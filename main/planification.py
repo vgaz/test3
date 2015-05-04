@@ -6,7 +6,6 @@ from main import constant
 
 #################################################
 
-
 def planif(dateDebut, dateFin):
     
     ## on balaye semaine par semaine
