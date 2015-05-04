@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block javascript %}{% endblock %}
+
+{% block title %}Jeux des familles{% endblock %}
+
+{% block content %}
+
+<div class="BlueFrame" style="width: 60%;margin-left:20%">
+
+<p><b>{{message}}</b></p>
+<br/>
+<h2>Parmi les familles suivantes, quelle est celle de la variété : {{form.var.nom}} ?</h2>
+
+<form action="" method="POST" style="list-style-type: none;">
+    {% csrf_token %}
+    {{ form }}
+	<input type="hidden" name="variete" value="{{form.var.id}}" />
+    <input type="submit" value="OK" />
+</form>
+
+</div>
+{% endblock %}

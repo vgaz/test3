@@ -1,0 +1,12 @@
+*.class
+*.pyc
+*.pyo
+*.class
+*.pyc
+*.pyo
+db.sqlite3
+db.sqlite3
+svg
+*.class
+*.pyc
+*.pyo

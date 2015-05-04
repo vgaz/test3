@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" href="{{ STATIC_URL }}images/shadok_green.gif" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css" /> 
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+<script>imageMainURL = "{{ STATIC_URL }}images" </script>
+
+{% block javascript %}{% endblock %}
+
+</head>
+<body onload="init()">
+<div id="banner">
+	<div id="home"><h1>
+		<a href="{% url 'home' %}"><img src="{{ STATIC_URL }}images/home.png" title="Home"/></a>
+	    {% block title %}{% endblock %}</h1>
+    </div>
+	
+	<div id="appName"></div>
+	
+<div id="Bannerblock">{{appName}} {{appVersion}}, with Django</div>
+</div>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Les variétés et familles{% endblock %}
+
+{% block content %}
+
+<div class="BlueFrame" style="list-style-type: none;width: 50%; margin-left: 20%">
+
+{% for var in l_vars %}
+ 
+      <table>
+          <tr>
+          {% if var.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
+          <td><h2>{{var.nom|title}} {% if var.famille %} ({{var.famille}}) {% endif %} </h2> {{var.date_min_plantation}} à {{var.date_max_plantation}}.
+              {{var.duree_avant_recolte_j}} jours de croissance, diamètre en terre : {{var.diametre_cm}} cm<br />
+              Unité de production: {{var.nomUniteProd}}
+              </td>
+          </tr>
+      </table>
+      {% if var.avec.distinct %} <img src="{{ STATIC_URL }}images/smileyOK.jpg" width="32px" height="32px"  title="Avec"/> 
+      {% for varAvec in var.avec.distinct %}{{varAvec.nom|title}}, {% endfor %} <br/>
+      {% endif %}
+      {% if var.sans.distinct %} <img src="{{ STATIC_URL }}images/smileyKO.jpg" width="32px" height="32px"  title="Sans"/>
+      {% for varSans in var.sans.distinct %}{{varSans.nom|title}}, {% endfor %} <br/>
+      {% endif %}
+      <hr />
+{% endfor %}
+</div>
+
+<ul class="BlueFrame" style="list-style-type: none;">
+<b>Familles</b>
+<br /><br />
+{% for f in l_fams %}
+  <li>{{f.nom}} ({{f.pk}})</li>
+{% endfor %}
+</ul>
+
+
+{% endblock %}

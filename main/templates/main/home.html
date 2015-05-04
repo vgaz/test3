@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Bienvenue !{% endblock %}
+
+{% block content %}
+
+<div class="BlueFrame">
+<h2>Sommaire</h2>
+<ul>
+  <li><a href="{% url 'tab_varietes' %}">Tableau des variétés</a></li>
+  <li><a href="{% url 'quizFamilles' %}">Quiz Familles et Variétés</a></li>
+  <li><a href="{% url 'creation_planche' %}">Création d'une planche</a></li>
+  <li><a href="{% url 'prevision_recolte' %}">Prévision de récolte</a></li>
+  <li><a href="../admin">Admin</a></li>
+</ul>
+<p><b>Définition des plants</b><br/>   
+            {% for planche in l_planches %}
+            Planche {{planche.num}}<a href="{% url 'edition_planche' %}?num_planche={{planche.num}}"><img src="{{ STATIC_URL }}images/editor.png" title="Editer"></a> 
+            <a href="{% url 'chrono_planche' %}?num_planche={{planche.num}}"><img src="{{ STATIC_URL }}images/arrowR.jpg" width="24" height="24" title="Chronogramme"></a><br/>
+            {% endfor %}
+  </p>
+</div>
+{% endblock %}
