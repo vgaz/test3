@@ -5,6 +5,10 @@ from main.models import Planche, Prevision, Production, PlantBase, Variete
 from main import constant
 
 #################################################
+def grainesPour1Plant(self):
+    pass
+def plantsPourProdHebdo(productionDemandee):
+    pass
 
 def planif(dateDebut, dateFin):
     
@@ -28,7 +32,7 @@ def planif(dateDebut, dateFin):
                 
             ## 3 déduction de tout ou partie de la quantité demandée
             reste = prod.qte - prod.qte_bloquee - prev.qte 
-            self.stdout.write("reste", reste)
+            print ("reste", reste)
             if reste >= 0:
                 prod.qte_bloquee = reste
                 break ## on a assez donc on bloque et on passe à la variété suivante
