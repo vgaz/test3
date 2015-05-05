@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from main.models import Planche, Prevision, Production, PlantBase, Variete
+from main.models import Planche, Prevision, Production, SeriePlants, Variete
 from main import constant
 
 #################################################
-def grainesPour1Plant(self):
-    pass
-def plantsPourProdHebdo(productionDemandee):
-    pass
 
 def planif(dateDebut, dateFin):
     
@@ -28,7 +24,7 @@ def planif(dateDebut, dateFin):
                 prod = Production()
                 prod.variete_id = prev.variete_id
                 prod.date_semaine = dateSemaine
-                self.stdout.write("production crée")
+                print("production crée")
                 
             ## 3 déduction de tout ou partie de la quantité demandée
             reste = prod.qte - prod.qte_bloquee - prev.qte 
@@ -37,17 +33,15 @@ def planif(dateDebut, dateFin):
                 prod.qte_bloquee = reste
                 break ## on a assez donc on bloque et on passe à la variété suivante
             else:
-                self.stdout.write("création de plants supplémentaires pour répondre au besoin de production")
-                plant = PlantBase()
+                print("création de plants supplémentaires pour répondre au besoin de production")
                 var = Variete.objects.get(id = prev.variete_id)
-                plant.variete = var
+                nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
+                print ("nb plants a installer", nb_plants_a_installer)
+                seriePlants = SeriePlants(prev.variete_id, nb_plants_a_installer)
                 ## on calcule la quantité de plants ou de graines nécessaires en fonction de la masse escomptée
-                plant.calculeNbPlantSemis(reste)
-                ## on calcule la surface nécessaire pour produire
-                plant.calculeEncombrement()
-
-                plant.planche = Planche.objects.get(num=0) ## placement en planche virtuelle en attente de placement réel 
-                plant.save()
+                
+                seriePlants.planche_id = 0 ## placement en planche virtuelle en attente de placement réel 
+                seriePlants.save()
                 
                 prod.qte = prev.qte
                 prod.qte_bloquee = prod.qte
