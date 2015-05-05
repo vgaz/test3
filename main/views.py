@@ -12,9 +12,8 @@ from main import forms, constant, planification
 from django.contrib.messages.storage.base import Message
 import datetime
 
-from main.models import Evenement, Planche, PlantBase, Prevision, TypeEvenement
+from main.models import Evenement, Planche, Plant, Prevision, TypeEvenement
 from main.forms import PlancheForm
-
 
 #################################################
 
@@ -34,7 +33,7 @@ def home(request):
 def chronoPlanche(request):
 
     try:
-        laPlanche, bRet = Planche.objects.get(num = int(request.POST.get("num_planche", request.GET.get("num_planche", 0))))
+        laPlanche = Planche.objects.get(num = int(request.POST.get("num_planche", request.GET.get("num_planche", 0))))
         print(laPlanche)
     except:
         s_msg = "Planche non trouvée... Est elle bien existante ?"
@@ -65,28 +64,29 @@ def chronoPlanche(request):
     ## on prend tous les evts de l'encadrement et pour la planche courrante
     l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
                                       date__lte = date_fin_vue, 
-                                      plant_base__in = PlantBase.objects.filter(planche_id = laPlanche))
+                                      plant_base__in = Plant.objects.filter(planche_id = laPlanche))
     ## on en deduit les plants impliqués, même partiellement
     l_plantsId = list(set([evt.plant_base_id for evt in l_evts]))
     ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle
     l_evts = Evenement.objects.filter(plant_base_id__in = l_plantsId).order_by('plant_base_id', 'date')
-    l_plants = PlantBase.objects.filter(planche_id = laPlanche, id__in = l_plantsId )
+    l_plants = Plant.objects.filter(planche_id = laPlanche, id__in = l_plantsId )
 
     return render(request,
                  'main/chrono_planche.html',
                  {
-                  "appVersion":constant.APP_VERSION,
-                  "appName":constant.APP_NAME,
+                  "appVersion": constant.APP_VERSION,
+                  "appName": constant.APP_NAME,
                   "planche": laPlanche,
-                  "l_typesEvt":l_typesEvt,
+                  "l_typesEvt": l_typesEvt,
                   "d_TitresTypeEvt": constant.d_TitresTypeEvt,
-                  "l_plants":l_plants,
+                  "l_plants": l_plants,
                   "l_evts": l_evts,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
-                  "date_du_jour" : date_du_jour,
-                  "decalage_j":decalage_j
+                  "date_du_jour": date_du_jour,
+                  "decalage_j": decalage_j
                   })
+    
 #################################################
 
 class CreationPlanche(CreateView):
@@ -143,7 +143,7 @@ def editionPlanche(request):
     l_evts = Evenement.objects.filter(type = TypeEvenement.objects.get(nom = "fin"), plant_base_id__in = l_PlantsIds, date__gte = dateVue)
     
     l_PlantsIds = l_evts.values_list('plant_base_id', flat=True)
-    l_plants = PlantBase.objects.filter(planche = planche, id__in = l_PlantsIds)
+    l_plants = Plant.objects.filter(planche = planche, id__in = l_PlantsIds)
     
     return render(request,
                  'main/edition_planche.html',
@@ -265,7 +265,7 @@ def quizFamilles(request):
         else:
             message = "PERDU"
 
-        message += ", %s est de la famille des %ss " % (varAsked.nom, varAsked.famille)
+        message += ", %s est de la famille des %ss " % (varAsked.nom, varAsked.famille.nom)
 
         ## restart a new form
         form = forms.FormFamilyQuiz()

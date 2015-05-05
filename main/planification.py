@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from main.models import Planche, Prevision, Production, SeriePlants, Variete
-from main import constant
+from main.models import Evenement, Prevision, Production, Plant, TypeEvenement, Variete
 
 #################################################
 
@@ -27,24 +26,31 @@ def planif(dateDebut, dateFin):
                 print("production crée")
                 
             ## 3 déduction de tout ou partie de la quantité demandée
-            reste = prod.qte - prod.qte_bloquee - prev.qte 
+            reste = prod.qte - prev.qte 
             print ("reste", reste)
             if reste >= 0:
-                prod.qte_bloquee = reste
-                break ## on a assez donc on bloque et on passe à la variété suivante
+                ## on a assez ,  on passe à la variété suivante
+                break 
             else:
                 print("création de plants supplémentaires pour répondre au besoin de production")
                 var = Variete.objects.get(id = prev.variete_id)
                 nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
                 print ("nb plants a installer", nb_plants_a_installer)
-                seriePlants = SeriePlants(prev.variete_id, nb_plants_a_installer)
-                ## on calcule la quantité de plants ou de graines nécessaires en fonction de la masse escomptée
                 
-                seriePlants.planche_id = 0 ## placement en planche virtuelle en attente de placement réel 
-                seriePlants.save()
+                plants = Plant(prev.variete_id, nb_plants_a_installer)                
+                plants.planche_id = 0 ## placement en planche virtuelle en attente de placement réel 
+                plants.productionHebdo_id = prod.id
+                plants.save()
                 
-                prod.qte = prev.qte
-                prod.qte_bloquee = prod.qte
+                evt = Evenement()
+                evt.type = TypeEvenement.objects.get(nom="debut")
+                evt.plant_base = plants
+                evt.date = dateSemaine
+                evt.duree = var.duree_avant_recolte_j
+                evt.nom = "plant " + var.nom
+
+                ## on ajoute la qté nouvelle à la production
+                prod.qte += abs(reste)  
                 prod.save()
                 
         dateSemaine += datetime.timedelta(days=7)

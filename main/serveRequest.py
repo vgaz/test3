@@ -7,7 +7,7 @@ Created on Nov 26, 2013
 
 from django.http import HttpResponse
 
-from main.models import Evenement, PlantBase, Planche, TypeEvenement, Variete
+from main.models import Evenement, Plant, Planche, TypeEvenement, Variete
 import sys
 import datetime
 from main import constant
@@ -52,9 +52,9 @@ def serveRequest(request):
         try:
             id_plant = request.POST.get("id_plant")
             if '_' in id_plant:
-                plant = PlantBase() ## un nouveau
+                plant = Plant() ## un nouveau
             else:
-                plant = PlantBase.objects.get(id=int(id_plant))
+                plant = Plant.objects.get(id=int(id_plant))
      
             plant.variete = Variete.objects.get(id = request.POST.get("variete",""))
             plant.nb_graines = int(request.POST.get("nb_graines",0))
@@ -86,7 +86,7 @@ def serveRequest(request):
             evt.type = TypeEvenement.objects.get(nom=request.POST.get("type", ""))
             if evt.type == TypeEvenement.objects.get(nom="fin"):
                 evt.date = evt.date + datetime.timedelta(hours=20)  ## pour eviter les confusions de debut de jour à 0 h , on finit la journée à 20h 
-            evt.plant_base = PlantBase.objects.get(id=int(request.POST.get("id_plan", 0)))
+            evt.plant_base = Plant.objects.get(id=int(request.POST.get("id_plan", 0)))
             evt.date_creation = datetime.datetime.now()
             evt.save()
             print(evt)

@@ -63,65 +63,6 @@ class Variete(models.Model):
 
     
 
-
-class PlantBase(models.Model):
-    
-    class Meta:
-        verbose_name = "Plant de base"
-        
-    variete = models.ForeignKey(Variete)
-    nb_graines = models.IntegerField(default=1)
-    largeur_cm = models.PositiveIntegerField('largeur cm', default=0)
-    hauteur_cm = models.PositiveIntegerField('hauteur cm', default=0)
-    coord_x_cm = models.PositiveIntegerField("pos x cm", default=0)
-    coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
-    planche = models.ForeignKey('Planche',  null=True, blank=True)
-       
-    def __unicode__(self):
-        return ("%d %s (%d), %d x %d, pos: %d %d sur planche %d" %( self.id,  self.variete, 
-                                                                self.nb_graines, 
-                                                                self.largeur_cm, 
-                                                                self.hauteur_cm, 
-                                                                self.coord_x_cm, 
-                                                                self.coord_y_cm, 
-                                                                self.planche.num))
-class SeriePlants(models.Model):
-    
-    class Meta:
-        verbose_name = "Série de Plants"
-    
-    quantite = models.PositiveIntegerField(default=1)
-    variete = models.ForeignKey(Variete)
-    nb_graines = models.PositiveIntegerField(default=1)
-    largeur_cm = models.PositiveIntegerField('largeur cm', default=0)
-    hauteur_cm = models.PositiveIntegerField('hauteur cm', default=0)
-    coord_x_cm = models.PositiveIntegerField("pos x cm", default=0)
-    coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
-    planche = models.ForeignKey('Planche',  null=True, blank=True)
-
-    def __init__(self, variete_id, nb_plants):
-        self.variete_id = variete_id
-        self.quantite = nb_plants
-        
-    def nbGraines(self, nbPlants):
-        """ retourne le nb de graines à planter en fonction du nb de plants installés"""
-        return(self.quantite / self.variete.rendementPlantsGraines)
-
-    def surface(self):
-        """ retourne la surface prise, em m2, par la série de plants
-        on prend le principe de 1 plant carré decoté = diametre variété"""
-        return(self.quantite * float(self.variete.diametre_cm *self.variete.diametre_cm) / 10000 )
-       
-       
-    def __unicode__(self):
-        return ("%d %s (%d), %d x %d, pos: %d %d sur planche %d" %( self.id,  self.variete, 
-                                                                self.nb_graines, 
-                                                                self.largeur_cm, 
-                                                                self.hauteur_cm, 
-                                                                self.coord_x_cm, 
-                                                                self.coord_y_cm, 
-                                                                self.planche.num))
-
 class TypeEvenement(models.Model):
     
     nom = models.CharField(max_length=20)
@@ -130,22 +71,6 @@ class TypeEvenement(models.Model):
         return self.nom
   
     
-class Evenement(models.Model):
-
-    plant_base = models.ForeignKey(PlantBase)
-    date_creation = models.DateTimeField(default=datetime.datetime.now())
-    date = models.DateTimeField()
-    duree = models.PositiveIntegerField("nb jours d'activité", default=1)
-    nom = models.CharField(max_length=100, default="")
-    texte = models.TextField(default="")
-    bFini = models.BooleanField(default=False)
-    type =  models.ForeignKey(TypeEvenement)
-
-    class Meta: 
-        ordering = ['date']
-        
-    def __unicode__(self):
-        return "%d %s %s"%(self.plant_base_id, self.date, self.type)
 
 
 class Prevision(models.Model):
@@ -174,3 +99,58 @@ class Production(models.Model):
     def __unicode__(self):
         return u"sem du %s : %s : %d kg (%d réservée)"%(self.date_semaine, self.variete.nom, self.qte, self.qte_bloquee)
 
+class Plant(models.Model):
+    
+    class Meta:
+        verbose_name = "Plant ou série de plants"
+        
+    variete = models.ForeignKey(Variete)
+    nb_graines = models.IntegerField(default=1)
+    largeur_cm = models.PositiveIntegerField('largeur cm', default=0)
+    hauteur_cm = models.PositiveIntegerField('hauteur cm', default=0)
+    coord_x_cm = models.PositiveIntegerField("pos x cm", default=0)
+    coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
+    planche = models.ForeignKey('Planche',  null=True, blank=True)
+    quantite = models.PositiveIntegerField(default=1)
+    productionHebdo = models.ForeignKey(Production)
+   
+    def __init__(self, variete_id, nb_plants):
+        self.variete_id = variete_id
+        self.quantite = nb_plants
+        
+    def nbGraines(self, nbPlants):
+        """ retourne le nb de graines à planter en fonction du nb de plants installés"""
+        return(self.quantite / self.variete.rendementPlantsGraines)
+
+    def surface(self):
+        """ retourne la surface prise, em m2, par la série de plants
+        on prend le principe de 1 plant carré decoté = diametre variété"""
+        return(self.quantite * float(self.variete.diametre_cm *self.variete.diametre_cm) / 10000 )
+       
+              
+    def __unicode__(self):
+        return ("%d %s (%d), %d x %d, pos: %d %d sur planche %d" %( self.id,  self.variete, 
+                                                                self.nb_graines, 
+                                                                self.largeur_cm, 
+                                                                self.hauteur_cm, 
+                                                                self.coord_x_cm, 
+                                                                self.coord_y_cm, 
+                                                                self.planche.num))
+
+
+class Evenement(models.Model):
+
+    plant_base = models.ForeignKey(Plant)
+    date_creation = models.DateTimeField(default=datetime.datetime.now())
+    date = models.DateTimeField()
+    duree = models.PositiveIntegerField("nb jours d'activité", default=1)
+    nom = models.CharField(max_length=100, default="")
+    texte = models.TextField(default="")
+    bFini = models.BooleanField(default=False)
+    type =  models.ForeignKey(TypeEvenement)
+
+    class Meta: 
+        ordering = ['date']
+        
+    def __unicode__(self):
+        return "%d %s %s"%(self.plant_base_id, self.date, self.type)
