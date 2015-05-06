@@ -23,7 +23,7 @@ def planif(dateDebut, dateFin):
                 prod = Production()
                 prod.variete_id = prev.variete_id
                 prod.date_semaine = dateSemaine
-                print("production crée")
+                print("Nelle production")
                 
             ## 3 déduction de tout ou partie de la quantité demandée
             reste = prod.qte - prev.qte 
@@ -35,12 +35,22 @@ def planif(dateDebut, dateFin):
                 print("création de plants supplémentaires pour répondre au besoin de production")
                 var = Variete.objects.get(id = prev.variete_id)
                 nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
-                print ("nb plants a installer", nb_plants_a_installer)
-                
+                print ("Nb plants à installer", nb_plants_a_installer)
+
+                ## on ajoute la qté nouvelle à la production
+                prod.qte += abs(reste)  
+                prod.save()
+                      
+                print(prod)          
                 plants = Plant(prev.variete_id, nb_plants_a_installer)                
                 plants.planche_id = 0 ## placement en planche virtuelle en attente de placement réel 
                 plants.productionHebdo_id = prod.id
+                print(plants.planche_id)
+                print(plants.productionHebdo_id)
+                print(plants.variete_id)
+                print(plants.quantite)
                 plants.save()
+                print(plants)
                 
                 evt = Evenement()
                 evt.type = TypeEvenement.objects.get(nom="debut")
@@ -49,9 +59,5 @@ def planif(dateDebut, dateFin):
                 evt.duree = var.duree_avant_recolte_j
                 evt.nom = "plant " + var.nom
 
-                ## on ajoute la qté nouvelle à la production
-                prod.qte += abs(reste)  
-                prod.save()
-                
         dateSemaine += datetime.timedelta(days=7)
     

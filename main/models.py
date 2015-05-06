@@ -83,7 +83,7 @@ class Prevision(models.Model):
         ordering = ["date_semaine"]
             
     def __unicode__(self):
-        return u"sem du %s : %s : %d kg"%(self.date_semaine, self.variete.nom, self.qte)
+        return "sem du %s : %s : %d kg"%(self.date_semaine, self.variete.nom, self.qte)
     
 
 class Production(models.Model):
@@ -91,13 +91,13 @@ class Production(models.Model):
     variete = models.ForeignKey(Variete)
     date_semaine = models.DateTimeField("date de début de semaine")
     qte = models.PositiveIntegerField("quantité produite en kg ou pièces", default=0)
-    qte_bloquee = models.PositiveIntegerField("quantité réservée en kg ou pièces", default=0)
+#     qte_bloquee = models.PositiveIntegerField("quantité réservée en kg ou pièces", default=0)
     
     class Meta: 
         ordering = ["date_semaine"]
             
-    def __unicode__(self):
-        return u"sem du %s : %s : %d kg (%d réservée)"%(self.date_semaine, self.variete.nom, self.qte, self.qte_bloquee)
+    def __str__(self):
+        return "sem du %s : %s , qté=%s"%(self.date_semaine, self.variete.nom, self.qte)
 
 class Plant(models.Model):
     
@@ -106,11 +106,11 @@ class Plant(models.Model):
         
     variete = models.ForeignKey(Variete)
     nb_graines = models.IntegerField(default=1)
-    largeur_cm = models.PositiveIntegerField('largeur cm', default=0)
-    hauteur_cm = models.PositiveIntegerField('hauteur cm', default=0)
+    largeur_cm = models.PositiveIntegerField("largeur cm", default=0)
+    hauteur_cm = models.PositiveIntegerField("hauteur cm", default=0)
     coord_x_cm = models.PositiveIntegerField("pos x cm", default=0)
     coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
-    planche = models.ForeignKey('Planche',  null=True, blank=True)
+    planche = models.ForeignKey("Planche", null=True, blank=True)
     quantite = models.PositiveIntegerField(default=1)
     productionHebdo = models.ForeignKey(Production)
    
@@ -125,19 +125,20 @@ class Plant(models.Model):
     def surface(self):
         """ retourne la surface prise, em m2, par la série de plants
         on prend le principe de 1 plant carré decoté = diametre variété"""
-        return(self.quantite * float(self.variete.diametre_cm *self.variete.diametre_cm) / 10000 )
+        return (self.quantite * float(self.variete.diametre_cm *self.variete.diametre_cm) / 10000 )
        
               
-    def __unicode__(self):
-        return ("%d %s (%d), %d x %d, pos: %d %d sur planche %d" %( self.id,  self.variete, 
-                                                                self.nb_graines, 
-                                                                self.largeur_cm, 
-                                                                self.hauteur_cm, 
-                                                                self.coord_x_cm, 
-                                                                self.coord_y_cm, 
-                                                                self.planche.num))
+    def __str__(self):
+        return "%d %s (%d), %d x %d, pos: %d %d sur planche %d" %(  self.id,  self.variete, 
+                                                                    self.nb_graines, 
+                                                                    self.largeur_cm, 
+                                                                    self.hauteur_cm, 
+                                                                    self.coord_x_cm, 
+                                                                    self.coord_y_cm, 
+                                                                    self.planche.num)
 
-
+        
+        
 class Evenement(models.Model):
 
     plant_base = models.ForeignKey(Plant)
