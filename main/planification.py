@@ -1,63 +1,73 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from main.models import Evenement, Prevision, Production, Plant, TypeEvenement, Variete
+from main.models import Evenement, Production, Planche, Plant, TypeEvenement, Variete
 
 #################################################
 
+def enregistrePrevisions(request):
+    if request.POST:
+        for k, v in request.POST.items():
+            ## gestion prévisions de récoltes
+            if k.startswith("p__") and v:
+                _, ds, var = k.split("__")
+                try:
+                    obj = Production.objects.get(variete_id=var, date_semaine = ds)
+                except:
+                    obj=Production()
+                    obj.variete_id = var
+                    obj.date_semaine = ds
+                masse = int(v)
+                if masse == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro
+                    obj.delete()
+                else:
+                    obj.qte_dde = masse
+                    obj.save()
+                    
+                    
 def planif(dateDebut, dateFin):
     
     ## on balaye semaine par semaine
-    print(__name__)
     dateSemaine = dateDebut
     while dateSemaine <= dateFin:
-        
+        print("\nplanification semaine du %s"%dateSemaine)
         ## 1 récupération des productions demandées
-        for prev in Prevision.objects.filter(date_semaine = dateSemaine):
-            print("planif prev", prev)
+        l_prods = Production.objects.filter(date_semaine = dateSemaine)
+        for prod in l_prods:
             
-            ## 2 test si dispo en tout ou partie sur production actuelle
-            try:
-                prod = Production.objects.get(date_semaine = dateSemaine, variete_id = prev.variete_id)
-            except:
-                prod = Production()
-                prod.variete_id = prev.variete_id
-                prod.date_semaine = dateSemaine
-                print("Nelle production")
-                
-            ## 3 déduction de tout ou partie de la quantité demandée
-            reste = prod.qte - prev.qte 
-            print ("reste", reste)
+            var = Variete.objects.get(id = prod.variete_id)
+            print ("\n%s"%var.nom)
+            reste = prod.qte_prod - prod.qte_dde 
             if reste >= 0:
-                ## on a assez ,  on passe à la variété suivante
-                break 
-            else:
-                print("création de plants supplémentaires pour répondre au besoin de production")
-                var = Variete.objects.get(id = prev.variete_id)
-                nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
-                print ("Nb plants à installer", nb_plants_a_installer)
-
-                ## on ajoute la qté nouvelle à la production
-                prod.qte += abs(reste)  
+                ## on a assez,  on passe à la variété suivante
+                print ("Dde = %d; prod= %d, ok"%(prod.qte_dde,  prod.qte_prod) )
+                break
+            
+            nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
+            print ("Besoin de %d nouveaux plants"%(nb_plants_a_installer))
+            plants = Plant(var.id, nb_plants_a_installer)                
+            plants.planche = Planche.objects.get(num = 0) ## placement en planche virtuelle en attente de placement réel 
+            plants.production_id = prod.id
+            plants.hauteur_cm = var.diametre_cm ## on fixe arbitrairement sur une ligne
+            plants.largeur_cm = var.diametre_cm * nb_plants_a_installer
+            plants.save()
+            print(plants)
+            
+            ## maj prod de cette semaine et, éventuellement, des suivantes induites par les nouveaux plants
+            l_nouvelle_prod = var.prodSemaines(nb_plants_a_installer)
+            for qte in l_nouvelle_prod:
+                ssssssla prod de la semaine et des suivantes
+                prod.qte += abs(qte)  
                 prod.save()
-                      
-                print(prod)          
-                plants = Plant(prev.variete_id, nb_plants_a_installer)                
-                plants.planche_id = 0 ## placement en planche virtuelle en attente de placement réel 
-                plants.productionHebdo_id = prod.id
-                print(plants.planche_id)
-                print(plants.productionHebdo_id)
-                print(plants.variete_id)
-                print(plants.quantite)
-                plants.save()
-                print(plants)
-                
-                evt = Evenement()
-                evt.type = TypeEvenement.objects.get(nom="debut")
-                evt.plant_base = plants
-                evt.date = dateSemaine
-                evt.duree = var.duree_avant_recolte_j
-                evt.nom = "plant " + var.nom
+                print(prod)            
+
+            evt = Evenement()
+            evt.type = TypeEvenement.objects.get(nom="debut")
+            evt.plant_base = plants
+            evt.date = dateSemaine
+            evt.duree = var.duree_avant_recolte_j
+            evt.nom = "plant " + var.nom
+            evt.save()
 
         dateSemaine += datetime.timedelta(days=7)
     

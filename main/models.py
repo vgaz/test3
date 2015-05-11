@@ -46,8 +46,11 @@ class Variete(models.Model):
     class Meta: 
         ordering = ['nom']
             
-    def __unicode__(self):
-        return(self.nom)   
+    def __str__(self):
+        return(self.nom) 
+    
+    def nomUniteProd(self):
+        return constant.D_NOM_UNITE_PROD[self.unite_prod]  
 
         
     def plantsPourProdHebdo(self, productionDemandee_kg):
@@ -55,11 +58,22 @@ class Variete(models.Model):
         pour les plantes donnant sur plusieurs semaines, on prend le rendement de la première semaine"""
         print ("productionDemandee_kg", productionDemandee_kg)
         print ("self.prod_hebdo_moy_g", self.prod_hebdo_moy_g)  
-        if           self.prod_hebdo_moy_g =="0,0":
-            return 55
+        if self.prod_hebdo_moy_g =="0,0":
+            return 55#@todo
         ret =  int(productionDemandee_kg * 1000 / float(self.prod_hebdo_moy_g.split(",")[0]))
         print (ret)
         return (ret)
+
+    def prodSemaines(self, productionDemandee):
+        """ retourne une liste de production(s)escomptée par semaine (en kg ou en unité)"""
+        if self.prod_hebdo_moy_g =="0,0":
+            return [55]#@todo
+        l_ret = []
+        if self.unite_prod == constant.UNITE_PROD_KG:
+            for prodSemUnitaire_g in self.prod_hebdo_moy_g.split(","):
+                l_ret.append(int(productionDemandee * prodSemUnitaire_g)))
+
+        return (l_ret)
 
     
 
@@ -67,37 +81,27 @@ class TypeEvenement(models.Model):
     
     nom = models.CharField(max_length=20)
     
-    def __unicode__(self):
+    def __str__(self):
         return self.nom
   
-    
-
-
-class Prevision(models.Model):
-    """Prévision hebdomadaire des récoltes pour une variété"""
-    variete = models.ForeignKey(Variete)
-    date_semaine = models.DateTimeField("date de début de semaine")
-    qte = models.PositiveIntegerField("quantité en kg ou pièces", default=0)
-    
-    class Meta: 
-        ordering = ["date_semaine"]
-            
-    def __unicode__(self):
-        return "sem du %s : %s : %d kg"%(self.date_semaine, self.variete.nom, self.qte)
     
 
 class Production(models.Model):
     """Prévision hebdomadaire des productions pour une variété"""
     variete = models.ForeignKey(Variete)
     date_semaine = models.DateTimeField("date de début de semaine")
-    qte = models.PositiveIntegerField("quantité produite en kg ou pièces", default=0)
-#     qte_bloquee = models.PositiveIntegerField("quantité réservée en kg ou pièces", default=0)
-    
+    qte_dde = models.PositiveIntegerField("quantité demandée", default=0)
+    qte_prod = models.PositiveIntegerField("quantité produite", default=0)
+
     class Meta: 
         ordering = ["date_semaine"]
             
     def __str__(self):
-        return "sem du %s : %s , qté=%s"%(self.date_semaine, self.variete.nom, self.qte)
+        return "sem du %s : %s : dde=%d prod=%d (%s)"%(self.date_semaine, 
+                                                     self.variete.nom, 
+                                                     self.qte_dde, 
+                                                     self.qte_prod, 
+                                                     self.variete.nomUniteProd())
 
 class Plant(models.Model):
     
@@ -112,9 +116,10 @@ class Plant(models.Model):
     coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
     planche = models.ForeignKey("Planche", null=True, blank=True)
     quantite = models.PositiveIntegerField(default=1)
-    productionHebdo = models.ForeignKey(Production)
+    production = models.ForeignKey(Production)
    
     def __init__(self, variete_id, nb_plants):
+        super(Plant, self).__init__()
         self.variete_id = variete_id
         self.quantite = nb_plants
         
@@ -129,7 +134,7 @@ class Plant(models.Model):
        
               
     def __str__(self):
-        return "%d %s (%d), %d x %d, pos: %d %d sur planche %d" %(  self.id,  self.variete, 
+        return "plant %d %s (%d gr), %d x %d, pos: %d %d sur planche %d" %(  self.id,  self.variete.nom, 
                                                                     self.nb_graines, 
                                                                     self.largeur_cm, 
                                                                     self.hauteur_cm, 

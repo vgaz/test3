@@ -12,7 +12,8 @@ d_TitresTypeEvt = {"debut":"début", "fin":"fin", "autre":"autre"}
 
 UNITE_PROD_KG = 1
 UNITE_PROD_PIECE = 2
-D_UNITE_PROD_NAME = { UNITE_PROD_KG:"Kg", UNITE_PROD_PIECE:"Pièce" }
+D_NOM_UNITE_PROD = { UNITE_PROD_KG:"Kg", UNITE_PROD_PIECE:"Pièce"}
+
 
 FORMAT_DATE = "%d/%m/%Y"
 

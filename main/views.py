@@ -174,54 +174,36 @@ def prevision_recolte(request):
     date_fin_sem_vue = date_fin_vue + datetime.timedelta(days= 6 - date_fin_vue.weekday()) 
             
     ## sauvegarde des prévisions des récoltes
-    if request.POST:
-        for k, v in request.POST.items():
-            ## gestion prévisions de récoltes
-            if k.startswith("p__") and v:
-                _, ds, var = k.split("__")
-                try:
-                    obj = Prevision.objects.get(variete_id=var, date_semaine = ds)
-                except:
-                    obj=Prevision()
-                    obj.variete_id = var
-                    obj.date_semaine = ds
-                masse = int(v)
-                if masse == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro
-                    obj.delete()
-                else:
-                    obj.qte = masse
-                    obj.save()
+    planification.enregistrePrevisions(request)
         
-        if request.POST.get("option_planif", ""):
-            planification.planif(date_debut_sem_vue, date_fin_sem_vue)
-                
-    
-    l_vars = Variete.objects.exclude(diametre_cm = 0)
+    if request.POST.get("option_planif", ""):
+        planification.planif(date_debut_sem_vue, date_fin_sem_vue)
     
     ## création de la liste des semaines     
     # on recadre sur le lundi pour démarrer en debut de semaine
     l_semaines = []
     date_debut_sem = date_debut_sem_vue
     while True:
-        date_fin_sem = date_debut_sem + datetime.timedelta(days=6)
+        date_fin_sem = date_debut_sem + datetime.timedelta(days=6, hours=20)
         l_semaines.append((date_debut_sem.isocalendar(), date_debut_sem, date_fin_sem))
-        if date_fin_sem > date_fin_vue: 
+        if date_fin_sem >= date_fin_vue: 
             break
         date_debut_sem = date_fin_sem + datetime.timedelta(days=1)
     
     tab_previsions = "[" 
-    for prev in Prevision.objects.filter(date_semaine__gte = date_debut_sem_vue, date_semaine__lte = date_fin_sem_vue):
-        tab_previsions += "['%s', %d, %d],"%(prev.date_semaine.strftime("%Y-%m-%d"), prev.variete_id, prev.qte)
+    for prod in Prevision.objects.filter(date_semaine__gte = date_debut_sem_vue, date_semaine__lte = date_fin_sem_vue):
+        tab_previsions += "['%s', %d, %d, %d],"%(prod.date_semaine.strftime("%Y-%m-%d"), prod.variete_id, prod.qte_dde, prod.qte_prod)
     tab_previsions += "]" 
+
     return render(request,
                  'main/prevision_recolte.html',
                  {
                   "appVersion":constant.APP_VERSION,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
-                  "l_vars":l_vars,
+                  "l_vars":Variete.objects.exclude(diametre_cm = 0),
                   "l_semaines":l_semaines,
-                  "tab_previsions" :tab_previsions,
+                  "tab_previsions":tab_previsions,
                   "info":""
                   })
     
@@ -231,7 +213,7 @@ def tab_varietes(request):
     
     l_vars = Variete.objects.filter(diametre_cm__isnull=False)
     for v in l_vars:
-        v.nomUniteProd = constant.D_UNITE_PROD_NAME[v.unite_prod]
+        v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
      
     return render(request,
                  'main/tab_varietes.html',
