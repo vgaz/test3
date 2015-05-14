@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from main import constant
-
+import datetime
 
 class Famille(models.Model):
     """famille associée à la plante"""
@@ -40,7 +40,7 @@ class Variete(models.Model):
     rendementPlantsGraines = models.FloatField('graines Pour 1 Plant', default=2)
     diametre_cm = models.IntegerField("diamètre (cm)", default=0)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
-    image = models.ImageField()
+#     image = models.ImageField()
     
     class Meta: 
         ordering = ['nom']
@@ -70,7 +70,7 @@ class Variete(models.Model):
         l_ret = []
         if self.unite_prod == constant.UNITE_PROD_KG:
             for prodSemUnitaire_g in self.prod_hebdo_moy_g.split(","):
-                l_ret.append(int(productionDemandee * prodSemUnitaire_g)))
+                l_ret.append(int(productionDemandee * prodSemUnitaire_g))
 
         return (l_ret)
 

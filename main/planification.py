@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import datetime
-
 from main.models import Evenement, Production, Planche, Plant, TypeEvenement, Variete
 
 #################################################
@@ -39,10 +38,12 @@ def planif(dateDebut, dateFin):
             print ("\n%s"%var.nom)
             reste = prod.qte_prod - prod.qte_dde 
             if reste >= 0:
+                pass
+                pass
                 ## on a assez,  on passe à la variété suivante
                 print ("Dde = %d; prod= %d, ok"%(prod.qte_dde,  prod.qte_prod) )
                 break
-            
+            ## on rajoute des plants
             nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
             print ("Besoin de %d nouveaux plants"%(nb_plants_a_installer))
             plants = Plant(var.id, nb_plants_a_installer)                
@@ -53,13 +54,21 @@ def planif(dateDebut, dateFin):
             plants.save()
             print(plants)
             
-            ## maj prod de cette semaine et, éventuellement, des suivantes induites par les nouveaux plants
-            l_nouvelle_prod = var.prodSemaines(nb_plants_a_installer)
-            for qte in l_nouvelle_prod:
-                ssssssla prod de la semaine et des suivantes
-                prod.qte += abs(qte)  
-                prod.save()
-                print(prod)            
+            ## maj prod de cette semaine pour cette variété
+            ## et, éventuellement, des suivantes induites par les nouveaux plants
+            l_prodSemaine = var.prodSemaines(nb_plants_a_installer)
+            ## maj pour cette semaine
+            prod.qte_prod += l_prodSemaine[0]  
+            prod.save()     
+            
+            ## maj éventuelle des semaines suivantes
+            if len(l_prodSemaine):  
+                for index, qteSem in enumerate(l_prodSemaine[1:]):
+                    dateSem = dateDebut + datetime.timedelta(days = 1 + index)
+                    prod_suite = Production.objects.get(variete = var.id,
+                                                        date_semaine = dateSem )
+                    prod_suite.qte_prod += qteSem
+            ##print(prod)
 
             evt = Evenement()
             evt.type = TypeEvenement.objects.get(nom="debut")
