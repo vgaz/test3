@@ -57,7 +57,6 @@ def serveRequest(request):
                 plant = Plant.objects.get(id=int(id_plant))
      
             plant.variete = Variete.objects.get(id = request.POST.get("variete",""))
-            plant.nb_graines = int(request.POST.get("nb_graines",0))
             plant.largeur_cm = int(request.POST.get("largeur_cm",0))
             plant.hauteur_cm = int(request.POST.get("hauteur_cm",0))
             plant.coord_x_cm = int(request.POST.get("coord_x_cm",0))

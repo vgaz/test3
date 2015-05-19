@@ -25,12 +25,13 @@ function init()
             d_cumul_hebdo[tab_previsions[ii][0]] += tab_previsions[ii][2]
             d_cumul_var[tab_previsions[ii][1]] += tab_previsions[ii][2]
             s_id = ["p", tab_previsions[ii][0], tab_previsions[ii][1]].join("__") 
-            document.getElementById(s_id).value = tab_previsions[ii][2]
+            document.getElementById(s_id).value = tab_previsions[ii][2] + ' prod:' + tab_previsions[ii][3]
             }
             
+    // maj total de la semaine 
     for (key in d_cumul_hebdo)
         document.getElementById("ts__" + key).innerHTML = d_cumul_hebdo[key]
-       
+    // maj total par variété pour toute la période vue
     for (key in d_cumul_var)
         document.getElementById("tv__" + key).innerHTML = d_cumul_var[key]
        
@@ -61,6 +62,7 @@ function init()
         {% for var in l_vars %}
         <tr>
             <td>{{var.nom}} <small>({{var.nomUniteProd}})</small></td>
+            
             {% for semaine in l_semaines %}
             <td><input style="width:100px;font-weight:bold;text-align: center" type="text" name="p__{{semaine.1|date:'Y-m-d'}}__{{var.id}}" id="p__{{semaine.1|date:'Y-m-d'}}__{{var.id}}"/></td>
             {% endfor %}
@@ -68,11 +70,13 @@ function init()
             <td><div style="font-weight:bold;text-align: center" id="tv__{{var.id}}"> </div></td>
         </tr>
         {% endfor %}
+        
 
-        <th>Total</th>
-            {% for semaine in l_semaines %}
-            <td><div style="font-weight:bold;text-align:center" id="ts__{{semaine.1|date:'Y-m-d'}}"> </div></td>
-            {% endfor %}
+        <tr><th>Total</th>{# ligne de total des qte de legumes par semaine #}
+        {% for semaine in l_semaines %}
+        <td><div style="font-weight:bold;text-align:center" id="ts__{{semaine.1|date:'Y-m-d'}}"> </div></td>
+        {% endfor %}
+        </tr>
         
     </table>
     <br/>

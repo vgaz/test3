@@ -36,7 +36,7 @@ class Variete(models.Model):
     date_min_plantation = models.CharField("date (jj/mm) de début de plantation", max_length=10, default="0/0")
     date_max_plantation = models.CharField("date (jj/mm) de fin de plantation", max_length=10, default="0/0")
     duree_avant_recolte_j = models.IntegerField("durée en terre avant récolte (jours)", default=0)
-    prod_hebdo_moy_g = models.CommaSeparatedIntegerField("suite de production hebdomadaire moyenne (grammes) pour un plant", max_length=20, default="0,0") ##attention, pour les légumes "à la pièce" ( choux, salades..), ne saisir qu'une valeur 
+    prod_hebdo_moy_g = models.CommaSeparatedIntegerField("suite de production hebdomadaire moyenne (grammes) pour un plant", max_length=20, default="0") ##attention, pour les légumes "à la pièce" ( choux, salades..), ne saisir qu'une valeur 
     rendementPlantsGraines = models.FloatField('graines Pour 1 Plant', default=2)
     diametre_cm = models.IntegerField("diamètre (cm)", default=0)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
@@ -52,25 +52,31 @@ class Variete(models.Model):
         return constant.D_NOM_UNITE_PROD[self.unite_prod]  
 
         
-    def plantsPourProdHebdo(self, productionDemandee_kg):
+    def plantsPourProdHebdo(self, productionDemandee):
         """ retourne nb de plants en fonction de la prod escomptée (en kg ou en unité
         pour les plantes donnant sur plusieurs semaines, on prend le rendement de la première semaine"""
-        print ("productionDemandee_kg", productionDemandee_kg)
+        print ("productionDemandee_kg", productionDemandee)
         print ("self.prod_hebdo_moy_g", self.prod_hebdo_moy_g)  
-        if self.prod_hebdo_moy_g =="0,0":
-            return 55#@todo
-        ret =  int(productionDemandee_kg * 1000 / float(self.prod_hebdo_moy_g.split(",")[0]))
+        if self.prod_hebdo_moy_g == "0":
+            print ("attention , réponse bidon dans  plantsPourProdHebdo %s"%self.nom)
+            return productionDemandee
+        
+        if self.unite_prod == constant.UNITE_PROD_PIECE:
+            return productionDemandee
+        
+        ret =  int( (float(productionDemandee) * 1000) / float(self.prod_hebdo_moy_g.split(",")[0])  )
         print (ret)
         return (ret)
 
     def prodSemaines(self, productionDemandee):
-        """ retourne une liste de production(s)escomptée par semaine (en kg ou en unité)"""
-        if self.prod_hebdo_moy_g =="0,0":
+        """ retourne une liste de production(s) escomptée(s) par semaine (en kg ou en unités)"""
+        if self.prod_hebdo_moy_g =="0":
             return [55]#@todo
         l_ret = []
+        
         if self.unite_prod == constant.UNITE_PROD_KG:
             for prodSemUnitaire_g in self.prod_hebdo_moy_g.split(","):
-                l_ret.append(int(productionDemandee * prodSemUnitaire_g))
+                l_ret.append(int((float(prodSemUnitaire_g)/1000) * productionDemandee))
 
         return (l_ret)
 
@@ -108,7 +114,6 @@ class Plant(models.Model):
         verbose_name = "Plant ou série de plants"
         
     variete = models.ForeignKey(Variete)
-    nb_graines = models.IntegerField(default=1)
     largeur_cm = models.PositiveIntegerField("largeur cm", default=0)
     hauteur_cm = models.PositiveIntegerField("hauteur cm", default=0)
     coord_x_cm = models.PositiveIntegerField("pos x cm", default=0)
@@ -122,7 +127,7 @@ class Plant(models.Model):
         self.variete_id = variete_id
         self.quantite = nb_plants
         
-    def nbGraines(self, nbPlants):
+    def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
         return(self.quantite / self.variete.rendementPlantsGraines)
 
@@ -133,13 +138,13 @@ class Plant(models.Model):
        
               
     def __str__(self):
-        return "plant %d %s (%d gr), %d x %d, pos: %d %d sur planche %d" %(  self.id,  self.variete.nom, 
-                                                                    self.nb_graines, 
-                                                                    self.largeur_cm, 
-                                                                    self.hauteur_cm, 
-                                                                    self.coord_x_cm, 
-                                                                    self.coord_y_cm, 
-                                                                    self.planche.num)
+        return "Série (id:%d) de %d plant(s) de %s (%d graines), %d x %d, pos: %d %d sur planche %d" %(  self.id, self.quantite, self.variete.nom, 
+                                                                                                        self.nbGraines(), 
+                                                                                                        self.largeur_cm, 
+                                                                                                        self.hauteur_cm, 
+                                                                                                        self.coord_x_cm, 
+                                                                                                        self.coord_y_cm, 
+                                                                                                        self.planche.num)
 
         
         

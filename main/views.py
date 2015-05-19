@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
-from django.http import Http404, HttpResponse
 from django.views.generic.edit import CreateView
 from django.core.urlresolvers import reverse_lazy
-from django.contrib.auth.decorators import login_required
+
 from main.models import Variete, Famille
 from django.template.defaultfilters import random
 
+
 from main import forms, constant, planification
-from django.contrib.messages.storage.base import Message
 import datetime
 
 from main.models import Evenement, Planche, Plant, Production, TypeEvenement
@@ -183,7 +182,7 @@ def prevision_recolte(request):
     l_semaines = []
     date_debut_sem = date_debut_sem_vue
     while True:
-        date_fin_sem = date_debut_sem + datetime.timedelta(days=6, hours=20)
+        date_fin_sem = date_debut_sem + datetime.timedelta(days=6)
         l_semaines.append((date_debut_sem.isocalendar(), date_debut_sem, date_fin_sem))
         if date_fin_sem >= date_fin_vue: 
             break
