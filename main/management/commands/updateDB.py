@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import csv
 
 from django.core.management.base import BaseCommand       
 from main.models import Famille, Variete, TypeEvenement
-import csv
 from main.constant import d_TitresTypeEvt
        
 class Command(BaseCommand):
@@ -19,8 +19,12 @@ class Command(BaseCommand):
             hTE.nom = n
             hTE.save()
         
-        ## maj croisssance plantes
-        with open("croissancePlantes.csv", "r+t", encoding="utf-8") as hF:
+        ## maj base de légumes
+        l_fams = Famille.objects.all().values_list("nom", flat=True)
+        print ("l_fams ", l_fams)
+        l_fams_sup = []
+        ficname = "Legumes.csv"
+        with open(ficname, "r+t", encoding="utf-8") as hF:
             reader = csv.DictReader(hF)
             for d_line in reader:
                 variet = d_line.get("variete").lower()
@@ -30,36 +34,17 @@ class Command(BaseCommand):
                     self.stdout.write("Ajout " + variet)
                     v = Variete()
                     v.nom = variet
-            
+
                 v.date_min_plantation = d_line.get("date_min_plantation")
                 v.date_max_plantation = d_line.get("date_max_plantation")
-                v.duree_avant_recolte_j = int(d_line.get("duree_avant_recolte_j"))
+                v.duree_avant_recolte_j = int(d_line.get("duree_avant_recolte_j") or 0 )
                 v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
-                v.diametre_cm = int(d_line.get("diametre_cm"))
+                v.diametre_cm = int(d_line.get("diametre_cm") or 0)
                 v.save()
-          
-        
-        ## maj des familles pour chaque variété
-        ficname = "famillesLegumes.csv"
-        with open(ficname, "r+t", encoding="utf-8") as hF:
-            reader = csv.DictReader(hF)
-            l_fams = Famille.objects.all().values_list("nom", flat=True)
-            print("l_fams", l_fams)
-            l_fams_sup = []
-            for d_line in reader:
-                
-                variet = d_line.get("variete").lower()
-                try:
-                    hVa = Variete.objects.get(nom = variet)
-                except:
-                    self.stdout.write("Ajout " + variet)
-                    v = Variete()
-                    v.nom = variet
-                    v.save()       
-    
+
                 try:
                     fam = d_line.get("famille","").lower().strip()
-                    
+                    print ("fam ", fam)
                     if fam and fam not in l_fams and fam not in l_fams_sup:
                         print("ajout famille %s"%fam)
                         hFam = Famille()
@@ -67,10 +52,10 @@ class Command(BaseCommand):
                         hFam.save()
                         l_fams_sup.append(fam)
                 
-                    if not hVa.famille:
-                        hVa.famille = Famille.objects.get(nom=fam)
-                        hVa.save()
-                        print("maj %s / %s"%(hVa.nom, hVa.famille.nom))
+                    if not v.famille:
+                        v.famille = Famille.objects.get(nom=fam)
+                        v.save()
+                        print("maj %s / %s"%(v.nom, v.famille.nom))
                         
                 except:
                     print("pb, pas de famille accessible pour %s dans le fichier %s" %(variet, ficname))

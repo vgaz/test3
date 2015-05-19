@@ -1,0 +1,31 @@
+variete,famille,date_min_plantation,date_max_plantation,duree_avant_recolte_j,diametre_cm,prod_hebdo_moy_g
+ail,liliacée,"20/03","20/05",120,20,"100,100,100"
+artichaut,composée,"20/03","20/05",100,50,"300"
+aubergine, solanacée,"20/03","20/05",100,60,"900"
+betterave, chénopodiacée,"20/03","20/05",60,25,"120,120"
+blé tendre, poacée,,,,,,
+blé dur, poacée,,,,,,
+blette, chénopodiacée,,,,,,
+carotte, apiacée,"20/03","20/05",90,13,"45,45,45"
+chou brocoli,crucifère,"20/03","20/05",150,60,"450"
+chou pointu, crucifère,,,,,,
+chou fleur, crucifère,"20/03","20/05",150,600,"1500"
+chou de bruxelles, crucifère,,,,,,
+concombre, cucurbitacée,,,,,,
+cornichon, cucurbitacée,,,,,,
+courgette, cucurbitacée,,,,,,
+épeautre, poacée,,,,,,
+épinard, chénopodiacée,,,,,,
+haricots verts, fabacée,,,,,,
+oignon blanc, liliacée,,,,,,
+orge, poacée,,,,,,
+poireau, liliacée,,,,,,
+potiron,cucurbitacée,,,,,,
+radis, crucifère,"20/03","20/05",20,10,"5,5"
+salade chicorée, composée,"20/03","20/05",30,20,"250"
+sorgho, poacée,,,,,,
+seigle, poacée,,,,,,
+tomate, solanacée,"20/03","20/05",90,60,"150,150,150,150,100,100"
+pomme de terre, solanacée,,,,,,
+luzerne, fabacée,,,,,,
+thym, lamiacée,,,,,,

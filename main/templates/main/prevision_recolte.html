@@ -61,6 +61,7 @@ function init()
         {% for var in l_vars %}
         <tr>
             <td>{{var.nom}} <small>({{var.nomUniteProd}})</small></td>
+            
             {% for semaine in l_semaines %}
             <td><input style="width:100px;font-weight:bold;text-align: center" type="text" name="p__{{semaine.1|date:'Y-m-d'}}__{{var.id}}" id="p__{{semaine.1|date:'Y-m-d'}}__{{var.id}}"/></td>
             {% endfor %}
@@ -68,11 +69,13 @@ function init()
             <td><div style="font-weight:bold;text-align: center" id="tv__{{var.id}}"> </div></td>
         </tr>
         {% endfor %}
+        
 
-        <th>Total</th>
-            {% for semaine in l_semaines %}
-            <td><div style="font-weight:bold;text-align:center" id="ts__{{semaine.1|date:'Y-m-d'}}"> </div></td>
-            {% endfor %}
+        <tr><th>Total</th>{# ligne de total des qte de legumes par semaine #}
+        {% for semaine in l_semaines %}
+        <td><div style="font-weight:bold;text-align:center" id="ts__{{semaine.1|date:'Y-m-d'}}"> </div></td>
+        {% endfor %}
+        </tr>
         
     </table>
     <br/>
