@@ -183,7 +183,7 @@ def prevision_recolte(request):
     l_semaines = []
     date_debut_sem = date_debut_sem_vue
     while True:
-        date_fin_sem = date_debut_sem + datetime.timedelta(days=6, hours=20)
+        date_fin_sem = date_debut_sem + datetime.timedelta(days=6)
         l_semaines.append((date_debut_sem.isocalendar(), date_debut_sem, date_fin_sem))
         if date_fin_sem >= date_fin_vue: 
             break
