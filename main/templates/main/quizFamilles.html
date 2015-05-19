@@ -11,10 +11,17 @@
 <br/>
 <h2>Parmi les familles suivantes, quelle est celle de la variété : {{form.var.nom}} ?</h2>
 
-<form action="" method="POST" style="list-style-type: none;">
+<form action="" method="POST" >
     {% csrf_token %}
-    {{ form }}
-	<input type="hidden" name="variete" value="{{form.var.id}}" />
+    
+    {# liste des familles possibles#}
+    <ul>
+    {% for choice in form.l_choices%}
+    <li style="list-style-type: none;"><label for="id_famChoice_{{choice.0}}"><input id="id_famChoice_{{choice.0}}" name="famChoice" type="radio" value="{{choice.0}}" /> {{choice.1|title}}</label></li>
+    {% endfor%}
+    </ul>
+    
+    <input type="hidden" name="variete" value="{{form.var.id}}" />
     <input type="submit" value="OK" />
 </form>
 

@@ -11,9 +11,9 @@
       <table>
           <tr>
           {% if var.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
-          <td><h2>{{var.nom|title}} {% if var.famille %} ({{var.famille}}) {% endif %} </h2> {{var.date_min_plantation}} à {{var.date_max_plantation}}.
+          <td><h2>{{var.nom|title}} {% if var.famille %} ({{var.famille.nom}}) {% endif %} </h2> {{var.date_min_plantation}} à {{var.date_max_plantation}}.
               {{var.duree_avant_recolte_j}} jours de croissance, diamètre en terre : {{var.diametre_cm}} cm<br />
-              Unité de production: {{var.nomUniteProd}}
+              Unité de production : {{var.nomUniteProd}}
               </td>
           </tr>
       </table>

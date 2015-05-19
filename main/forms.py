@@ -8,10 +8,10 @@ from main.models import Famille, Planche
 class FormFamilyQuiz(forms.Form):
     var = None
     l_choices = [(fam.pk, fam.nom) for fam in Famille.objects.all().order_by('nom')]
-    famChoice = forms.ChoiceField( label = "Liste des familles",
+    famChoice = forms.ChoiceField(  label = "Liste des familles",
                                     choices = l_choices, 
-                                    widget=forms.RadioSelect())   
-    
+                                    widget = forms.RadioSelect())   
+
 #    def clean(self):
 #        pkResp = self.cleaned_data.get('famChoices')
 #        if True:
