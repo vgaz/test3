@@ -16,12 +16,12 @@ def enregistrePrevisions(request):
                     obj=Production()
                     obj.variete_id = var
                     obj.date_semaine = ds
-                masse = int(v)
-                if masse == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro
-                    obj.delete()
-                else:
-                    obj.qte_dde = masse
-                    obj.save()
+                qte = int(v.split(" ")[0])
+#                 if qte == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro
+#                     obj.delete()
+#                 else:
+                obj.qte_dde = qte
+                obj.save()
                     
                     
 def planif(dateDebut, dateFin):
@@ -47,28 +47,30 @@ def planif(dateDebut, dateFin):
             nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
             print ("Besoin de %d nouveaux plants"%(nb_plants_a_installer))
             plants = Plant(var.id, nb_plants_a_installer)                
-            plants.planche = Planche.objects.get(num = 0) ## placement en planche virtuelle en attente de placement réel 
+            plants.planche = Planche.objects.get(num = 0)           ## placement en planche virtuelle en attente de placement réel 
             plants.production_id = prod.id
-            plants.hauteur_cm = var.diametre_cm ## on fixe arbitrairement sur une ligne
+            plants.hauteur_cm = var.diametre_cm                     ## on fixe arbitrairement sur une ligne
             plants.largeur_cm = var.diametre_cm * nb_plants_a_installer
             plants.save()
             print(plants)
             
             ## maj prod de cette semaine pour cette variété
-            ## et, éventuellement, des suivantes induites par les nouveaux plants
             l_prodSemaine = var.prodSemaines(nb_plants_a_installer)
+            print(l_prodSemaine)
             ## maj pour cette semaine
-            prod.qte_prod += l_prodSemaine[0]  
-            prod.save()     
+            prod.qte_prod += l_prodSemaine[0]
+            print ("prod %s sem %s  %d/%d"%(prod.variete_id, dateSemaine, prod.qte_dde, prod.qte_prod))
+            prod.save()
             
             ## maj éventuelle des semaines suivantes
-            if len(l_prodSemaine):  
+            if len(l_prodSemaine) > 1:  
                 for index, qteSem in enumerate(l_prodSemaine[1:]):
-                    dateSem = dateDebut + datetime.timedelta(days = 1 + index)
-                    prod_suite = Production.objects.get(variete = var.id,
-                                                        date_semaine = dateSem )
+                    dateSem = dateDebut + datetime.timedelta(weeks = 1 + index)
+                    prod_suite = Production.objects.get_or_create(variete_id = var.id, date_semaine = dateSem)[0]
+                    print (prod_suite)
                     prod_suite.qte_prod += qteSem
-            ##print(prod)
+                    prod_suite.save()
+                    print(prod_suite)
 
             evt = Evenement()
             evt.type = TypeEvenement.objects.get(nom="debut")

@@ -25,12 +25,13 @@ function init()
             d_cumul_hebdo[tab_previsions[ii][0]] += tab_previsions[ii][2]
             d_cumul_var[tab_previsions[ii][1]] += tab_previsions[ii][2]
             s_id = ["p", tab_previsions[ii][0], tab_previsions[ii][1]].join("__") 
-            document.getElementById(s_id).value = tab_previsions[ii][2]
+            document.getElementById(s_id).value = tab_previsions[ii][2] + ' prod:' + tab_previsions[ii][3]
             }
             
+    // maj total de la semaine 
     for (key in d_cumul_hebdo)
         document.getElementById("ts__" + key).innerHTML = d_cumul_hebdo[key]
-       
+    // maj total par variété pour toute la période vue
     for (key in d_cumul_var)
         document.getElementById("tv__" + key).innerHTML = d_cumul_var[key]
        

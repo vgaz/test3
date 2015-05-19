@@ -4,6 +4,7 @@ import csv
 from django.core.management.base import BaseCommand       
 from main.models import Famille, Variete, TypeEvenement
 from main.constant import d_TitresTypeEvt
+from main import constant
        
 class Command(BaseCommand):
     """updateDB command"""
@@ -40,6 +41,12 @@ class Command(BaseCommand):
                 v.duree_avant_recolte_j = int(d_line.get("duree_avant_recolte_j") or 0 )
                 v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
                 v.diametre_cm = int(d_line.get("diametre_cm") or 0)
+                
+                if d_line.get("unite_prod") == 'u': 
+                    v.unite_prod = constant.UNITE_PROD_PIECE
+                else:
+                    v.unite_prod = constant.UNITE_PROD_KG
+                     
                 v.save()
 
                 try:
