@@ -40,7 +40,7 @@ class Variete(models.Model):
     rendementPlantsGraines = models.FloatField('graines Pour 1 Plant', default=2)
     diametre_cm = models.IntegerField("diamètre (cm)", default=0)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
-#     image = models.ImageField()
+    ##image = models.ImageField()
     
     class Meta: 
         ordering = ['nom']
