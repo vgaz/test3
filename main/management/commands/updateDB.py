@@ -2,8 +2,7 @@
 import csv
 
 from django.core.management.base import BaseCommand       
-from main.models import Famille, Variete, TypeEvenement
-from main.constant import d_TitresTypeEvt
+from main.models import Famille, Variete
 from main import constant
        
 class Command(BaseCommand):
@@ -12,13 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
-        ## maj type d'évenement
-        l_typeEvt = TypeEvenement.objects.all().values_list("nom", flat=True)
-        for n in d_TitresTypeEvt.keys():    
-            if n in l_typeEvt: continue 
-            hTE = TypeEvenement()
-            hTE.nom = n
-            hTE.save()
+
         
         ## maj base de légumes
         l_fams = Famille.objects.all().values_list("nom", flat=True)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-from main.models import Evenement, Production, Planche, Plant, TypeEvenement, Variete
+from main.models import Evenement, Production, Planche, Plant, Variete
 
 #################################################
 
@@ -38,10 +38,8 @@ def planif(dateDebut, dateFin):
             print ("\n%s"%var.nom)
             reste = prod.qte_prod - prod.qte_dde 
             if reste >= 0:
-                pass
-                pass
                 ## on a assez,  on passe à la variété suivante
-                print ("Dde = %d; prod= %d, ok"%(prod.qte_dde,  prod.qte_prod) )
+                print ("Dde = %d; prod = %d, ok"%(prod.qte_dde,  prod.qte_prod) )
                 break
             ## on rajoute des plants
             nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
@@ -52,8 +50,16 @@ def planif(dateDebut, dateFin):
             plants.hauteur_cm = var.diametre_cm                     ## on fixe arbitrairement sur une ligne
             plants.largeur_cm = var.diametre_cm * nb_plants_a_installer
             plants.save()
-            print(plants)
+            print( "nouvelle serie " + str(plants))
             
+            print ("crea evt : ", Evenement.TYPE_DEBUT, dateSemaine, var.duree_avant_recolte_j, plants.id, "debut plant " + var.nom)
+            e = Evenement(Evenement.TYPE_DEBUT, 
+                          dateSemaine, 
+                          var.duree_avant_recolte_j, 
+                          plants.id)#,                         "debut plant " + var.nom)
+            e.save()
+            Evenement(Evenement.TYPE_FIN, dateSemaine, var.duree_avant_recolte_j, plants.id, "fin plant " + var.nom)
+
             ## maj prod de cette semaine pour cette variété
             l_prodSemaine = var.prodSemaines(nb_plants_a_installer)
             print(l_prodSemaine)
@@ -65,20 +71,13 @@ def planif(dateDebut, dateFin):
             ## maj éventuelle des semaines suivantes
             if len(l_prodSemaine) > 1:  
                 for index, qteSem in enumerate(l_prodSemaine[1:]):
-                    dateSem = dateDebut + datetime.timedelta(weeks = 1 + index)
+                    dateSem = dateSemaine + datetime.timedelta(weeks = 1 + index)
                     prod_suite = Production.objects.get_or_create(variete_id = var.id, date_semaine = dateSem)[0]
                     print (prod_suite)
                     prod_suite.qte_prod += qteSem
                     prod_suite.save()
                     print(prod_suite)
 
-            evt = Evenement()
-            evt.type = TypeEvenement.objects.get(nom="debut")
-            evt.plant_base = plants
-            evt.date = dateSemaine
-            evt.duree = var.duree_avant_recolte_j
-            evt.nom = "plant " + var.nom
-            evt.save()
 
         dateSemaine += datetime.timedelta(days=7)
     

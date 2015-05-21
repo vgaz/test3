@@ -31,8 +31,8 @@ class Variete(models.Model):
     """variété de plante"""
     nom = models.CharField(max_length=100)
     famille = models.ForeignKey(Famille, null=True, blank=True)
-    avec = models.ManyToManyField("self", related_name="avec", null=True, blank=True)
-    sans = models.ManyToManyField("self", related_name="sans", null=True, blank=True)
+    avec = models.ManyToManyField("self", related_name="avec", blank=True)
+    sans = models.ManyToManyField("self", related_name="sans", blank=True)
     date_min_plantation = models.CharField("date (jj/mm) de début de plantation", max_length=10, default="0/0")
     date_max_plantation = models.CharField("date (jj/mm) de fin de plantation", max_length=10, default="0/0")
     duree_avant_recolte_j = models.IntegerField("durée en terre avant récolte (jours)", default=0)
@@ -76,20 +76,11 @@ class Variete(models.Model):
         
         if self.unite_prod == constant.UNITE_PROD_KG:
             for prodSemUnitaire_g in self.prod_hebdo_moy_g.split(","):
-                l_ret.append(int((float(prodSemUnitaire_g)/1000) * productionDemandee))
+                l_ret.append(int((float(prodSemUnitaire_g)/1000) * productionDemandee) + 1)
 
         return (l_ret)
 
-    
-
-class TypeEvenement(models.Model):
-    
-    nom = models.CharField(max_length=20)
-    
-    def __str__(self):
-        return self.nom
   
-    
 
 class Production(models.Model):
     """Prévision hebdomadaire des productions pour une variété"""
@@ -120,9 +111,9 @@ class Plant(models.Model):
     coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
     planche = models.ForeignKey("Planche", null=True, blank=True)
     quantite = models.PositiveIntegerField(default=1)
-    production = models.ForeignKey(Production)
+    production = models.ForeignKey(Production, null=True, blank=True)
    
-    def __init__(self, variete_id, nb_plants):
+    def __init__(self, variete_id = 0, nb_plants = 0):
         super(Plant, self).__init__()
         self.variete_id = variete_id
         self.quantite = nb_plants
@@ -149,18 +140,38 @@ class Plant(models.Model):
         
         
 class Evenement(models.Model):
-
+    
+    TYPE_DEBUT = 1
+    TYPE_FIN = 2
+    TYPE_AUTRE = 3
+    D_NOM_TYPES = {TYPE_DEBUT:"Début", TYPE_FIN:"Fin", TYPE_AUTRE:"Divers"}
+    
+    type =  models.PositiveIntegerField()
     plant_base = models.ForeignKey(Plant)
     date_creation = models.DateTimeField(default=datetime.datetime.now())
     date = models.DateTimeField()
-    duree = models.PositiveIntegerField("nb jours d'activité", default=1)
+    duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)
     nom = models.CharField(max_length=100, default="")
     texte = models.TextField(default="")
     bFini = models.BooleanField(default=False)
-    type =  models.ForeignKey(TypeEvenement)
 
     class Meta: 
         ordering = ['date']
-        
-    def __unicode__(self):
-        return "%d %s %s"%(self.plant_base_id, self.date, self.type)
+    
+    def __init__(self, e_type, date, duree_j, plant_id = 0, nom = ""):
+        super(Evenement, self).__init__()        
+        self.type = e_type
+        self.date = date
+        self.duree_j = duree_j
+        self.plant_base_id = plant_id
+        self.nom = nom
+        self.date_creation = datetime.datetime.now()
+        self.save()
+
+    def nomType(self):
+        return self.D_NOM_TYPES[self.type]  
+
+                    
+    def __str__(self):
+        return "Evt %s %s pour plant %d, %s pour %d j"%(self.nomType(), self.id or "?", self.plant_base_id, self.date, self.duree_j )
+             

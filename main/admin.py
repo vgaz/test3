@@ -8,7 +8,6 @@ from main.models import Variete
 from main.models import Plant
 from main.models import Planche
 from main.models import Production
-from main.models import TypeEvenement
 
 admin.site.register(Evenement)
 admin.site.register(Famille)
@@ -16,4 +15,3 @@ admin.site.register(Variete)
 admin.site.register(Planche)
 admin.site.register(Plant)
 admin.site.register(Production)
-admin.site.register(TypeEvenement)

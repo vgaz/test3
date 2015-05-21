@@ -35,7 +35,7 @@
     NomEvtDeId = {  {% for evtType in l_typesEvt %} '{{evtType.id}}':'{{evtType.nom}}',{% endfor %}  }
     
     jsonEvts = '{"evts":[{% for evt in l_evts %}\
-                {"id":"{{evt.id}}","nom":"{{evt.nom}}","date":"{{evt.date|safe}}","duree":"{{evt.duree}}","type":"{{evt.type}}","id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}\
+                {"id":"{{evt.id}}","nom":"{{evt.nom}}","date":"{{evt.date|safe}}","duree":"{{evt.duree_j}}","type":"{{evt.type}}","id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}\
                 {% endfor %}]}'	
 
 function    init()
@@ -100,7 +100,7 @@ function  balisagePlants()
                     {
                     //positionnement des autres évènements
                     deltaPx = moment(hJsonEvts.evts[ii].date).diff(moment(debut), 'hours') * pxParH  + "px"
-                    s_evt = "<img title='" + hJsonEvts.evts[ii].nom + '\n' + moment(hJsonEvts.evts[ii].date).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + ";width:" + hJsonEvts.evts[ii].duree * 24 * pxParH + "px;height:13px'>"
+                    s_evt = "<img title='" + hJsonEvts.evts[ii].nom + '\n' + moment(hJsonEvts.evts[ii].date).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + ";width:" + hJsonEvts.evts[ii].duree_j * 24 * pxParH + "px;height:13px'>"
                     document.getElementById(hJsonEvts.evts[ii].id_plant).getElementsByClassName("evts")[0].innerHTML += s_evt
                     }
                 }
@@ -146,7 +146,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         {# plants existants en base #}
         {% for plant in l_plants %}
         <div class="chrono_plant" id="{{plant.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
-        variete="{{plant.variete_id}}" debut="{{plant.debut}}" fin="{{plant.fin}}" >
+        variete="{{plant.variete_id}}" debut="{{plant.debut}}" fin="{{plant.duree_j}}" >
         <div><div class="num_plant" style="display: inline;">({{plant.id}}) </div><div class="variete" style="display: inline;">{{plant.variete}}</div><br/>
         <div class="debut" style="display: inline;float:left">ddd{{plant.debut}}</div><br/><div class="fin" style="display:inline;float:right">{{plant.fin}}fff</div>
         <br/><div class="evts" style="display: inline;float:left"> </div></div>

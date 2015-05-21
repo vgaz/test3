@@ -8,7 +8,6 @@ APP_NAME = "MARAICH"
 
 APP_VERSION = "1.0.1"
 
-d_TitresTypeEvt = {"debut":"début", "fin":"fin", "autre":"autre"}
 
 UNITE_PROD_KG = 1
 UNITE_PROD_PIECE = 2
