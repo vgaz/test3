@@ -114,7 +114,7 @@ class CreationPlanche(CreateView):
 
 def editionPlanche(request):
 
-    planche = Planche.objects.get(num = int(request.GET.get('num_planche', 0)))
+    planche = Planche.objects.get(num = int(request.GET.get("num_planche", 0)))
     s_date = request.POST.get("date", "")
     if s_date:
         dateVue = datetime.datetime.strptime(s_date, constant.FORMAT_DATE)
@@ -131,7 +131,7 @@ def editionPlanche(request):
     l_PlantsIds = list(l_evts_debut.values_list('plant_base_id', flat=True))
     ## recup des evenement de fin ayant les memes id_plants que les evts de debut 
     l_evts = Evenement.objects.filter(type = Evenement.TYPE_FIN, plant_base_id__in = l_PlantsIds, date__gte = dateVue)
-    
+    print (l_evts)
     l_PlantsIds = l_evts.values_list('plant_base_id', flat=True)
     l_plants = Plant.objects.filter(planche = planche, id__in = l_PlantsIds)
     

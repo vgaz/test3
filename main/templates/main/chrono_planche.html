@@ -119,7 +119,7 @@ function changelePas(delta)
 
 {% endblock %}
 
-{% block title %}Suivi dans le temps de la planche {{planche.num}} ({{planche.largeur_cm}} cm x {{planche.longueur_m}} m) {% endblock %}
+{% block title %}Suivi temporel des plants de la planche {{planche.num}} ({{planche.largeur_cm}} cm x {{planche.longueur_m}} m) {% endblock %}
 
 {% block content %}
 
@@ -130,6 +130,7 @@ function changelePas(delta)
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
 Pour la planche <input style="width: 30px" type="text" name="num_planche" value="{{planche.num}}" />
+<a href="{% url 'edition_planche' %}?num_planche={{planche.num}}"><img src="{{ STATIC_URL }}images/editor.png" title="Editer"></a>
  Visionnage du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
 <input style="margin-left: 20px" type="submit" value="Envoyer"/>
 <input style="margin-left: 20px" type="submit" name="direction" value="recul"/>

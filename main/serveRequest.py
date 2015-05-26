@@ -88,14 +88,16 @@ def serveRequest(request):
 
             if e_id == 0:
                 ## svg d'un nouvel evt
-                evt = Evenement(e_type, date, duree_j, plant_id, nom)    
+                evt = Evenement()
             else:
                 # maj d'un evt deja existant
                 evt = Evenement.objects.get(id=e_id)
-                evt.type = e_type
-                evt.date = date
-                evt.duree_j = 1
-                evt.nom = nom
+                
+            evt.type = e_type
+            evt.plant_base_id = plant_id
+            evt.date = date
+            evt.duree_j = 1
+            evt.nom = nom
 
             if evt.type == Evenement.TYPE_FIN and "00:00:00" in evt.date:
                 print("date +20h")

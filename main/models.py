@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.utils import timezone
+import datetime
 
 from main import constant
-import datetime
 
 class Famille(models.Model):
     """famille associée à la plante"""
@@ -76,8 +75,11 @@ class Variete(models.Model):
         l_ret = []
         
         if self.unite_prod == constant.UNITE_PROD_KG:
-            for prodSemUnitaire_g in self.prod_hebdo_moy_g.split(","):
-                l_ret.append(int((float(prodSemUnitaire_g)/1000) * productionDemandee) + 1)
+            for prodSemUnitaire in self.prod_hebdo_moy_g.split(","):
+                l_ret.append(int((float(prodSemUnitaire)/1000) * productionDemandee) + 1)
+
+        if self.unite_prod == constant.UNITE_PROD_PIECE:
+            l_ret.append(productionDemandee)
 
         return (l_ret)
 
@@ -144,7 +146,7 @@ class Evenement(models.Model):
     type =  models.PositiveIntegerField()
     plant_base = models.ForeignKey(Plant)
     date = models.DateTimeField()
-    date_creation = models.DateTimeField(default=timezone.now())
+    date_creation = models.DateTimeField(default=datetime.datetime.now())
     duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)
     nom = models.CharField(max_length=100, default="")
     texte = models.TextField(default="")

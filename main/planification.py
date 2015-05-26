@@ -33,14 +33,15 @@ def planif(dateDebut, dateFin):
         ## 1 récupération des productions demandées
         l_prods = Production.objects.filter(date_semaine = dateSemaine)
         for prod in l_prods:
-            
+            ## recup de la variete pour cette semaine
             var = Variete.objects.get(id = prod.variete_id)
             print ("\n%s"%var.nom)
             reste = prod.qte_prod - prod.qte_dde 
             if reste >= 0:
                 ## on a assez,  on passe à la variété suivante
                 print ("Dde = %d; prod = %d, ok"%(prod.qte_dde,  prod.qte_prod) )
-                break
+                continue
+            
             ## on rajoute des plants
             nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
             print ("Besoin de %d nouveaux plants"%(nb_plants_a_installer))

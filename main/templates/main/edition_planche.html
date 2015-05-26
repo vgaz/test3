@@ -13,7 +13,6 @@ function init()
     id_plant_courant = ""
     g_tab_tickets = new Array()
     jsonVarietes = {  {% for var in l_vars %} {{var.id}}:'{{var.nom}}',{% endfor %}  }
-    //jsonTitreTypeEvt = {  {% for evtType in l_evtTypes %} '{{evtType.id}}':'{{evtType.titre}}',{% endfor %}  }
     o_nomTypeEvt = {{d_evtTypes|safe}}
     //retaillage de la matrice, on fait un carré
     document.getElementById("matrice").style.height = ({{planche.largeur_cm}} * pxParCm ).toString() + "px"
@@ -332,7 +331,7 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
 <input type="button" onclick="ajouteNouveauPlant()" value="Ajout d'un plant">
 &nbsp;
 <input type="button" onclick="sauveMatrice()" value="Sauvegarder tous les plants">
-
+<a href="{% url 'chrono_planche' %}?num_planche={{planche.num}}"><img src="{{ STATIC_URL }}images/arrowR.jpg" width="24" height="24" title="Chronogramme"></a>
 <span id="divInfoDebug" ></span>
 <br/><br/>
 

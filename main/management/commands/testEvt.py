@@ -17,11 +17,19 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
+        from main import planification
+
+        delta20h = datetime.timedelta(hours=20)
+        date_debut_vue = datetime.datetime.strptime("18/5/2015", constant.FORMAT_DATE)
+        date_fin_vue = datetime.datetime.strptime("24/5/2015", constant.FORMAT_DATE) + delta20h
+
+        planification.planif(date_debut_vue, date_fin_vue)
+        return
+        
         self.factory = RequestFactory()
 
         # Create an instance of a POST request.
-        request = self.factory.post('http://localhost:8000/edition_planche/?num_planche=1', data={"cde":"getEvtsPlant",
-                                                                                                  "id":"36"
+        request = self.factory.post('http://localhost:8000/edition_planche/?num_planche=1', data={"cde":"getEvtsPlant", "id":"36"
                                                                                                   })
 #         
 #         evt =  Evenement(2, datetime.datetime.strptime("24/4/2015", constant.FORMAT_DATE), 5, 36)
