@@ -44,7 +44,9 @@ def planif(dateDebut, dateFin):
             ## on rajoute des plants
             nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
             print ("Besoin de %d nouveaux plants"%(nb_plants_a_installer))
-            plants = Plant(var.id, nb_plants_a_installer)                
+            plants = Plant()
+            plants.variete_id = var.id
+            plants.quantite = nb_plants_a_installer                
             plants.planche = Planche.objects.get(num = 0)           ## placement en planche virtuelle en attente de placement réel 
             plants.production_id = prod.id
             plants.hauteur_cm = var.diametre_cm                     ## on fixe arbitrairement sur une ligne
@@ -52,13 +54,20 @@ def planif(dateDebut, dateFin):
             plants.save()
             print( "nouvelle serie " + str(plants))
             
-            print ("crea evt : ", Evenement.TYPE_DEBUT, dateSemaine, var.duree_avant_recolte_j, plants.id, "debut plant " + var.nom)
-            e = Evenement(Evenement.TYPE_DEBUT, 
-                          dateSemaine, 
-                          var.duree_avant_recolte_j, 
-                          plants.id)#,                         "debut plant " + var.nom)
+            print ("crea evt : ", Evenement.TYPE_DEBUT, dateSemaine, var.duree_avant_recolte_j, plants.id, "début plant " + var.nom)
+            e = Evenement()
+            e.type = Evenement.TYPE_DEBUT
+            e.date = dateSemaine
+            e.plant_base_id = plants.id
+            e.nom = "début plant " + var.nom
             e.save()
-            Evenement(Evenement.TYPE_FIN, dateSemaine, var.duree_avant_recolte_j, plants.id, "fin plant " + var.nom)
+            
+            e = Evenement()
+            e.type = Evenement.TYPE_FIN
+            e.date = dateSemaine + datetime.timedelta(days = var.duree_avant_recolte_j)
+            e.plant_base_id = plants.id
+            e.nom = "fin plant " + var.nom
+            e.save()
 
             ## maj prod de cette semaine pour cette variété
             l_prodSemaine = var.prodSemaines(nb_plants_a_installer)

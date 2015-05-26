@@ -7,7 +7,7 @@ Created on Nov 26, 2013
 
 from django.http import HttpResponse
 
-from main.models import Evenement, Plant, Planche, Variete
+from main.models import Evenement, Plant, Planche
 import sys
 import datetime
 from main import constant

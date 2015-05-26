@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.utils import timezone
+
 from main import constant
 import datetime
 
@@ -17,15 +19,14 @@ class Famille(models.Model):
     
 class Planche(models.Model):
     """ planche de culture"""
-    
     num = models.PositiveIntegerField()
     nom = models.CharField(max_length=100, blank=True, default="")
     longueur_m = models.IntegerField()
     largeur_cm = models.IntegerField()
-    
-    def __unicode__(self):
-        return "Planche %d : %s, %d m x %d cm" % (self.num, self.nom, self.longueur_m, self.largeur_cm)
 
+    def __str__(self):
+        return "Planche %d : %s, %d m x %d cm" % (self.num, self.nom, self.longueur_m, self.largeur_cm)
+    
 
 class Variete(models.Model):
     """variété de plante"""
@@ -112,12 +113,7 @@ class Plant(models.Model):
     planche = models.ForeignKey("Planche", null=True, blank=True)
     quantite = models.PositiveIntegerField(default=1)
     production = models.ForeignKey(Production, null=True, blank=True)
-   
-    def __init__(self, variete_id = 0, nb_plants = 0):
-        super(Plant, self).__init__()
-        self.variete_id = variete_id
-        self.quantite = nb_plants
-        
+
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
         return(self.quantite / self.variete.rendementPlantsGraines)
@@ -126,7 +122,6 @@ class Plant(models.Model):
         """ retourne la surface prise, em m2, par la série de plants
         on prend le principe de 1 plant carré decoté = diametre variété"""
         return (self.quantite * float(self.variete.diametre_cm *self.variete.diametre_cm) / 10000 )
-       
               
     def __str__(self):
         return "Série (id:%d) de %d plant(s) de %s (%d graines), %d x %d, pos: %d %d sur planche %d" %(  self.id, self.quantite, self.variete.nom, 
@@ -137,7 +132,7 @@ class Plant(models.Model):
                                                                                                         self.coord_y_cm, 
                                                                                                         self.planche.num)
 
-        
+      
         
 class Evenement(models.Model):
     
@@ -145,11 +140,11 @@ class Evenement(models.Model):
     TYPE_FIN = 2
     TYPE_AUTRE = 3
     D_NOM_TYPES = {TYPE_DEBUT:"Début", TYPE_FIN:"Fin", TYPE_AUTRE:"Divers"}
-    
+
     type =  models.PositiveIntegerField()
     plant_base = models.ForeignKey(Plant)
-    date_creation = models.DateTimeField(default=datetime.datetime.now())
     date = models.DateTimeField()
+    date_creation = models.DateTimeField(default=timezone.now())
     duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)
     nom = models.CharField(max_length=100, default="")
     texte = models.TextField(default="")
@@ -158,16 +153,6 @@ class Evenement(models.Model):
     class Meta: 
         ordering = ['date']
     
-    def __init__(self, e_type, date, duree_j, plant_id = 0, nom = ""):
-        super(Evenement, self).__init__()        
-        self.type = e_type
-        self.date = date
-        self.duree_j = duree_j
-        self.plant_base_id = plant_id
-        self.nom = nom
-        self.date_creation = datetime.datetime.now()
-        self.save()
-
     def nomType(self):
         return self.D_NOM_TYPES[self.type]  
 

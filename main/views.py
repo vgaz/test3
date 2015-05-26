@@ -61,7 +61,7 @@ def chronoPlanche(request):
     l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
                                       date__lte = date_fin_vue, 
                                       plant_base__in = Plant.objects.filter(planche_id = laPlanche))
-    print(l_evts)
+
     ## on en deduit les plants impliqués, même partiellement
     l_plantsId = list(set([evt.plant_base_id for evt in l_evts]))
     ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle

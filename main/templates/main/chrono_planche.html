@@ -79,7 +79,7 @@ function  balisagePlants()
             
             if (hJsonEvts.evts[ii].id_plant == pl)
                 {
-                if (hJsonEvts.evts[ii].type == 'debut')
+                if (hJsonEvts.evts[ii].type == '1')
                     {
                     debut = hJsonEvts.evts[ii].date
                     deltaDebutH = moment(hJsonEvts.evts[ii].date).diff(moment(date_debut_vue), 'hours')
@@ -88,7 +88,7 @@ function  balisagePlants()
                     //mise à jour visuelle info date
                     document.getElementById(hJsonEvts.evts[ii].id_plant).getElementsByClassName("debut")[0].innerHTML = moment(debut).format("DD/MM/YYYY")
                     }
-                else if (hJsonEvts.evts[ii].type == 'fin')
+                else if (hJsonEvts.evts[ii].type == '2')
                     {
                     fin = hJsonEvts.evts[ii].date
                     deltaH = moment(fin).diff(moment(debut), 'hours')

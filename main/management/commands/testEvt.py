@@ -6,7 +6,11 @@ from django.core.management.base import BaseCommand
 from main import serveRequest
 from django.test import TestCase, RequestFactory
 
-   
+from main.models import Evenement, Plant, Planche
+from main import constant
+import datetime
+
+
 class Command(BaseCommand):
     """updateDB command"""
     help = "updateDB"
@@ -19,13 +23,17 @@ class Command(BaseCommand):
         request = self.factory.post('http://localhost:8000/edition_planche/?num_planche=1', data={"cde":"getEvtsPlant",
                                                                                                   "id":"36"
                                                                                                   })
-
-      
-        
+#         
+#         evt =  Evenement(2, datetime.datetime.strptime("24/4/2015", constant.FORMAT_DATE), 5, 36)
+# 
+#         l_objs = Planche.objects.all()
+#        
+#         l_objs = Plant.objects.all()
+#         for evt in l_objs:
+#             print (evt)         
+#         
+#         l_objs = Evenement.objects.filter(plant_base_id = int(request.POST.get("id", 0)))
+#         for evt in l_objs:
+#             print (evt)
         serveRequest.serveRequest(request)
         
-        
-       
-        
-        
-    
