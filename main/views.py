@@ -66,7 +66,7 @@ def chronoPlanche(request):
     l_plantsId = list(set([evt.plant_base_id for evt in l_evts]))
     ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle
     l_evts = Evenement.objects.filter(plant_base_id__in = l_plantsId).order_by('plant_base_id', 'date')
-    l_plants = Plant.objects.filter(planche_id = laPlanche, id__in = l_plantsId )
+    l_plants = Plant.objects.filter(planche_id = laPlanche, id__in = l_plantsId ).order_by('variete_id')
 
     return render(request,
                  'main/chrono_planche.html',

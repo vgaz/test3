@@ -17,13 +17,12 @@ def enregistrePrevisions(request):
                     obj.variete_id = var
                     obj.date_semaine = ds
                 qte = int(v.split(" ")[0])
-#                 if qte == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro
-#                     obj.delete()
-#                 else:
-                obj.qte_dde = qte
-                obj.save()
-                    
-                    
+                if qte == 0 and obj.qte_prod == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro mais sans engagement de production
+                    obj.delete()
+                else:
+                    obj.qte_dde = qte
+                    obj.save()
+
 def planif(dateDebut, dateFin):
     
     ## on balaye semaine par semaine
@@ -72,7 +71,7 @@ def planif(dateDebut, dateFin):
 
             ## maj prod de cette semaine pour cette variété
             l_prodSemaine = var.prodSemaines(nb_plants_a_installer)
-            print(l_prodSemaine)
+            ##print(l_prodSemaine)
             ## maj pour cette semaine
             prod.qte_prod += l_prodSemaine[0]
             print ("prod %s sem %s  %d/%d"%(prod.variete_id, dateSemaine, prod.qte_dde, prod.qte_prod))

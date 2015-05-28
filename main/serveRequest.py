@@ -87,7 +87,7 @@ def serveRequest(request):
             try:
                 prod = None
                 prod = Production.objects.get(id = plant.production_id)
-                prod.delete()
+                prod.delete()##@todo: erreur il faut retrancher de la seule production de ces plants 
             except:
                 pass    
 
