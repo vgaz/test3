@@ -47,6 +47,9 @@ function ajouteNouveauPlant()
    
 function supprimePlant(plant_id)
     {
+    s_request = "cde=supprime_plant&id="+ id_plant
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)        
     document.getElementById('divEditPlan').style.display = "none"
     document.getElementById('matrice').removeChild(document.getElementById(plant_id))
     }

@@ -7,7 +7,7 @@ Created on Nov 26, 2013
 
 from django.http import HttpResponse
 
-from main.models import Evenement, Plant, Planche
+from main.models import Evenement, Plant, Planche, Production
 import sys
 import datetime
 from main import constant
@@ -18,6 +18,7 @@ def serveRequest(request):
     ## --------------- renvoi de tous les evenements d'un plant
     cde = request.POST.get("cde","")
     print("cde =", cde)
+    
     if cde == "getEvtsPlant": 
         try:
             l_evts = Evenement.objects.filter(plant_base_id = int(request.POST.get("id", 0)))
@@ -35,8 +36,6 @@ def serveRequest(request):
         return HttpResponse(s_json, content_type="application/json")
 
     ## --------------- renvoi d'un evt
-    cde = request.POST.get("cde","")
-    print("cde =", cde)
     if cde == "getEvt": 
         try:
             evt = Evenement.objects.get(id = int(request.POST.get("id", 0)))
@@ -50,8 +49,6 @@ def serveRequest(request):
 
     ## --------------- request to update database 
     if cde =='sauve_plant':
-        print( __name__, "sauve_plant", request.POST)
-
         try:
             id_plant = request.POST.get("id_plant")
             if '_' in id_plant:
@@ -69,6 +66,40 @@ def serveRequest(request):
             plant.quatite = 1
             plant.save()
             s_json = '{"status":"true","id_plant":%d}'%plant.pk
+        except:
+            s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
+
+        return HttpResponse( s_json, content_type="application/json")
+
+    
+    ## --------------- request to update database 
+    if cde == 'supprime_plant':
+        try:
+            id_plant = request.POST.get("id", "_")
+            if '_' in id_plant:
+                print("return _")
+                raise(Exception, "_ in id plant")
+            
+            id_plant = int(id_plant)
+            plant = Plant.objects.get(id=id_plant)
+            
+            ## suppression de la production associée
+            try:
+                prod = None
+                prod = Production.objects.get(id = plant.production_id)
+                prod.delete()
+            except:
+                pass    
+
+            ## supression des évenements associés
+            for obj in Evenement.objects.filter(plant_base_id = plant.id):
+                print ("Suppression ", obj)
+                obj.delete()
+             
+            plant.delete()                
+            print ("Suppression plant", id_plant)
+         
+            s_json = '{"status":"true","id_plant":%d}'%id_plant
         except:
             s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
 
