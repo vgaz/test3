@@ -83,7 +83,54 @@ def chronoPlanche(request):
                   "decalage_j": decalage_j
                   })
     
-#################################################
+
+def evenementsPlanches(request):
+
+    delta20h = datetime.timedelta(hours=20)
+    date_du_jour = datetime.datetime.now()
+    if request.POST.get("aujourdhui","off") == "on":
+        date_debut_vue = datetime.datetime.strptime(datetime.datetime.strftime(date_du_jour, constant.FORMAT_DATE), constant.FORMAT_DATE) 
+        date_fin_vue = date_debut_vue
+        print(date_debut_vue, date_fin_vue)
+    elif request.POST.get("date_debut_vue",""):
+        date_debut_vue = datetime.datetime.strptime(request.POST.get("date_debut_vue", ""), constant.FORMAT_DATE)
+        date_fin_vue = datetime.datetime.strptime(request.POST.get("date_fin_vue", ""), constant.FORMAT_DATE) + delta20h
+    else:
+        delta = datetime.timedelta(days=60)
+        date_debut_vue = date_du_jour - delta
+        date_fin_vue = date_du_jour + delta + delta20h
+    
+    decalage_j = int(request.POST.get("decalage_j", 10))
+    delta = datetime.timedelta(days = decalage_j)
+    if request.POST.get("direction", "") == "avance":
+        date_debut_vue += delta 
+        date_fin_vue += delta
+    if request.POST.get("direction", "") == "recul":
+        date_debut_vue -= delta 
+        date_fin_vue -= delta        
+    
+    ## on prend tous les evts de l'encadrement pour la planche courrante
+    l_evts = Evenement.objects.filter(date__gte = date_debut_vue, date__lte = date_fin_vue)
+    for evt in l_evts:
+        plant = Plant.objects.get(id = evt.plant_base_id)
+        planche = Planche.objects.get(id = plant.planche_id)
+        evt.planche_num = planche.num
+
+#     plant_base__in = Plant.objects.filter(planche_id = laPlanche))
+
+    return render(request,
+                 'main/evenements.html',
+                 {
+                  "appVersion": constant.APP_VERSION,
+                  "appName": constant.APP_NAME,
+                  "l_evts": l_evts,
+                  "date_debut_vue": date_debut_vue,
+                  "date_fin_vue": date_fin_vue,
+                  "date_du_jour": date_du_jour,
+                  "decalage_j": decalage_j
+                  })
+    
+    #################################################
 
 class CreationPlanche(CreateView):
     

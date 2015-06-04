@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+
+<style>
+
+#date_du_jour
+{
+    position:absolute;
+    width: 2px;
+    background: white;
+    border: 2px solid blue;   
+}
+
+</style>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/moment-with-locales.min.js"></script>
+
+    <script type="text/javascript">
+    
+    s_info = ""
+    date_debut_vue = "{{date_debut_vue|safe}}"
+    date_fin_vue = "{{date_fin_vue|safe}}"
+    date_du_jour = "{{date_du_jour|safe}}"
+    decalage_j = {{decalage_j|safe}}
+    NomEvtDeId = {  {% for evtType in l_typesEvt %} '{{evtType.id}}':'{{evtType.nom}}',{% endfor %}  }
+    
+    jsonEvts = '{"evts":[{% for evt in l_evts %}\
+                {"id":"{{evt.id}}","nom":"{{evt.nom}}","date":"{{evt.date|safe}}","duree":"{{evt.duree_j}}","planche_num":"{{evt.planche_num}}","type":"{{evt.type}}","id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}\
+                {% endfor %}]}'	
+
+function    init()
+    {
+    // creation d'une liste d'evts pour chaque id_plant
+    hJsonEvts = JSON.parse(jsonEvts)
+    EvtsDePlant = {}
+    for (ii=0;ii<hJsonEvts.evts.length;ii++)
+        {
+        s_info += hJsonEvts.evts[ii].id_plant + " " + hJsonEvts.evts[ii].type + " " + hJsonEvts.evts[ii].date + '<br/>'
+        if (EvtsDePlant[hJsonEvts.evts[ii].id_plant] == null)
+            EvtsDePlant[hJsonEvts.evts[ii].id_plant] = new Array()
+        EvtsDePlant[hJsonEvts.evts[ii].id_plant].push(hJsonEvts.evts[ii].id)
+        }
+    document.getElementById("decalage_j").value = decalage_j
+    }
+    
+
+    
+function changelePas(delta)
+{
+    decalage_j += delta
+    if (decalage_j < 1) decalage_j = 1
+    document.getElementById("decalage_j").value = decalage_j
+}
+
+</script>
+
+{% endblock %}
+
+{% block title %}Liste des évenements{% endblock %}
+
+{% block content %}
+
+<p id="divInfoDebug"> </p>
+<div id="main" style="text-align: center" >
+
+<form action="" method="post" accept-charset="utf-8">
+{% csrf_token %}
+Visionnage du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
+
+<input style="margin-left: 20px" type="checkbox" name="aujourdhui"/> Juste aujourd'hui ({{date_du_jour|date:'d/m/Y'}})
+<input style="margin-left: 20px" type="submit" value="Envoyer"/>
+
+</form>
+
+<br/><br/>
+        {# plants existants en base #}
+        <table>
+        <tr><th>Date</th><th>Planche</th><th>Libellé</th></tr>
+        {% for evt in l_evts %}
+            {% if evt.date|date:'d/m/Y' ==  date_du_jour|date:'d/m/Y' %}
+            <tr id="{{evt.id}}"><td class="tdEvt2">{{evt.date|date:'d/m/Y'}}</td><td class="tdEvt2">{{evt.planche_num}}</td><td class="tdEvt2">{{evt.nom}}</td></tr>
+            {% else %}
+            <tr id="{{evt.id}}"><td class="tdEvt">{{evt.date|date:'d/m/Y'}}</td><td class="tdEvt">{{evt.planche_num}}</td><td class="tdEvt">{{evt.nom}}</td></tr>
+            {% endif %}
+            
+        {% endfor %}
+        </table>
+</div>
+
+{% endblock %}

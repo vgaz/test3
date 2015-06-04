@@ -16,7 +16,6 @@ body
 {
     display:inline-block;
     font-weight:bold;
-
 }
 
 .plant
@@ -191,30 +190,27 @@ margin:10px;
 	height:130px;
 	padding:30px;
 	margin-left: 36%;
-	padding-left:20px;
 	border-radius:5px;
 	border: solid 5px #7F5FFF;
 	margin-top:10%;
 }
 
-.tdFailure
+.tdEvt, .tdEvt2
 {
-    border:3px solid #FF0000;
-}
-
-.tdSuccess
-{
-    border:3px solid #00FF00;
-}
-.tdSuccess, .tdFailure
-{
-    text-align:center;
-    padding:4px;
-}
-
-.whiteFrame {
-    background-color: white;
+    border:3px solid #FFFFFF;
     color:black;
+    text-align:left;
     padding:10px;
-    margin:10px;
 }
+.tdEvt
+{
+    background:#D6D6D6;
+}
+
+.tdEvt2
+{
+    background:#D6F6D6;
+
+}
+
+

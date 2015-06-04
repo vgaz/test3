@@ -70,7 +70,7 @@ class Variete(models.Model):
 
     def prodSemaines(self, productionDemandee):
         """ retourne une liste de production(s) escomptée(s) par semaine (en kg ou en unités)"""
-        if self.prod_hebdo_moy_g =="0":
+        if self.prod_hebdo_moy_g == "0":
             return [55]#@todo
         
         l_ret = []
