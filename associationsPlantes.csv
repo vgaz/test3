@@ -15,6 +15,7 @@ chou-fleur,"aneth, betterave, camomille, capucine, céleri, concombre, cornichon
 chou-rave,"betterave, brocoli, camomille, capucine, concombre, cornichon, fève, haricot nain, laitue, mâche, menthe, panais, pois, romarin, sarriette, sauge, thym, aneth, hysope, oignon, origan, radis","ail, chicorée, échalote, fenouil, fraise, haricot à rames, poireau, tomate, vigne,"
 chou,"betterave, brocoli, camomille, capucine, céleri, concombre, cornichon, cresson, fève, haricot nain, laitue, mâche, menthe, panais, pois, pomme de terre, romarin, sarriette, sauge, thym, aneth, hysope, oignon, origan","ail, chicorée, échalote, fenouil, fraise, poireau, radis, vigne"
 chou de Bruxelles,"aneth, betterave, capucine, céleri, fève, haricot, laitue, menthe, pomme de terre, romarin, sauge, hysope","fraise, pois, vigne"
+ciboulette,,"pois,fève,haricot"
 citrouille,"fève, maïs, menthe, capucine, radis",pomme de terre
 concombre,"aneth, choux, haricot, laitue, maïs, oignon, pois, tournesol, fève, brocoli, céleri, radis","melon, pomme de terre, tomate, sauge"
 coriandre,"pomme de terre",
@@ -46,4 +47,4 @@ raifort,pomme de terre,
 romarin,"carotte, choux, fenouil, persil, pois, pomme de terre, thym, tomate",
 tomate,"aneth, asperge, basilic, carotte, céleri, ciboulette chinoise, maïs, oignon, persil, radis, pois, sauge, poireau, souci, oeillet d'inde (tagète), capucine","betterave, fenouil, haricot, pois, pomme de terre, chou, concombre"
 topinambour,pomme de terre,
-Tournesol,"concombre, cornichon","laitue, maïs, pomme de terre"
+tournesol,"concombre, cornichon","laitue, maïs, pomme de terre"
