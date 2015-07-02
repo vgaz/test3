@@ -35,7 +35,7 @@ def planif(dateDebut, dateFin):
         for prod in l_prods:
             
             var = Variete.objects.get(id = prod.variete_id)
-            print ("\n%s"%var.nom)
+            print("\n%s"%var.nom)
             reste = prod.qte_prod - prod.qte_dde 
             if reste >= 0:
                 pass

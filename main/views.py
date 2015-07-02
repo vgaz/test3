@@ -10,7 +10,7 @@ from django.template.defaultfilters import random
 from main import forms, constant, planification
 import datetime
 
-from main.models import Evenement, Planche, Plant, Production, TypeEvenement
+from main.models import Evenement, Planche, Plant, Production
 from main.forms import PlancheForm
 
 #################################################
@@ -56,13 +56,12 @@ def chronoPlanche(request):
     if request.POST.get("direction", "") == "recul":
         date_debut_vue -= delta 
         date_fin_vue -= delta        
-        
-    l_typesEvt = TypeEvenement.objects.all()
     
-    ## on prend tous les evts de l'encadrement et pour la planche courrante
+    ## on prend tous les evts de l'encadrement pour la planche courrante
     l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
                                       date__lte = date_fin_vue, 
                                       plant_base__in = Plant.objects.filter(planche_id = laPlanche))
+
     ## on en deduit les plants impliqués, même partiellement
     l_plantsId = list(set([evt.plant_base_id for evt in l_evts]))
     ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle
@@ -75,8 +74,7 @@ def chronoPlanche(request):
                   "appVersion": constant.APP_VERSION,
                   "appName": constant.APP_NAME,
                   "planche": laPlanche,
-                  "l_typesEvt": l_typesEvt,
-                  "d_TitresTypeEvt": constant.d_TitresTypeEvt,
+
                   "l_plants": l_plants,
                   "l_evts": l_evts,
                   "date_debut_vue": date_debut_vue,
@@ -116,7 +114,7 @@ class CreationPlanche(CreateView):
 
 def editionPlanche(request):
 
-    planche = Planche.objects.get(num = int(request.GET.get('num_planche', 0)))
+    planche = Planche.objects.get(num = int(request.GET.get("num_planche", 0)))
     s_date = request.POST.get("date", "")
     if s_date:
         dateVue = datetime.datetime.strptime(s_date, constant.FORMAT_DATE)
@@ -128,18 +126,12 @@ def editionPlanche(request):
     if request.POST.get("delta", "") == "hier":
         dateVue += datetime.timedelta(days=-1)
 
-    l_vars = Variete.objects.all()
-    l_typesEvt = []
-    for et in TypeEvenement.objects.all():
-        l_typesEvt.append({"id":et.id, 
-                           "nom":et.nom, 
-                           "titre":constant.d_TitresTypeEvt[et.nom]})
     ## filtrage par date
-    l_evts_debut = Evenement.objects.filter(type = TypeEvenement.objects.get(nom = "debut"), date__lte = dateVue)
+    l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = dateVue)
     l_PlantsIds = list(l_evts_debut.values_list('plant_base_id', flat=True))
     ## recup des evenement de fin ayant les memes id_plants que les evts de debut 
-    l_evts = Evenement.objects.filter(type = TypeEvenement.objects.get(nom = "fin"), plant_base_id__in = l_PlantsIds, date__gte = dateVue)
-    
+    l_evts = Evenement.objects.filter(type = Evenement.TYPE_FIN, plant_base_id__in = l_PlantsIds, date__gte = dateVue)
+    print (l_evts)
     l_PlantsIds = l_evts.values_list('plant_base_id', flat=True)
     l_plants = Plant.objects.filter(planche = planche, id__in = l_PlantsIds)
     
@@ -147,9 +139,10 @@ def editionPlanche(request):
                  'main/edition_planche.html',
                  {
                   "appVersion":constant.APP_VERSION,
-                  "planche": planche,
-                  "l_vars":l_vars,
-                  "l_typesEvt":l_typesEvt,
+                  "planche":planche,
+                  "l_vars":Variete.objects.all(),
+                  "l_evtTypes":Evenement.D_NOM_TYPES.items(),
+                  "d_evtTypes":Evenement.D_NOM_TYPES,
                   "l_plants":l_plants,
                   "date":dateVue
                   })

@@ -10,15 +10,14 @@ function init()
     {
     bEnMouvement = false
     pxParCm = 8
-    plant_courant = ""
+    id_plant_courant = ""
     g_tab_tickets = new Array()
     jsonVarietes = {  {% for var in l_vars %} {{var.id}}:'{{var.nom}}',{% endfor %}  }
-    jsonTitreTypeEvt = {  {% for evtType in l_typesEvt %} '{{evtType.nom}}':'{{evtType.titre}}',{% endfor %}  }
+    o_nomTypeEvt = {{d_evtTypes|safe}}
     //retaillage de la matrice, on fait un carré
     document.getElementById("matrice").style.height = ({{planche.largeur_cm}} * pxParCm ).toString() + "px"
     document.getElementById("matrice").style.width = ({{planche.largeur_cm}} * pxParCm ).toString() + "px"
     affichePlants()
-    ///window.location.pathname = "example/index.html"   juste pour penser à rechercher la facon d'affecter l'url editbox d'une page
     }
 
 
@@ -66,12 +65,7 @@ function majListEvts(id_plant)
         //recuperation de tous les evenements, on met en gras le debut et fin
         for(ii=0;ii<jsonRep.l_evts.length;ii++)
             {
-            s_tag = ""
-            if (jsonRep.l_evts[ii].type == "debut")
-                s_tag = jsonTitreTypeEvt["debut"] +  " "
-            if (jsonRep.l_evts[ii].type == "fin")
-                s_tag = jsonTitreTypeEvt["fin"] +  " "
-            s_evts += "<tr><td><b>" + s_tag +"</b> " + jsonRep.l_evts[ii].date + " (" + jsonRep.l_evts[ii].duree + "j) "  + jsonRep.l_evts[ii].nom + "</td>"
+            s_evts += "<tr><td><b>" +  o_nomTypeEvt[jsonRep.l_evts[ii].type] +" </b> " + jsonRep.l_evts[ii].date + " (" + jsonRep.l_evts[ii].duree_j + "j) "  + jsonRep.l_evts[ii].nom + "</td>"
             s_evts += "<td><a href='javascript:editeEvenement(" + jsonRep.l_evts[ii].id + ")'><img align='right' src='{{STATIC_URL}}images/editor.png' title='Editer'></a></td>"
             s_evts += "<td><a href='javascript:supprimeEvenement(" + jsonRep.l_evts[ii].id + ")'><img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td></tr>"
             }
@@ -154,6 +148,7 @@ function ajouteEvenement()
     document.getElementById("edit_evt_id").value = 0
     document.getElementById("edit_evt_nom").value = ""
     document.getElementById("edit_evt_date").value = ""
+    document.getElementById("edit_evt_duree_j").value = ""
     document.getElementById("edit_evt_type").value = ""   
     }
     
@@ -166,14 +161,15 @@ function editeEvenement(idEvent)
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)
     if (jsonRep.status == 'true')
-        {   
+        {
         document.getElementById("edit_evt_id").value = jsonRep.evt.id
         document.getElementById("edit_evt_nom").value = jsonRep.evt.nom
         document.getElementById("edit_evt_date").value = jsonRep.evt.date
+        document.getElementById("edit_evt_duree_j").value = jsonRep.evt.duree
         document.getElementById("edit_evt_type").value = jsonRep.evt.type       
         }
     }
-     
+
 function supprimeEvenement(idEvent)
     {
     s_request = "cde=supprime_evenement&id=" + idEvent
@@ -190,18 +186,21 @@ function sauveEvenement()
 	// recup données et ajout
 	s_request = "cde=sauveEvt&id="+ document.getElementById("edit_evt_id").value +"&nom=" + document.getElementById("edit_evt_nom").value
     s_request += "&date=" + document.getElementById("edit_evt_date").value
+    s_request += "&duree_j=" + document.getElementById("edit_evt_duree_j").value
     s_request += "&type=" + document.getElementById("edit_evt_type").value
     id_plant = document.getElementById("editPlant_plantId").innerHTML
-	s_request += "&id_plan=" + id_plant
+	s_request += "&id_plant=" + id_plant
     rep = requestServer(s_request)
     jsonRep = JSON.parse(rep)
     if (jsonRep.status == 'false')
-        alert (jsonRep.err)
+        document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>"+ jsonRep.err + "</div>"
+
     // maj fenetre d'edition du plant
     majListEvts(id_plant)
     // nettoyage nom et date de l'evt
     document.getElementById("edit_evt_nom").value = ""
     document.getElementById("edit_evt_date").value = ""
+    document.getElementById("edit_evt_duree_j").value = ""
     }
 
 function sauveMatrice()
@@ -226,7 +225,7 @@ function sauveMatrice()
 
         if (s_err != "")
             {
-            alert("Sauvegarde impossible plan " + id_plant + "\n" + s_err)
+            alert("Sauvegarde impossible plant " + id_plant + "\n" + s_err)
             continue
             }
   
@@ -241,7 +240,10 @@ function sauveMatrice()
             s_msg += " plant " + id_plant
             }
         else
+            {
             document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>"+ jsonRep.err + "</div>"
+            return
+            }
         }
     affichePlants()
     document.getElementById("divInfoDebug").innerHTML = s_msg + ", sauvés"
@@ -252,9 +254,9 @@ function majXYMouse(event)
     clientX = event.clientX
     clientY = event.clientY
    
-    if (plant_courant != "")
+    if (id_plant_courant != "")
         {
-        obj= document.getElementById(plant_courant)   
+        obj= document.getElementById(id_plant_courant)   
         // maj hauteur largeur
         hauteur_cm = parseInt(obj.style.height.split('px')[0] / pxParCm)
         obj.setAttribute("hauteur_cm", hauteur_cm )
@@ -268,7 +270,7 @@ function majXYMouse(event)
         
         affichePlant(obj)
         }
-    //document.getElementById("divInfoDebug").innerHTML = plant_courant
+    //document.getElementById("divInfoDebug").innerHTML = id_plant_courant
     }
 
 function toggleMove(hPlant)
@@ -277,7 +279,7 @@ function toggleMove(hPlant)
     rect = hPlant.getBoundingClientRect()
     if(bEnMouvement == false)
         {
-        plant_courant = hPlant.getAttribute('id')
+        id_plant_courant = hPlant.getAttribute('id')
         if ((clientY - rect.top < 40)&&(clientX - rect.left <40 ))  // pour prendre au coin
             {
             bEnMouvement = true
@@ -286,7 +288,7 @@ function toggleMove(hPlant)
         }
     else
         {
-        plant_courant = ""
+        id_plant_courant = ""
         bEnMouvement = false
         hPlant.style.borderColor = 'green'
         }
@@ -294,10 +296,10 @@ function toggleMove(hPlant)
 
 function deplace()
     {
-    if (plant_courant == "")
+    if (id_plant_courant == "")
         return
     
-    obj=document.getElementById(plant_courant)
+    obj=document.getElementById(id_plant_courant)
     matr = document.getElementById("matrice")
 
     if (bEnMouvement)
@@ -329,7 +331,7 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
 <input type="button" onclick="ajouteNouveauPlant()" value="Ajout d'un plant">
 &nbsp;
 <input type="button" onclick="sauveMatrice()" value="Sauvegarder tous les plants">
-
+<a href="{% url 'chrono_planche' %}?num_planche={{planche.num}}"><img src="{{ STATIC_URL }}images/arrowR.jpg" width="24" height="24" title="Chronogramme"></a>
 <span id="divInfoDebug" ></span>
 <br/><br/>
 
@@ -374,13 +376,14 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
 		
 		<table>
 		<tr><td>Type : <select id="edit_evt_type">
-		              {% for typeEvt in l_typesEvt %}  
-                      <option value="{{typeEvt.nom}}">{{typeEvt.titre}}</option>
+		              {% for evtType in l_evtTypes %}  
+                      <option value="{{evtType.0}}">{{evtType.1}}</option>
                       {% endfor %}
                       </select>
 		</td></tr>
         <tr><td>Nom : <input type='hidden' value='0' id='edit_evt_id'/><input type='text' value='' id='edit_evt_nom'/></td></tr>
-		<tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type='text' value='' id='edit_evt_date'/></td></tr>
+        <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type='text' value='' id='edit_evt_date'/></td></tr>
+        <tr><td>Durée (j): <input style="width: 60px" type='text' value='' id='edit_evt_duree_j'/></td></tr>
 		<tr><td><input type='button' value='Cancel' name='sauver' onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
 		        <input type='button' value='Sauver' name='sauver' onclick="sauveEvenement()" defaultValue="true" />
 		</td></tr>
