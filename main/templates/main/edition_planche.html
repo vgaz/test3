@@ -47,6 +47,9 @@ function ajouteNouveauPlant()
    
 function supprimePlant(plant_id)
     {
+    s_request = "cde=supprime_plant&id="+ id_plant
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)        
     document.getElementById('divEditPlan').style.display = "none"
     document.getElementById('matrice').removeChild(document.getElementById(plant_id))
     }
@@ -148,7 +151,7 @@ function ajouteEvenement()
     document.getElementById("edit_evt_id").value = 0
     document.getElementById("edit_evt_nom").value = ""
     document.getElementById("edit_evt_date").value = ""
-    document.getElementById("edit_evt_duree_j").value = ""
+    document.getElementById("edit_evt_duree_j").value = "1"
     document.getElementById("edit_evt_type").value = ""   
     }
     
@@ -356,19 +359,13 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
     Variété : <select id="editPlant_select_var">{% for var in l_vars %}
     	           <option value="{{var.id}}" name="{{var.nom}}">{{var.nom}}</option>
     	    {% endfor %}</select>
-    
-    <br/>Nb graines : <input style="width: 30px" type="text" id="editPlant_nb_graines" value="1">
-    
+        
     <br/><br/><b>Evenements</b><div id="editPlant_evts"> </div>
-    
     <br/>
-    
     <input type='button' value='Ajouter un évènement' name='ajout' onclick="ajouteEvenement()"/><br/>
-    
     <hr/>
     <input type='button' value='Supprimer le plant' name='supprime' onclick="supprimePlant(document.getElementById('editPlant_plantId').innerHTML)"/><br/>
 </div>
-
 
 <div class="YellowFrame" style="display: none" id="divEditEvenement">
     
@@ -385,7 +382,7 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
         <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type='text' value='' id='edit_evt_date'/></td></tr>
         <tr><td>Durée (j): <input style="width: 60px" type='text' value='' id='edit_evt_duree_j'/></td></tr>
 		<tr><td><input type='button' value='Cancel' name='sauver' onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
-		        <input type='button' value='Sauver' name='sauver' onclick="sauveEvenement()" defaultValue="true" />
+		        <input type='button' value='Sauver' name='sauver' onclick="sauveEvenement()" />
 		</td></tr>
         </table>
         

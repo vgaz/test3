@@ -11,3 +11,4 @@ svg
 *.pyc
 *.pyo
 /.pydevproject
+.settings/org.eclipse.core.resources.prefs
