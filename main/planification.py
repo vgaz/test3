@@ -16,23 +16,15 @@ def enregistrePrevisions(request):
                     obj=Production()
                     obj.variete_id = var
                     obj.date_semaine = ds
-                qte = int(v.split(" ")[0])
-<<<<<<< HEAD
-#                 if qte == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro
-#                     obj.delete()
-#                 else:
-                obj.qte_dde = qte
-                obj.save()
-                    
-                    
-=======
-                if qte == 0 and obj.qte_prod == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro mais sans engagement de production
+                
+                obj.qte_dde = int(v.split(" ")[0])
+                if qte_dde == 0 and obj.qte_prod == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro mais sans engagement de production
                     obj.delete()
                 else:
                     obj.qte_dde = qte
                     obj.save()
 
->>>>>>> refs/remotes/github_test3/dev
+
 def planif(dateDebut, dateFin):
     
     ## on balaye semaine par semaine
@@ -81,11 +73,8 @@ def planif(dateDebut, dateFin):
 
             ## maj prod de cette semaine pour cette variété
             l_prodSemaine = var.prodSemaines(nb_plants_a_installer)
-<<<<<<< HEAD
-            print(l_prodSemaine)
-=======
+
             ##print(l_prodSemaine)
->>>>>>> refs/remotes/github_test3/dev
             ## maj pour cette semaine
             prod.qte_prod += l_prodSemaine[0]
             print ("prod %s sem %s  %d/%d"%(prod.variete_id, dateSemaine, prod.qte_dde, prod.qte_prod))
@@ -94,11 +83,7 @@ def planif(dateDebut, dateFin):
             ## maj éventuelle des semaines suivantes
             if len(l_prodSemaine) > 1:  
                 for index, qteSem in enumerate(l_prodSemaine[1:]):
-<<<<<<< HEAD
-                    dateSem = dateDebut + datetime.timedelta(weeks = 1 + index)
-=======
                     dateSem = dateSemaine + datetime.timedelta(weeks = 1 + index)
->>>>>>> refs/remotes/github_test3/dev
                     prod_suite = Production.objects.get_or_create(variete_id = var.id, date_semaine = dateSem)[0]
                     print (prod_suite)
                     prod_suite.qte_prod += qteSem
