@@ -15,7 +15,6 @@ class Famille(models.Model):
         return self.nom
 
 
-    
 class Planche(models.Model):
     """ planche de culture"""
     num = models.PositiveIntegerField()
@@ -70,12 +69,8 @@ class Variete(models.Model):
 
     def prodSemaines(self, productionDemandee):
         """ retourne une liste de production(s) escomptée(s) par semaine (en kg ou en unités)"""
-<<<<<<< HEAD
-        if self.prod_hebdo_moy_g =="0":
-=======
         if self.prod_hebdo_moy_g == "0":
->>>>>>> refs/remotes/github_test3/dev
-            return [55]#@todo
+            assert "prod hebdo non donnée pour %s"%prod_hebdo_moy_g.variete.nom
         
         l_ret = []
         
@@ -120,18 +115,8 @@ class Plant(models.Model):
     coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
     planche = models.ForeignKey("Planche", null=True, blank=True)
     quantite = models.PositiveIntegerField(default=1)
-<<<<<<< HEAD
     production = models.ForeignKey(Production)
    
-    def __init__(self, variete_id, nb_plants):
-        super(Plant, self).__init__()
-        self.variete_id = variete_id
-        self.quantite = nb_plants
-        
-=======
-    production = models.ForeignKey(Production, null=True, blank=True)
-
->>>>>>> refs/remotes/github_test3/dev
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
         return(self.quantite / self.variete.rendementPlantsGraines)

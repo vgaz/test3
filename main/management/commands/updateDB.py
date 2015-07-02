@@ -2,7 +2,7 @@
 import csv
 
 from django.core.management.base import BaseCommand       
-from main.models import Famille, Variete, TypeEvenement
+from main.models import Famille, Variete
 from main.constant import d_TitresTypeEvt
 
 from main import constant
