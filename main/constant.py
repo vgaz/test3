@@ -6,7 +6,7 @@ Created on 15 févr. 2015
 '''
 APP_NAME = "MARAICH"
 
-APP_VERSION = "1.0.1"
+APP_VERSION = "1.0.2"
 
 d_TitresTypeEvt = {"debut":"début", "fin":"fin", "autre":"autre"}
 
