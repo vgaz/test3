@@ -316,17 +316,19 @@ function deplace()
 {% endblock %}
 
 {% block title %}
-Définition de la matrice de la planche {{planche.num}} ({{planche.largeur_cm}}cm x {{planche.longueur_m}}m) 
+Composition de la planche {{planche.num}} ({{planche.largeur_cm}}cm x {{planche.longueur_m}}m) 
 <br />{{planche.nom}}
 {% endblock %}
 
 {% block content %}
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
+<input style="margin-left: 20px" type="submit" name="delta" value="-10" />
+<input type="submit" name="delta" value="-1" />
 Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m/Y'}}" />
+<input type="submit" name="delta" value="+1" />
+<input type="submit" name="delta" value="+10" />
 <input type="submit" value="Envoyer" />
-<input style="margin-left: 20px" type="submit" name="delta" value="hier" />
-<input type="submit" name="delta" value="demain" />
 <input type="hidden" name="num_planche" value="{{planche.num}}" />
 </form><br/>
 
@@ -380,7 +382,7 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
 		</td></tr>
         <tr><td>Nom : <input type='hidden' value='0' id='edit_evt_id'/><input type='text' value='' id='edit_evt_nom'/></td></tr>
         <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type='text' value='' id='edit_evt_date'/></td></tr>
-        <tr><td>Durée (j): <input style="width: 60px" type='text' value='' id='edit_evt_duree_j'/></td></tr>
+        <tr><td>Durée (j): <input style="width: 60px" type='text' value='1' id='edit_evt_duree_j'/></td></tr>
 		<tr><td><input type='button' value='Cancel' name='sauver' onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
 		        <input type='button' value='Sauver' name='sauver' onclick="sauveEvenement()" />
 		</td></tr>

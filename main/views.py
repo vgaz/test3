@@ -168,10 +168,14 @@ def editionPlanche(request):
     else:
         dateVue = datetime.datetime.now()
         
-    if request.POST.get("delta", "") == "demain":
+    if request.POST.get("delta", "") == "+1":
         dateVue += datetime.timedelta(days=1)
-    if request.POST.get("delta", "") == "hier":
+    if request.POST.get("delta", "") == "-1":
         dateVue += datetime.timedelta(days=-1)
+    if request.POST.get("delta", "") == "+10":
+        dateVue += datetime.timedelta(days=10)
+    if request.POST.get("delta", "") == "-10":
+        dateVue += datetime.timedelta(days=-10)
 
     ## filtrage par date
     l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = dateVue)

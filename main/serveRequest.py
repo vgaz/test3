@@ -130,12 +130,17 @@ def serveRequest(request):
             evt.date = date
             evt.duree_j = 1
             evt.nom = nom
-            
-            if evt.type == Evenement.TYPE_FIN and "00:00:00" in evt.date:
-                print("date +20h")
-                evt.date = evt.date + datetime.datetime.timedelta(hours=20)  ## pour eviter les confusions de debut de jour à 0 h , on finit la journée à 20h 
-            
-            print(evt)
+#             
+#             if evt.type == Evenement.TYPE_FIN and "00:00:00" in evt.date:
+#                 print("date +20h")
+#                 evt.date = evt.date + datetime.datetime.timedelta(hours=20)  ## pour eviter les confusions de debut de jour à 0 h , on finit la journée à 20h 
+# 
+#             if evt.type == Evenement.TYPE_DEBUT and 
+#             :
+#                 print("date +20h")
+#                 evt.date = evt.date + datetime.datetime.timedelta(hours=20)  ## pour eviter les confusions de debut de jour à 0 h , on finit la journée à 20h 
+#             
+#             print(evt)
             evt.save()
             print(evt)
                 

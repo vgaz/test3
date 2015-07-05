@@ -115,8 +115,9 @@ class Plant(models.Model):
     coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
     planche = models.ForeignKey("Planche", null=True, blank=True)
     quantite = models.PositiveIntegerField(default=1)
-    production = models.ForeignKey(Production)
-   
+    evt_debut = models.ForeignKey("Evenement")
+    evt_fin = models.ForeignKey("Evenement")
+  
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
         return(self.quantite / self.variete.rendementPlantsGraines)
