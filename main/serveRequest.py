@@ -53,8 +53,9 @@ def serveRequest(request):
             id_plant = request.POST.get("id_plant")
             if '_' in id_plant:
                 plant = Plant() ## un nouveau
+                print("nouv")
             else:
-                plant = Plant.objects.get(id=int(id_plant))
+                plant = Plant.objects.get(id=int(id_plant)) ## un déjà créé
      
             plant.variete_id = request.POST.get("variete", 0)
             plant.largeur_cm = int(request.POST.get("largeur_cm",0))
@@ -64,7 +65,11 @@ def serveRequest(request):
             plant.planche = Planche.objects.get(num=int(request.POST.get("id_planche",0)))
             plant.production_id = 0
             plant.quatite = 1
+            print ("333333")
             plant.save()
+            print ("44444444")
+            plant.fixeDates(request.POST.get("date_debut"), request.POST.get("date_fin", ""))
+            print(plant)
             s_json = '{"status":"true","id_plant":%d}'%plant.pk
         except:
             s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]

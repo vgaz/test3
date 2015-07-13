@@ -55,22 +55,8 @@ def planif(dateDebut, dateFin):
             plants.largeur_cm = var.diametre_cm * nb_plants_a_installer
             plants.save()
             print( "nouvelle serie " + str(plants))
+            plants.fixeDates(dateSemaine)
             
-            print ("crea evt : ", Evenement.TYPE_DEBUT, dateSemaine, var.duree_avant_recolte_j, plants.id, "début plant " + var.nom)
-            e = Evenement()
-            e.type = Evenement.TYPE_DEBUT
-            e.date = dateSemaine
-            e.plant_base_id = plants.id
-            e.nom = "début plant " + var.nom
-            e.save()
-            
-            e = Evenement()
-            e.type = Evenement.TYPE_FIN
-            e.date = dateSemaine + datetime.timedelta(days = var.duree_avant_recolte_j)
-            e.plant_base_id = plants.id
-            e.nom = "fin plant " + var.nom
-            e.save()
-
             ## maj prod de cette semaine pour cette variété
             l_prodSemaine = var.prodSemaines(nb_plants_a_installer)
 

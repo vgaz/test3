@@ -113,10 +113,10 @@ class Plant(models.Model):
     hauteur_cm = models.PositiveIntegerField("hauteur cm", default=0)
     coord_x_cm = models.PositiveIntegerField("pos x cm", default=0)
     coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
-    planche = models.ForeignKey("Planche", null=True, blank=True)
+    planche = models.ForeignKey("Planche", default=0, blank=True)
     quantite = models.PositiveIntegerField(default=1)
-    evt_debut = models.ForeignKey("Evenement")
-    evt_fin = models.ForeignKey("Evenement")
+    evt_debut = models.OneToOneField("Evenement", related_name="evt_debut_plant", null=True,default=0)
+    evt_fin = models.OneToOneField("Evenement", related_name="evt_fin_plant", null=True, default=0)
   
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
@@ -127,14 +127,37 @@ class Plant(models.Model):
         on prend le principe de 1 plant carré decoté = diametre variété"""
         return (self.quantite * float(self.variete.diametre_cm *self.variete.diametre_cm) / 10000 )
               
+    def fixeDates(self, dateDebut, dateFin=""):
+        """ crée les evts de debut et fin de vie du/des plants"""
+        print("fixeDates")
+        e = Evenement()
+        e.type = Evenement.TYPE_DEBUT
+        e.date = dateDebut
+        e.plant_base_id = self.id
+        e.save()
+        self.evt_debut_id = e.id
+        print ("evt debut", e)
+        e = Evenement()
+        e.type = Evenement.TYPE_FIN
+        if dateFin:
+            e.date = dateFin
+        else:
+            e.date = dateDebut + datetime.timedelta(days = self.var.duree_avant_recolte_j)
+        e.plant_base_id = self.id
+        e.save()
+        self.evt_fin_id = e.id
+        print(__name__, "crea evt début : %s; evt_fin:%s"%(dateDebut, e.date))
+                  
     def __str__(self):
-        return "Série (id:%d) de %d plant(s) de %s (%d graines), %d x %d, pos: %d %d sur planche %d" %(  self.id, self.quantite, self.variete.nom, 
+        return "Série (id:%d) de %d plant(s) de %s (%d graines), %d x %d, pos: %d %d sur planche %d du %s au %s" %(  self.id, self.quantite, self.variete.nom, 
                                                                                                         self.nbGraines(), 
                                                                                                         self.largeur_cm, 
                                                                                                         self.hauteur_cm, 
                                                                                                         self.coord_x_cm, 
                                                                                                         self.coord_y_cm, 
-                                                                                                        self.planche.num)
+                                                                                                        self.planche.num,
+                                                                                                        self.evt_debut.date,
+                                                                                                        self.evt_fin.date)
 
       
         
@@ -147,6 +170,7 @@ class Evenement(models.Model):
 
     type =  models.PositiveIntegerField()
     plant_base = models.ForeignKey(Plant)
+#     plant = models.ManyToManyField("Plant", related_name="plant", blank=True)
     date = models.DateTimeField()
     date_creation = models.DateTimeField(default=datetime.datetime.now())
     duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)

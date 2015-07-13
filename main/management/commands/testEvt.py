@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import csv
-
 from django.core.management.base import BaseCommand       
 
 from main import serveRequest
@@ -12,8 +10,7 @@ import datetime
 
 
 class Command(BaseCommand):
-    """updateDB command"""
-    help = "updateDB"
+    help = "test evt"
 
     def handle(self, *args, **options):
         
