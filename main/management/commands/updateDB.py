@@ -2,19 +2,33 @@
 import csv
 
 from django.core.management.base import BaseCommand       
-from main.models import Famille, Variete
-from main.constant import d_TitresTypeEvt
+from main.models import Famille, Planche, Variete
 
 from main import constant
-       
+
+   
 class Command(BaseCommand):
     """updateDB command"""
     help = "updateDB"
 
-    def handle(self, *args, **options):
-        
+    def creationPlanches(self):
+        print("création des planches de base")
 
-        
+        p = Planche()
+        p.num = 1
+        p.nom = "planche1"
+        p.longueur_m=100
+        p.largeur_cm=100
+        p.save()        
+        p = Planche()
+        p.num = 2
+        p.nom = "planche2"
+        p.longueur_m=60
+        p.largeur_cm=100
+        p.save()
+            
+    def handle(self, *args, **options):
+           
         ## maj base de légumes
         l_fams = Famille.objects.all().values_list("nom", flat=True)
         print ("l_fams ", l_fams)
@@ -46,7 +60,6 @@ class Command(BaseCommand):
 
                 try:
                     fam = d_line.get("famille","").lower().strip()
-                    print ("fam ", fam)
                     if fam and fam not in l_fams and fam not in l_fams_sup:
                         print("ajout famille %s"%fam)
                         hFam = Famille()
@@ -104,6 +117,8 @@ class Command(BaseCommand):
                 v.sans.add(Variete.objects.get( nom = var ))
 
             v.save()
+        
+        self.creationPlanches()
 
         self.stdout.write("end of command " + self.__doc__)  
         

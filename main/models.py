@@ -21,9 +21,10 @@ class Planche(models.Model):
     nom = models.CharField(max_length=100, blank=True, default="")
     longueur_m = models.IntegerField()
     largeur_cm = models.IntegerField()
+    bSerre = models.BooleanField(default=False)
 
     def __str__(self):
-        return "Planche %d : %s, %d m x %d cm" % (self.num, self.nom, self.longueur_m, self.largeur_cm)
+        return "Planche %d : %s, %d m x %d cm; en serre:%s" % (self.num, self.nom, self.longueur_m, self.largeur_cm, str(self.bSerre))
     
 
 class Variete(models.Model):
@@ -115,8 +116,8 @@ class Plant(models.Model):
     coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
     planche = models.ForeignKey("Planche", default=0, blank=True)
     quantite = models.PositiveIntegerField(default=1)
-    evt_debut = models.OneToOneField("Evenement", related_name="evt_debut_plant", null=True,default=0)
-    evt_fin = models.OneToOneField("Evenement", related_name="evt_fin_plant", null=True, default=0)
+    evt_debut = models.ForeignKey("Evenement", related_name="evt_debut_plant", null=True,default=0)
+    evt_fin = models.ForeignKey("Evenement", related_name="evt_fin_plant", null=True, default=0)
   
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
@@ -130,6 +131,12 @@ class Plant(models.Model):
     def fixeDates(self, dateDebut, dateFin=""):
         """ crée les evts de debut et fin de vie du/des plants"""
         print("fixeDates")
+        
+        if "/" in dateDebut:
+            dateDebut = datetime.datetime.strptime(dateDebut, constant.FORMAT_DATE)
+        if "/" in dateFin:
+            dateFin = datetime.datetime.strptime(dateDebut, constant.FORMAT_DATE)
+
         e = Evenement()
         e.type = Evenement.TYPE_DEBUT
         e.date = dateDebut
@@ -142,7 +149,7 @@ class Plant(models.Model):
         if dateFin:
             e.date = dateFin
         else:
-            e.date = dateDebut + datetime.timedelta(days = self.var.duree_avant_recolte_j)
+            e.date = dateDebut + datetime.timedelta(days = self.variete.duree_avant_recolte_j)
         e.plant_base_id = self.id
         e.save()
         self.evt_fin_id = e.id
