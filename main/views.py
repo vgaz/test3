@@ -180,7 +180,7 @@ def editionPlanche(request):
     ## filtrage par date
     l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = dateVue)
     l_PlantsIds = list(l_evts_debut.values_list('plant_base_id', flat=True))
-    ## recup des evenement de fin ayant les memes id_plants que les evts de debut 
+    ## recup des evenements de fin ayant les mêmes id_plants que les evts de debut 
     l_evts = Evenement.objects.filter(type = Evenement.TYPE_FIN, plant_base_id__in = l_PlantsIds, date__gte = dateVue)
     print (l_evts)
     l_PlantsIds = l_evts.values_list('plant_base_id', flat=True)

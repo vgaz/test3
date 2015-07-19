@@ -1,5 +1,5 @@
 variete,famille,date_min_plantation,date_max_plantation,duree_avant_recolte_j,diametre_cm,prod_hebdo_moy_g,unite_prod
-ail,liliacée,"20/03","20/05",120,20,"100,100,100",kg
+ail,amaryllidacée,"20/03","20/05",120,20,"100,100,100",kg
 artichaut,composée,"20/03","20/05",100,50,"300",u
 aubergine, solanacée,"20/03","20/05",100,60,"900",u
 betterave, chénopodiacée,"20/03","20/05",60,25,"120,120",kg
@@ -11,17 +11,18 @@ chou brocoli,crucifère,"20/03","20/05",150,60,"450",u
 chou pointu, crucifère,,,,,,u
 chou fleur, crucifère,"20/03","20/05",150,60,"1500",u
 chou de bruxelles, crucifère,,,,,,kg
-ciboulette,liliacée,"20/4","20/5",50,25,"100",kg
+ciboulette,amaryllidacée,"20/4","20/5",50,25,"100",kg
 concombre, cucurbitacée,,,,,,u
 cornichon, cucurbitacée,,,,,,kg
 courgette, cucurbitacée,,,,,,u
+échalotte,amaryllidacée,"1/10","1/11",180,40,"100",kg 
 épeautre, poacée,,,,,,kg
 épinard, chénopodiacée,,,,,,kg
 fève,fabacée,,,,,,kg
 haricots verts, fabacée,,,60,,,kg
-oignon blanc, liliacée,,,,,,kg
+oignon blanc, amaryllidacée,,,,,,kg
 orge, poacée,,,,,,kg
-poireau, liliacée,,,,,,kg
+poireau, amaryllidacée,,,,,,kg
 potiron,cucurbitacée,,,,,,u
 radis, crucifère,"20/03","20/05",20,10,"5,5",kg
 salade chicorée, composée,"20/03","20/05",30,20,"250",u

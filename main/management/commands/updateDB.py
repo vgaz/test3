@@ -15,6 +15,12 @@ class Command(BaseCommand):
         print("création des planches de base")
 
         p = Planche()
+        p.num = constant.PLANCHE_VIRTUELLE_ID
+        p.nom = "PLANCHE VIRTUELLE"
+        p.longueur_m=10000
+        p.largeur_cm=100
+        p.save()        
+        p = Planche()
         p.num = 1
         p.nom = "planche1"
         p.longueur_m=100

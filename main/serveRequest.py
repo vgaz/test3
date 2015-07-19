@@ -8,7 +8,7 @@ Created on Nov 26, 2013
 from django.http import HttpResponse
 
 from main.models import Evenement, Plant, Planche, Production
-import sys
+import sys, traceback
 import datetime
 from main import constant
 
@@ -20,8 +20,10 @@ def serveRequest(request):
     print("cde =", cde)
     
     if cde == "getEvtsPlant": 
+        ## retour des évenements des plants (sauf debut et fin déjà affichés spécifiquement)
         try:
-            l_evts = Evenement.objects.filter(plant_base_id = int(request.POST.get("id", 0)))
+            l_evts = Evenement.objects.filter(plant_base_id = int(request.POST.get("id", 0)),
+                                              type = Evenement.TYPE_AUTRE)
             for evt in l_evts:
                 print (evt)
             
@@ -31,18 +33,19 @@ def serveRequest(request):
             s_json = '{"status":"true","l_evts":[%s]}'% s_
         except:
             print(__name__ + ': ' + str(sys.exc_info()[1]) )
+            traceback.print_tb(sys.exc_info())
             s_json = '{"status":"false","err":"%s"}'%(sys.exc_info()[1])
              
         return HttpResponse(s_json, content_type="application/json")
 
-    ## --------------- renvoi d'un evt
+    ## --------------- renvoi d'un evt à partir de son identifiant
     if cde == "getEvt": 
         try:
             evt = Evenement.objects.get(id = int(request.POST.get("id", 0)))
             s_ = '{"id":"%d","nom":"%s","date":"%s","duree_j":"%s","type":"%s"}'%(evt.id, evt.nom, evt.date.strftime(constant.FORMAT_DATE), evt.duree_j, evt.type)       
             s_json = '{"status":"true","evt":%s}'% s_
         except:
-            print(__name__ + ': ' + str(sys.exc_info()[1]) )
+            traceback.print_tb(sys.exc_info())
             s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
              
         return HttpResponse( s_json, content_type="application/json")
@@ -50,10 +53,10 @@ def serveRequest(request):
     ## --------------- request to update database 
     if cde =='sauve_plant':
         try:
+            print (request.POST)
             id_plant = request.POST.get("id_plant")
             if '_' in id_plant:
                 plant = Plant() ## un nouveau
-                print("nouv")
             else:
                 plant = Plant.objects.get(id=int(id_plant)) ## un déjà créé
      
@@ -65,13 +68,14 @@ def serveRequest(request):
             plant.planche = Planche.objects.get(num=int(request.POST.get("id_planche",0)))
             plant.production_id = 0
             plant.quatite = 1
-            print ("333333")
             plant.save()
-            print ("44444444")
             plant.fixeDates(request.POST.get("date_debut"), request.POST.get("date_fin", ""))
             print(plant)
             s_json = '{"status":"true","id_plant":%d}'%plant.pk
         except:
+            ex_type, ex, tb = sys.exc_info()
+            print (ex_type, ex)
+            traceback.print_tb(tb)
             s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")
@@ -151,6 +155,7 @@ def serveRequest(request):
                 
             s_json = '{"status":"true"}'
         except:
+            traceback.print_tb(sys.exc_info())            
             s_json = '{"status":"false","err":"%s %s"}'%(__name__, sys.exc_info()[1])
            
         return HttpResponse(s_json)
