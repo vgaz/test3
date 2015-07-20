@@ -58,7 +58,7 @@ function supprimePlant(plant_id)
     s_request = "cde=supprime_plant&id="+ id_plant
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)        
-    document.getElementById('divEditPlan').style.display = "none"
+    document.getElementById('divEditPlant').style.display = "none"
     document.getElementById('matrice').removeChild(document.getElementById(plant_id))
     }
 
@@ -107,7 +107,7 @@ function editePlant(hPlant)
     // maj infos plant                   
     document.getElementById("editPlant_id_planche").innerHTML = {{planche.num}}
     document.getElementById("editPlant_plantId").innerHTML = id_plant
-    document.getElementById("divEditPlan").style.display = "inline"
+    document.getElementById("divEditPlant").style.display = "inline"
     }
 
 function sauvePlant()
@@ -245,7 +245,6 @@ function sauveMatrice()
         s_request = "cde=sauve_plant&id_plant="+ id_plant + "&id_planche=" + id_planche + "&variete=" + variete + "&largeur_cm="+ largeur_cm +"&hauteur_cm="+ hauteur_cm 
         s_request += "&coord_x_cm="+ coord_x_cm + "&coord_y_cm=" + coord_y_cm 
         s_request += "&date_debut="+ date_debut + "&date_fin=" + date_fin 
-        alert (s_request)
         rep = requestServer(s_request)
         jsonRep = JSON.parse(rep)
         if (jsonRep.status == 'true' )
@@ -261,7 +260,8 @@ function sauveMatrice()
            }
         }
     affichePlants()
- 
+ 	// masquage fenetre d'edition
+ 	document.getElementById("divEditPlant").style.display = 'none'
     document.getElementById("div \InfoDebug").innerHTML = s_msg + ", sauvés"
     }
 
@@ -373,7 +373,7 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
             {% endfor %}
 </div>
 
-<div id="divEditPlan" style="display: none" class="BlueFrame">
+<div id="divEditPlant" style="display: none" class="BlueFrame">
 	
 	<h2>Gestion du/des plant/s <span id="editPlant_plantId"> </span></h2>
 	<p>Sur la planche N° <span id="editPlant_id_planche"> </span></p>
