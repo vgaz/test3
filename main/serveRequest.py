@@ -17,7 +17,7 @@ def serveRequest(request):
 
     ## --------------- renvoi de tous les evenements d'un plant
     cde = request.POST.get("cde","")
-    print("cde =", cde)
+    print(request.POST)
     
     if cde == "getEvtsPlant": 
         ## retour des évenements des plants (sauf debut et fin déjà affichés spécifiquement)
@@ -61,6 +61,7 @@ def serveRequest(request):
                 plant = Plant.objects.get(id=int(id_plant)) ## un déjà créé
      
             plant.variete_id = request.POST.get("variete", 0)
+            plant.quantite = int(request.POST.get("quantite", 0))
             plant.largeur_cm = int(request.POST.get("largeur_cm",0))
             plant.hauteur_cm = int(request.POST.get("hauteur_cm",0))
             plant.coord_x_cm = int(request.POST.get("coord_x_cm",0))

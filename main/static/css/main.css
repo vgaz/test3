@@ -136,7 +136,7 @@ margin:10px;
 	padding:5px;
 }
 
-.coord_x_cm, .coord_y_cm, .largeur_cm, .hauteur_cm, num_plant
+.displayInLine
 {
     display: inline;
 }
