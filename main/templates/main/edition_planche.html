@@ -33,6 +33,7 @@ function ajouteNouveauPlant()
     s_nouveauPlanId = getTicket() + '_' 
     s_plant = '<div class="plant" id="$ID_PLANT$" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)" \
                 variete="" \
+                quantite="" \
                 date_debut="" \
                 date_fin=""  \
                 largeur_cm=""  \
@@ -111,13 +112,14 @@ function editePlant(hPlant)
 
 function sauvePlant()
     {
-    // recup données de la fenetre d'edition et mise à jour des attributs dans le div du plant
+    // recup des infos de la fenetre d'edition et mise à jour des attributs dans le div du plant
     id_plant = document.getElementById("editPlant_plantId").innerHTML
     l_plants = document.getElementsByClassName("plant")
     for(ii=0;ii<l_plants.length;ii++)
         if (l_plants[ii].getAttribute("id") == id_plant)
             {
             l_plants[ii].setAttribute("variete", document.getElementById("editPlant_select_var").value)
+            l_plants[ii].setAttribute("quantite", document.getElementById("editPlant_quantite").value)
             l_plants[ii].setAttribute("date_debut", document.getElementById("editPlant_date_debut").value)
             l_plants[ii].setAttribute("date_fin", document.getElementById("editPlant_date_fin").value)
             // mise à jour affichage 
@@ -259,6 +261,7 @@ function sauveMatrice()
            }
         }
     affichePlants()
+ 
     document.getElementById("div \InfoDebug").innerHTML = s_msg + ", sauvés"
     }
 
@@ -355,6 +358,7 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
             {% for plant in l_plants %}
 	            <div class="plant" id="{{plant.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
 	            variete="{{plant.variete_id}}" 
+	            quantite="{{plant.quantite}}" 
 	            date_debut="{{plant.evt_debut.date|date:'d/m/Y'}}" 
 	            date_fin="{{plant.evt_fin.date|date:'d/m/Y'}}" 
 	            largeur_cm="{{plant.largeur_cm}}" 
@@ -369,7 +373,7 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
             {% endfor %}
 </div>
 
-<div id="divEditPlan" style="display: none" class="BlueFrame" onpropertychange="sauvePlant(document.getElementById('editPlant_plantId').innerHTML)">
+<div id="divEditPlan" style="display: none" class="BlueFrame">
 	
 	<h2>Gestion du/des plant/s <span id="editPlant_plantId"> </span></h2>
 	<p>Sur la planche N° <span id="editPlant_id_planche"> </span></p>
@@ -379,7 +383,8 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
     	    	{% endfor %}
     	      </select>
     </p>
-    <p>Date de début (jj/mm/aaaa) : <input style="width: 100px" type='text' value='' id='editPlant_date_debut'/></p>
+    <p>Quantité : <input style="width: 100px" type='text' value='' id='editPlant_quantite' onpropertychange="sauvePlant(document.getElementById('editPlant_plantId').innerHTML")/></p>
+    <p>Date de début (jj/mm/aaaa) : <input style="width: 100px" type='text' value='' id='editPlant_date_debut' onpropertychange="sauvePlant(document.getElementById('editPlant_plantId').innerHTML")/></p>
     <p>Date de fin (jj/mm/aaaa) : <input style="width: 100px" type='text' value='' id='editPlant_date_fin'/></p>
     <br/><br/><b>Evenements</b><div id="editPlant_evts"> </div>
     <br/>
