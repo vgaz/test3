@@ -19,11 +19,14 @@
             Planche {{planche.num}}<a href="{% url 'edition_planche' %}?num_planche={{planche.num}}"><img src="{{ STATIC_URL }}images/editor.png" title="Editer"></a> 
             <a href="{% url 'chrono_planche' %}?num_planche={{planche.num}}"><img src="{{ STATIC_URL }}images/arrowR.jpg" width="24" height="24" title="Chronogramme"></a><br/>
             {% endfor %}
-  </p>
+</p>
+<a href="{% url 'chrono_planches' %}?num_planche={{planche.num}}"><img src="{{ STATIC_URL }}images/arrowR.jpg" width="24" height="24" title="Chronogramme des planches">
+	Chrono planches</a>
 </div>
 <div class="BlueFrame">
 <h2>A faire</h2>
-déroulé planche : page contenant toutes les planches<br/>
+déroulé plancheS : page contenant toutes les planches<br/>
+repartition planche virtuelle vers planches réelles<br/>
 
 </div>
 

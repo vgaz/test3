@@ -82,7 +82,68 @@ def chronoPlanche(request):
                   "date_du_jour": date_du_jour,
                   "decalage_j": decalage_j
                   })
+
+
+def chronoPlanches(request):
+
+    delta20h = datetime.timedelta(hours=20)
+    date_du_jour = datetime.datetime.now()
+
+    if request.POST.get("date_debut_vue",""):
+        date_debut_vue = datetime.datetime.strptime(request.POST.get("date_debut_vue", ""), constant.FORMAT_DATE)
+        date_fin_vue = datetime.datetime.strptime(request.POST.get("date_fin_vue", ""), constant.FORMAT_DATE) + delta20h
+    else:
+        delta = datetime.timedelta(days=60)
+        date_debut_vue = date_du_jour - delta
+        date_fin_vue = date_du_jour + delta + delta20h
     
+    decalage_j = int(request.POST.get("decalage_j", 10))
+    delta = datetime.timedelta(days = decalage_j)
+    if request.POST.get("direction", "") == "avance":
+        date_debut_vue += delta 
+        date_fin_vue += delta
+    if request.POST.get("direction", "") == "recul":
+        date_debut_vue -= delta 
+        date_fin_vue -= delta        
+    
+    
+    try:
+        l_nums = [int(num.strip()) for num in request.POST.get("num_planches", request.GET.get("num_planches", 0)).strip(',').split(",")]
+        print(l_nums)
+        l_planches = Planche.objects.filter(num__in = l_nums).order_by('num')
+        print("l_planches", l_planches)
+    except:
+        s_msg = "Planche(s) non trouvée..."
+        return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
+    
+    ## ajout des evts liés à cette planche
+    for laPlanche in l_planches:
+        ## on prend tous les evts de l'encadrement pour les planches sélectionnées
+        laPlanche.l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
+                                          date__lte = date_fin_vue, 
+                                          plant_base__in = Plant.objects.filter(planche_id = laPlanche))
+
+        ## on en deduit les plants impliqués, même partiellement
+        l_plantsId = list(set([evt.plant_base_id for evt in laPlanche.l_evts]))
+        ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle
+        laPlanche.l_evts = Evenement.objects.filter(plant_base_id__in = l_plantsId).order_by('plant_base_id', 'date')
+        laPlanche.l_plants = Plant.objects.filter(planche_id = laPlanche, id__in = l_plantsId ).order_by('variete_id')
+            
+        
+
+
+    return render(request,
+                 'main/chrono_planches.html',
+                 {
+                  "appVersion": constant.APP_VERSION,
+                  "appName": constant.APP_NAME,
+                  "l_planches": l_planches,
+                  "date_debut_vue": date_debut_vue,
+                  "date_fin_vue": date_fin_vue,
+                  "date_du_jour": date_du_jour,
+                  "decalage_j": decalage_j
+                  })
+        
 
 def evenementsPlanches(request):
 
