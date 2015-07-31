@@ -108,10 +108,12 @@ def chronoPlanches(request):
     
     
     try:
-        l_nums = [int(num.strip()) for num in request.POST.get("num_planches", request.GET.get("num_planches", 0)).strip(',').split(",")]
-        print(l_nums)
-        l_planches = Planche.objects.filter(num__in = l_nums).order_by('num')
-        print("l_planches", l_planches)
+        s_nums = request.POST.get("num_planches", request.GET.get("num_planches", ""))
+        if s_nums:
+            l_nums = [int(num.strip()) for num in s_nums.strip(',').split(",")]
+            l_planches = Planche.objects.filter(num__in = l_nums).order_by('num')
+        else:
+            l_planches = Planche.objects.all().order_by('num')
     except:
         s_msg = "Planche(s) non trouvée..."
         return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})

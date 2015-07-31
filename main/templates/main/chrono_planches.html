@@ -45,14 +45,14 @@
 						     		{"id":"{{evt.id}}","nom":"{{evt.nom}}","date":"{{evt.date|safe}}","duree":"{{evt.duree_j}}","type":"{{evt.type}}","id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}\
 						            {% endfor %}]
 	    			{% endfor %}}'	
-        <p>Model: {{model}}</p>
+
 function    init()
     {
 
     changelePas(0) // juste pour affichage 1 ere fois
 
     // nb px par jour en fonction des bornes , on ajoute 1 pour inclure le dernier jour plein 
-    pxParH = window.getComputedStyle(document.getElementById("cadre_chrono")).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours') 
+    pxParH = window.getComputedStyle(document.getElementsByClassName("cadre_chrono")[0].width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours') 
 
     // creation d'une liste d'evts pour chaque id_plant
     hJsonEvts = JSON.parse(jsonEvts)
@@ -167,22 +167,22 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     {% for planche in l_planches %}
     Planche {{planche.num}}<br/>
 
-    <div id="cadre_chrono_pl{{planche.id}}">
-    <div id="date_du_jour"> </div>
+    <div id="cadre_chrono_pl{{planche.id}}" class="cadre_chrono">
+    <div id="date_du_jour_pl{{planche.id}}"> </div>
 
         {# plants existants en base #}
         {% for plant in planche.l_plants %}
         <div class="chrono_plant" id="{{plant.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
-        variete="{{plant.variete_id}}" debut="{{plant.debut}}" fin="{{plant.duree_j}}" >
+        variete="{{plant.variete_id}}" debut="{{plant.evt_debut.date|date:'d/m/Y'}}" fin="{{plant.evt_fin.date|date:'d/m/Y'}}" >
         <div><div class="num_plant" style="display: inline;">({{plant.id}}) </div><div class="variete" style="display: inline;">{{plant.variete}}</div><br/>
 
-        <div class="debut" style="display: inline;float:left">ddd{{plant.debut}}</div><br/><div class="fin" style="display:inline;float:right">{{plant.fin}}fin ?</div>
+        <div class="debut" style="display: inline;float:left">{{plant.evt_debut.date|date:'d/m/Y'}}</div><br/><div class="fin" style="display:inline;float:right">{{plant.evt_fin.date|date:'d/m/Y'}}</div>
         <br/><div class="evts" style="display: inline;float:left"> </div></div>
         </div>
         {% endfor %}
+    </div>
     {% endfor %}
         
-    </div>
 </div>
 
 {% endblock %}

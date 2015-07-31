@@ -55,7 +55,7 @@ body
     float:left;
     }
 
-#cadre_chrono { 
+.cadre_chrono { 
     width: 90%;
     height: 80%; 
     border: 5px solid #20D626;
