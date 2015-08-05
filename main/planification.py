@@ -60,7 +60,7 @@ def planif(dateDebut, dateFin):
             plants.hauteur_cm = var.diametre_cm                     ## on fixe arbitrairement sur une ligne
             plants.largeur_cm = var.diametre_cm * nb_plants_a_installer
             plants.save()
-            print("nouvelle serie ", plants)
+#             print("nouvelle serie ", plants)
             plants.fixeDates(dateSemaine)
             
             ## maj prod de cette semaine pour cette variété

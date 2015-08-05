@@ -46,7 +46,17 @@ def getDateFrom_y_m_d(s_time):
     _date =  datetime.date(int(y),int(m),int(d))
     return (_date)
     
+
 ######################################################################## 
+
+def getDateFrom_d_m_y(s_time):
+    if "/" in s_time:
+        d,m,y = s_time.split("/")
+    if "-" in s_time:
+        d,m,y = s_time.split("-")
+    _date =  datetime.date(int(y),int(m),int(d))
+    return (_date)
+    ######################################################################## 
 
 def getYMDFromDate(dateIn, sep="-"):
     s_date = dateIn.strftime('%Y-%m-%d')

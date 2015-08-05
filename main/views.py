@@ -271,8 +271,8 @@ def prevision_recolte(request):
     delta20h = datetime.timedelta(hours=20)
     date_du_jour = datetime.datetime.now()
     if request.POST.get("date_debut_vue",""):
-        date_debut_vue = datetime.datetime.strptime(request.POST.get("date_debut_vue", ""), constant.FORMAT_DATE)
-        date_fin_vue = datetime.datetime.strptime(request.POST.get("date_fin_vue", ""), constant.FORMAT_DATE) + delta20h
+        date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
+        date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
     else:
         delta = datetime.timedelta(days=30)
         date_debut_vue = date_du_jour - delta

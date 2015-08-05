@@ -70,7 +70,8 @@ def serveRequest(request):
             plant.production_id = 0
             plant.quatite = 1
             plant.save()
-            plant.fixeDates(request.POST.get("date_debut"), request.POST.get("date_fin", ""))
+            plant.fixeDates(MyTools.getDateFrom_d_m_y(request.POST.get("date_debut")), 
+                            None or request.POST.get("date_fin", ""))
             print(plant)
             s_json = '{"status":"true","id_plant":%d}'%plant.pk
         except:

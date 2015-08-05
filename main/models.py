@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 import datetime
+import main.Tools.MyTools as MyTools
 
 from main import constant
 
@@ -128,18 +129,9 @@ class Plant(models.Model):
         on prend le principe de 1 plant carré decoté = diametre variété"""
         return (self.quantite * float(self.variete.diametre_cm *self.variete.diametre_cm) / 10000 )
               
-    def fixeDates(self, s_dateDebut, s_dateFin=""):
+    def fixeDates(self, dateDebut, dateFin=None):
         """ crée les evts de debut et fin de vie du/des plants"""
-        print("fixeDates")
         
-        if "/" not in s_dateDebut:
-            raise Exception('%s pas de date de début de plant au format jj/mm/yyyy'%s_dateDebut)
-        
-        dateDebut = datetime.datetime.strptime(s_dateDebut, constant.FORMAT_DATE)
-        
-        if "/" in s_dateFin:
-            dateFin = datetime.datetime.strptime(s_dateFin, constant.FORMAT_DATE)
-
         e = Evenement()
         e.type = Evenement.TYPE_DEBUT
         e.date = dateDebut
@@ -157,7 +149,6 @@ class Plant(models.Model):
         e.save()
         self.evt_fin_id = e.id
         self.save()
-        print(__name__, self)
                   
     def __str__(self):
         return "Série (id:%d) de %d plant(s) de %s (%d graines), %d x %d, pos: %d %d sur planche %d du %s au %s" %(  self.id, self.quantite, self.variete.nom, 
