@@ -10,11 +10,11 @@ logging.basicConfig(format=LOGGIN_FORMAT, level=logging.DEBUG)
 Generic Tools
 
 """
-import os
+import os, stat
 import sys
 import shutil, time, datetime
 import re
-import ConfigParser
+# import ConfigParser
 
 ##############################################################################
 # remember:    command >> filename 2>&1    Appends both stdout and stderr to the file "filename" ...
@@ -38,6 +38,25 @@ def getDateTime ():
 
 ######################################################################## 
 
+def getDateFrom_y_m_d(s_time):
+    if "/" in s_time:
+        y,m,d = s_time.split("/")
+    if "-" in s_time:
+        y,m,d = s_time.split("-")
+    _date =  datetime.date(int(y),int(m),int(d))
+    return (_date)
+    
+######################################################################## 
+
+def getYMDFromDate(dateIn, sep="-"):
+    s_date = dateIn.strftime('%Y-%m-%d')
+    if sep != "-":
+        s_date = s_date.replace("-", sep)
+    return s_date
+    
+######################################################################## 
+    
+    
 def getFutureDateTime(s_dateTime):
     """return a time according to the futur delay wanted
     some Meta delays are possible : ASAP, NEXT_NIGHT, NEXT_WE, 
@@ -144,34 +163,37 @@ def xmlise(my_dict):
 
 ###########################################################################
 
-def createFileIfAbsent(s_fpath, s_defaultContent = "", mode = 0777):
+def createFileIfAbsent(s_fpath, 
+                       s_defaultContent = "", 
+                       mode = None):
     """create a file in 777 mode if it doesn't exist
     input : full file path, optional text to write in file
     output , True if ok (already exists or well created, False if an error occured
     """
     try:
-        ret = True
+        if not mode:
+            mode = stat.S_IREAD | stat.S_IWRITE | stat.S_IEXEC
         if not os.path.isfile(s_fpath):
             hF = open(s_fpath, "w")
             if s_defaultContent:
                 hF.write(s_defaultContent)
             hF.close()
             os.chmod(s_fpath, mode)
-        ret = True
+        
     except:
         logging.error( __name__ + ': ' + str(sys.exc_info()[1]))
-        ret = False
+        return False
         
-    return ret
+    return True
 
 ###########################################################################
 
-def createFolder(folder, mode=0777):
+def createFolder(folder, mode=stat.S_IREAD | stat.S_IWRITE):
     try:
         ret = True
         if not os.path.isdir(folder):
             os.makedirs(folder)
-            os.chmod(folder, 0777)   
+            os.chmod(folder, mode)   
     except:
         ret = False
         
@@ -312,7 +334,7 @@ def copyDir(pathSRC, pathDST, logger=logging.getLogger()):
         for fileName in files:            
             try:
                 shutil.copy( os.path.join(root,fileName) , tmpDestPath)
-            except IOError, err:
+            except Exception.IOError:
                 logger.exception("*** ERROR : " + str(err) + " Can't copy " + root + "/"+ fileName + " to directory " + tmpDestPath)
                 return False
 
@@ -344,7 +366,7 @@ def removeFilesInDir(path):
     for x in files:
         fullpath=os.path.join(path, x)
         if os.path.isfile(fullpath):
-            os.chmod(fullpath, 0777 )        # if file if protected, give removing rights
+            os.chmod(fullpath, stat.S_IREAD | stat.S_IWRITE | stat.S_IEXEC )        # if file if protected, give removing rights
             os.remove(fullpath)
             
         if os.path.islink(fullpath):
@@ -398,7 +420,7 @@ def lockFile(filePath, nb_waiting_sec = 4, logger=logging.getLogger(), askerId =
         try:
             os.mkdir(lockFolder) ## lock file 
             return True
-        except OSError, _err:
+        except Exception.OSError:
             pass ## can't take lock by creating a folder
             ##print '[lockFile] Error occurred when trying to create lock %s. errno = %i (%s)' % (lockFolder, err.errno, err.strerror)
 
@@ -433,7 +455,7 @@ def unlockFile(filePath, nb_waiting_sec=4, logger=logging.getLogger(), askerId =
                 os.rmdir(lockFolder)                ## unlock file 
                 return True
             
-            except OSError, err:
+            except Exception.OSError as err:
                 logger.exception('Error occurred when trying to remove lock %s. errno = %i (%s)' % (lockFolder, err.errno, err.strerror))
 
         else:
@@ -604,31 +626,31 @@ def getDictFromCsvLine(inStr):
     return data    
 
 ######################################################################################
-
-def dictToIniFile(inDict, iniFile, section="DATA"):
-    
-    cfParser = ConfigParser.RawConfigParser()
-    cfParser.readfp(open(iniFile))
-
-    ## clean existing section
-    if cfParser.has_section(section):
-        cfParser.remove_section(section)
-    cfParser.add_section(section)
-    
-    for key, val in inDict.items():
-        cfParser.set(section, str(key), str(val)) 
-        
-    cfParser.write(open(iniFile, 'w'))     
-
-######################################################################################
-
-def iniFileToDict(iniFile, section="DATA"):
-    """return a dictionary from keys/values included in an ini file"""
-    if not os.path.isfile(iniFile):
-        return {}
-    cfParser = ConfigParser.ConfigParser()
-    cfParser.readfp(open(iniFile))
-    return dict( cfParser.items(section) )  
+# 
+# def dictToIniFile(inDict, iniFile, section="DATA"):
+#     
+#     cfParser = ConfigParser.RawConfigParser()
+#     cfParser.readfp(open(iniFile))
+# 
+#     ## clean existing section
+#     if cfParser.has_section(section):
+#         cfParser.remove_section(section)
+#     cfParser.add_section(section)
+#     
+#     for key, val in inDict.items():
+#         cfParser.set(section, str(key), str(val)) 
+#         
+#     cfParser.write(open(iniFile, 'w'))     
+# 
+# ######################################################################################
+# 
+# def iniFileToDict(iniFile, section="DATA"):
+#     """return a dictionary from keys/values included in an ini file"""
+#     if not os.path.isfile(iniFile):
+#         return {}
+#     cfParser = ConfigParser.ConfigParser()
+#     cfParser.readfp(open(iniFile))
+#     return dict( cfParser.items(section) )  
 
 ######################################################################################
 
@@ -672,7 +694,7 @@ def transformToHtml( xmlFile, xslFile, htmlFile):
         result.freeDoc()
 
     except:
-        print "transformToHtml exception : %s" %(sys.exc_info()[1])                  
+        print("transformToHtml exception : %s" %(sys.exc_info()[1]))                  
         return False 
     
     return True
@@ -759,7 +781,10 @@ def changeDivContent(resultFilePath, divId, content):
 ######################################################################################
 if __name__ == '__main__':
 
-    
+    tt = getDateFrom_y_m_d("2015/12/3")
+    print (tt)
+    print (getYMDFromDate(tt, "//"))
+    exit(0)
     
     dictToIniFile({"user":"toto"},
                   "/a/home.users/vgazeill/EclipseWorkspace/GIT/pyatt/Config/sessions.txt", 

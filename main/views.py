@@ -8,6 +8,8 @@ from django.template.defaultfilters import random
 
 
 from main import forms, constant, planification
+import main.Tools.MyTools as MyTools
+
 import datetime
 
 from main.models import Evenement, Planche, Plant, Production
@@ -264,7 +266,7 @@ def editionPlanche(request):
 #################################################
 
 def prevision_recolte(request):
-
+    
     ## récup de la fenetre de temps
     delta20h = datetime.timedelta(hours=20)
     date_du_jour = datetime.datetime.now()
@@ -276,7 +278,7 @@ def prevision_recolte(request):
         date_debut_vue = date_du_jour - delta
         date_fin_vue = date_du_jour + delta + delta20h
     date_debut_sem_vue = date_debut_vue - datetime.timedelta(days=date_debut_vue.weekday()) 
-    date_fin_sem_vue = date_fin_vue + datetime.timedelta(days= 6 - date_fin_vue.weekday()) 
+    date_fin_sem_vue = date_fin_vue + datetime.timedelta(days = 6 - date_fin_vue.weekday()) 
             
     ## sauvegarde des prévisions des récoltes
     planification.enregistrePrevisions(request)
@@ -297,7 +299,8 @@ def prevision_recolte(request):
     
     tab_previsions = "[" 
     for prod in Production.objects.filter(date_semaine__gte = date_debut_sem_vue, date_semaine__lte = date_fin_sem_vue):
-        tab_previsions += "['%s', %d, %d, %d],"%(prod.date_semaine.strftime("%Y-%m-%d"), prod.variete_id, prod.qte_dde, prod.qte_prod)
+        print (prod)
+        tab_previsions += "['%s', %d, %d, %d],"%(MyTools.getYMDFromDate(prod.date_semaine), prod.variete_id, prod.qte_dde, prod.qte_prod)
     tab_previsions += "]" 
 
     return render(request,

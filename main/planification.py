@@ -1,28 +1,34 @@
 # -*- coding: utf-8 -*-
 import datetime
-from main.models import Evenement, Production, Planche, Plant, Variete
+from main.models import Production, Planche, Plant, Variete
+import main.Tools.MyTools as MyTools
+from main import constant
 
 #################################################
 
 def enregistrePrevisions(request):
-    if request.POST:
-        for k, v in request.POST.items():
-            ## gestion prévisions de récoltes
-            if k.startswith("p__") and v:
-                _, ds, var = k.split("__")
-                try:
-                    obj = Production.objects.get(variete_id=var, date_semaine = ds)
-                except:
-                    obj=Production()
-                    obj.variete_id = var
-                    obj.date_semaine = ds
-                
-                obj.qte_dde = int(v.split(" ")[0])
-                if qte_dde == 0 and obj.qte_prod == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro mais sans engagement de production
-                    obj.delete()
-                else:
-                    obj.qte_dde = qte
-                    obj.save()
+    if not request.POST:
+        return
+    
+    for k, v in request.POST.items():
+        ## gestion prévisions de récoltes
+        if not k.startswith("p__") or not v:
+            continue
+        try:
+            _, s_ds, var = k.split("__")
+            ds = MyTools.getDateFrom_y_m_d(s_ds)
+            obj = Production.objects.get(variete_id=var, date_semaine = ds)
+        except:
+            obj=Production()
+            obj.variete_id = var
+            obj.date_semaine = ds
+
+        obj.qte_dde = int(v.split(" ")[0])
+        if obj.qte_dde == 0 and obj.qte_prod == 0: ## issu d'un enregistrement ayant précédement une masse différente de zéro mais sans engagement de production
+            obj.delete()
+        else:
+            obj.save()
+            print("ds3", obj.date_semaine)
 
 
 def planif(dateDebut, dateFin):
@@ -49,12 +55,12 @@ def planif(dateDebut, dateFin):
             plants = Plant()
             plants.variete_id = var.id
             plants.quantite = nb_plants_a_installer                
-            plants.planche = Planche.objects.get(num = 0)           ## placement en planche virtuelle en attente de placement réel 
+            plants.planche = Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_ID)           ## placement en planche virtuelle en attente de placement réel 
             plants.production_id = prod.id
             plants.hauteur_cm = var.diametre_cm                     ## on fixe arbitrairement sur une ligne
             plants.largeur_cm = var.diametre_cm * nb_plants_a_installer
             plants.save()
-            print( "nouvelle serie " + str(plants))
+            print("nouvelle serie ", plants)
             plants.fixeDates(dateSemaine)
             
             ## maj prod de cette semaine pour cette variété

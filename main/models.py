@@ -90,7 +90,7 @@ class Variete(models.Model):
 class Production(models.Model):
     """Prévision hebdomadaire des productions pour une variété"""
     variete = models.ForeignKey(Variete)
-    date_semaine = models.DateTimeField("date de début de semaine")
+    date_semaine = models.DateField("date de début de semaine")
     qte_dde = models.PositiveIntegerField("quantité demandée", default=0)
     qte_prod = models.PositiveIntegerField("quantité produite", default=0)
 
@@ -98,11 +98,11 @@ class Production(models.Model):
         ordering = ["date_semaine"]
             
     def __str__(self):
-        return "sem du %s : %s : dde=%d prod=%d (%s)"%(self.date_semaine, 
-                                                     self.variete.nom, 
-                                                     self.qte_dde, 
-                                                     self.qte_prod, 
-                                                     self.variete.nomUniteProd())
+        return "semaine du %s : %s : dde=%d prod=%d (%s)"%(  self.date_semaine, 
+                                                             self.variete.nom, 
+                                                             self.qte_dde, 
+                                                             self.qte_prod, 
+                                                             self.variete.nomUniteProd())
 
 class Plant(models.Model):
     
