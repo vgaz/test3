@@ -76,13 +76,14 @@ class Variete(models.Model):
         
         l_ret = []
         
-        if self.unite_prod == constant.UNITE_PROD_KG:
+            
+        for prodSemUnitaire in self.prod_hebdo_moy_g.split(","):
 
-            for prodSemUnitaire in self.prod_hebdo_moy_g.split(","):
+            if self.unite_prod == constant.UNITE_PROD_PIECE:
+                l_ret.append(int(productionDemandee * float(prodSemUnitaire)))
+            else:
                 l_ret.append(int((float(prodSemUnitaire)/1000) * productionDemandee) + 1)
 
-        if self.unite_prod == constant.UNITE_PROD_PIECE:
-            l_ret.append(productionDemandee)
 
         return (l_ret)
 

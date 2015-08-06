@@ -73,14 +73,14 @@ def planif(dateDebut, dateFin):
             prod.save()
             
             ## maj éventuelle des semaines suivantes
-            if len(l_prodSemaine) > 1:  
-                for index, qteSem in enumerate(l_prodSemaine[1:]):
-                    dateSem = dateSemaine + datetime.timedelta(weeks = 1 + index)
-                    prod_suite = Production.objects.get_or_create(variete_id = var.id, date_semaine = dateSem)[0]
-                    print (prod_suite)
-                    prod_suite.qte_prod += qteSem
-                    prod_suite.save()
-                    print(prod_suite)
+#             if len(l_prodSemaine) > 1:  
+            for index, qteSem in enumerate(l_prodSemaine[1:]):
+                dateSem = dateSemaine + datetime.timedelta(weeks = 1 + index)
+                prod_suite = Production.objects.get_or_create(variete_id = var.id, date_semaine = dateSem)[0]
+                print (prod_suite)
+                prod_suite.qte_prod += qteSem
+                prod_suite.save()
+                print(prod_suite)
 
 
         dateSemaine += datetime.timedelta(days=7)
