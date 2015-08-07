@@ -20,6 +20,15 @@
     color: black;
     border: 5px solid green;
     }
+
+#transfert_plant
+    {
+    width: 50%;
+    height: 50%;
+    background: white;
+    color: black;
+    border: 5px solid brown;
+    }    
 </style>
 
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
@@ -174,7 +183,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         {% for plant in planche.l_plants %}
         <div class="chrono_plant" id="{{plant.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
         variete="{{plant.variete_id}}" debut="{{plant.evt_debut.date|date:'d/m/Y'}}" fin="{{plant.evt_fin.date|date:'d/m/Y'}}" >
-        <div><div class="num_plant" style="display: inline;">({{plant.id}}) </div><div class="variete" style="display: inline;">{{plant.variete}}</div><br/>
+        <div><div class="num_plant" style="display: inline;">({{plant.id}}) </div><div class="variete" style="display: inline;">{{plant.variete}} x {{plant.quantite}}</div><br/>
 
         <div class="debut" style="display: inline;float:left">{{plant.evt_debut.date|date:'d/m/Y'}}</div><br/><div class="fin" style="display:inline;float:right">{{plant.evt_fin.date|date:'d/m/Y'}}</div>
         <br/><div class="evts" style="display: inline;float:left"> </div></div>
@@ -182,6 +191,17 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         {% endfor %}
     </div>
     {% endfor %}
+    <div id="transfert_plant">
+    	Déplacement de plants <br/>
+    	Vers planche <input style="margin-left: 20px" type="text" name="deplacement_planche_dest" value=""/><br/>
+    	distance inter-rang (cm)<input style="margin-left: 20px" type="text" name="deplacement_inter_rang_cm" value=""/><br/>
+    	distance dans le rang (cm) <input style="margin-left: 20px" type="text" name="deplacement_dans_rang_cm" value=""/><br/>
+    	Déplacement total : oui<input id="deplacement_type" type="radio" value="total" />
+    	non<input style="margin-left: 20px" type="radio" name="deplacement_type" value="partiel"/>
+    	nb de plants <input style="margin-left: 20px" type="text" name="deplacement_nb_plants" value=""/>
+
+
+    </div>
         
 </div>
 
