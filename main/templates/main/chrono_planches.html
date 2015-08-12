@@ -24,7 +24,7 @@
 #transfert_plant
     {
     width: 50%;
-    height: 50%;
+    height: 200px;
     background: white;
     color: black;
     border: 5px solid brown;
@@ -43,17 +43,16 @@
     decalage_j = {{decalage_j|safe}}
     NomEvtDeId = {  {% for evtType in l_typesEvt %} '{{evtType.id}}':'{{evtType.nom}}',{% endfor %}  }
     // evenement par planche id
-    jsonEvts = '{"evts":[{% for evt in l_evts %}\
-                {"id":"{{evt.id}}","nom":"{{evt.nom}}","date":"{{evt.date|safe}}","duree":"{{evt.duree_j}}","type":"{{evt.type}}","id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}\
-                {% endfor %}]}'	
-
-    d_evtsPlanches = '{% for plancheId,l_evts in planchesEvts.items %}
-					    	{
-					    	"plancheId":{{plancheId}},
-					    	"evts":[{% for evt in l_evts %}\
-						     		{"id":"{{evt.id}}","nom":"{{evt.nom}}","date":"{{evt.date|safe}}","duree":"{{evt.duree_j}}","type":"{{evt.type}}","id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}\
-						            {% endfor %}]
-	    			{% endfor %}}'	
+    d_evtsPlanches =   { {% for planche in l_planches %}
+					    	"evts__pl{{planche.num}}":[{% for evt in planche.l_evts %}
+					    									{"id":"{{evt.id}}",
+															"nom":"{{evt.nom}}",
+															"date":"{{evt.date|safe}}",
+															"duree":"{{evt.duree_j}}",
+															"type":"{{evt.type}}",
+															"id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}{% endfor%}]
+					   {% if not forloop.last %},{% endif %}
+	    			   {% endfor %}	}
 
 function    init()
     {
@@ -61,39 +60,15 @@ function    init()
     changelePas(0) // juste pour affichage 1 ere fois
 
     // nb px par jour en fonction des bornes , on ajoute 1 pour inclure le dernier jour plein 
-    pxParH = window.getComputedStyle(document.getElementsByClassName("cadre_chrono")[0].width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours') 
-
-    // creation d'une liste d'evts pour chaque id_plant
-    hJsonEvts = JSON.parse(jsonEvts)
-    EvtsDePlant = {}
-    for (ii=0;ii<hJsonEvts.evts.length;ii++)
-        {
-        s_info += hJsonEvts.evts[ii].id_plant + " " + hJsonEvts.evts[ii].type + " " + hJsonEvts.evts[ii].date + '<br/>'
-        if (EvtsDePlant[hJsonEvts.evts[ii].id_plant] == null)
-            EvtsDePlant[hJsonEvts.evts[ii].id_plant] = new Array()
-        EvtsDePlant[hJsonEvts.evts[ii].id_plant].push(hJsonEvts.evts[ii].id)
-        }
-
-    // creation d'une liste d'evts pour chaque id_plant pour chaque planche
-    hJsonEvts = JSON.parse(jsonEvts)
-    EvtsDePlant = {}
-    for (ii=0;ii<hJsonEvts.evts.length;ii++)
-        {
-        s_info += hJsonEvts.evts[ii].id_plant + " " + hJsonEvts.evts[ii].type + " " + hJsonEvts.evts[ii].date + '<br/>'
-        if (EvtsDePlant[hJsonEvts.evts[ii].id_plant] == null)
-            EvtsDePlant[hJsonEvts.evts[ii].id_plant] = new Array()
-        EvtsDePlant[hJsonEvts.evts[ii].id_plant].push(hJsonEvts.evts[ii].id)
-        }
+    pxParH = window.getComputedStyle(document.getElementsByClassName("cadre_chrono")[0]).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours')
 
     //document.getElementById("divInfoDebug").innerHTML = s_info
     balisagePlants()
     
     // ajout ligne date du jour
-    for (planche in a_planches)
+    for (hplanche in document.getElementsByClassName("cadre_chrono"))
     	{
-    	id_planche = planche["id"]
-    	hBarreCeJour = document.getElementById("date_du_jour_pl" + id_planche)
-	    hBarreCeJour.style.height = window.getComputedStyle(document.getElementById("cadre_chrono_pl" + id_planche)).height
+	    hplanche.getElementsByTagName("date_du_jour").style.height = window.getComputedStyle(hplanche).height
 	    delta = moment(date_du_jour).diff(moment(date_debut_vue), 'hours')
 	    hBarreCeJour.style.marginLeft = delta * pxParH + "px" 
 	    }
@@ -101,43 +76,27 @@ function    init()
     
 function  balisagePlants()
     {
-    for (pl in EvtsDePlant)
+    l_plants = document.getElementsByClassName("chrono_plant")
+    for (ii=0;ii<l_plants.length;ii++)
         {
-        debut = "" 
-        fin = ""
-        for (ii=0;ii<hJsonEvts.evts.length;ii++)
-            {
-            // on balaye plant par plant car les evt sont ordonnés par id_plant
+        // decalage debut
+        debut = l_plants[ii].getAttribute("debut")
+        deltaH = moment(debut).diff(moment(date_debut_vue), 'hours')
+        l_plants[ii].style.marginLeft = deltaH * pxParH + "px" 
+        // decalage fin
+        fin = l_plants[ii].getAttribute("fin")
+        deltaH = moment(fin).diff(moment(debut), 'hours')
+        l_plants[ii].style.width = deltaH * pxParH  + "px"
+        
+    		/*{
+            //positionnement des autres évènements
+            deltaPx = moment(hJsonEvts.evts[ii].date).diff(moment(debut), 'hours') * pxParH  + "px"
+            s_evt = "<img title='" + hJsonEvts.evts[ii].nom + '\n' + moment(hJsonEvts.evts[ii].date).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + ";width:" + hJsonEvts.evts[ii].duree_j * 24 * pxParH + "px;height:13px'>"
+            document.getElementById(hJsonEvts.evts[ii].id_plant).getElementsByClassName("evts")[0].innerHTML += s_evt
+            }*/
             
-            if (hJsonEvts.evts[ii].id_plant == pl)
-                {
-                if (hJsonEvts.evts[ii].type == '1')
-                    {
-                    debut = hJsonEvts.evts[ii].date
-                    deltaDebutH = moment(hJsonEvts.evts[ii].date).diff(moment(date_debut_vue), 'hours')
-                    // decalage debut
-                    document.getElementById(hJsonEvts.evts[ii].id_plant).style.marginLeft = deltaDebutH * pxParH + "px" 
-                    //mise à jour visuelle info date
-                    document.getElementById(hJsonEvts.evts[ii].id_plant).getElementsByClassName("debut")[0].innerHTML = moment(debut).format("DD/MM/YYYY")
-                    }
-                else if (hJsonEvts.evts[ii].type == '2')
-                    {
-                    fin = hJsonEvts.evts[ii].date
-                    deltaH = moment(fin).diff(moment(debut), 'hours')
-                    document.getElementById(hJsonEvts.evts[ii].id_plant).style.width = deltaH * pxParH  + "px"
-                    //mise à jour visuelle info date
-                    document.getElementById(hJsonEvts.evts[ii].id_plant).getElementsByClassName("fin")[0].innerHTML = moment(fin).format("DD/MM/YYYY")
-                    }
-                else
-                    {
-                    //positionnement des autres évènements
-                    deltaPx = moment(hJsonEvts.evts[ii].date).diff(moment(debut), 'hours') * pxParH  + "px"
-                    s_evt = "<img title='" + hJsonEvts.evts[ii].nom + '\n' + moment(hJsonEvts.evts[ii].date).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + ";width:" + hJsonEvts.evts[ii].duree_j * 24 * pxParH + "px;height:13px'>"
-                    document.getElementById(hJsonEvts.evts[ii].id_plant).getElementsByClassName("evts")[0].innerHTML += s_evt
-                    }
-                }
-            }
         }
+    
     }
     
 function changelePas(delta)
@@ -177,14 +136,14 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     Planche {{planche.num}}<br/>
 
     <div id="cadre_chrono_pl{{planche.id}}" class="cadre_chrono">
-    <div id="date_du_jour_pl{{planche.id}}"> </div>
+    <div class="date_du_jour_pl{{planche.id}}"> </div>
 
         {# plants existants en base #}
         {% for plant in planche.l_plants %}
         <div class="chrono_plant" id="{{plant.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
-        variete="{{plant.variete_id}}" debut="{{plant.evt_debut.date|date:'d/m/Y'}}" fin="{{plant.evt_fin.date|date:'d/m/Y'}}" >
-        <div><div class="num_plant" style="display: inline;">({{plant.id}}) </div><div class="variete" style="display: inline;">{{plant.variete}} x {{plant.quantite}}</div><br/>
-
+        variete="{{plant.variete_id}}" debut="{{plant.evt_debut.date|safe}}" fin="{{plant.evt_fin.date|safe}}" >
+        <div><div class="num_plant" style="display: inline;">({{plant.id}}) </div><div class="variete" style="display: inline;">
+        {{plant.variete}} x {{plant.quantite}}</div><br/>
         <div class="debut" style="display: inline;float:left">{{plant.evt_debut.date|date:'d/m/Y'}}</div><br/><div class="fin" style="display:inline;float:right">{{plant.evt_fin.date|date:'d/m/Y'}}</div>
         <br/><div class="evts" style="display: inline;float:left"> </div></div>
         </div>
