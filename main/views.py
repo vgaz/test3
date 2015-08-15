@@ -123,26 +123,25 @@ def chronoPlanches(request):
     ## ajout des evts liés à cette planche
     for laPlanche in l_planches:
         ## on prend tous les evts de l'encadrement pour les planches sélectionnées
-        laPlanche.l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
+        l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
                                           date__lte = date_fin_vue, 
                                           plant_base__in = Plant.objects.filter(planche_id = laPlanche))
 
         ## on en deduit les plants impliqués, même partiellement
-        l_plantsId = list(set([evt.plant_base_id for evt in laPlanche.l_evts]))
-        ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle
-        laPlanche.l_evts = Evenement.objects.filter(plant_base_id__in = l_plantsId,
-                                                    type = Evenement.TYPE_AUTRE).order_by('plant_base_id', 'date')
+        l_plantsId = list(set([evt.plant_base_id for evt in l_evts]))
         laPlanche.l_plants = Plant.objects.filter(planche_id = laPlanche, id__in = l_plantsId ).order_by('variete_id')
+        ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle 
+        s_evts_plants = ""
+        for plant in laPlanche.l_plants:
+            plant.l_evts = Evenement.objects.filter(plant_base_id = plant.id, type = Evenement.TYPE_AUTRE).order_by('date')
             
-        
-
-
     return render(request,
                  'main/chrono_planches.html',
                  {
                   "appVersion": constant.APP_VERSION,
                   "appName": constant.APP_NAME,
                   "l_planches": l_planches,
+                  "s_evts_plants":s_evts_plants,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
                   "date_du_jour": date_du_jour,

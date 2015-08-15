@@ -41,18 +41,15 @@
     date_fin_vue = "{{date_fin_vue|safe}}"
     date_du_jour = "{{date_du_jour|safe}}"
     decalage_j = {{decalage_j|safe}}
-    NomEvtDeId = {  {% for evtType in l_typesEvt %} '{{evtType.id}}':'{{evtType.nom}}',{% endfor %}  }
-    // evenement par planche id
-    d_evtsPlanches =   { {% for planche in l_planches %}
-					    	"evts__pl{{planche.num}}":[{% for evt in planche.l_evts %}
-					    									{"id":"{{evt.id}}",
-															"nom":"{{evt.nom}}",
-															"date":"{{evt.date|safe}}",
-															"duree":"{{evt.duree_j}}",
-															"type":"{{evt.type}}",
-															"id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}{% endfor%}]
-					   {% if not forloop.last %},{% endif %}
-	    			   {% endfor %}	}
+    // evenement par plant id
+    l_evts_plants=[    {% for planche in l_planches %}{% for plant in planche.l_plants %}
+			{% for evt in plant.l_evts %}  {"id":"{{evt.id}}",
+											"nom":"{{evt.nom}}",
+											"date":"{{evt.date|safe}}",
+											"duree_j":"{{evt.duree_j}}",
+											"type":"{{evt.type}}",
+											"id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}{% endfor%}
+		{% endfor %}{% endfor %}]
 
 function    init()
     {
@@ -85,18 +82,19 @@ function  balisagePlants()
         l_plants[ii].style.marginLeft = deltaH * pxParH + "px" 
         // decalage fin
         fin = l_plants[ii].getAttribute("fin")
-        deltaH = moment(fin).diff(moment(debut), 'hours')
+        deltaH = moment(fin).diff(moment(debut), "hours")
         l_plants[ii].style.width = deltaH * pxParH  + "px"
-        
-    		/*{
-            //positionnement des autres évènements
-            deltaPx = moment(hJsonEvts.evts[ii].date).diff(moment(debut), 'hours') * pxParH  + "px"
-            s_evt = "<img title='" + hJsonEvts.evts[ii].nom + '\n' + moment(hJsonEvts.evts[ii].date).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + ";width:" + hJsonEvts.evts[ii].duree_j * 24 * pxParH + "px;height:13px'>"
-            document.getElementById(hJsonEvts.evts[ii].id_plant).getElementsByClassName("evts")[0].innerHTML += s_evt
-            }*/
-            
+        // placement evenements divers
+    	for (jj=0;jj<l_evts_plants.length;jj++)
+    		{
+    		if (l_evts_plants[jj]["id_plant"] != l_plants[ii].getAttribute("id"))
+    			continue
+            //positionnement des évènements
+            deltaPx = moment(l_evts_plants[jj]["date"]).diff(moment(debut), 'hours') * pxParH  + "px"
+            s_evt = "<img title='" + l_evts_plants[jj]["nom"] + '\n' + moment(l_evts_plants[jj]["date"]).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + ";width:" + l_evts_plants[jj]["duree_j"] * 24 * pxParH + "px;height:13px'>"
+            document.getElementById(l_plants[ii].getAttribute("id")).getElementsByClassName("evts")[0].innerHTML += s_evt
+            }
         }
-    
     }
     
 function changelePas(delta)
