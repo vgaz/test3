@@ -23,17 +23,19 @@
 
 #transfert_plant
     {
-    width: 50%;
-    height: 200px;
+    text-align:left;
+    padding:10px;
+    width: 400px;
+    height: 25	0px;
     background: white;
     color: black;
     border: 5px solid brown;
+    position: absolute;
     }    
 </style>
 
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/moment-with-locales.min.js"></script>
-
     <script type="text/javascript">
     
     s_info = ""
@@ -59,16 +61,57 @@ function    init()
     // nb px par jour en fonction des bornes , on ajoute 1 pour inclure le dernier jour plein 
     pxParH = window.getComputedStyle(document.getElementsByClassName("cadre_chrono")[0]).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours')
 
-    //document.getElementById("divInfoDebug").innerHTML = s_info
     balisagePlants()
     
     // ajout ligne date du jour
     for (hplanche in document.getElementsByClassName("cadre_chrono"))
     	{
-	    hplanche.getElementsByTagName("date_du_jour").style.height = window.getComputedStyle(hplanche).height
+	    hplanche.getElementsByTagName("date_du_jour")[0].style.height = window.getComputedStyle(hplanche).height
 	    delta = moment(date_du_jour).diff(moment(date_debut_vue), 'hours')
 	    hBarreCeJour.style.marginLeft = delta * pxParH + "px" 
 	    }
+    //document.getElementById("divInfoDebug").innerHTML = s_info
+    }
+    
+function  editeDeplacement(id_plant_orig)
+    {
+    	//alert("deplacement_id_plant  " + id_plant_orig)
+    	hDiv = document.getElementById("transfert_plant")
+    	hDiv.style.top = "200px"
+    	hDiv.style.left = "100px"
+    	document.getElementById("deplacement_id_plant").value = id_plant_orig
+    	//hDiv.getElementsByName("deplacement_id_plant")[0].value = id_plant_orig
+    	
+    }    
+function  deplacement(hForm, essai)
+    {
+	alert("deplacement du/des plant/s ")
+	//recup param
+	/*
+	id_plant = 
+	    	vers planche N°<input style="width: 30px" type="text" name="deplacement_planche_dest" value=""/><br/>
+    	Distance inter-rang (cm)<input style="margin-left: 20px;width: 30px" type="text" name="deplacement_inter_rang_cm" value=""/><br/>
+    	Distance dans le rang (cm) <input style="margin-left: 20px;width: 30px" type="text" name="deplacement_dans_rang_cm" value=""/><br/>
+    	Déplacement total : oui<input id="deplacement_type" type="radio" value="total" />
+    	non<input style="margin-right: 15px" type="radio" name="deplacement_type" value="partiel"/><br/>
+    	Si non, nb de plants :<input style="margin-left: 20px;width: 30px" type="text" name="deplacement_nb_plants" value=""/><br/>
+		<input type="submit" value="Essai" onclick="deplacement(this, 0)" />
+		<input type="submit" value="Transfert" onclick="deplacement(this, 1)" />
+	//appel servRequest
+    // recup evts du plant
+    s_request = "cde=deplacementPlant&id="+ id_plant
+    s_request = "&interid="+ id_plant
+    s_request = "cde=deplacementPlant&id="+ id_plant
+    s_request = "cde=deplacementPlant&id="+ id_plant
+    s_request = "cde=deplacementPlant&id="+ id_plant
+    s_request = "cde=deplacementPlant&id="+ id_plant
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == 'true' )
+        {
+        //recuperation de la reponse
+       
+        }      	*/
     }
     
 function  balisagePlants()
@@ -131,7 +174,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 
 <br/><br/>
     {% for planche in l_planches %}
-    Planche {{planche.num}}<br/>
+    Planche {{planche.num}}. {{planche.nom}}<br/>
 
     <div id="cadre_chrono_pl{{planche.id}}" class="cadre_chrono">
     <div class="date_du_jour_pl{{planche.id}}"> </div>
@@ -141,7 +184,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         <div class="chrono_plant" id="{{plant.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
         variete="{{plant.variete_id}}" debut="{{plant.evt_debut.date|safe}}" fin="{{plant.evt_fin.date|safe}}" >
         <div><div class="num_plant" style="display: inline;">({{plant.id}}) </div><div class="variete" style="display: inline;">
-        {{plant.variete}} x {{plant.quantite}}</div><br/>
+        {{plant.variete}} x {{plant.quantite}}</div> <a href="javascript:editeDeplacement({{plant.id}})">>></a><br/>
         <div class="debut" style="display: inline;float:left">{{plant.evt_debut.date|date:'d/m/Y'}}</div><br/><div class="fin" style="display:inline;float:right">{{plant.evt_fin.date|date:'d/m/Y'}}</div>
         <br/><div class="evts" style="display: inline;float:left"> </div></div>
         </div>
@@ -149,13 +192,16 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     </div>
     {% endfor %}
     <div id="transfert_plant">
-    	Déplacement de plants <br/>
-    	Vers planche <input style="margin-left: 20px" type="text" name="deplacement_planche_dest" value=""/><br/>
-    	distance inter-rang (cm)<input style="margin-left: 20px" type="text" name="deplacement_inter_rang_cm" value=""/><br/>
-    	distance dans le rang (cm) <input style="margin-left: 20px" type="text" name="deplacement_dans_rang_cm" value=""/><br/>
+    	<h4>Déplacement de plants à partir de la planche virtuelle</h4>
+    	Plant/s N°<input style="width: 30px;display: inline" type="text" id="deplacement_id_plant" value=""/>
+    	vers planche N°<input style="width: 30px" type="text" id="deplacement_planche_dest" value=""/><br/>
+    	Distance inter-rang (cm)<input style="margin-left: 20px;width: 30px" type="text" id="deplacement_inter_rang_cm" value=""/><br/>
+    	Distance dans le rang (cm) <input style="margin-left: 20px;width: 30px" type="text" id="deplacement_dans_rang_cm" value=""/><br/>
     	Déplacement total : oui<input id="deplacement_type" type="radio" value="total" />
-    	non<input style="margin-left: 20px" type="radio" name="deplacement_type" value="partiel"/>
-    	nb de plants <input style="margin-left: 20px" type="text" name="deplacement_nb_plants" value=""/>
+    	non<input style="margin-right: 15px" type="radio" id="deplacement_type" value="partiel"/><br/>
+    	Si non, nb de plants :<input style="margin-left: 20px;width: 30px" type="text" id="deplacement_nb_plants" value=""/><br/>
+		<input type="submit" value="Essai" onclick="deplacement(this, 0)" />
+		<input type="submit" value="Transfert" onclick="deplacement(this, 1)" />
 
 
     </div>
