@@ -13,21 +13,32 @@ class Command(BaseCommand):
 
     def creationPlanches(self):
         print("création des planches de base")
+        try:
+            p = Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_ID )
+        except:
+            p = Planche()
+            p.num = constant.PLANCHE_VIRTUELLE_ID
 
-        p = Planche()
-        p.num = constant.PLANCHE_VIRTUELLE_ID
         p.nom = "PLANCHE VIRTUELLE"
         p.longueur_m=10000
         p.largeur_cm=100
-        p.save()        
-        p = Planche()
-        p.num = 1
+        p.save()  
+
+        try:
+            p = Planche.objects.get(num = 1)
+        except:
+            p = Planche()              
+            p.num = 1        
         p.nom = "planche1"
         p.longueur_m=100
         p.largeur_cm=100
-        p.save()        
-        p = Planche()
-        p.num = 2
+        p.save()  
+              
+        try:
+            p = Planche.objects.get(num = 1)
+        except:
+            p = Planche()              
+            p.num = 2 
         p.nom = "planche2"
         p.longueur_m=60
         p.largeur_cm=100
@@ -55,7 +66,7 @@ class Command(BaseCommand):
                 v.date_max_plantation = d_line.get("date_max_plantation")
                 v.duree_avant_recolte_j = int(d_line.get("duree_avant_recolte_j") or 0 )
                 v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
-                v.diametre_cm = int(d_line.get("diametre_cm") or 0)
+
                 
                 if d_line.get("unite_prod") == 'u': 
                     v.unite_prod = constant.UNITE_PROD_PIECE
@@ -105,7 +116,8 @@ class Command(BaseCommand):
             l_ajoutSiBesoin.append(variet)
             l_ajoutSiBesoin.extend(l_varAvec)
             l_ajoutSiBesoin.extend(l_varSans)
-                        
+            
+#             print(d_line)
             for _v in set(l_ajoutSiBesoin):
                 if _v and _v not in l_variets and _v not in l_variets_sup:
                     v = Variete()
@@ -126,7 +138,7 @@ class Command(BaseCommand):
         
         self.creationPlanches()
 
-        self.stdout.write("end of command " + self.__doc__)  
+        print("end of command " + self.__doc__)  
         
         
     

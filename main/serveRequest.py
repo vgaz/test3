@@ -64,8 +64,8 @@ def serveRequest(request):
             plant.quantite = int(request.POST.get("quantite", 0))
             plant.largeur_cm = int(request.POST.get("largeur_cm",0))
             plant.hauteur_cm = int(request.POST.get("hauteur_cm",0))
-            plant.coord_x_cm = int(request.POST.get("coord_x_cm",0))
-            plant.coord_y_cm = int(request.POST.get("coord_y_cm",0))
+            plant.intra_rang_cm = int(request.POST.get("intra_rang_cm",0))
+            plant.nb_rangs = int(request.POST.get("nb_rangs",0))
             plant.planche = Planche.objects.get(num=int(request.POST.get("id_planche",0)))
             plant.production_id = 0
             plant.quatite = 1
@@ -162,13 +162,46 @@ def serveRequest(request):
            
         return HttpResponse(s_json)
 
-    ## --------------- request to update database 
     if cde == "supprime_evenement":
         try:
             evt = Evenement.objects.get(id=int(request.POST.get("id", 0)))
             print("will delete", evt)
             evt.delete()
             s_json = '{"status":"true"}'
+        except:
+            s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
+           
+        return HttpResponse(s_json)
+
+    if cde == "deplacement_plant":
+        ## deplacement des plants d'une planche vers une autre
+        try:
+            plant = Plant.objects.get(id=int(request.POST.get("id_plant")))
+            
+            nb_plants = request.POST.get("nb_plants") ## peut etre chaine vide pas castable
+            if nb_plants:
+                nb_plants = int(nb_plants)
+            else:
+                nb_plants = 0
+            print ('rrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+            if request.POST.get("simu") == "true":
+                print("simu _______")
+                rep = "reste 3 , déplacement incomplet. \\nfin de simulation"
+            else:
+                ## changement de planche
+                plant.planche_id = Planche.objects.get(num = int(request.POST.get("num_planche_dest"))).id
+                plant.save()
+                rep ="reste 3 , deplacement incomplet. fin de déplacementS"
+                
+#             reste = plant.deplace(  int(request.POST.get("id_planche_src")),
+#                                     int(request.POST.get("num_planche_dest")),
+#                                     int(request.POST.get("distance_inter_rang_cm")),
+#                                     int(request.POST.get("distance_dans_rang_cm")),
+#                                     request.POST.get("deplacement_total") == 1,
+#                                     nb_plants,
+#                                     request.POST.get("simu") == 1  
+#                                     )
+            s_json = '{"status":"true", "msg":"%s"}'%rep
         except:
             s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
            

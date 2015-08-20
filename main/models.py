@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 import datetime
-import main.Tools.MyTools as MyTools
 
 from main import constant
 
@@ -39,7 +38,7 @@ class Variete(models.Model):
     duree_avant_recolte_j = models.IntegerField("durée en terre avant récolte (jours)", default=0)
     prod_hebdo_moy_g = models.CommaSeparatedIntegerField("suite de production hebdomadaire moyenne (grammes) pour un plant", max_length=20, default="0") ##attention, pour les légumes "à la pièce" ( choux, salades..), ne saisir qu'une valeur 
     rendementPlantsGraines = models.FloatField('graines Pour 1 Plant', default=2)
-    diametre_cm = models.IntegerField("diamètre (cm)", default=0)
+    intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     ##image = models.ImageField()
     
@@ -52,7 +51,6 @@ class Variete(models.Model):
     def nomUniteProd(self):
         return constant.D_NOM_UNITE_PROD[self.unite_prod]  
 
-        
     def plantsPourProdHebdo(self, productionDemandee):
         """ retourne nb de plants en fonction de la prod escomptée (en kg ou en unité
         pour les plantes donnant sur plusieurs semaines, on prend le rendement de la première semaine"""
@@ -76,14 +74,12 @@ class Variete(models.Model):
         
         l_ret = []
         
-            
         for prodSemUnitaire in self.prod_hebdo_moy_g.split(","):
 
             if self.unite_prod == constant.UNITE_PROD_PIECE:
                 l_ret.append(int(productionDemandee * float(prodSemUnitaire)))
             else:
                 l_ret.append(int((float(prodSemUnitaire)/1000) * productionDemandee) + 1)
-
 
         return (l_ret)
 
@@ -112,27 +108,25 @@ class Plant(models.Model):
         verbose_name = "Plant ou série de plants"
         
     variete = models.ForeignKey(Variete)
-    largeur_cm = models.PositiveIntegerField("largeur cm", default=0)
-    hauteur_cm = models.PositiveIntegerField("hauteur cm", default=0)
-    coord_x_cm = models.PositiveIntegerField("pos x cm", default=0)
-    coord_y_cm = models.PositiveIntegerField("pos y cm", default=0)
+#     largeur_cm = models.PositiveIntegerField("largeur cm", default=0)
+#     hauteur_cm = models.PositiveIntegerField("hauteur cm", default=0)
+    nb_rangs = models.PositiveIntegerField("nombre de rangs", default=3)
+    intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=0)
     planche = models.ForeignKey("Planche", default=0, blank=True)
     quantite = models.PositiveIntegerField(default=1)
     evt_debut = models.ForeignKey("Evenement", related_name="evt_debut_plant", null=True,default=0)
     evt_fin = models.ForeignKey("Evenement", related_name="evt_fin_plant", null=True, default=0)
-  
+    
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
         return(self.quantite / self.variete.rendementPlantsGraines)
 
-    def surface(self):
-        """ retourne la surface prise, em m2, par la série de plants
-        on prend le principe de 1 plant carré decoté = diametre variété"""
-        return (self.quantite * float(self.variete.diametre_cm *self.variete.diametre_cm) / 10000 )
+    def longueurDePlanche(self):
+        """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang"""
+        return (self.quantite * self.intra_rang_cm ) / self.nb_rangs
               
     def fixeDates(self, dateDebut, dateFin=None):
         """ crée les evts de debut et fin de vie du/des plants"""
-        
         e = Evenement()
         e.type = Evenement.TYPE_DEBUT
         e.date = dateDebut

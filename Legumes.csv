@@ -1,16 +1,16 @@
-variete,famille,date_min_plantation,date_max_plantation,duree_avant_recolte_j,diametre_cm,prod_hebdo_moy_g,unite_prod
+variete,famille,date_min_plantation,date_max_plantation,duree_avant_recolte_j,intra_rang_cm,prod_hebdo_moy_g,unite_prod
 ail,amaryllidacée,"20/03","20/05",120,20,"100,100,100",kg
-artichaut,composée,"20/03","20/05",100,50,"300",u
+artichaut,astéracée,"20/03","20/05",100,50,"300",u
 aubergine, solanacée,"20/03","20/05",100,60,"900",u
 betterave, chénopodiacée,"20/03","20/05",60,25,"120,120",kg
 blé tendre, poacée,,,,,,kg
 blé dur, poacée,,,,,,kg
 blette, chénopodiacée,,,,,,kg
 carotte, apiacée,"20/03","20/05",90,13,"45,45,45",kg
-chou brocoli,crucifère,"20/03","20/05",150,60,"450",u
-chou pointu, crucifère,,,,,,u
-chou fleur, crucifère,"20/03","20/05",150,60,"1500",u
-chou de bruxelles, crucifère,,,,,,kg
+chou brocoli,brassicacée,"20/03","20/05",150,60,"450",u
+chou pointu, brassicacée,,,,,,u
+chou fleur, brassicacée,"20/03","20/05",150,60,"1500",u
+chou de bruxelles, brassicacée,,,,,,kg
 ciboulette,amaryllidacée,"20/4","20/5",50,25,"100",kg
 concombre, cucurbitacée,,,,,,u
 cornichon, cucurbitacée,,,,,,kg
@@ -24,8 +24,8 @@ oignon blanc, amaryllidacée,,,,,,kg
 orge, poacée,,,,,,kg
 poireau, amaryllidacée,,,,,,kg
 potiron,cucurbitacée,,,,,,u
-radis, crucifère,"20/03","20/05",20,10,"5,5",kg
-salade chicorée, composée,"20/03","20/05",30,20,"250",u
+radis, brassicacée,"20/03","20/05",20,10,"5,5",kg
+salade chicorée, astéracée,"20/03","20/05",30,20,"250",u
 sorgho, poacée,,,,,,kg
 seigle, poacée,,,,,,kg
 tomate, solanacée,"20/03","20/05",90,60,"150,150,150,150,100,100",kg

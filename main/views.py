@@ -309,7 +309,7 @@ def prevision_recolte(request):
                   "appVersion":constant.APP_VERSION,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
-                  "l_vars":Variete.objects.exclude(diametre_cm = 0),
+                  "l_vars":Variete.objects.all(),
                   "l_semaines":l_semaines,
                   "tab_previsions":tab_previsions,
                   "info":""
@@ -319,7 +319,7 @@ def prevision_recolte(request):
 
 def tab_varietes(request):
     
-    l_vars = Variete.objects.filter(diametre_cm__isnull=False)
+    l_vars = Variete.objects.filter(famille__isnull=False)
     for v in l_vars:
         v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
      
@@ -360,7 +360,7 @@ def quizFamilles(request):
         ## restart a new form
         form = forms.FormFamilyQuiz()
 
-    form.var = random(Variete.objects.filter(famille__isnull=False, diametre_cm__isnull=False).values("nom", "id"))
+    form.var = random(Variete.objects.filter(famille__isnull=False).values("nom", "id"))
 
     return render(request, 'main/quizFamilles.html',
             {
