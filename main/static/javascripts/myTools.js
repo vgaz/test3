@@ -66,7 +66,7 @@ function colorScores()
 
 function getValueOfTagName(root, tagName, attrName)
 	{
-	// get value of <tagName name="attrName" value"the value that will be returned"
+	// get value of <tagName name="attrName" value="the value that will be returned"
 	if (root == null)
 		l_elts = document.getElementsByTagName(tagName)
 	else

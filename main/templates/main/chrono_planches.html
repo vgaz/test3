@@ -19,9 +19,15 @@
     background: white;
     color: black;
     border: 5px solid green;
+    position:relative;
     }
-
-#transfert_plant
+.evt
+{
+	    background: orange;
+	    position:absolute;
+	    height:13px;
+}
+#div_deplacement_plants
     {
     text-align:left;
     padding:10px;
@@ -31,6 +37,7 @@
     color: black;
     border: 5px solid brown;
     position: absolute;
+    display:none;
     }    
 </style>
 
@@ -75,14 +82,17 @@ function    init()
     
 function  editeDeplacement(id_plant_orig)
     {
-    	//alert("deplacement_id_plant  " + id_plant_orig)
-    	hDiv = document.getElementById("transfert_plant")
-    	hDiv.style.display = "block"
-    	hDiv.style.top = "200px"
-    	hDiv.style.left = "100px"
+    	hPlant = document.getElementById(id_plant_orig)
+    	hDivDepl = document.getElementById("div_deplacement_plants")
+    	hDivDepl.style.display = "block"
+    	hDivDepl.style.left = "10px"
+    	document.getElementById("deplacement_variete").innerHTML = hPlant.getAttribute("nom_variete")
     	document.getElementById("deplacement_id_plant").value = id_plant_orig
-    	//hDiv.getElementsByName("deplacement_id_plant")[0].value = id_plant_orig
-    	
+    	document.getElementById("deplacement_intra_rang_cm").value = hPlant.getAttribute("intra_rang_cm")
+    	document.getElementById("deplacement_nb_rangs").value = hPlant.getAttribute("nb_rangs")
+    	hDivDepl.style.top = hPlant.offsetTop + "px"
+//    	alert ("id planche = " + hPlant.parentNode.getAttribute("id"))
+
     }    
 function  deplacement(hForm)
     {
@@ -99,7 +109,7 @@ function  deplacement(hForm)
     jsonRep = JSON.parse(rep)
     if (jsonRep.status == 'true')
         {
-        document.getElementById("transfert_plant").style.display = "none"
+        document.getElementById("div_deplacement_plants").style.display = "none"
       	alert(jsonRep.msg)
         if (b_simu == 0)
         	{
@@ -124,16 +134,18 @@ function  balisagePlants()
         fin = l_plants[ii].getAttribute("fin")
         deltaH = moment(fin).diff(moment(debut), "hours")
         l_plants[ii].style.width = deltaH * pxParH  + "px"
-        // placement evenements divers
+        // placement des divers evenements
+        s_evt = ""
     	for (jj=0;jj<l_evts_plants.length;jj++)
     		{
     		if (l_evts_plants[jj]["id_plant"] != l_plants[ii].getAttribute("id"))
     			continue
             //positionnement des évènements
-            deltaPx = moment(l_evts_plants[jj]["date"]).diff(moment(debut), 'hours') * pxParH  + "px"
-            s_evt = "<img title='" + l_evts_plants[jj]["nom"] + '\n' + moment(l_evts_plants[jj]["date"]).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + ";width:" + l_evts_plants[jj]["duree_j"] * 24 * pxParH + "px;height:13px'>"
-            document.getElementById(l_plants[ii].getAttribute("id")).getElementsByClassName("evts")[0].innerHTML += s_evt
+            deltaPx = moment(l_evts_plants[jj]["date"]).diff(moment(debut), 'hours') * pxParH
+            s_evt += "<div class='evt' style='left:" + deltaPx + "px;width:" + l_evts_plants[jj]["duree_j"] * 24 * pxParH + "px;' title='" + l_evts_plants[jj]["nom"] + '\n' + moment(l_evts_plants[jj]["date"]).format("DD/MM/YYYY") + "' > </div>"
+            //s_evt = "<div style='position:absolute'><img title='" + l_evts_plants[jj]["nom"] + '\n' + moment(l_evts_plants[jj]["date"]).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + "px;width:" + l_evts_plants[jj]["duree_j"] * 24 * pxParH + "px;height:13px'></div>"
             }
+        document.getElementById(l_plants[ii].getAttribute("id")).getElementsByClassName("evts")[0].innerHTML = s_evt
         }
     }
     
@@ -179,21 +191,27 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         {# plants existants en base #}
         {% for plant in planche.l_plants %}
         <div class="chrono_plant" id="{{plant.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
-        variete="{{plant.variete_id}}" debut="{{plant.evt_debut.date|safe}}" fin="{{plant.evt_fin.date|safe}}" >
-        <div><div class="num_plant" style="display: inline;">({{plant.id}}) </div><div class="variete" style="display: inline;">
-        {{plant.variete}} x {{plant.quantite}}</div> <a href="javascript:editeDeplacement({{plant.id}})">>></a><br/>
-        <div class="debut" style="display: inline;float:left">{{plant.evt_debut.date|date:'d/m/Y'}}</div><br/><div class="fin" style="display:inline;float:right">{{plant.evt_fin.date|date:'d/m/Y'}}</div>
-        <br/><div class="evts" style="display: inline;float:left"> </div></div>
+        nom_variete="{{plant.variete}}" debut="{{plant.evt_debut.date|safe}}" fin="{{plant.evt_fin.date|safe}}" 
+        nb_rangs="{{plant.nb_rangs}}" intra_rang_cm="{{plant.intra_rang_cm}}">
+        
+        <div class="num_plant" style="display: inline;">({{plant.id}}) </div>
+        <div class="variete" style="display: inline;">
+        {{plant.variete}} x {{plant.quantite}}</div> 
+        <a href="javascript:editeDeplacement({{plant.id}})">>></a><br/>
+        <div class="debut" style="display: inline;float:left">{{plant.evt_debut.date|date:'d/m/Y'}}</div><br/>
+        <div class="fin" style="display:inline;float:right">{{plant.evt_fin.date|date:'d/m/Y'}}</div><br/>
+        <div class="evts" style="display:inline;position:relative;float:left;"> </div>
         </div>
         {% endfor %}
     </div>
     {% endfor %}
-    <div id="transfert_plant">
-    	<h4>Déplacement de plants à partir de la planche virtuelle</h4>
-    	Plant/s N°<input style="width: 30px;display: inline" type="text" id="deplacement_id_plant" value=""/>
-    	vers planche N°<input style="width: 30px" type="text" id="deplacement_planche_dest" value=""/><br/>
-    	Ecart dans le rang (cm)<input style="margin-left: 20px;width: 30px" type="text" id="deplacement_intra_rang_cm" value=""/><br/>
-    	Nombre de rangs<input style="margin-left: 20px;width: 30px" type="text" id="deplacement_nb_rangs" value=""/><br/>
+    <div id="div_deplacement_plants">
+    	<p><b>Déplacement de plants à partir de la planche virtuelle</b></p>
+    	Plant/s N°<input style="width: 30px;margin-left: 10px;display: inline" type="text" id="deplacement_id_plant" value=""/>
+    	<b>(<div id="deplacement_variete" style="display: inline"> </div>)</b>
+    	vers planche N°<input style="width: 30px;margin-left: 10px" type="text" id="deplacement_planche_dest" value=""/><br/>
+    	Espacement dans le rang (cm)<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_intra_rang_cm" value=""/><br/>
+    	Nombre de rangs<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_nb_rangs" value=""/><br/>
     	Déplacement total : oui<input id="deplacement_total" type="radio" value="1" />
     	non<input style="margin-right: 15px" type="radio" id="deplacement_total" value="0"/><br/>
     	Si non, nb de plants :<input style="margin-left: 20px;width: 30px" type="text" id="deplacement_nb_plants" value=""/><br/>

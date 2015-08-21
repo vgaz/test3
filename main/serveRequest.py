@@ -177,8 +177,11 @@ def serveRequest(request):
         ## deplacement des plants d'une planche vers une autre
         try:
             plant = Plant.objects.get(id=int(request.POST.get("id_plant")))
-            
-            nb_plants = request.POST.get("nb_plants") ## peut etre chaine vide pas castable
+            b_deplacementTotal = request.POST.get("deplacement_total", "false") == "true"
+            nb_rangs = int(request.POST.get("nb_rangs"))
+            intra_rang_cm = int(request.POST.get("intra_rang_cm"))
+            # nb de plants à déplacer
+            nb_plants = request.POST.get("nb_plants") ## peut etre chaine vide donc pas castable
             if nb_plants:
                 nb_plants = int(nb_plants)
             else:
@@ -190,6 +193,8 @@ def serveRequest(request):
             else:
                 ## changement de planche
                 plant.planche_id = Planche.objects.get(num = int(request.POST.get("num_planche_dest"))).id
+                plant.nb_rangs = nb_rangs
+                plant.intra_rang_cm = intra_rang_cm
                 plant.save()
                 rep ="reste 3 , deplacement incomplet. fin de déplacementS"
                 
