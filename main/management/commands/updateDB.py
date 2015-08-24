@@ -18,31 +18,30 @@ class Command(BaseCommand):
         except:
             p = Planche()
             p.num = constant.PLANCHE_VIRTUELLE_ID
-
-        p.nom = "PLANCHE VIRTUELLE"
-        p.longueur_m=10000
-        p.largeur_cm=100
-        p.save()  
+            p.nom = "PLANCHE VIRTUELLE"
+            p.longueur_m=10000
+            p.largeur_cm=100
+            p.save()  
 
         try:
             p = Planche.objects.get(num = 1)
         except:
             p = Planche()              
             p.num = 1        
-        p.nom = "planche1"
-        p.longueur_m=100
-        p.largeur_cm=100
-        p.save()  
+            p.nom = "planche1"
+            p.longueur_m=100
+            p.largeur_cm=100
+            p.save()  
               
         try:
-            p = Planche.objects.get(num = 1)
+            p = Planche.objects.get(num = 2)
         except:
             p = Planche()              
             p.num = 2 
-        p.nom = "planche2"
-        p.longueur_m=60
-        p.largeur_cm=100
-        p.save()
+            p.nom = "planche2"
+            p.longueur_m=60
+            p.largeur_cm=100
+            p.save()
             
     def handle(self, *args, **options):
            

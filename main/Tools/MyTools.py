@@ -56,7 +56,8 @@ def getDateFrom_d_m_y(s_time):
         d,m,y = s_time.split("-")
     _date =  datetime.date(int(y),int(m),int(d))
     return (_date)
-    ######################################################################## 
+
+######################################################################## 
 
 def getYMDFromDate(dateIn, sep="-"):
     s_date = dateIn.strftime('%Y-%m-%d')
@@ -107,6 +108,14 @@ def getFutureDateTime(s_dateTime):
     
 ###########################################################################
 
+def jourApresJour(dateDebut, dateFin):
+    ## generateur renvoyant une date du debut au jour de fin
+    _date = dateDebut
+    while _date <= dateFin:
+        yield _date
+        _date = _date + datetime.timedelta(days = 1)
+       
+##########################################################################
 def xmlStrToStr(inString): 
     """replace all XML escape characters by non encoded characters"""  
     inString = inString.replace('&quot;','"')
@@ -791,9 +800,12 @@ def changeDivContent(resultFilePath, divId, content):
 ######################################################################################
 if __name__ == '__main__':
 
-    tt = getDateFrom_y_m_d("2015/12/3")
-    print (tt)
-    print (getYMDFromDate(tt, "//"))
+    dateDebut = datetime.datetime.now()
+    dateFin = dateDebut + datetime.timedelta(days = 22)
+    for a_date in jourApresJour(dateDebut, dateFin):
+        print (a_date)
+   
+
     exit(0)
     
     dictToIniFile({"user":"toto"},

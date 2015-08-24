@@ -2,8 +2,58 @@
 from django.db import models
 import datetime
 
-from main import constant
+from main import constant  
+from main.Tools import MyTools
+        
+def recupListePlantsEnDateDu(la_date, id_planche):
+    """Filtrage par des plants presents à telle date"""
+    l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = la_date)
+    l_PlantsIds = list(l_evts_debut.values_list('plant_base_id', flat=True))
+    ## recup des evenements de fin ayant les mêmes id_plant que les evts de debut 
+    l_evts = Evenement.objects.filter(type = Evenement.TYPE_FIN, plant_base_id__in = l_PlantsIds, date__gte = la_date)
+    ## récup des id de plants dans cet encarement temporel
+    l_PlantsIds = l_evts.values_list('plant_base_id', flat=True)
+    l_plants = Plant.objects.filter(id__in = l_PlantsIds)
+    if id_planche:
+        l_plants = Plant.objects.filter(planche_id = id_planche)
+    
+    return l_plants
 
+
+def essai_deplacement_plants(idPlant, numPlancheDest, intraRangCm, nbRangs): 
+    """tentative de placement de plants ref <idPlant> sur planche <idPlancheDest> en fonction du nb de rang et distance dans le rang
+    retourne le nombre de plants restants à placer ailleurs si le nb de plants est trop important pour la planche (déjà occupée ou trop courte par exemple)
+    0 si tout peut etre placé sur la planche 
+    """
+    plant = Plant.objects.get(id = idPlant)
+    planche = Planche.objects.get(num = numPlancheDest)
+    
+    cumul_max_m = 0
+    ## pour chaque jour sur la planche, on calcule la distance de planche restante
+    for day in MyTools.jourApresJour(plant.evt_debut.date, plant.evt_fin.date):
+        cumul_m = 0
+        ## recup des plants sur la planche à cette date et cumul des longeur sur planche    
+        l_plants = recupListePlantsEnDateDu(day, planche.id)
+        
+        for p in l_plants:
+            cumul_m += p.longueurSurPlanche_m()
+            print ("ajout", cumul_m)
+
+        print (day, cumul_m, "m occupés sur ", planche.longueur_m, "m (cumul max =", cumul_max_m, ")" )
+    
+        cumul_max_m = max((cumul_max_m, cumul_m))
+        
+    libre_m = planche.longueur_m - cumul_max_m
+    
+    reste_m = libre_m - plant.longueurSurPlanche_m(intraRangCm, nbRangs)
+    if reste_m >=0:
+        ## assez de place, on peut caser tous les plants
+        return 0
+    else:
+        ## pas assez de place, on retourne le nb de plants restant à placer apres remplissage du reste de la planche
+        return plant.nbPlantsPlacables(abs(reste_m))
+    
+    
 class Famille(models.Model):
     """famille associée à la plante"""
     nom = models.CharField(max_length=100)
@@ -91,6 +141,7 @@ class Production(models.Model):
     date_semaine = models.DateField("date de début de semaine")
     qte_dde = models.PositiveIntegerField("quantité demandée", default=0)
     qte_prod = models.PositiveIntegerField("quantité produite", default=0)
+    
 
     class Meta: 
         ordering = ["date_semaine"]
@@ -108,23 +159,31 @@ class Plant(models.Model):
         verbose_name = "Plant ou série de plants"
         
     variete = models.ForeignKey(Variete)
-#     largeur_cm = models.PositiveIntegerField("largeur cm", default=0)
-#     hauteur_cm = models.PositiveIntegerField("hauteur cm", default=0)
+    parent =  models.ForeignKey("Plant", default=0, blank=True) ## plant d'origine sur la planche virtuelle
     nb_rangs = models.PositiveIntegerField("nombre de rangs", default=3)
     intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=0)
     planche = models.ForeignKey("Planche", default=0, blank=True)
     quantite = models.PositiveIntegerField(default=1)
-    evt_debut = models.ForeignKey("Evenement", related_name="evt_debut_plant", null=True,default=0)
-    evt_fin = models.ForeignKey("Evenement", related_name="evt_fin_plant", null=True, default=0)
+    evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
+    evt_fin = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
     
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
         return(self.quantite / self.variete.rendementPlantsGraines)
 
-    def longueurDePlanche(self):
-        """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang"""
-        return (self.quantite * self.intra_rang_cm ) / self.nb_rangs
-              
+    def longueurSurPlanche_m(self, intra_rang_cm=None, nb_rangs=None):
+        """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
+        intra_rang_cm et nb_rangs peuvent etre forcés , autrement on prend ceux du plant défini"""
+        if not intra_rang_cm:
+            intra_rang_cm = self.intra_rang_cm
+        if not nb_rangs:
+            nb_rangs = self.nb_rangs
+                        
+        return ((self.quantite * intra_rang_cm ) /nb_rangs)/100
+    
+    def nbPlantsPlacables(self, longueurDePlanche_m):
+        return longueurDePlanche_m * 100 * self.nb_rangs / self.intra_rang_cm
+     
     def fixeDates(self, dateDebut, dateFin=None):
         """ crée les evts de debut et fin de vie du/des plants"""
         e = Evenement()
@@ -162,12 +221,11 @@ class Evenement(models.Model):
     
     TYPE_DEBUT = 1
     TYPE_FIN = 2
-    TYPE_AUTRE = 3
-    D_NOM_TYPES = {TYPE_DEBUT:"Début", TYPE_FIN:"Fin", TYPE_AUTRE:"Divers"}
+    TYPE_DIVERS = 3
+    D_NOM_TYPES = {TYPE_DEBUT:"Début", TYPE_FIN:"Fin", TYPE_DIVERS:"Divers"}
 
     type =  models.PositiveIntegerField()
     plant_base = models.ForeignKey(Plant)
-#     plant = models.ManyToManyField("Plant", related_name="plant", blank=True)
     date = models.DateTimeField()
     date_creation = models.DateTimeField(default=datetime.datetime.now())
     duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)

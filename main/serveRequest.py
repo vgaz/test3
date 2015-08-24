@@ -7,7 +7,7 @@ Created on Nov 26, 2013
 
 from django.http import HttpResponse
 
-from main.models import Evenement, Plant, Planche, Production
+from main.models import Evenement, Plant, Planche, Production, essai_deplacement_plants
 import sys, traceback
 import datetime
 from main import constant
@@ -23,7 +23,7 @@ def serveRequest(request):
         ## retour des évenements des plants (sauf debut et fin déjà affichés spécifiquement)
         try:
             l_evts = Evenement.objects.filter(plant_base_id = int(request.POST.get("id", 0)),
-                                              type = Evenement.TYPE_AUTRE)
+                                              type = Evenement.TYPE_DIVERS)
             for evt in l_evts:
                 print (evt)
             
@@ -141,17 +141,6 @@ def serveRequest(request):
             evt.date = date
             evt.duree_j = 1
             evt.nom = nom
-#             
-#             if evt.type == Evenement.TYPE_FIN and "00:00:00" in evt.date:
-#                 print("date +20h")
-#                 evt.date = evt.date + datetime.datetime.timedelta(hours=20)  ## pour eviter les confusions de debut de jour à 0 h , on finit la journée à 20h 
-# 
-#             if evt.type == Evenement.TYPE_DEBUT and 
-#             :
-#                 print("date +20h")
-#                 evt.date = evt.date + datetime.datetime.timedelta(hours=20)  ## pour eviter les confusions de debut de jour à 0 h , on finit la journée à 20h 
-#             
-#             print(evt)
             evt.save()
             print(evt)
                 
@@ -174,29 +163,46 @@ def serveRequest(request):
         return HttpResponse(s_json)
 
     if cde == "deplacement_plant":
-        ## deplacement des plants d'une planche vers une autre
+        ## deplacement de plants d'une planche vers une autre
         try:
             plant = Plant.objects.get(id=int(request.POST.get("id_plant")))
-            b_deplacementTotal = request.POST.get("deplacement_total", "false") == "true"
+            b_deplacementTotal = request.POST.get("deplacement_total", "0") == "1"
+            if not b_deplacementTotal:
+                # nb de plants à déplacer
+                nb_plants = request.POST.get("nb_plants") ## peut etre chaine vide donc pas castable
+                if nb_plants:
+                    nb_plants = int(nb_plants)
+                else:
+                    raise Exception("demande de deplacement total mais pas de nb_plants")                
+            
             nb_rangs = int(request.POST.get("nb_rangs"))
             intra_rang_cm = int(request.POST.get("intra_rang_cm"))
-            # nb de plants à déplacer
-            nb_plants = request.POST.get("nb_plants") ## peut etre chaine vide donc pas castable
-            if nb_plants:
-                nb_plants = int(nb_plants)
+            num_planche_dest = int(request.POST.get("num_planche_dest"))
+            b_simu = request.POST.get("simu") == "true"
+            reste = essai_deplacement_plants(plant.id, num_planche_dest, intra_rang_cm, nb_rangs)
+            
+            if b_simu:
+                if reste == 0:
+                    rep = "SIMULATION\\nTous les plants sont déplaçables sur la planche %s" % num_planche_dest
+                else:
+                    rep = "SIMULATION\\nReste %d plants non déplaçables. Déplacement incomplet."%reste            
             else:
-                nb_plants = 0
-            print ('rrrrrrrrrrrrrrrrrrrrrrrrrrrr')
-            if request.POST.get("simu") == "true":
-                print("simu _______")
-                rep = "reste 3 , déplacement incomplet. \\nfin de simulation"
-            else:
+                ## si on peut tout transférer sur une seule planche, le plant chage de planche
+                ## sinon, on cree une nouvelle serie de plants vers la planche partiellement accueillante et on garde le reste
                 ## changement de planche
-                plant.planche_id = Planche.objects.get(num = int(request.POST.get("num_planche_dest"))).id
-                plant.nb_rangs = nb_rangs
-                plant.intra_rang_cm = intra_rang_cm
-                plant.save()
-                rep ="reste 3 , deplacement incomplet. fin de déplacementS"
+                if reste == 0:
+                    plant.planche_id = Planche.objects.get(num = num_planche_dest).id
+                    plant.nb_rangs = nb_rangs
+                    plant.intra_rang_cm = intra_rang_cm
+                    plant.save()
+                    rep ="Tous les plants ont été déplacés"
+                else:
+                    ## Création nouvelle série de plants sur planche dest
+                    plant2 = Plant()
+                    plantXXXXXXXXXXXXXXXXX copy
+                    maj quantite
+                    
+                    maj quantite plant d'origine
                 
 #             reste = plant.deplace(  int(request.POST.get("id_planche_src")),
 #                                     int(request.POST.get("num_planche_dest")),

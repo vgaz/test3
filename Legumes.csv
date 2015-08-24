@@ -1,7 +1,7 @@
 variete,famille,date_min_plantation,date_max_plantation,duree_avant_recolte_j,intra_rang_cm,prod_hebdo_moy_g,unite_prod
 ail,amaryllidacée,"20/03","20/05",120,20,"100,100,100",kg
 artichaut,astéracée,"20/03","20/05",100,50,"300",u
-aubergine, solanacée,"20/03","20/05",100,60,"900",u
+aubergine, solanacée,"20/03","20/05",100,60,"1",u
 betterave, chénopodiacée,"20/03","20/05",60,25,"120,120",kg
 blé tendre, poacée,,,,,,kg
 blé dur, poacée,,,,,,kg

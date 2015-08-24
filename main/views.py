@@ -12,7 +12,7 @@ import main.Tools.MyTools as MyTools
 
 import datetime
 
-from main.models import Evenement, Planche, Plant, Production
+from main.models import Evenement, Planche, Plant, Production, recupListePlantsEnDateDu
 from main.forms import PlancheForm
 
 #################################################
@@ -133,7 +133,7 @@ def chronoPlanches(request):
         ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle 
         s_evts_plants = ""
         for plant in laPlanche.l_plants:
-            plant.l_evts = Evenement.objects.filter(plant_base_id = plant.id, type = Evenement.TYPE_AUTRE).order_by('date')
+            plant.l_evts = Evenement.objects.filter(plant_base_id = plant.id, type = Evenement.TYPE_DIVERS).order_by('date')
             
     return render(request,
                  'main/chrono_planches.html',
@@ -242,14 +242,8 @@ def editionPlanche(request):
     if request.POST.get("delta", "") == "-10":
         dateVue += datetime.timedelta(days=-10)
 
-    ## filtrage par date
-    l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = dateVue)
-    l_PlantsIds = list(l_evts_debut.values_list('plant_base_id', flat=True))
-    ## recup des evenements de fin ayant les mêmes id_plants que les evts de debut 
-    l_evts = Evenement.objects.filter(type = Evenement.TYPE_FIN, plant_base_id__in = l_PlantsIds, date__gte = dateVue)
-    print (l_evts)
-    l_PlantsIds = l_evts.values_list('plant_base_id', flat=True)
-    l_plants = Plant.objects.filter(planche = planche, id__in = l_PlantsIds)
+    l_plants = recupListePlantsEnDateDu(dateVue, planche.id)
+
     
     return render(request,
                  'main/edition_planche.html',

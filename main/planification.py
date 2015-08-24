@@ -45,11 +45,11 @@ def planif(dateDebut, dateFin):
             print("\n%s"%var.nom)
             reste = prod.qte_prod - prod.qte_dde 
             if reste >= 0:
-                ## on a assez,  on passe à la variété suivante
+                ## on a assez, on passe à la variété suivante
                 print ("Dde = %d; prod = %d, ok"%(prod.qte_dde,  prod.qte_prod) )
                 continue
             
-            ## on rajoute des plants
+            ## on rajoute une série de plants
             nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
             print ("Besoin de %d nouveaux plants"%(nb_plants_a_installer))
             plants = Plant()
