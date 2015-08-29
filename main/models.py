@@ -37,22 +37,33 @@ def essai_deplacement_plants(idPlant, numPlancheDest, intraRangCm, nbRangs):
         
         for p in l_plants:
             cumul_m += p.longueurSurPlanche_m()
-            print ("ajout", cumul_m)
 
         print (day, cumul_m, "m occupés sur ", planche.longueur_m, "m (cumul max =", cumul_max_m, ")" )
     
         cumul_max_m = max((cumul_max_m, cumul_m))
         
     libre_m = planche.longueur_m - cumul_max_m
-    
+    print ("libre=%dm besoin=%dm"%(libre_m, plant.longueurSurPlanche_m( intraRangCm, nbRangs)))
+
     reste_m = libre_m - plant.longueurSurPlanche_m(intraRangCm, nbRangs)
     if reste_m >=0:
         ## assez de place, on peut caser tous les plants
         return 0
     else:
         ## pas assez de place, on retourne le nb de plants restant à placer apres remplissage du reste de la planche
-        return plant.nbPlantsPlacables(abs(reste_m))
+        return int(plant.nbPlantsPlacables(abs(reste_m), intraRangCm, nbRangs))
     
+def clonePlant(plant):
+    plant2 = Plant.objects.get(id=plant.id)
+    plant2.id = None
+    plant2.save() ## creation d'un nouveau plant
+    ## duplication des évenements
+    for evt in Evenement.objects.filter(plant_base_id=plant.id):
+        evt2 = Evenement.objects.get(id=evt.id)
+        evt2.id = None
+        evt2.plant_base_id = plant2.id
+        evt2.save()
+    return plant2
     
 class Famille(models.Model):
     """famille associée à la plante"""
@@ -160,8 +171,8 @@ class Plant(models.Model):
         
     variete = models.ForeignKey(Variete)
     parent =  models.ForeignKey("Plant", default=0, blank=True) ## plant d'origine sur la planche virtuelle
-    nb_rangs = models.PositiveIntegerField("nombre de rangs", default=3)
-    intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=0)
+    nb_rangs = models.PositiveIntegerField("nombre de rangs", default=None)
+    intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=None)
     planche = models.ForeignKey("Planche", default=0, blank=True)
     quantite = models.PositiveIntegerField(default=1)
     evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
@@ -173,16 +184,22 @@ class Plant(models.Model):
 
     def longueurSurPlanche_m(self, intra_rang_cm=None, nb_rangs=None):
         """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
-        intra_rang_cm et nb_rangs peuvent etre forcés , autrement on prend ceux du plant défini"""
+        intra_rang_cm et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend ceux du plant défini"""
         if not intra_rang_cm:
             intra_rang_cm = self.intra_rang_cm
         if not nb_rangs:
             nb_rangs = self.nb_rangs
                         
-        return ((self.quantite * intra_rang_cm ) /nb_rangs)/100
+        return ((self.quantite * intra_rang_cm)/nb_rangs)/100
     
-    def nbPlantsPlacables(self, longueurDePlanche_m):
-        return longueurDePlanche_m * 100 * self.nb_rangs / self.intra_rang_cm
+    def nbPlantsPlacables(self, longueurDePlanche_m, intraRangCm=None, nbRangs=None):
+        if not intraRangCm:
+            intraRangCm = self.intra_rang_cm
+        assert intraRangCm, Exception("intraRangCm non défini")
+        if not nbRangs:
+            nbRangs = self.nb_rangs
+        assert nbRangs, Exception("nbRangs non défini")
+        return longueurDePlanche_m * 100 * nbRangs / intraRangCm
      
     def fixeDates(self, dateDebut, dateFin=None):
         """ crée les evts de debut et fin de vie du/des plants"""

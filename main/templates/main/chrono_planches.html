@@ -99,22 +99,24 @@ function  deplacement(hForm)
 	//appel serveRequest 
     s_request = "cde=deplacement_plant&id_plant=" + document.getElementById("deplacement_id_plant").value
     s_request += "&id_planche_src=0"
-    s_request += "&num_planche_dest=" + document.getElementById("deplacement_planche_dest").value
+    s_request += "&num_planche_dest=" + document.getElementById("deplacement_num_planche_dest").value
     s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
     s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
-    s_request += "&deplacement_total=" + document.getElementById("deplacement_total").value
+    s_request += "&deplacement_partiel=" + document.getElementById("deplacement_partiel").checked
     s_request += "&nb_plants=" + document.getElementById("deplacement_nb_plants").value
-    s_request += "&simu=" + document.getElementById("deplacement_simulation").checked
+    b_simu = document.getElementById("deplacement_simulation").checked
+    s_request += "&simu=" + b_simu
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)
     if (jsonRep.status == 'true')
         {
         document.getElementById("div_deplacement_plants").style.display = "none"
       	alert(jsonRep.msg)
-        if (b_simu == 0)
+        if (b_simu == "false")
         	{
         	// on rafraichit la page
-        	location.reload()
+        	window.location.replace(window.location.pathname)
+        	///window.location.reload(true)
         	}
         }
     else
@@ -209,12 +211,11 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     	<p><b>Déplacement de plants à partir de la planche virtuelle</b></p>
     	Plant/s N°<input style="width: 30px;margin-left: 10px;display: inline" type="text" id="deplacement_id_plant" value=""/>
     	<b>(<div id="deplacement_variete" style="display: inline"> </div>)</b>
-    	vers planche N°<input style="width: 30px;margin-left: 10px" type="text" id="deplacement_planche_dest" value=""/><br/>
+    	vers planche N°<input style="width: 30px;margin-left: 10px" type="text" id="deplacement_num_planche_dest" value=""/><br/>
     	Espacement dans le rang (cm)<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_intra_rang_cm" value=""/><br/>
     	Nombre de rangs<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_nb_rangs" value=""/><br/>
-    	Déplacement total : oui<input id="deplacement_total" name="deplacement_total" type="radio" value="1" />
-    	non<input style="margin-right: 15px" type="radio" id="deplacement_total" name="deplacement_total" value="0"/><br/>
-    	Si non, nb de plants :<input style="margin-left: 20px;width: 30px" type="text" id="deplacement_nb_plants" value=""/><br/>
+    	<input type="checkbox" id="deplacement_partiel" />Déplacement partiel.
+    	Nb de plants :<input style="width: 30px" type="text" id="deplacement_nb_plants" value=""/><br/>
 		<input type="checkbox" id="deplacement_simulation" />Simulation
 		<input type="submit" style="margin-left: 30px"  value="Déplacement" onclick="deplacement(this)" />
 
