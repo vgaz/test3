@@ -45,11 +45,11 @@ def planif(dateDebut, dateFin):
             print("\n%s"%var.nom)
             reste = prod.qte_prod - prod.qte_dde 
             if reste >= 0:
-                ## on a assez,  on passe à la variété suivante
+                ## on a assez, on passe à la variété suivante
                 print ("Dde = %d; prod = %d, ok"%(prod.qte_dde,  prod.qte_prod) )
                 continue
             
-            ## on rajoute des plants
+            ## on rajoute une série de plants
             nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
             print ("Besoin de %d nouveaux plants"%(nb_plants_a_installer))
             plants = Plant()
@@ -57,8 +57,8 @@ def planif(dateDebut, dateFin):
             plants.quantite = nb_plants_a_installer                
             plants.planche = Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_ID)           ## placement en planche virtuelle en attente de placement réel 
             plants.production_id = prod.id
-            plants.hauteur_cm = var.diametre_cm                     ## on fixe arbitrairement sur une ligne
-            plants.largeur_cm = var.diametre_cm * nb_plants_a_installer
+            plants.intra_rang_cm = var.intra_rang_cm                     ## on fixe a priori la distance pour la variete
+#             plants.largeur_cm = var.diametre_cm * nb_plants_a_installer
             plants.save()
 #             print("nouvelle serie ", plants)
             plants.fixeDates(dateSemaine)

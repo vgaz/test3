@@ -7,14 +7,14 @@ Created on Nov 26, 2013
 
 from django.http import HttpResponse
 
-from main.models import Evenement, Plant, Planche, Production
+from main.models import Evenement, Plant, Planche, Production, essai_deplacement_plants, clonePlant
 import sys, traceback
 import datetime
 from main import constant
 
 def serveRequest(request):
     """Received a request and return specific response"""
-
+    rep = ""
     ## --------------- renvoi de tous les evenements d'un plant
     cde = request.POST.get("cde","")
     print(request.POST)
@@ -23,7 +23,7 @@ def serveRequest(request):
         ## retour des évenements des plants (sauf debut et fin déjà affichés spécifiquement)
         try:
             l_evts = Evenement.objects.filter(plant_base_id = int(request.POST.get("id", 0)),
-                                              type = Evenement.TYPE_AUTRE)
+                                              type = Evenement.TYPE_DIVERS)
             for evt in l_evts:
                 print (evt)
             
@@ -64,8 +64,8 @@ def serveRequest(request):
             plant.quantite = int(request.POST.get("quantite", 0))
             plant.largeur_cm = int(request.POST.get("largeur_cm",0))
             plant.hauteur_cm = int(request.POST.get("hauteur_cm",0))
-            plant.coord_x_cm = int(request.POST.get("coord_x_cm",0))
-            plant.coord_y_cm = int(request.POST.get("coord_y_cm",0))
+            plant.intra_rang_cm = int(request.POST.get("intra_rang_cm",0))
+            plant.nb_rangs = int(request.POST.get("nb_rangs", 0))
             plant.planche = Planche.objects.get(num=int(request.POST.get("id_planche",0)))
             plant.production_id = 0
             plant.quatite = 1
@@ -141,17 +141,6 @@ def serveRequest(request):
             evt.date = date
             evt.duree_j = 1
             evt.nom = nom
-#             
-#             if evt.type == Evenement.TYPE_FIN and "00:00:00" in evt.date:
-#                 print("date +20h")
-#                 evt.date = evt.date + datetime.datetime.timedelta(hours=20)  ## pour eviter les confusions de debut de jour à 0 h , on finit la journée à 20h 
-# 
-#             if evt.type == Evenement.TYPE_DEBUT and 
-#             :
-#                 print("date +20h")
-#                 evt.date = evt.date + datetime.datetime.timedelta(hours=20)  ## pour eviter les confusions de debut de jour à 0 h , on finit la journée à 20h 
-#             
-#             print(evt)
             evt.save()
             print(evt)
                 
@@ -162,13 +151,65 @@ def serveRequest(request):
            
         return HttpResponse(s_json)
 
-    ## --------------- request to update database 
     if cde == "supprime_evenement":
         try:
             evt = Evenement.objects.get(id=int(request.POST.get("id", 0)))
             print("will delete", evt)
             evt.delete()
             s_json = '{"status":"true"}'
+        except:
+            s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
+           
+        return HttpResponse(s_json)
+
+    if cde == "deplacement_plant":
+        ## deplacement de plants d'une planche vers une autre
+        try:
+            plant = Plant.objects.get(id=int(request.POST.get("id_plant")))
+            b_deplacementPartiel = request.POST.get("deplacement_partiel") == "true"
+            if b_deplacementPartiel:
+                # nb de plants à déplacer
+                nb_plants = request.POST.get("nb_plants") ## peut etre chaine vide donc pas castable
+                if nb_plants:
+                    nb_plants = int(nb_plants)
+                else:
+                    raise Exception("demande de deplacement partiel mais nb_plants non défini")                
+            
+            nb_rangs = int(request.POST.get("nb_rangs"))
+            intra_rang_cm = int(request.POST.get("intra_rang_cm"))
+            planche_dest = Planche.objects.get(num=int(request.POST.get("num_planche_dest")))
+            b_simu = request.POST.get("simu") == "true"
+            reste = essai_deplacement_plants(plant.id, planche_dest.num, intra_rang_cm, nb_rangs)
+            
+            if b_simu:
+                if reste == 0:
+                    rep = "SIMULATION\\nTous les plants sont déplaçables sur la planche %s" % planche_dest.num
+                else:
+                    rep = "SIMULATION\\nReste %d plants non déplaçables. Déplacement incomplet."%reste            
+            elif reste == 0:
+                ## si on peut tout transférer sur une seule planche, le plant chage de planche
+                ## sinon, on cree une nouvelle serie de plants vers la planche partiellement accueillante et on garde le reste
+                ## changement de planche
+                plant.planche_id = planche_dest.id
+                plant.nb_rangs = nb_rangs
+                plant.intra_rang_cm = intra_rang_cm
+                plant.save()
+                rep ="Tous les plants ont été déplacés"
+            else:
+                ## Création nouvelle série de plants sur planche dest
+                plant2 = clonePlant(plant) ## creation d'un nouveau plant
+                ## maj quantités
+                plant2.quantite = plant.quantite - reste 
+                plant.quantite = reste
+                plant.save()
+                ## changement de planche
+                plant2.planche_id = planche_dest.id
+                plant2.nb_rangs = nb_rangs
+                plant2.intra_rang_cm = intra_rang_cm
+                plant2.save() 
+                rep = "plant %d déplacé partiellement (reste %d) sur planche %d "%(plant.id, reste, planche_dest.num)
+
+            s_json = '{"status":"true", "msg":"%s"}'%rep
         except:
             s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
            

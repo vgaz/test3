@@ -12,7 +12,7 @@ import main.Tools.MyTools as MyTools
 
 import datetime
 
-from main.models import Evenement, Planche, Plant, Production
+from main.models import Evenement, Planche, Plant, Production, recupListePlantsEnDateDu
 from main.forms import PlancheForm
 
 #################################################
@@ -123,25 +123,25 @@ def chronoPlanches(request):
     ## ajout des evts liés à cette planche
     for laPlanche in l_planches:
         ## on prend tous les evts de l'encadrement pour les planches sélectionnées
-        laPlanche.l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
+        l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
                                           date__lte = date_fin_vue, 
                                           plant_base__in = Plant.objects.filter(planche_id = laPlanche))
 
         ## on en deduit les plants impliqués, même partiellement
-        l_plantsId = list(set([evt.plant_base_id for evt in laPlanche.l_evts]))
-        ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle
-        laPlanche.l_evts = Evenement.objects.filter(plant_base_id__in = l_plantsId).order_by('plant_base_id', 'date')
+        l_plantsId = list(set([evt.plant_base_id for evt in l_evts]))
         laPlanche.l_plants = Plant.objects.filter(planche_id = laPlanche, id__in = l_plantsId ).order_by('variete_id')
+        ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle 
+        s_evts_plants = ""
+        for plant in laPlanche.l_plants:
+            plant.l_evts = Evenement.objects.filter(plant_base_id = plant.id, type = Evenement.TYPE_DIVERS).order_by('date')
             
-        
-
-
     return render(request,
                  'main/chrono_planches.html',
                  {
                   "appVersion": constant.APP_VERSION,
                   "appName": constant.APP_NAME,
                   "l_planches": l_planches,
+                  "s_evts_plants":s_evts_plants,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
                   "date_du_jour": date_du_jour,
@@ -242,14 +242,8 @@ def editionPlanche(request):
     if request.POST.get("delta", "") == "-10":
         dateVue += datetime.timedelta(days=-10)
 
-    ## filtrage par date
-    l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = dateVue)
-    l_PlantsIds = list(l_evts_debut.values_list('plant_base_id', flat=True))
-    ## recup des evenements de fin ayant les mêmes id_plants que les evts de debut 
-    l_evts = Evenement.objects.filter(type = Evenement.TYPE_FIN, plant_base_id__in = l_PlantsIds, date__gte = dateVue)
-    print (l_evts)
-    l_PlantsIds = l_evts.values_list('plant_base_id', flat=True)
-    l_plants = Plant.objects.filter(planche = planche, id__in = l_PlantsIds)
+    l_plants = recupListePlantsEnDateDu(dateVue, planche.id)
+
     
     return render(request,
                  'main/edition_planche.html',
@@ -309,7 +303,7 @@ def prevision_recolte(request):
                   "appVersion":constant.APP_VERSION,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
-                  "l_vars":Variete.objects.exclude(diametre_cm = 0),
+                  "l_vars":Variete.objects.all(),
                   "l_semaines":l_semaines,
                   "tab_previsions":tab_previsions,
                   "info":""
@@ -319,7 +313,7 @@ def prevision_recolte(request):
 
 def tab_varietes(request):
     
-    l_vars = Variete.objects.filter(diametre_cm__isnull=False)
+    l_vars = Variete.objects.filter(famille__isnull=False)
     for v in l_vars:
         v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
      
@@ -360,7 +354,7 @@ def quizFamilles(request):
         ## restart a new form
         form = forms.FormFamilyQuiz()
 
-    form.var = random(Variete.objects.filter(famille__isnull=False, diametre_cm__isnull=False).values("nom", "id"))
+    form.var = random(Variete.objects.filter(famille__isnull=False).values("nom", "id"))
 
     return render(request, 'main/quizFamilles.html',
             {
