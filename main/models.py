@@ -170,9 +170,9 @@ class Plant(models.Model):
         verbose_name = "Plant ou série de plants"
         
     variete = models.ForeignKey(Variete)
-    parent =  models.ForeignKey("Plant", default=0, blank=True) ## plant d'origine sur la planche virtuelle
-    nb_rangs = models.PositiveIntegerField("nombre de rangs", default=None)
-    intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=None)
+#     parent =  models.ForeignKey("Plant", default=0, blank=True) ## plant d'origine sur la planche virtuelle
+    nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
+    intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=0)
     planche = models.ForeignKey("Planche", default=0, blank=True)
     quantite = models.PositiveIntegerField(default=1)
     evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
@@ -207,6 +207,7 @@ class Plant(models.Model):
         e.type = Evenement.TYPE_DEBUT
         e.date = dateDebut
         e.plant_base_id = self.id
+        e.nom = "début %s"%self.variete.nom
         e.save()
         self.evt_debut_id = e.id
         print ("evt debut", e)
@@ -217,6 +218,7 @@ class Plant(models.Model):
         else:
             e.date = dateDebut + datetime.timedelta(days = self.variete.duree_avant_recolte_j)
         e.plant_base_id = self.id
+        e.nom = "fin %s"%self.variete.nom
         e.save()
         self.evt_fin_id = e.id
         self.save()
@@ -233,7 +235,8 @@ class Plant(models.Model):
                                                                                                         self.evt_fin.date)
 
       
-        
+        #             print("nouvelle serie ", plants)
+
 class Evenement(models.Model):
     
     TYPE_DEBUT = 1

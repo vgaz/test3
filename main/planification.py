@@ -58,9 +58,8 @@ def planif(dateDebut, dateFin):
             plants.planche = Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_ID)           ## placement en planche virtuelle en attente de placement réel 
             plants.production_id = prod.id
             plants.intra_rang_cm = var.intra_rang_cm                     ## on fixe a priori la distance pour la variete
-#             plants.largeur_cm = var.diametre_cm * nb_plants_a_installer
+            plants.nb_rangs = 0
             plants.save()
-#             print("nouvelle serie ", plants)
             plants.fixeDates(dateSemaine)
             
             ## maj prod de cette semaine pour cette variété

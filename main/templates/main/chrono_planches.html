@@ -116,7 +116,6 @@ function  deplacement(hForm)
         	{
         	// on rafraichit la page
         	window.location.replace(window.location.pathname)
-        	///window.location.reload(true)
         	}
         }
     else
@@ -184,6 +183,8 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 </form>
 
 <br/><br/>
+    
+
     {% for planche in l_planches %}
     Planche {{planche.num}}. {{planche.nom}}<br/>
 
