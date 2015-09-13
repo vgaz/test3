@@ -219,9 +219,29 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     	Nb de plants :<input style="width: 30px" type="text" id="deplacement_nb_plants" value=""/><br/>
 		<input type="checkbox" id="deplacement_simulation" />Simulation
 		<input type="submit" style="margin-left: 30px"  value="Déplacement" onclick="deplacement(this)" />
-
     </div>
-        
+
+	<div id="divEditPlant" style="display: block" class="BlueFrame">
+		<h2>Gestion du/des plant/s N° <input type="text" readonly id="editPlant_plantId" value="" /></h2>
+		<p>Sur la planche N° <span id="editPlant_id_planche"> </span></p>
+	    <p>Variété : <select id="editPlant_select_var" onchange="majPlant()">
+	    			{% for var in l_vars %}
+	    	        <option value="{{var.id}}" name="{{var.nom}}">{{var.nom}}</option>
+	    	    	{% endfor %}
+	    	      </select>
+	    </p>
+	    <p>Quantité : <input style="width: 100px" type='text' value='' id="editPlant_quantite" onchange="majPlant()" /></p>
+	    <p>Date de début (jj/mm/aaaa) : <input style="width:100px" type="text" value=" " id="editPlant_date_debut" onchange="majPlant()"/></p>
+	    <p>Date de fin (jj/mm/aaaa) : <input style="width:100px" type="text" value=" " id="editPlant_date_fin" onchange="majPlant()" /></p>
+	    <br/><br/><b>Evenements</b><div id="editPlant_evts"> </div>
+	    <br/>
+	    <input type='button' value='Ajouter un évènement' name='ajout' onclick="ajouteEvenement()"/><br/>
+	    <hr/>
+	    <input type='button' value='Supprimer' name='supprime' onclick="supprimePlant(document.getElementById('editPlant_plantId').innerHTML)"/><br/>
+	    <input type='button' value='Sauver' name='sauve' onclick="majPlant()"/><br/>
+	</div>
+
+
 </div>
 
 {% endblock %}

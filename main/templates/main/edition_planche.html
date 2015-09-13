@@ -11,7 +11,7 @@ id_plant_courant = ""
 
 function init()
     {
-    g_tab_tickets = new Array()
+    g_index_ticket = 0
     jsonVarietes = {  {% for var in l_vars %} {{var.id}}:'{{var.nom}}',{% endfor %}  }
     o_nomTypeEvt = {{d_evtTypes|safe}}
     //retaillage de la matrice, on fait un carré
@@ -21,11 +21,10 @@ function init()
     }
 
 
-
 function getTicket()
 {
-    g_tab_tickets.push("0")
-    return(g_tab_tickets.length) 
+    g_index_ticket += 1
+    return(g_index_ticket) 
 }
     
 function ajouteNouveauPlant()
@@ -113,7 +112,7 @@ function editePlant(hPlant)
     document.getElementById("divEditPlant").style.display = "inline"
     }
 
-function sauvePlant()
+function majPlant()
     {
     // recup des infos de la fenetre d'edition et mise à jour des attributs dans le div du plant
     id_plant = document.getElementById("editPlant_plantId").innerHTML
@@ -382,21 +381,21 @@ Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m
 	
 	<h2>Gestion du/des plant/s <span id="editPlant_plantId"> </span></h2>
 	<p>Sur la planche N° <span id="editPlant_id_planche"> </span></p>
-    <p>Variété : <select id="editPlant_select_var" onchange="sauvePlant(document.getElementById('editPlant_plantId').innerHTML)">
+    <p>Variété : <select id="editPlant_select_var" onchange="majPlant()">
     			{% for var in l_vars %}
     	        <option value="{{var.id}}" name="{{var.nom}}">{{var.nom}}</option>
     	    	{% endfor %}
     	      </select>
     </p>
-    <p>Quantité : <input style="width: 100px" type='text' value='' id="editPlant_quantite" onchange="sauvePlant(document.getElementById('editPlant_plantId').innerHTML)" /></p>
-    <p>Date de début (jj/mm/aaaa) : <input style="width:100px" type="text" value=" " id="editPlant_date_debut" onchange="sauvePlant(document.getElementById('editPlant_plantId').innerHTML)"/></p>
-    <p>Date de fin (jj/mm/aaaa) : <input style="width:100px" type="text" value=" " id="editPlant_date_fin" onchange="sauvePlant(document.getElementById('editPlant_plantId').innerHTML)" /></p>
+    <p>Quantité : <input style="width: 100px" type='text' value='' id="editPlant_quantite" onchange="majPlant()" /></p>
+    <p>Date de début (jj/mm/aaaa) : <input style="width:100px" type="text" value=" " id="editPlant_date_debut" onchange="majPlant()"/></p>
+    <p>Date de fin (jj/mm/aaaa) : <input style="width:100px" type="text" value=" " id="editPlant_date_fin" onchange="majPlant()" /></p>
     <br/><br/><b>Evenements</b><div id="editPlant_evts"> </div>
     <br/>
     <input type='button' value='Ajouter un évènement' name='ajout' onclick="ajouteEvenement()"/><br/>
     <hr/>
     <input type='button' value='Supprimer' name='supprime' onclick="supprimePlant(document.getElementById('editPlant_plantId').innerHTML)"/><br/>
-    <input type='button' value='Sauver' name='sauve' onclick="sauvePlant(document.getElementById('editPlant_plantId').innerHTML)"/><br/>
+    <input type='button' value='Sauver' name='sauve' onclick="majPlant()"/><br/>
 </div>
 
 <div class="YellowFrame" style="display: none" id="divEditEvenement">
