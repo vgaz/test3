@@ -23,10 +23,11 @@
     }
 .evt
 {
-	    background: orange;
-	    position:absolute;
-	    height:13px;
+    background: orange;
+    position:absolute;
+    height:13px;
 }
+
 #div_deplacement_plants
     {
     text-align:left;
@@ -36,13 +37,17 @@
     background: white;
     color: black;
     border: 5px solid brown;
+    border-radius:10px;
     position: absolute;
     display:none;
-    }    
+    }  
+      
 </style>
 
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/planif.js"></script>
+
     <script type="text/javascript">
     
     s_info = ""
@@ -62,6 +67,7 @@
 
 function    init()
     {
+    o_nomTypeEvt = {{d_evtTypes|safe}}
 
     changelePas(0) // juste pour affichage 1 ere fois
 
@@ -71,57 +77,18 @@ function    init()
     balisagePlants()
     
     // ajout ligne date du jour
-    for (hplanche in document.getElementsByClassName("cadre_chrono"))
+    delta_h = moment(date_du_jour).diff(moment(date_debut_vue), 'hours')
+    
+    l_planches = document.getElementsByClassName("cadre_chrono")
+    for (ii=0;ii<l_planches.length;ii++)
     	{
-	    hplanche.getElementsByTagName("date_du_jour")[0].style.height = window.getComputedStyle(hplanche).height
-	    delta = moment(date_du_jour).diff(moment(date_debut_vue), 'hours')
-	    hBarreCeJour.style.marginLeft = delta * pxParH + "px" 
+    	hBarreJour = l_planches[ii].getElementsByClassName("barre_du_jour")[0]
+	    hBarreJour.style.height = window.getComputedStyle(l_planches[ii]).height
+	    hBarreJour.style.marginLeft = delta_h * pxParH + "px" 
 	    }
-    
+	    
     }
-    
-function  editeDeplacement(id_plant_orig)
-    {
-    	hPlant = document.getElementById(id_plant_orig)
-    	hDivDepl = document.getElementById("div_deplacement_plants")
-    	hDivDepl.style.display = "block"
-    	hDivDepl.style.left = "10px"
-    	document.getElementById("deplacement_variete").innerHTML = hPlant.getAttribute("nom_variete")
-    	document.getElementById("deplacement_id_plant").value = id_plant_orig
-    	document.getElementById("deplacement_intra_rang_cm").value = hPlant.getAttribute("intra_rang_cm")
-    	document.getElementById("deplacement_nb_rangs").value = hPlant.getAttribute("nb_rangs")
-    	hDivDepl.style.top = hPlant.offsetTop + "px"
-//    	alert ("id planche = " + hPlant.parentNode.getAttribute("id"))
 
-    }    
-function  deplacement(hForm)
-    {
-	//appel serveRequest 
-    s_request = "cde=deplacement_plant&id_plant=" + document.getElementById("deplacement_id_plant").value
-    s_request += "&id_planche_src=0"
-    s_request += "&num_planche_dest=" + document.getElementById("deplacement_num_planche_dest").value
-    s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
-    s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
-    s_request += "&deplacement_partiel=" + document.getElementById("deplacement_partiel").checked
-    s_request += "&nb_plants=" + document.getElementById("deplacement_nb_plants").value
-    b_simu = document.getElementById("deplacement_simulation").checked
-    s_request += "&simu=" + b_simu
-    rep = requestServer(s_request)  
-    jsonRep = JSON.parse(rep)
-    if (jsonRep.status == 'true')
-        {
-        document.getElementById("div_deplacement_plants").style.display = "none"
-      	alert(jsonRep.msg)
-        if (b_simu == "false")
-        	{
-        	// on rafraichit la page
-        	window.location.replace(window.location.pathname)
-        	}
-        }
-    else
-    	document.getElementById("divInfoDebug").innerHTML = jsonRep.err
-    }
-    
 function  balisagePlants()
     {
     l_plants = document.getElementsByClassName("chrono_plant")
@@ -149,13 +116,6 @@ function  balisagePlants()
         document.getElementById(l_plants[ii].getAttribute("id")).getElementsByClassName("evts")[0].innerHTML = s_evt
         }
     }
-    
-function changelePas(delta)
-{
-    decalage_j += delta
-    if (decalage_j < 1) decalage_j = 1
-    document.getElementById("decalage_j").value = decalage_j
-}
 
 </script>
 
@@ -189,16 +149,16 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     Planche {{planche.num}}. {{planche.nom}}<br/>
 
     <div id="cadre_chrono_pl{{planche.num}}" class="cadre_chrono">
-    <div class="date_du_jour_pl{{planche.id}}"> </div>
+    <div class="barre_du_jour"> </div>
 
         {# plants existants en base #}
         {% for plant in planche.l_plants %}
-        <div class="chrono_plant" id="{{plant.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
+        <div class="chrono_plant" id="{{plant.id}}" onmousedown="editePlant(this);"  onclick="editPlant(this)"
         nom_variete="{{plant.variete}}" debut="{{plant.evt_debut.date|safe}}" fin="{{plant.evt_fin.date|safe}}" 
         nb_rangs="{{plant.nb_rangs}}" intra_rang_cm="{{plant.intra_rang_cm}}">
         
-        <div class="num_plant" style="display: inline;">({{plant.id}}) </div>
-        <div class="variete" style="display: inline;">
+        <div class="num_plant" style="display: inline;z-index:3;  ">({{plant.id}}) </div>
+        <div class="variete" style="display: inline;z-index:3; ">
         {{plant.variete}} x {{plant.quantite}}</div> 
         <a href="javascript:editeDeplacement({{plant.id}})">>></a><br/>
         <div class="debut" style="display: inline;float:left">{{plant.evt_debut.date|date:'d/m/Y'}}</div><br/>
@@ -221,7 +181,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 		<input type="submit" style="margin-left: 30px"  value="Déplacement" onclick="deplacement(this)" />
     </div>
 
-	<div id="divEditPlant" style="display: block" class="BlueFrame">
+	<div id="divEditPlant" style="display:block" class="BlueFrame" >
 		<h2>Gestion du/des plant/s N° <input type="text" readonly id="editPlant_plantId" value="" /></h2>
 		<p>Sur la planche N° <span id="editPlant_id_planche"> </span></p>
 	    <p>Variété : <select id="editPlant_select_var" onchange="majPlant()">
@@ -241,7 +201,19 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    <input type='button' value='Sauver' name='sauve' onclick="majPlant()"/><br/>
 	</div>
 
-
+	<div class="YellowFrame" style="display: none" id="divEditEvenement">
+	    
+		<h2>Gestion d'évenement</h2>
+		<table>
+        <tr><td>Nom : <input type="hidden" value="0" id="edit_evt_id"/><input type="text" value="" id="edit_evt_nom"/></td></tr>
+        <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
+        <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
+		<tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
+		        <input type="button" value="Sauver" onclick="sauveEvenement()" />
+		</td></tr>
+        </table>
+	        
+	</div>
 </div>
 
 {% endblock %}

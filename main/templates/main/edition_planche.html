@@ -2,6 +2,7 @@
 
 {% block javascript %}
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/planif.js"></script>
 
 	<script>
 	
@@ -20,13 +21,7 @@ function init()
     affichePlants()
     }
 
-
-function getTicket()
-{
-    g_index_ticket += 1
-    return(g_index_ticket) 
-}
-    
+ 
 function ajouteNouveauPlant()
     {
     s_nouveauPlanId = getTicket() + '_' 
@@ -61,29 +56,6 @@ function supprimePlant(plant_id)
     document.getElementById('matrice').removeChild(document.getElementById(plant_id))
     }
 
-function majListEvts(id_plant)
-    {
-    // recup evts du plant
-    s_request = "cde=getEvtsPlant&id="+ id_plant
-    rep = requestServer(s_request)  
-    jsonRep = JSON.parse(rep)
-    s_debut = ""
-    s_fin = ""
-    s_evts = '<table border="0" width="100%">\n'
-    if (jsonRep.status == 'true' )
-        {
-        //recuperation de tous les evenements, on met en gras le debut et fin
-        for(ii=0;ii<jsonRep.l_evts.length;ii++)
-            {
-            s_evts += "<tr><td><b>" +  o_nomTypeEvt[jsonRep.l_evts[ii].type] +" </b> " + jsonRep.l_evts[ii].date + " (" + jsonRep.l_evts[ii].duree_j + "j) "  + jsonRep.l_evts[ii].nom + "</td>"
-            s_evts += "<td><a href='javascript:editeEvenement(" + jsonRep.l_evts[ii].id + ")'><img align='right' src='{{STATIC_URL}}images/editor.png' title='Editer'></a></td>"
-            s_evts += "<td><a href='javascript:supprimeEvenement(" + jsonRep.l_evts[ii].id + ")'><img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td></tr>"
-            }
-        }    
-    s_evts += s_debut + s_fin + "</table>\n"
-
-    document.getElementById("editPlant_evts").innerHTML = s_evts
-    }
     
 function editePlant(hPlant)
     {
@@ -297,7 +269,7 @@ function toggleMove(hPlant)
     {
 
     rect = hPlant.getBoundingClientRect()
-    if(bEnMouvement == false)
+    if(bEnMouvement == false)onmouseup
         {
         id_plant_courant = hPlant.getAttribute('id')
         if ((clientY - rect.top < 40)&&(clientX - rect.left <40 ))  // pour prendre au coin

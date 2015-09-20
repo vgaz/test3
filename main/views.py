@@ -142,6 +142,8 @@ def chronoPlanches(request):
                   "appName": constant.APP_NAME,
                   "l_planches": l_planches,
                   "s_evts_plants":s_evts_plants,
+                  "d_evtTypes":Evenement.D_NOM_TYPES,
+                  "l_vars": Variete.objects.all(),                  
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
                   "date_du_jour": date_du_jour,

@@ -170,6 +170,14 @@ margin:10px;
     border:5px solid red;
 }
 
+.barre_du_jour
+{
+    position:absolute;
+    width: 1px;
+    background: white;
+    border: 1px solid blue; 
+    z-index:2;  
+}
 #adminTools
 {
 	background: #FFFFFF;
