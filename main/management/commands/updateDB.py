@@ -65,6 +65,7 @@ class Command(BaseCommand):
                 v.date_max_plantation = d_line.get("date_max_plantation")
                 v.duree_avant_recolte_j = int(d_line.get("duree_avant_recolte_j") or 0 )
                 v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
+                v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
 
                 
                 if d_line.get("unite_prod") == 'u': 

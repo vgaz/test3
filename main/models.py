@@ -98,7 +98,7 @@ class Variete(models.Model):
     date_max_plantation = models.CharField("date (jj/mm) de fin de plantation", max_length=10, default="0/0")
     duree_avant_recolte_j = models.IntegerField("durée en terre avant récolte (jours)", default=0)
     prod_hebdo_moy_g = models.CommaSeparatedIntegerField("suite de production hebdomadaire moyenne (grammes) pour un plant", max_length=20, default="0") ##attention, pour les légumes "à la pièce" ( choux, salades..), ne saisir qu'une valeur 
-    rendementPlantsGraines = models.FloatField('graines Pour 1 Plant', default=2)
+    rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
     intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     ##image = models.ImageField()
@@ -180,7 +180,7 @@ class Plant(models.Model):
     
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
-        return(self.quantite / self.variete.rendementPlantsGraines)
+        return(self.quantite * self.variete.rendement_plants_graines_pourcent / 100)
 
     def longueurSurPlanche_m(self, intra_rang_cm=None, nb_rangs=None):
         """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
