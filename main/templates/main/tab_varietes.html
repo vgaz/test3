@@ -31,11 +31,21 @@
 {% endfor %}
 </div>
 
+
 <ul class="BlueFrame" style="list-style-type: none;">
-<b>Familles</b>
+<b>Familles et variété</b>
 <br /><br />
 {% for f in l_fams %}
-  <li>{{f.nom}} ({{f.pk}})</li>
+  <li><b>{{f.nom|title}}</b> ({{f.pk}})
+	<ul>
+	
+	{% for var in l_vars %}
+	{% if var.famille.pk == f.pk %} <li>{{var.nom|title}}</li> {% endif %}
+	{% endfor %}
+	</ul>
+  
+  </li>
+  
 {% endfor %}
 </ul>
 
