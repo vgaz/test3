@@ -12,6 +12,10 @@
     border: 2px solid blue;   
 }
 
+.nouveau_plant
+{
+display:none;
+}
 .chrono_plant
     {
     width: 30%;
@@ -117,6 +121,73 @@ function  balisagePlants()
         }
     }
 
+
+ 
+function ajouteNouveauPlant()
+    {
+    s_nouveauPlanId = getTicket() + '_' 
+    s_plant = '<div class="plant" 
+    			id="$ID_PLANT$" 
+    			onmousedown="editePlant(this);toggleMove(this)" 
+    			onmouseup="toggleMove(this)" \
+                variete="" \
+                quantite="" \
+                date_debut="" \
+                date_fin=""  \
+                largeur_cm=""  \
+                hauteur_cm=""  \
+                nb_rangs=""  \
+                intra_rang_cm=""  >'
+    s_plant += '<span><div class="num_plant"> </div><div class="variete"> </div></span><br/>' 
+    s_plant += '<div class="largeur_cm"> </div> <div class="hauteur_cm"> </div><br/>' 
+    s_plant += '<div class="coord_x_cm"> </div> <div class="coord_y_cm"> </div><br/>' 
+    s_plant += 'Du <div class="date_debut"> </div> au <div class="date_fin"> </div><br/>' 
+    s_plant += '</div>'
+    s_plant = s_plant.replace("$ID_PLANT$", s_nouveauPlanId)
+    
+    document.getElementById("matrice").innerHTML += s_plant
+    plan_courrant = s_nouveauPlanId
+    affichePlants()
+                
+    }
+   
+function supprimePlant(plant_id)
+    {
+    s_request = "cde=supprime_plant&id="+ id_plant
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)        
+    document.getElementById('divEditPlant').style.display = "none"
+    document.getElementById('matrice').removeChild(document.getElementById(plant_id))
+    }
+
+    
+function editePlant(hPlant)
+    {
+    // recup evenements liés à ce plant
+    id_plant = hPlant.getAttribute("id")
+    
+    if (id_plant.search("_") != 1)
+        majListEvts(id_plant)
+        
+    // maj variété
+    id_variet  = hPlant.getAttribute("variete")
+    list = document.getElementById("editPlant_select_var").getElementsByTagName("option")
+    for(ii=0;ii<list.length;ii++)
+        if (list[ii].value == id_variet)
+            {
+            document.getElementById("editPlant_select_var").options[ii].selected=true
+            break
+           }
+
+    // maj attributs plant                   
+    document.getElementById("editPlant_id_planche").innerHTML = {{planche.num}}
+    document.getElementById("editPlant_plantId").innerHTML = id_plant
+    document.getElementById("editPlant_quantite").value = hPlant.getAttribute("quantite")
+    document.getElementById("editPlant_date_debut").value =  hPlant.getAttribute("date_debut")
+    document.getElementById("editPlant_date_fin").value =  hPlant.getAttribute("date_fin")
+    document.getElementById("divEditPlant").style.display = "inline"
+    }
+
 </script>
 
 {% endblock %}
@@ -124,6 +195,17 @@ function  balisagePlants()
 {% block title %}Suivi temporel des plants sur les planches{% endblock %}
 
 {% block content %}
+
+<div class="nouveau_plant" id="0" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)" \
+                variete="" quantite=""  date_debut="" date_fin="" largeur_cm=""  \
+                hauteur_cm="" nb_rangs="" intra_rang_cm=""  >
+    <span><div class="num_plant"> </div><div class="variete"> </div></span><br/>' 
+    <div class="largeur_cm"> </div> <div class="hauteur_cm"> </div><br/>' 
+    <div class="coord_x_cm"> </div> <div class="coord_y_cm"> </div><br/>' 
+    Du <div class="date_debut"> </div> au <div class="date_fin"> </div><br/>' 
+</div>'
+    
+    
 
 <p id="divInfoDebug"> </p>
 
@@ -149,7 +231,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	<br/>
     <div id="cadre_chrono_pl{{planche.num}}" class="cadre_chrono">
     <div class="barre_du_jour"> </div>
-    <h2>Planche {{planche.num}} ({{planche.nom}})</h2>
+    <h2>Planche {{planche.num}} ({{planche.nom}}) <img src="{{STATIC_URL}}images/plus.png" title="ajouter un plant"> </h2>
 
         {# plants existants en base #}
         {% for plant in planche.l_plants %}
@@ -201,13 +283,13 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    <input type='button' value='Sauver' name='sauve' onclick="majPlant()"/><br/>
 	</div>
 
-	<div class="YellowFrame" style="display: none" id="divEditEvenement">
+	<div class="YellowFrame" style="display:bl" id=ock"divEditEvenement">
 	    
 		<h2>Gestion d'évenement</h2>
 		<table>
         <tr><td>Nom : <input type="hidden" value="0" id="edit_evt_id"/><input type="text" value="" id="edit_evt_nom"/></td></tr>
         <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
-        <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
+        <tr><td>Durée max (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
 		<tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
 		        <input type="button" value="Sauver" onclick="sauveEvenement()" />
 		</td></tr>
