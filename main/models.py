@@ -6,7 +6,7 @@ from main import constant
 from main.Tools import MyTools
         
 def recupListePlantsEnDateDu(la_date, id_planche):
-    """Filtrage par des plants presents à telle date"""
+    """Filtrage des séries de plants presents à telle date"""
     l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = la_date)
     l_PlantsIds = list(l_evts_debut.values_list('plant_base_id', flat=True))
     ## recup des evenements de fin ayant les mêmes id_plant que les evts de debut 
