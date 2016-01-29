@@ -4,7 +4,28 @@ import datetime
 
 from main import constant  
 from main.Tools import MyTools
-        
+from _ast import Num
+
+def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None): 
+    """Création d'une planche. Si $ID$ est passé dans le nom, on remplace
+    par l'ID recupéré apres création"""
+    planche  = Planche()
+    planche.longueur_m = longueur_m
+    planche.largeur_cm = largeur_cm
+    planche.bSerre = bSerre
+    planche.num = 999
+    planche.save()
+    if s_nom :
+        planche.nom = s_nom.replace("$ID$", str(planche.id))
+    else:
+        planche.nom = "Planche %d"%(planche.id)
+    if num :
+        planche.num = num
+    else:
+        planche.num = planche.id
+    return planche
+    
+           
 def recupListePlantsEnDateDu(la_date, id_planche):
     """Filtrage des séries de plants presents à telle date"""
     l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = la_date)
@@ -78,12 +99,13 @@ class Famille(models.Model):
 
 class Planche(models.Model):
     """ planche de culture"""
-    num = models.PositiveIntegerField()
+    num = models.PositiveIntegerField(null=True, blank=True)
     nom = models.CharField(max_length=100, blank=True, default="")
     longueur_m = models.IntegerField()
     largeur_cm = models.IntegerField()
     bSerre = models.BooleanField(default=False)
 
+    ### ici , il faut mettre un truc post constructeur pour mettre num = id si num vide
     def __str__(self):
         return "Planche %d : %s, %d m x %d cm; en serre:%s" % (self.num, self.nom, self.longueur_m, self.largeur_cm, str(self.bSerre))
     

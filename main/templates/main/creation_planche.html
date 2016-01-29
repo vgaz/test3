@@ -5,10 +5,10 @@
 
 {% block content %}
 
-<div class="BlueFrame" style=""> 
-	
-	<form action="" method="POST">
-	{% csrf_token %}
+<div class="BlueFrame"> 
+    <b>Création d'une planche</b><br/>
+    <form action="" method="POST">
+    {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Sauver" />
     </form>

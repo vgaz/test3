@@ -20,11 +20,11 @@ urlpatterns = patterns('',
     url(r'^prevision_recolte/', 'main.views.prevision_recolte', name='prevision_recolte'),
     url(r'^evenements/', 'main.views.evenementsPlanches', name='evenements'),
 
-    url(r'^creation_planche/', 
-        CreationPlanche.as_view() ,  
+    url(r'^creation_planche/', CreationPlanche.as_view() ,  
         {"appName":constant.APP_NAME, "appVersion":constant.APP_VERSION}, 
         name='creation_planche'),
     
+    url(r'^creation_planches/', 'main.views.creationPlanches', name='creation_planches'),    
     url(r'^admin/', include(admin.site.urls)),
     
     url(r'^home', 'main.views.home',  name='home'),

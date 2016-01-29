@@ -7,7 +7,8 @@ Created on Nov 26, 2013
 
 from django.http import HttpResponse
 
-from main.models import Evenement, Plant, Planche, Production, essai_deplacement_plants, clonePlant
+from main.models import Evenement, Plant, Planche, Production
+from main.models import creationPlanche, essai_deplacement_plants, clonePlant
 import sys, traceback
 import datetime
 from main import constant
