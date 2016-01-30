@@ -234,7 +234,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	<br/>
     <div id="cadre_chrono_pl{{planche.num}}" class="cadre_chrono">
     <div class="barre_du_jour"> </div>
-    <h2>Planche {{planche.num}} ({{planche.nom}}) <img src="{{STATIC_URL}}images/plus.png" title="ajouter un plant"> </h2>
+    <h2>{{planche.nom}} ({{planche.num}}) <img src="{{STATIC_URL}}images/plus.png" title="ajouter un plant"> </h2>
 
         {# plants existants en base #}
         {% for plant in planche.l_plants %}

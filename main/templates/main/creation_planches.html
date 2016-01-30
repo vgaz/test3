@@ -5,19 +5,23 @@
 
 {% block content %}
 
+{{ s_msg }}
+
 <div class="BlueFrame"> 
     <p><b>Création d'une collection de planches de même type</b></p>
     <form action="" method="POST">
     {% csrf_token %}
     <table>
-    <tr><td>Nombre de planches</td><td> <input style="width: 50px" type="text" value="" name="quantite"/></td></tr>
+    <tr><td>Préfixe (optionnel)</td><td><input style="width: 250px" type="text" value="" name="prefixe"/></td></tr>
+    <tr><td>Nombre de planches</td><td><input style="width: 50px" type="text" value="" name="quantite"/></td></tr>
+    <tr><td>Numero de la première</td><td><input style="width: 50px" type="text" value="" name="num_prem"/></td></tr>
     <tr><td>Longueur (m)</td><td><input style="width: 50px" type="text" value="" name="longueur_m"/></td></tr>
     <tr><td>Largeur (cm)</td><td><input style="width: 50px" type="text" value="" name="largeur_cm"/></td></tr>
-    <tr><td>Sous Serre</td><td><input type="checkbox" value="" name="bSerre"/></td></tr>
+    <tr><td>Sous Serre</td><td><input type="checkbox" name="bSerre" /></td></tr>
     <tr><td></td><td><input type="submit" value="Sauver" /></td></tr>
     </table>
     </form>
-
+Les planches seront numérotés en partant du numéro fourni
 </div>
 
 {% endblock %}
