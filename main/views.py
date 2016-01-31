@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.views.generic.edit import CreateView
 from django.core.urlresolvers import reverse_lazy
 
-from main.models import Variete, Famille
 from django.template.defaultfilters import random
 
 
@@ -12,7 +11,8 @@ import main.Tools.MyTools as MyTools
 
 import datetime
 
-from main.models import Evenement, Planche, Plant, Production, recupListePlantsEnDateDu
+from main.models import Variete, Famille, Evenement, Planche, Plant, Production
+from main.models import recupListePlantsEnDateDu, creationPlanche
 from main.forms import PlancheForm
 
 #################################################
@@ -26,6 +26,33 @@ def home(request):
                   "appVersion":constant.APP_VERSION,
                   "appName":constant.APP_NAME,
                   "l_planches":l_planches
+                  })
+#################################################
+
+def creationPlanches(request):
+    """gestion de la requete de post """
+    s_msg = ""
+    if request.POST:
+        quantite = int(request.POST.get("quantite", 0))        
+        numPl = int(request.POST.get("num_prem"))           
+        s_msg = ""
+        for index in range(numPl, numPl + quantite):
+            pl = creationPlanche(int(request.POST.get("longueur_m")), 
+                                 int(request.POST.get("largeur_cm")), 
+                                 request.POST.get("bSerre") == "on",
+                                 s_nom = request.POST.get("prefixe", "Planche"),
+                                 num = index
+                                 )
+            
+            s_msg = "Planches créées"
+            print (pl)
+    
+    return render(request,
+                 'main/creation_planches.html',
+                 {
+                  "appVersion": constant.APP_VERSION,
+                  "appName": constant.APP_NAME,
+                  "s_msg": s_msg
                   })
     
 #################################################

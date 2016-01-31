@@ -4,9 +4,26 @@ import datetime
 
 from main import constant  
 from main.Tools import MyTools
-        
+from _ast import Num
+
+def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None): 
+    """Création d'une planche"""
+    planche  = Planche()
+    planche.longueur_m = longueur_m
+    planche.largeur_cm = largeur_cm
+    planche.bSerre = bSerre
+    planche.num = 9999
+    planche.nom = s_nom
+    planche.save()
+    if num :
+        planche.num = num
+    else:
+        planche.num = planche.id
+    planche.save()
+    return planche
+           
 def recupListePlantsEnDateDu(la_date, id_planche):
-    """Filtrage par des plants presents à telle date"""
+    """Filtrage des séries de plants presents à telle date"""
     l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = la_date)
     l_PlantsIds = list(l_evts_debut.values_list('plant_base_id', flat=True))
     ## recup des evenements de fin ayant les mêmes id_plant que les evts de debut 
@@ -78,14 +95,16 @@ class Famille(models.Model):
 
 class Planche(models.Model):
     """ planche de culture"""
-    num = models.PositiveIntegerField()
+    num = models.PositiveIntegerField(null=True, blank=True)
     nom = models.CharField(max_length=100, blank=True, default="")
     longueur_m = models.IntegerField()
     largeur_cm = models.IntegerField()
     bSerre = models.BooleanField(default=False)
 
     def __str__(self):
-        return "Planche %d : %s, %d m x %d cm; en serre:%s" % (self.num, self.nom, self.longueur_m, self.largeur_cm, str(self.bSerre))
+        if self.bSerre: s_lieu = "sous serre"
+        else:           s_lieu = "plein champ"
+        return "%s %d, %d m x %d cm; %s" % ( self.nom, self.num, self.longueur_m, self.largeur_cm, s_lieu)
     
 
 class Variete(models.Model):
