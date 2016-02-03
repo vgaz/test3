@@ -14,10 +14,10 @@ class Command(BaseCommand):
     def creationPlanches(self):
         print("création des planches de base")
         try:
-            p = Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_ID )
+            p = Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_NUM )
         except:
             p = Planche()
-            p.num = constant.PLANCHE_VIRTUELLE_ID
+            p.num = constant.PLANCHE_VIRTUELLE_NUM
             p.nom = "PLANCHE VIRTUELLE"
             p.longueur_m=10000
             p.largeur_cm=100

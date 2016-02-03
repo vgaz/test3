@@ -55,7 +55,7 @@ def planif(dateDebut, dateFin):
             plants = Plant()
             plants.variete_id = var.id
             plants.quantite = nb_plants_a_installer                
-            plants.planche = Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_ID)           ## placement en planche virtuelle en attente de placement réel 
+            plants.planche = Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_NUM)           ## placement en planche virtuelle en attente de placement réel 
             plants.production_id = prod.id
             plants.intra_rang_cm = var.intra_rang_cm                     ## on fixe a priori la distance pour la variete
             plants.nb_rangs = 0

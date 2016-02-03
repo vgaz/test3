@@ -84,7 +84,6 @@ def serveRequest(request):
         return HttpResponse( s_json, content_type="application/json")
 
     
-    ## --------------- request to update database 
     if cde == 'supprime_plant':
         try:
             id_plant = request.POST.get("id", "_")
@@ -112,6 +111,25 @@ def serveRequest(request):
             print ("Suppression plant", id_plant)
          
             s_json = '{"status":"true","id_plant":%d}'%id_plant
+        except:
+            s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
+
+        return HttpResponse( s_json, content_type="application/json")
+
+    if cde == 'supprime_planche':
+        try:
+            id_pl = int(request.POST.get("id"))
+            if id_pl == 1:
+                raise ValueError("Refus de suppression. La planche virtuelle ne peut être détruite")
+            
+            planche = Planche.objects.get(id=id_pl)
+            planche.delete()
+
+            ## suppression des series de plants associés
+                ## suppression de la production associée
+                ## supression des évenements associés à une serie de plants
+
+            s_json = '{"status":"true","id_planche":%d}'%id_pl
         except:
             s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
 

@@ -16,6 +16,7 @@
 {
 display:none;
 }
+
 .chrono_plant
     {
     width: 30%;
@@ -25,11 +26,16 @@ display:none;
     border: 5px solid green;
     position:relative;
     }
+    
 .evt
 {
     background: orange;
     position:absolute;
     height:13px;
+}
+.suppr_planche
+{
+display:inline;
 }
 
 #div_deplacement_plants
@@ -153,7 +159,7 @@ function ajouteNouveauPlant()
     affichePlants()
                 
     }
-   
+
 function supprimePlant(plant_id)
     {
     s_request = "cde=supprime_plant&id="+ id_plant
@@ -161,6 +167,17 @@ function supprimePlant(plant_id)
     jsonRep = JSON.parse(rep)        
     document.getElementById('divEditPlant').style.display = "none"
     document.getElementById('matrice').removeChild(document.getElementById(plant_id))
+    }
+
+function supprime_planche(plId)
+    {
+    s_request = "cde=supprime_planche&id=" + plId
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == 'true')
+        document.getElementById('cadre_chrono_pl' + plId).style.display = "none"
+    else
+        alert(jsonRep.err)
     }
 
     
@@ -182,7 +199,7 @@ function editePlant(hPlant)
             break
            }
 
-    // maj attributs plant                   
+    // maj attributs plant               
     document.getElementById("editPlant_id_planche").innerHTML = {{planche.num}}
     document.getElementById("editPlant_plantId").innerHTML = id_plant
     document.getElementById("editPlant_quantite").value = hPlant.getAttribute("quantite")
@@ -213,7 +230,6 @@ function editePlant(hPlant)
 <p id="divInfoDebug"> </p>
 
 <div id="main" style="text-align: center" >
-
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
 Pour les planches <input style="width: 300px" type="text" name="num_planches" value=" {% for planche in l_planches %}{{planche.num}},{% endfor %}" />
@@ -228,13 +244,17 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 </form>
 
 <br/><br/>
-    
-
     {% for planche in l_planches %}
 	<br/>
-    <div id="cadre_chrono_pl{{planche.num}}" class="cadre_chrono">
+    <div id="cadre_chrono_pl{{planche.id}}" class="cadre_chrono">
     <div class="barre_du_jour"> </div>
-    <h2>{{planche.nom}} ({{planche.num}}) <img src="{{STATIC_URL}}images/plus.png" title="ajouter un plant"> </h2>
+   
+    <h2>{{planche.nom}} ({{planche.num}}) 
+        <img src="{{STATIC_URL}}images/plus.png" title="ajouter un plant"> 
+        <div class="suppr_planche" onclick="supprime_planche({{planche.id}});return false;">
+            <img src="{{STATIC_URL}}images/toDelete.jpeg" title="supprimer la planche">
+        </div>
+    </h2>
 
         {# plants existants en base #}
         {% for plant in planche.l_plants %}
@@ -288,19 +308,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    <input type='button' value='Sauver' name='sauve' onclick="majPlant()"/><br/>
 	</div>
 
-	<div class="YellowFrame" style="display:bl" id=ock"divEditEvenement">
-	    
-		<h2>Gestion d'évenement</h2>
-		<table>
-        <tr><td>Nom : <input type="hidden" value="0" id="edit_evt_id"/><input type="text" value="" id="edit_evt_nom"/></td></tr>
-        <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
-        <tr><td>Durée max (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
-		<tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
-		        <input type="button" value="Sauver" onclick="sauveEvenement()" />
-		</td></tr>
-        </table>
-	        
-	</div>
+
 </div>
 
 {% endblock %}
