@@ -112,9 +112,10 @@ def chronoPlanche(request):
                   "decalage_j": decalage_j
                   })
 
-
+    
 def chronoPlanches(request):
-
+    
+    s_msg = ""
     delta20h = datetime.timedelta(hours=20)
     date_du_jour = datetime.datetime.now()
 
@@ -135,7 +136,11 @@ def chronoPlanches(request):
         date_debut_vue -= delta 
         date_fin_vue -= delta        
     
-    
+    if int(request.POST.get("editPlant_plantId", 99999)) == 0:
+        quantiteSerie = int(request.POST.get("editPlant_quantite",0))
+        idVar = int(request.POST.get("editPlant_select_var"))
+        s_msg += "dde nouvelle serie qté = %d, var:%d"%(quantiteSerie, idVar)
+
     try:
         s_nums = request.POST.get("num_planches", request.GET.get("num_planches", ""))
         if s_nums:
@@ -174,7 +179,8 @@ def chronoPlanches(request):
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
                   "date_du_jour": date_du_jour,
-                  "decalage_j": decalage_j
+                  "decalage_j": decalage_j,
+                  "s_msg":s_msg
                   })
         
 

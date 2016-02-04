@@ -133,32 +133,6 @@ function ajouteEvenement()
     {
     document.getElementById("editPlant_evts").innerHTML += '<table><tr><td>Nom : <input type="hidden" value="0" id="edit_evt_id"/><input type="text" value="" id="edit_evt_nom"/></td></tr>        <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>        <tr><td>Durée max (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr></table>'
     }
-    
-function ajouteNouveauPlant()
-    {
-    s_nouveauPlanId = getTicket() + '_' 
-    s_plant = '<div class="plant" id="$ID_PLANT$" onmousedown="editePlant(this);toggleMove(this)" \
-    			onmouseup="toggleMove(this)" \
-                variete="" \
-                quantite="" \
-                date_debut="" \
-                date_fin=""  \
-                largeur_cm=""  \
-                hauteur_cm=""  \
-                nb_rangs=""  \
-                intra_rang_cm=""  >'
-    s_plant += '<span><div class="num_plant"> </div><div class="variete"> </div></span><br/>' 
-    s_plant += '<div class="largeur_cm"> </div> <div class="hauteur_cm"> </div><br/>' 
-    s_plant += '<div class="coord_x_cm"> </div> <div class="coord_y_cm"> </div><br/>' 
-    s_plant += 'Du <div class="date_debut"> </div> au <div class="date_fin"> </div><br/>' 
-    s_plant += '</div>'
-    s_plant = s_plant.replace("$ID_PLANT$", s_nouveauPlanId)
-    
-    document.getElementById("matrice").innerHTML += s_plant
-    plan_courrant = s_nouveauPlanId
-    affichePlants()
-                
-    }
 
 function supprimePlant(plant_id)
     {
@@ -215,33 +189,23 @@ function editePlant(hPlant)
 {% block title %}Suivi temporel des plants sur les planches{% endblock %}
 
 {% block content %}
-
-<div class="nouveau_plant" id="0" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)" \
-                variete="" quantite=""  date_debut="" date_fin="" largeur_cm=""  \
-                hauteur_cm="" nb_rangs="" intra_rang_cm=""  >
-    <span><div class="num_plant"> </div><div class="variete"> </div></span><br/>' 
-    <div class="largeur_cm"> </div> <div class="hauteur_cm"> </div><br/>' 
-    <div class="coord_x_cm"> </div> <div class="coord_y_cm"> </div><br/>' 
-    Du <div class="date_debut"> </div> au <div class="date_fin"> </div><br/>' 
-</div>'
-    
-    
+{{s_msg}}
 
 <p id="divInfoDebug"> </p>
 
 <div id="main" style="text-align: center" >
+
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
+<input hidden type="text" id="mode" value="echelle" />
 Pour les planches <input style="width: 300px" type="text" name="num_planches" value=" {% for planche in l_planches %}{{planche.num}},{% endfor %}" />
-<a href="{% url 'edition_planche' %}?num_planche={{planche.num}}"><img src="{{STATIC_URL}}images/editor.png" title="Editer"></a>
  Visionnage du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
-<input style="margin-left: 20px" type="submit" value="Envoyer"/>
-<input style="margin-left: 20px" type="submit" name="direction" value="recul"/>
-<input type="submit" name="direction" value="avance"/>
-
-Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}"/> jours 
+<input style="margin-left: 20px" type="submit" value="Envoyer" />
+<input style="margin-left: 20px" type="submit" name="direction" value="recul" />
+<input type="submit" name="direction" value="avance" />
+Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
 <button onclick="changelePas(-1);return(false)">-</button><button onclick="changelePas(1);return(false)">+</button>
-</form>
+
 
 <br/><br/>
     {% for planche in l_planches %}
@@ -258,10 +222,12 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 
         {# plants existants en base #}
         {% for plant in planche.l_plants %}
-        <div class="chrono_plant" id="{{plant.id}}" onmousedown="editePlant(this);"  onclick="editPlant(this)"
-        nom_variete="{{plant.variete}}" debut="{{plant.evt_debut.date|safe}}" fin="{{plant.evt_fin.date|safe}}" 
-        nb_rangs="{{plant.nb_rangs}}" intra_rang_cm="{{plant.intra_rang_cm}}">
-        
+        <div class="chrono_plant"   id="{{plant.id}}" 
+                                    onmousedown="editePlant(this);"  onclick="editPlant(this)"
+                                    nom_variete="{{plant.variete}}" 
+                                    debut="{{plant.evt_debut.date|safe}}" fin="{{plant.evt_fin.date|safe}}" 
+                                    nb_rangs="{{plant.nb_rangs}}" intra_rang_cm="{{plant.intra_rang_cm}}">
+        <img src="{{STATIC_URL}}images/editor.png" title="Editer" />
         <div class="num_plant" style="display: inline;z-index:3;  ">({{plant.id}}) </div>
         <div class="variete" style="display: inline;z-index:3; ">
         {{plant.variete}} x {{plant.quantite}}</div> 
@@ -273,41 +239,42 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         {% endfor %}
     </div>
     {% endfor %}
-    <div id="div_deplacement_plants">
-    	<h3>Déplacement de plants</h3>
-    	Plant/s N°<input style="width: 30px;margin-left: 10px;display: inline" type="text" id="deplacement_id_plant" value=""/>
-    	<b>(<div id="deplacement_variete" style="display: inline"> </div>)</b>
-    	vers planche N°<input style="width: 30px;margin-left: 10px" type="text" id="deplacement_num_planche_dest" value=""/><br/>
-    	Espacement dans le rang (cm)<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_intra_rang_cm" value=""/><br/>
-    	Nombre de rangs<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_nb_rangs" value=""/><br/>
-    	<input type="checkbox" id="deplacement_partiel" />Déplacement partiel.
-    	Nb de plants :<input style="width: 30px" type="text" id="deplacement_nb_plants" value=""/><br/>
-		<input type="checkbox" id="deplacement_simulation" />Simulation
-		<input type="submit" style="margin-left: 30px"  value="Déplacement" onclick="deplacement(this)" />
-    </div>
+
 
 	<div id="divEditPlant" style="display:block" class="BlueFrame" >
-		<h2>Création d'une série</h2>
+		<h2>Edition d'une série</h2>
 		<p>
-		Série <input style="width:40px" type="text" readonly id="editPlant_plantId" value="" />
-		sur planche N° <input style="width: 40px" type="text" id="editPlant_id_planche" value="0" /></span></p>
-	    <p>Variété : <select id="editPlant_select_var" onchange="majPlant()">
+		Série <input style="width:40px" type="text" id="editPlant_plantId" name="editPlant_plantId" value="" />
+		sur planche N° <input style="width: 40px" type="text" id="editPlant_id_planche" value="0" /></p>
+	    <p>Variété : <select name="editPlant_select_var" id="editPlant_select_var" onchange="majPlant()">
 	    			{% for var in l_vars %}
 	    	        <option value="{{var.id}}" name="{{var.nom}}">{{var.nom}}</option>
 	    	    	{% endfor %}
 	    	      </select>
 	    </p>
-	    <p>Quantité : <input style="width: 100px" type='text' value='' id="editPlant_quantite" onchange="majPlant()" /></p>
-	    <p>Début (jj/mm/aaaa) : <input style="width:100px" type="text" value=" " id="editPlant_date_debut" onchange="majPlant()"/></p>
-	    <p>Fin (jj/mm/aaaa) ou vide : <input style="width:100px" type="text" value=" " id="editPlant_date_fin" onchange="majPlant()" /></p>
+	    <p>Quantité : <input style="width: 100px" type='text' value="" name="editPlant_quantite" id="editPlant_quantite" onchange="majPlant()" /></p>
+	    <p>Début (jj/mm/aaaa) : <input style="width:100px" type="text" value="" id="editPlant_date_debut" onchange="majPlant()"/></p>
+	    <p>Fin (jj/mm/aaaa) ou vide : <input style="width:100px" type="text" value="" id="editPlant_date_fin" onchange="majPlant()" /></p>
 	    <br/><br/><b>Evenements</b>
 	    <div id="editPlant_evts"> </div>
 	    <input type='button' value='+' onclick="ajouteEvenement()"/><br/>
 	    <hr/>
 	    <input type='button' value='Supprimer' name='supprime' onclick="supprimePlant(document.getElementById('editPlant_plantId').innerHTML)"/><br/>
-	    <input type='button' value='Sauver' name='sauve' onclick="majPlant()"/><br/>
+	    <input type='submit' value='Sauver' /><br/>
 	</div>
-
+    </form>
+    <div id="div_deplacement_plants">
+        <h3>Déplacement de plants</h3>
+        Plant/s N°<input style="width: 30px;margin-left: 10px;display: inline" type="text" id="deplacement_id_plant" value=""/>
+        <b>(<div id="deplacement_variete" style="display: inline"> </div>)</b>
+        vers planche N°<input style="width: 30px;margin-left: 10px" type="text" id="deplacement_num_planche_dest" value=""/><br/>
+        Espacement dans le rang (cm)<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_intra_rang_cm" value=""/><br/>
+        Nombre de rangs<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_nb_rangs" value=""/><br/>
+        <input type="checkbox" id="deplacement_partiel" />Déplacement partiel.
+        Nb de plants :<input style="width: 30px" type="text" id="deplacement_nb_plants" value=""/><br/>
+        <input type="checkbox" id="deplacement_simulation" />Simulation
+        <input type="submit" style="margin-left: 30px"  value="Déplacement" onclick="deplacement(this)" />
+    </div>
 
 </div>
 
