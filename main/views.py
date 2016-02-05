@@ -70,8 +70,8 @@ def chronoPlanche(request):
     date_du_jour = datetime.datetime.now()
 
     if request.POST.get("date_debut_vue",""):
-        date_debut_vue = datetime.datetime.strptime(request.POST.get("date_debut_vue", ""), constant.FORMAT_DATE)
-        date_fin_vue = datetime.datetime.strptime(request.POST.get("date_fin_vue", ""), constant.FORMAT_DATE) + delta20h
+        date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
+        date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
     else:
         delta = datetime.timedelta(days=60)
         date_debut_vue = date_du_jour - delta
@@ -135,13 +135,22 @@ def chronoPlanches(request):
     if request.POST.get("direction", "") == "recul":
         date_debut_vue -= delta 
         date_fin_vue -= delta        
-    
-    if int(request.POST.get("editPlant_plantId", 99999)) == 0:
-        quantiteSerie = int(request.POST.get("editPlant_quantite",0))
-        idVar = int(request.POST.get("editPlant_select_var"))
-        s_msg += "dde nouvelle serie qté = %d, var:%d"%(quantiteSerie, idVar)
 
     try:
+        # gestion de la cration d'une nouvelle série de plants
+        if int(request.POST.get("editSerie_plantId", 99999)) == 0:
+
+            snouv = models.creationSerie(Planche.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
+                                 int(request.POST.get("editSerie_id_variete")), 
+                                 int(request.POST.get("editSerie_quantite")), 
+                                 int(request.POST.get("editSerie_intra_rang_cm")), 
+                                 int(request.POST.get("editSerie_nb_rangs")), 
+                                 request.POST.get("editSerie_date_debut"), 
+                                 request.POST.get("editSerie_date_fin"))
+            print(snouv)
+            s_msg += "dde nouvelle serie qté = %d, var:%d"%(quantiteSerie, idVar)
+            
+            
         s_nums = request.POST.get("num_planches", request.GET.get("num_planches", ""))
         if s_nums:
             l_nums = [int(num.strip()) for num in s_nums.strip(',').split(",")]
@@ -149,7 +158,7 @@ def chronoPlanches(request):
         else:
             l_planches = Planche.objects.all().order_by('num')
     except:
-        s_msg = "Planche(s) non trouvée..."
+        s_msg += "Planche(s) non trouvée..."
         return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
     
     ## ajout des evts liés à cette planche

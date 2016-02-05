@@ -6,6 +6,35 @@ from main import constant
 from main.Tools import MyTools
 from _ast import Num
 
+## fabrique d'éléments et enregistrement dans la base
+
+def creationEvt(e_date, e_type, duree_j, id_serie):
+    """création d'une evenement en base
+    retourne l'instance de l'évenement"""
+    if isinstance(e_date == str):
+        e_date = MyTools.getDateFrom_d_m_y(e_date)
+        
+    evt = Evenement()
+    evt.type = e_type
+    evt.date = e_date
+    evt.duree_j = duree_j
+    evt.nom = nom
+    evt.plant_base_id = id_serie
+    evt.save()
+
+ 
+def creationSerie(id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_debut, date_fin):
+    """création d'une série de plants ou graines"""
+    serie = Plant()
+    serie.variete_id = id_var
+    serie.intra_rang_cm = intra_rang_cm
+    serie.nb_rangs = nb_rangs
+    serie.planche_id = id_planche
+    serie.quantite = quantite
+    serie.save()
+    serie.evt_debut = creationEvt(date_debut, Evenement.TYPE_DEBUT, 1, serie.id)
+    serie.evt_debut = creationEvt(date_debut, Evenement.TYPE_DEBUT, 1, serie.id)
+   
 def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None): 
     """Création d'une planche"""
     planche  = Planche()
@@ -50,7 +79,7 @@ def essai_deplacement_plants(idPlant, numPlancheDest, intraRangCm, nbRangs):
     for day in MyTools.jourApresJour(plant.evt_debut.date, plant.evt_fin.date):
         cumul_m = 0
         ## recup des plants sur la planche à cette date et cumul des longeur sur planche    
-        l_plants = recupListePlantsEnDateDu(day, planche.id)
+        l_plants = recupListePlants1EnDateDu(day, planche.id)
         
         for p in l_plants:
             cumul_m += p.longueurSurPlanche_m()
@@ -69,7 +98,7 @@ def essai_deplacement_plants(idPlant, numPlancheDest, intraRangCm, nbRangs):
     else:
         ## pas assez de place, on retourne le nb de plants restant à placer apres remplissage du reste de la planche
         return int(plant.nbPlantsPlacables(abs(reste_m), intraRangCm, nbRangs))
-    
+
 def clonePlant(plant):
     plant2 = Plant.objects.get(id=plant.id)
     plant2.id = None
@@ -122,7 +151,7 @@ class Variete(models.Model):
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     ##image = models.ImageField()
     
-    class Meta: 
+    class Meta:
         ordering = ['nom']
             
     def __str__(self):
@@ -138,7 +167,7 @@ class Variete(models.Model):
         print ("self.prod_hebdo_moy_g", self.prod_hebdo_moy_g)  
         if self.prod_hebdo_moy_g == "0":
             print ("attention , réponse bidon dans  plantsPourProdHebdo %s"%self.nom)
-            return productionDemandee
+            return productionDeman1dee
         
         if self.unite_prod == constant.UNITE_PROD_PIECE:
             return productionDemandee

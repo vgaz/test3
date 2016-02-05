@@ -244,17 +244,19 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	<div id="divEditPlant" style="display:block" class="BlueFrame" >
 		<h2>Edition d'une série</h2>
 		<p>
-		Série <input style="width:40px" type="text" id="editPlant_plantId" name="editPlant_plantId" value="" />
-		sur planche N° <input style="width: 40px" type="text" id="editPlant_id_planche" value="0" /></p>
-	    <p>Variété : <select name="editPlant_select_var" id="editPlant_select_var" onchange="majPlant()">
+		Série <input style="width:40px" type="text" name="editSerie_plantId" value="" />
+		sur planche N° <input style="width: 40px" type="text" name="editSerie_num_planche" value="0" /></p>
+	    <p>Variété : <select name="editSerie_id_variete" >
 	    			{% for var in l_vars %}
-	    	        <option value="{{var.id}}" name="{{var.nom}}">{{var.nom}}</option>
+	    	        <option value="{{var.id}}" name="{{var.id}}">{{var.nom}}</option>
 	    	    	{% endfor %}
 	    	      </select>
 	    </p>
-	    <p>Quantité : <input style="width: 100px" type='text' value="" name="editPlant_quantite" id="editPlant_quantite" onchange="majPlant()" /></p>
-	    <p>Début (jj/mm/aaaa) : <input style="width:100px" type="text" value="" id="editPlant_date_debut" onchange="majPlant()"/></p>
-	    <p>Fin (jj/mm/aaaa) ou vide : <input style="width:100px" type="text" value="" id="editPlant_date_fin" onchange="majPlant()" /></p>
+        <p>Quantité : <input style="width: 40px" type='text' value="" name="editSerie_quantite" /></p>
+        <p>Nb rangs : <input style="width: 40px" type='text' value="" name="editSerie_nb_rangs" />
+           Intra rangs (cm) : <input style="width: 40px" type='text' value="" name="editSerie_intra_rang_cm" /></p>
+	    <p>Début (jj/mm/aaaa) : <input style="width:100px" type="text" value="" name="editSerie_date_debut"/></p>
+	    <p>Fin (jj/mm/aaaa) ou vide : <input style="width:100px" type="text" value="" name="editSerie_date_fin" /></p>
 	    <br/><br/><b>Evenements</b>
 	    <div id="editPlant_evts"> </div>
 	    <input type='button' value='+' onclick="ajouteEvenement()"/><br/>

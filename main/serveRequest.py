@@ -24,10 +24,7 @@ def serveRequest(request):
         ## retour des évenements des plants (sauf debut et fin déjà affichés spécifiquement)
         try:
             l_evts = Evenement.objects.filter(plant_base_id = int(request.POST.get("id", 0)),
-                                              type = Evenement.TYPE_DIVERS)
-            for evt in l_evts:
-                print (evt)
-            
+                                              type = Evenement.TYPE_DIVERS)       
             s_ = ','.join(['{"id":"%d","nom":"%s","date":"%s","duree_j":"%d","type":"%s"}'%( item.id, item.nom, 
                                                                                              item.date.strftime(constant.FORMAT_DATE), item.duree_j, item.type) 
                                                                                                 for item in l_evts])           
