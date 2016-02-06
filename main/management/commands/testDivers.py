@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand       
 
-from main import serveRequest
+from main import serveRequest, views
 from django.test import RequestFactory
 
 from main.models import Plant, essai_deplacement_plants, clonePlant
@@ -21,32 +21,32 @@ class Command(BaseCommand):
 #         planification.planif(date_debut_vue, date_fin_vue)
 #         return
         
-        id_plant = 1
-        reste  = essai_deplacement_plants(id_plant, 3, 60, 2)
-        plant = Plant.objects.get(id=id_plant)
-        plant2 = clonePlant(plant)
-        ## maj quantités
-        plant2.quantite = plant.quantite - reste 
-        plant2.save()
-        plant.quantite = reste
-        plant.save()
-        return
+#         id_plant = 1
+#         reste  = essai_deplacement_plants(id_plant, 3, 60, 2)
+#         plant = Plant.objects.get(id=id_plant)
+#         plant2 = clonePlant(plant)
+#         ## maj quantités
+#         plant2.quantite = plant.quantite - reste 
+#         plant2.save()
+#         plant.quantite = reste
+#         plant.save()
+
+        print(help)
+        
         self.factory = RequestFactory()
 
         # Create an instance of a POST request.
-        request = self.factory.post('http://localhost:8000/edition_planche/?num_planche=1', data={"cde":"getEvtsPlant", "id":"36"
-                                                                                                  })
-#         
-#         evt =  Evenement(2, datetime.datetime.strptime("24/4/2015", constant.FORMAT_DATE), 5, 36)
-# 
-#         l_objs = Planche.objects.all()
-#        
-#         l_objs = Plant.objects.all()
-#         for evt in l_objs:
-#             print (evt)         
-#         
-#         l_objs = Evenement.objects.filter(plant_base_id = int(request.POST.get("id", 0)))
-#         for evt in l_objs:
-#             print (evt)
-        serveRequest.serveRequest(request)
+        request = self.factory.post('/chrono_planches/?num_planches=', 
+                                    data={"editSerie_id":"0",
+                                          "editSerie_num_planche":"12",
+                                          "editSerie_id_variete":"6", 
+                                          "editSerie_quantite":"343", 
+                                          "editSerie_intra_rang_cm":"20", 
+                                          "editSerie_nb_rangs":"5", 
+                                          "editSerie_date_debut":"3/2/2016", 
+                                          "editSerie_date_fin":"12/6/2016"
+                                        }
+                                    )
+        views.chronoPlanches(request)
+#         serveRequest.serveRequest(request)
         

@@ -8,10 +8,10 @@ from _ast import Num
 
 ## fabrique d'éléments et enregistrement dans la base
 
-def creationEvt(e_date, e_type, duree_j, id_serie):
+def creationEvt(e_date, e_type, duree_j, id_serie, nom=""):
     """création d'une evenement en base
-    retourne l'instance de l'évenement"""
-    if isinstance(e_date == str):
+    retourne l'instance de l'évènement"""
+    if isinstance(e_date, str):
         e_date = MyTools.getDateFrom_d_m_y(e_date)
         
     evt = Evenement()
@@ -21,10 +21,11 @@ def creationEvt(e_date, e_type, duree_j, id_serie):
     evt.nom = nom
     evt.plant_base_id = id_serie
     evt.save()
+    return evt
 
  
 def creationSerie(id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_debut, date_fin):
-    """création d'une série de plants ou graines"""
+    """Création d'une série de plants ou graines"""
     serie = Plant()
     serie.variete_id = id_var
     serie.intra_rang_cm = intra_rang_cm
@@ -32,8 +33,10 @@ def creationSerie(id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_de
     serie.planche_id = id_planche
     serie.quantite = quantite
     serie.save()
-    serie.evt_debut = creationEvt(date_debut, Evenement.TYPE_DEBUT, 1, serie.id)
-    serie.evt_debut = creationEvt(date_debut, Evenement.TYPE_DEBUT, 1, serie.id)
+    serie.evt_debut_id = creationEvt(date_debut, Evenement.TYPE_DEBUT, 1, serie.id, "Début %s"%serie.variete.nom).id
+    serie.evt_fin_id = creationEvt(date_fin, Evenement.TYPE_FIN, 1, serie.id, "Fin %s"%serie.variete.nom).id
+    serie.save()
+    return serie
    
 def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None): 
     """Création d'une planche"""
@@ -156,7 +159,7 @@ class Variete(models.Model):
             
     def __str__(self):
         return(self.nom) 
-    
+
     def nomUniteProd(self):
         return constant.D_NOM_UNITE_PROD[self.unite_prod]  
 
@@ -216,9 +219,8 @@ class Plant(models.Model):
     
     class Meta:
         verbose_name = "Plant ou série de plants"
-        
+
     variete = models.ForeignKey(Variete)
-#     parent =  models.ForeignKey("Plant", default=0, blank=True) ## plant d'origine sur la planche virtuelle
     nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
     intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=0)
     planche = models.ForeignKey("Planche", default=0, blank=True)
@@ -270,15 +272,12 @@ class Plant(models.Model):
         e.save()
         self.evt_fin_id = e.id
         self.save()
-                  
+   
     def __str__(self):
-        return "Série (id:%d) de %d plant(s) de %s (%d graines), %d x %d, pos: %d %d sur planche %d du %s au %s" %(  self.id, self.quantite, self.variete.nom, 
-                                                                                                        self.nbGraines(), 
-                                                                                                        self.largeur_cm, 
-                                                                                                        self.hauteur_cm, 
-                                                                                                        self.coord_x_cm, 
-                                                                                                        self.coord_y_cm, 
+        return "Série (%d) de %d plant(s) de %s sur planche %d, %d cm dans le rang sur %d rangs, du %s au %s" %(  self.id, self.quantite, self.variete.nom, 
                                                                                                         self.planche.num,
+                                                                                                        self.intra_rang_cm, 
+                                                                                                        self.nb_rangs, 
                                                                                                         self.evt_debut.date,
                                                                                                         self.evt_fin.date)
 

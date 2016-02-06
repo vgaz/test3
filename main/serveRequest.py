@@ -8,7 +8,7 @@ Created on Nov 26, 2013
 from django.http import HttpResponse
 
 from main.models import Evenement, Plant, Planche, Production
-from main.models import creationPlanche, essai_deplacement_plants, clonePlant
+from main.models import creationPlanche, creationSerie, essai_deplacement_plants, clonePlant
 import sys, traceback
 import datetime
 from main import constant
@@ -18,7 +18,7 @@ def serveRequest(request):
     rep = ""
     ## --------------- renvoi de tous les evenements d'un plant
     cde = request.POST.get("cde","")
-    print(request.POST)
+    print(request.POST)#
     
     if cde == "getEvtsPlant": 
         ## retour des évenements des plants (sauf debut et fin déjà affichés spécifiquement)
@@ -48,11 +48,11 @@ def serveRequest(request):
              
         return HttpResponse( s_json, content_type="application/json")
 
-    ## --------------- request to update database 
+    ## --------------- creation ou maj serie de plants 
     if cde =='sauve_plant':
         try:
             print (request.POST)
-            id_plant = request.POST.get("id_plant")
+            id_plant = request.POST.get("id_pl#ant")
             if '_' in id_plant:
                 plant = Plant() ## un nouveau
             else:
@@ -72,7 +72,7 @@ def serveRequest(request):
                             None or request.POST.get("date_fin", ""))
             print(plant)
             s_json = '{"status":"true","id_plant":%d}'%plant.pk
-        except:
+        except:#
             ex_type, ex, tb = sys.exc_info()
             print (ex_type, ex)
             traceback.print_tb(tb)
@@ -212,7 +212,7 @@ def serveRequest(request):
                 plant.save()
                 rep ="Tous les plants ont été déplacés"
             else:
-                ## Création nouvelle série de plants sur planche dest
+                ## Création nouvelle série de #plants sur planche dest
                 plant2 = clonePlant(plant) ## creation d'un nouveau plant
                 ## maj quantités
                 plant2.quantite = plant.quantite - reste 

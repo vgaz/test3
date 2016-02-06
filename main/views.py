@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse_lazy
 
 from django.template.defaultfilters import random
 
+import sys
 
 from main import forms, constant, planification
 import main.Tools.MyTools as MyTools
@@ -12,7 +13,7 @@ import main.Tools.MyTools as MyTools
 import datetime
 
 from main.models import Variete, Famille, Evenement, Planche, Plant, Production
-from main.models import recupListePlantsEnDateDu, creationPlanche
+from main.models import recupListePlantsEnDateDu, creationPlanche, creationSerie
 from main.forms import PlancheForm
 
 #################################################
@@ -120,8 +121,8 @@ def chronoPlanches(request):
     date_du_jour = datetime.datetime.now()
 
     if request.POST.get("date_debut_vue",""):
-        date_debut_vue = datetime.datetime.strptime(request.POST.get("date_debut_vue", ""), constant.FORMAT_DATE)
-        date_fin_vue = datetime.datetime.strptime(request.POST.get("date_fin_vue", ""), constant.FORMAT_DATE) + delta20h
+        date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
+        date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
     else:
         delta = datetime.timedelta(days=60)
         date_debut_vue = date_du_jour - delta
@@ -138,9 +139,9 @@ def chronoPlanches(request):
 
     try:
         # gestion de la cration d'une nouvelle série de plants
-        if int(request.POST.get("editSerie_plantId", 99999)) == 0:
+        if int(request.POST.get("editSerie_id", 99999)) == 0:
 
-            snouv = models.creationSerie(Planche.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
+            snouv = creationSerie(Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
                                  int(request.POST.get("editSerie_id_variete")), 
                                  int(request.POST.get("editSerie_quantite")), 
                                  int(request.POST.get("editSerie_intra_rang_cm")), 
@@ -148,7 +149,7 @@ def chronoPlanches(request):
                                  request.POST.get("editSerie_date_debut"), 
                                  request.POST.get("editSerie_date_fin"))
             print(snouv)
-            s_msg += "dde nouvelle serie qté = %d, var:%d"%(quantiteSerie, idVar)
+            s_msg += "Nouvelle serie créée = %s"%(snouv)
             
             
         s_nums = request.POST.get("num_planches", request.GET.get("num_planches", ""))
@@ -158,6 +159,7 @@ def chronoPlanches(request):
         else:
             l_planches = Planche.objects.all().order_by('num')
     except:
+        s_err = sys.exc_info()[1]
         s_msg += "Planche(s) non trouvée..."
         return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
     
