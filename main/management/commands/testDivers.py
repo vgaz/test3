@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from main import serveRequest, views
 from django.test import RequestFactory
 
-from main.models import Plant, essai_deplacement_plants, clonePlant
+from main.models import Plant, essai_deplacement_plants, clonePlant, Evenement
 
 
 class Command(BaseCommand):
@@ -44,7 +44,13 @@ class Command(BaseCommand):
                                           "editSerie_intra_rang_cm":"20", 
                                           "editSerie_nb_rangs":"5", 
                                           "editSerie_date_debut":"3/2/2016", 
-                                          "editSerie_date_fin":"12/6/2016"
+                                          "editSerie_date_fin":"12/6/2016",
+                                          "evt_date[]":"12/4/2016",
+                                          "evt_type[]":Evenement.TYPE_DIVERS,
+                                          "evt_nom[]":"taille",
+                                          "evt_date[]":"15/4/2016",
+                                          "evt_type[]":Evenement.TYPE_DIVERS,
+                                          "evt_nom[]":"action2"
                                         }
                                     )
         views.chronoPlanches(request)

@@ -4,11 +4,10 @@ import datetime
 
 from main import constant  
 from main.Tools import MyTools
-from _ast import Num
 
 ## fabrique d'éléments et enregistrement dans la base
 
-def creationEvt(e_date, e_type, duree_j, id_serie, nom=""):
+def creationEvt(e_date, e_type, id_serie, duree_j=1, nom=""):
     """création d'une evenement en base
     retourne l'instance de l'évènement"""
     if isinstance(e_date, str):
@@ -33,8 +32,8 @@ def creationSerie(id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_de
     serie.planche_id = id_planche
     serie.quantite = quantite
     serie.save()
-    serie.evt_debut_id = creationEvt(date_debut, Evenement.TYPE_DEBUT, 1, serie.id, "Début %s"%serie.variete.nom).id
-    serie.evt_fin_id = creationEvt(date_fin, Evenement.TYPE_FIN, 1, serie.id, "Fin %s"%serie.variete.nom).id
+    serie.evt_debut_id = creationEvt(date_debut, Evenement.TYPE_DEBUT, serie.id, 1, "Début %s"%serie.variete.nom).id
+    serie.evt_fin_id = creationEvt(date_fin, Evenement.TYPE_FIN,serie.id,  1, "Fin %s"%serie.variete.nom).id
     serie.save()
     return serie
    
@@ -82,7 +81,7 @@ def essai_deplacement_plants(idPlant, numPlancheDest, intraRangCm, nbRangs):
     for day in MyTools.jourApresJour(plant.evt_debut.date, plant.evt_fin.date):
         cumul_m = 0
         ## recup des plants sur la planche à cette date et cumul des longeur sur planche    
-        l_plants = recupListePlants1EnDateDu(day, planche.id)
+        l_plants = recupListePlantsEnDateDu(day, planche.id)
         
         for p in l_plants:
             cumul_m += p.longueurSurPlanche_m()
@@ -170,7 +169,7 @@ class Variete(models.Model):
         print ("self.prod_hebdo_moy_g", self.prod_hebdo_moy_g)  
         if self.prod_hebdo_moy_g == "0":
             print ("attention , réponse bidon dans  plantsPourProdHebdo %s"%self.nom)
-            return productionDeman1dee
+            return productionDemandee
         
         if self.unite_prod == constant.UNITE_PROD_PIECE:
             return productionDemandee
@@ -182,7 +181,7 @@ class Variete(models.Model):
     def prodSemaines(self, productionDemandee):
         """ retourne une liste de production(s) escomptée(s) par semaine (en kg ou en unités)"""
         if self.prod_hebdo_moy_g == "0":
-            assert "prod hebdo non donnée pour %s"%prod_hebdo_moy_g.variete.nom
+            assert "prod hebdo non donnée pour %s"%self.prod_hebdo_moy_g.variete.nom
         
         l_ret = []
         

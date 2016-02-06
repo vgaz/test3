@@ -52,8 +52,11 @@ def getDateFrom_y_m_d(s_time):
 def getDateFrom_d_m_y(s_time):
     if "/" in s_time:
         d,m,y = s_time.split("/")
+
     if "-" in s_time:
         d,m,y = s_time.split("-")
+    if len(y)==2:
+        y= "20" + y   # if only 2 digits for year     
     _date =  datetime.date(int(y),int(m),int(d))
     return (_date)
 
@@ -800,6 +803,7 @@ def changeDivContent(resultFilePath, divId, content):
 ######################################################################################
 if __name__ == '__main__':
 
+    print getDateFrom_d_m_y("22/3/45")
     dateDebut = datetime.datetime.now()
     dateFin = dateDebut + datetime.timedelta(days = 22)
     for a_date in jourApresJour(dateDebut, dateFin):

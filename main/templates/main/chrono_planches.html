@@ -127,11 +127,14 @@ function  balisagePlants()
         }
     }
 
-
+function editSerie(this)
+    {
+        document.getElementById('divEditPlant').style.display = "block"
+    }
  
 function ajouteEvenement() 
     {
-    document.getElementById("editPlant_evts").innerHTML += '<table><tr><td>Nom : <input type="hidden" value="0" id="edit_evt_id"/><input type="text" value="" id="edit_evt_nom"/></td></tr>        <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>        <tr><td>Durée max (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr></table>'
+    document.getElementById("editPlant_evts").innerHTML += '<table><tr><td>Nom : <input type="hidden" value="0" name="edit_evt_id[]"/><input type="text" value="" name="edit_evt_nom[]"/></td></tr><tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" name="edit_evt_date[]"/></td></tr><tr><td>Durée max (j): <input style="width: 60px" type="text" value="1" name="edit_evt_duree_j"/></td></tr></table>'
     }
 
 function supprimePlant(plant_id)
@@ -154,7 +157,12 @@ function supprime_planche(plId)
         alert(jsonRep.err)
     }
 
-    
+function prepareEditSerie(num_planche)
+    {
+    document.getElementById('divEditPlant').style.display = "block"
+    editSerie_num_planche.text = num_planche
+    }
+        
 function editePlant(hPlant)
     {
     // recup evenements liés à ce plant
@@ -214,7 +222,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     <div class="barre_du_jour"> </div>
    
     <h2>{{planche.nom}} ({{planche.num}}) 
-        <img src="{{STATIC_URL}}images/plus.png" title="ajouter un plant"> 
+        <img src="{{STATIC_URL}}images/plus.png" title="ajouter une série" onclick="prepareEditSerie({{planche.num}});return false"> 
         <div class="suppr_planche" onclick="supprime_planche({{planche.id}});return false;">
             <img src="{{STATIC_URL}}images/toDelete.jpeg" title="supprimer la planche">
         </div>
@@ -222,8 +230,8 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 
         {# plants existants en base #}
         {% for plant in planche.l_plants %}
-        <div class="chrono_plant"   id="{{plant.id}}" 
-                                    onmousedown="editePlant(this);"  onclick="editPlant(this)"
+        <div class="chrono_plant"  id="{{plant.id}}"   
+                                    onclick="editSerie(this)"
                                     nom_variete="{{plant.variete}}" 
                                     debut="{{plant.evt_debut.date|safe}}" fin="{{plant.evt_fin.date|safe}}" 
                                     nb_rangs="{{plant.nb_rangs}}" intra_rang_cm="{{plant.intra_rang_cm}}">
@@ -241,7 +249,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     {% endfor %}
 
 
-	<div id="divEditPlant" style="display:block" class="BlueFrame" >
+	<div id="divEditPlant" style="display:none" class="BlueFrame" >
 		<h2>Edition d'une série</h2>
 		<p>
 		Série <input style="width:40px" type="text" name="editSerie_id" value="" />
