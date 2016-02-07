@@ -799,18 +799,18 @@ def changeDivContent(resultFilePath, divId, content):
     f.write(xmlstr)
     f.close()
 
-
 ######################################################################################
 if __name__ == '__main__':
 
-    print getDateFrom_d_m_y("22/3/45")
+    print(getDateFrom_d_m_y("22/3/45"))
+    print(getDateFrom_d_m_y("22/3/1945"))
+    exit(0)
     dateDebut = datetime.datetime.now()
     dateFin = dateDebut + datetime.timedelta(days = 22)
     for a_date in jourApresJour(dateDebut, dateFin):
         print (a_date)
    
 
-    exit(0)
     
     dictToIniFile({"user":"toto"},
                   "/a/home.users/vgazeill/EclipseWorkspace/GIT/pyatt/Config/sessions.txt", 

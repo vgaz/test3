@@ -17,7 +17,7 @@
 display:none;
 }
 
-.chrono_plant
+.chrono_serie
     {
     width: 30%;
     height: 75px;
@@ -65,14 +65,14 @@ display:inline;
     date_fin_vue = "{{date_fin_vue|safe}}"
     date_du_jour = "{{date_du_jour|safe}}"
     decalage_j = {{decalage_j|safe}}
-    // evenement par plant id
-    l_evts_plants=[    {% for planche in l_planches %}{% for plant in planche.l_plants %}
-			{% for evt in plant.l_evts %}  {"id":"{{evt.id}}",
+    // evenement par serie id
+    l_evts_plants=[    {% for planche in l_planches %}{% for serie in planche.l_plants %}
+			{% for evt in serie.l_evts %}  {"id":"{{evt.id}}",
 											"nom":"{{evt.nom}}",
 											"date":"{{evt.date|safe}}",
 											"duree_j":"{{evt.duree_j}}",
 											"type":"{{evt.type}}",
-											"id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}{% endfor%}
+											"id_serie":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}{% endfor%}
 		{% endfor %}{% endfor %}]
 
 function    init()
@@ -101,49 +101,46 @@ function    init()
 
 function  balisagePlants()
     {
-    l_plants = document.getElementsByClassName("chrono_plant")
-    for (ii=0;ii<l_plants.length;ii++)
+    l_series = document.getElementsByClassName("chrono_serie")
+    for (ii=0;ii<l_series.length;ii++)
         {
         // decalage debut
-        debut = l_plants[ii].getAttribute("debut")
+        debut = l_series[ii].getAttribute("debut")
         deltaH = moment(debut).diff(moment(date_debut_vue), 'hours')
-        l_plants[ii].style.marginLeft = deltaH * pxParH + "px" 
+        l_series[ii].style.marginLeft = deltaH * pxParH + "px" 
         // decalage fin
-        fin = l_plants[ii].getAttribute("fin")
+        fin = l_series[ii].getAttribute("fin")
         deltaH = moment(fin).diff(moment(debut), "hours")
-        l_plants[ii].style.width = deltaH * pxParH  + "px"
-        // placement des divers evenements
+        l_series[ii].style.width = deltaH * pxParH  + "px"
+        // placement des évenements "divers"
         s_evt = ""
     	for (jj=0;jj<l_evts_plants.length;jj++)
     		{
-    		if (l_evts_plants[jj]["id_plant"] != l_plants[ii].getAttribute("id"))
+    		if (l_evts_plants[jj]["id_serie"] != l_series[ii].getAttribute("id"))
     			continue
             //positionnement des évènements
             deltaPx = moment(l_evts_plants[jj]["date"]).diff(moment(debut), 'hours') * pxParH
             s_evt += "<div class='evt' style='left:" + deltaPx + "px;width:" + l_evts_plants[jj]["duree_j"] * 24 * pxParH + "px;' title='" + l_evts_plants[jj]["nom"] + '\n' + moment(l_evts_plants[jj]["date"]).format("DD/MM/YYYY") + "' > </div>"
             //s_evt = "<div style='position:absolute'><img title='" + l_evts_plants[jj]["nom"] + '\n' + moment(l_evts_plants[jj]["date"]).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + "px;width:" + l_evts_plants[jj]["duree_j"] * 24 * pxParH + "px;height:13px'></div>"
             }
-        document.getElementById(l_plants[ii].getAttribute("id")).getElementsByClassName("evts")[0].innerHTML = s_evt
+        document.getElementById(l_series[ii].getAttribute("id")).getElementsByClassName("evts")[0].innerHTML = s_evt
         }
     }
 
-function editSerie(this)
-    {
-        document.getElementById('divEditPlant').style.display = "block"
-    }
+
  
 function ajouteEvenement() 
     {
     document.getElementById("editPlant_evts").innerHTML += '<table><tr><td>Nom : <input type="hidden" value="0" name="edit_evt_id[]"/><input type="text" value="" name="edit_evt_nom[]"/></td></tr><tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" name="edit_evt_date[]"/></td></tr><tr><td>Durée max (j): <input style="width: 60px" type="text" value="1" name="edit_evt_duree_j"/></td></tr></table>'
     }
 
-function supprimePlant(plant_id)
+function supprimePlant(id_serie)
     {
-    s_request = "cde=supprime_plant&id="+ id_plant
+    s_request = "cde=supprime_plant&id="+ id_serie
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)        
-    document.getElementById('divEditPlant').style.display = "none"
-    document.getElementById('matrice').removeChild(document.getElementById(plant_id))
+    document.getElementById('divEditSerie').style.display = "none"
+    document.getElementById('matrice').removeChild(document.getElementById(id_serie))
     }
 
 function supprime_planche(plId)
@@ -157,19 +154,42 @@ function supprime_planche(plId)
         alert(jsonRep.err)
     }
 
-function prepareEditSerie(num_planche)
+function prepareAjouteSerie(num_planche)
     {
-    document.getElementById('divEditPlant').style.display = "block"
-    editSerie_num_planche.text = num_planche
+    document.getElementById('divEditSerie').style.display = "block"
+    document.getElementById("editSerie_num_planche").value = num_planche
+    document.getElementById("editSerie_id_serie").value = 0
+
+    }
+function prepareEditeSerie(hDivSerie)
+    {
+    document.getElementById('divEditSerie').style.display = "block"
+    document.getElementById("editSerie_id_serie").value = hDivSerie.getAttribute("id")
+    document.getElementById("editSerie_num_planche").value =  hDivSerie.getAttribute("num_planche")
+    document.getElementById("editSerie_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
+    document.getElementById("editSerie_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
+    document.getElementById("editSerie_quantite").value = hDivSerie.getAttribute("quantite")
+    document.getElementById("editSerie_date_debut").value = hDivSerie.getAttribute("date_debut_f")
+    document.getElementById("editSerie_date_fin").value = hDivSerie.getAttribute("date_fin_f")
+    // maj variété
+    id_variet  = hDivSerie.getAttribute("id_variete")
+    list = document.getElementById("editSerie_id_variete").getElementsByTagName("option")
+    for(ii=0;ii<list.length;ii++)
+        if (list[ii].id == id_variet)
+            {
+            document.getElementById("editSerie_id_variete").options[ii].selected=true
+            break
+           }
+
     }
         
 function editePlant(hPlant)
     {
-    // recup evenements liés à ce plant
-    id_plant = hPlant.getAttribute("id")
+    // recup evenements liés à cette série
+    id_serie = hPlant.getAttribute("id_serie")
     
-    if (id_plant.search("_") != 1)
-        majListEvts(id_plant)
+    if (id_serie.search("_") != 1)
+        majListEvts(id_serie)
         
     // maj variété
     id_variet  = hPlant.getAttribute("variete")
@@ -183,11 +203,11 @@ function editePlant(hPlant)
 
     // maj attributs plant               
     document.getElementById("editPlant_id_planche").innerHTML = {{planche.num}}
-    document.getElementById("editPlant_plantId").innerHTML = id_plant
+    document.getElementById("editPlant_plantId").innerHTML = id_serie
     document.getElementById("editPlant_quantite").value = hPlant.getAttribute("quantite")
     document.getElementById("editPlant_date_debut").value =  hPlant.getAttribute("date_debut")
     document.getElementById("editPlant_date_fin").value =  hPlant.getAttribute("date_fin")
-    document.getElementById("divEditPlant").style.display = "inline"
+    document.getElementById("divEditSerie").style.display = "inline"
     }
 
 </script>
@@ -222,26 +242,30 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     <div class="barre_du_jour"> </div>
    
     <h2>{{planche.nom}} ({{planche.num}}) 
-        <img src="{{STATIC_URL}}images/plus.png" title="ajouter une série" onclick="prepareEditSerie({{planche.num}});return false"> 
+        <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie({{planche.num}});return false"> 
         <div class="suppr_planche" onclick="supprime_planche({{planche.id}});return false;">
             <img src="{{STATIC_URL}}images/toDelete.jpeg" title="supprimer la planche">
         </div>
     </h2>
 
         {# plants existants en base #}
-        {% for plant in planche.l_plants %}
-        <div class="chrono_plant"  id="{{plant.id}}"   
-                                    onclick="editSerie(this)"
-                                    nom_variete="{{plant.variete}}" 
-                                    debut="{{plant.evt_debut.date|safe}}" fin="{{plant.evt_fin.date|safe}}" 
-                                    nb_rangs="{{plant.nb_rangs}}" intra_rang_cm="{{plant.intra_rang_cm}}">
-        <img src="{{STATIC_URL}}images/editor.png" title="Editer" />
-        <div class="num_plant" style="display: inline;z-index:3;  ">({{plant.id}}) </div>
+        {% for serie in planche.l_plants %}
+        <div class="chrono_serie"  id="{{serie.id}}"  num_planche="{{planche.num}}" 
+                                    onclick="prepareEditeSerie(this);return false"
+                                    nom_variete="{{serie.variete}}" id_variete="{{serie.variete.id}}" 
+                                    quantite="{{serie.quantite}}"
+                                    date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
+                                    date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
+                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}">
+                                    
+        <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" 
+            title="id={{serie.id}} planche={{planche.num}} variete={{serie.variete}} quantite={{serie.quantite}} nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}} Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
+        <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
         <div class="variete" style="display: inline;z-index:3; ">
-        {{plant.variete}} x {{plant.quantite}}</div> 
-        <a href="javascript:editeDeplacement({{plant.id}})">>></a><br/>
-        <div class="debut" style="display: inline;float:left">{{plant.evt_debut.date|date:'d/m/Y'}}</div><br/>
-        <div class="fin" style="display:inline;float:right">{{plant.evt_fin.date|date:'d/m/Y'}}</div><br/>
+        {{serie.variete}} x {{serie.quantite}}</div> 
+        <a href="javascript:editeDeplacement({{serie.id}})">>></a><br/>
+        <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
+        <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
         <div class="evts" style="display:inline;position:relative;float:left;"> </div>
         </div>
         {% endfor %}
@@ -249,22 +273,22 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     {% endfor %}
 
 
-	<div id="divEditPlant" style="display:none" class="BlueFrame" >
+	<div id="divEditSerie" style="display:none" class="BlueFrame" >
 		<h2>Edition d'une série</h2>
 		<p>
-		Série <input style="width:40px" type="text" name="editSerie_id" value="" />
-		sur planche N° <input style="width: 40px" type="text" name="editSerie_num_planche" value="0" /></p>
-	    <p>Variété : <select name="editSerie_id_variete" >
+		Série <input style="width:40px" type="text" id="editSerie_id_serie"  name="editSerie_id_serie" value="" />
+		sur planche N° <input style="width: 40px" type="text" id="editSerie_num_planche" name="editSerie_num_planche" value="0" /></p>
+	    <p>Variété : <select id="editSerie_id_variete" name="editSerie_id_variete" >
 	    			{% for var in l_vars %}
-	    	        <option value="{{var.id}}" name="{{var.id}}">{{var.nom}}</option>
+	    	        <option value="{{var.id}}" id="{{var.id}}" name="{{var.id}}">{{var.nom|title}}</option>
 	    	    	{% endfor %}
 	    	      </select>
 	    </p>
-        <p>Quantité : <input style="width: 40px" type='text' value="" name="editSerie_quantite" /></p>
-        <p>Nb rangs : <input style="width: 40px" type='text' value="" name="editSerie_nb_rangs" />
-           Intra rangs (cm) : <input style="width: 40px" type='text' value="" name="editSerie_intra_rang_cm" /></p>
-	    <p>Début (jj/mm/aaaa) : <input style="width:100px" type="text" value="" name="editSerie_date_debut"/></p>
-	    <p>Fin (jj/mm/aaaa) ou vide : <input style="width:100px" type="text" value="" name="editSerie_date_fin" /></p>
+        <p>Quantité : <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
+        <p>Nb rangs : <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
+           Intra rangs (cm) : <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
+	    <p>Début (jj/mm/aaaa) : <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
+	    <p>Fin (jj/mm/aaaa) ou vide : <input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
 	    <br/><br/><b>Evenements</b>
 	    <div id="editPlant_evts"> </div>
 	    <input type='button' value='+' onclick="ajouteEvenement()"/><br/>

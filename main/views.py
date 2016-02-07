@@ -83,7 +83,7 @@ def chronoPlanches(request):
 
     try:
         # gestion de la cration d'une nouvelle série de plants
-        if int(request.POST.get("editSerie_id", 99999)) == 0:
+        if int(request.POST.get("editSerie_id_serie", -1)) == 0:
 
             snouv = creationSerie(Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
                                  int(request.POST.get("editSerie_id_variete")), 
@@ -92,9 +92,9 @@ def chronoPlanches(request):
                                  int(request.POST.get("editSerie_nb_rangs")), 
                                  request.POST.get("editSerie_date_debut"), 
                                  request.POST.get("editSerie_date_fin"))
-            l_evts = request.POST.get("evt_date[]")
-            for index, evt in enumerate(l_evts):
-                print(str(evt))
+#             l_evts = request.POST.get("evt_date[]")
+#             for index, evt in enumerate(l_evts):
+#                 print(str(evt))
             print(snouv)
             s_msg += "Nouvelle serie créée = %s"%(snouv)
             
@@ -106,8 +106,7 @@ def chronoPlanches(request):
         else:
             l_planches = Planche.objects.all().order_by('num')
     except:
-        s_err = sys.exc_info()[1]
-        s_msg += "Planche(s) non trouvée..."
+        s_msg += str(sys.exc_info()[1])
         return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
     
     ## ajout des evts liés à cette planche
