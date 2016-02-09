@@ -47,12 +47,14 @@ def creationPlanches(request):
             
             s_msg = "Planches créées"
             print (pl)
-    
+    l_planches = Planche.objects.all().order_by('num')
+
     return render(request,
                  'main/creation_planches.html',
                  {
                   "appVersion": constant.APP_VERSION,
                   "appName": constant.APP_NAME,
+                  "l_planches":l_planches,
                   "s_msg": s_msg
                   })
     

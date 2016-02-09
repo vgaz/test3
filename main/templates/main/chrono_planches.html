@@ -156,15 +156,27 @@ function supprime_planche(plId)
 
 function prepareAjouteSerie(num_planche)
     {
-    document.getElementById('divEditSerie').style.display = "block"
+    hDiv = document.getElementById('divEditSerie')
+    hDiv.style.display = "block"
+    hDiv.style.position = "absolute"
+    hDiv.style.left = "10px"
+    hDiv.top = hDiv.offsetTop
     document.getElementById("editSerie_num_planche").value = num_planche
     document.getElementById("editSerie_id_serie").value = 0
-
+    document.getElementById("editSerie_id_serie").readOnly = true
+    document.getElementById("editSerie_titre").innerHTML = "Edition d'une nouvelle série"
     }
+    
 function prepareEditeSerie(hDivSerie)
     {
-    document.getElementById('divEditSerie').style.display = "block"
+    hDiv = document.getElementById('divEditSerie')
+    hDiv.style.display = "block"
+    hDiv.style.position = "absolute"
+    hDiv.style.left = "10px"
+   //hDiv.top = hDivSerie.offsetTop
+    
     document.getElementById("editSerie_id_serie").value = hDivSerie.getAttribute("id")
+    document.getElementById("editSerie_id_serie").readOnly = true
     document.getElementById("editSerie_num_planche").value =  hDivSerie.getAttribute("num_planche")
     document.getElementById("editSerie_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
     document.getElementById("editSerie_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
@@ -180,6 +192,7 @@ function prepareEditeSerie(hDivSerie)
             document.getElementById("editSerie_id_variete").options[ii].selected=true
             break
            }
+    document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
 
     }
         
@@ -241,22 +254,20 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     <div id="cadre_chrono_pl{{planche.id}}" class="cadre_chrono">
     <div class="barre_du_jour"> </div>
    
-    <h2>{{planche.nom}} {{planche.num}}({{planche.longueur_m}} m x {{planche.largeur_cm}} cm) 
+    <h2>{{planche}}
         <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie({{planche.num}});return false"> 
-        <div class="suppr_planche" onclick="supprime_planche({{planche.id}});return false;">
-            <img src="{{STATIC_URL}}images/toDelete.jpeg" title="supprimer la planche">
-        </div>
+           
     </h2>
 
         {# plants existants en base #}
         {% for serie in planche.l_plants %}
-        <div class="chrono_serie"  id="{{serie.id}}"  num_planche="{{planche.num}}" 
-                                    onclick="prepareEditeSerie(this);return false"
+        <div class="chrono_serie"   id="{{serie.id}}" num_planche="{{planche.num}}" 
+                                    onclick="alert('eee');prepareEditeSerie(this);return false"
                                     nom_variete="{{serie.variete}}" id_variete="{{serie.variete.id}}" 
                                     quantite="{{serie.quantite}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
-                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}">
+                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}" >
                                     
         <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" 
             title="id={{serie.id}} planche={{planche.num}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
@@ -274,7 +285,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 
 
 	<div id="divEditSerie" style="display:none" class="BlueFrame" >
-		<h2>Edition d'une série</h2>
+		<h2 id="editSerie_titre"> </h2>
 		<p>
 		Série <input style="width:40px" type="text" id="editSerie_id_serie"  name="editSerie_id_serie" value="" />
 		sur planche N° <input style="width: 40px" type="text" id="editSerie_num_planche" name="editSerie_num_planche" value="0" /></p>
@@ -287,8 +298,8 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         <p>Quantité : <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
         <p>Nb rangs : <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
            Intra rangs (cm) : <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
-	    <p>Début (jj/mm/aaaa) : <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
-	    <p>Fin (jj/mm/aaaa) ou vide : <input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
+	    <p>Début (jj/mm/aa) : <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
+	    <p>Fin (jj/mm/aa) ou vide : <input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
 	    <br/><br/><b>Evenements</b>
 	    <div id="editPlant_evts"> </div>
 	    <input type='button' value='+' onclick="ajouteEvenement()"/><br/>

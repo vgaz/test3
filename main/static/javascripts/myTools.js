@@ -63,6 +63,23 @@ function colorScores()
 
 }
 
+function getHandleOfClass(root, className, id)
+    {
+    // get value of <div class="className"   PAS TESTE !!!!!!!!!!!!!!!!!!
+    if (root == null)
+        l_elts = document.getElementsByClassName(className)
+    else
+        l_elts = root.getElementsByClassName(className)
+
+    // return the first value of tag name element
+    for(ii=0; ii < l_elts.length; ii++)
+        if (l_elts[ii].getAttribute("id") == id)
+            return (l_elts[ii])
+
+    return ("")
+    }
+    
+
 
 function getValueOfTagName(root, tagName, attrName)
 	{

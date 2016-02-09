@@ -44,8 +44,13 @@ def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None):
     planche.largeur_cm = largeur_cm
     planche.bSerre = bSerre
     planche.num = 9999
-    planche.nom = s_nom
+    if s_nom:
+        planche.nom = s_nom
+    else:
+        planche.nom = "Planche"
+        
     planche.save()
+    
     if num :
         planche.num = num
     else:
