@@ -227,6 +227,16 @@ class Plant(models.Model):
     evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
     
+    
+    def donneSurface(self):
+        if not intraRangCm:
+            intraRangCm = self.intra_rang_cm
+        assert intraRangCm, Exception("intraRangCm non défini")
+        if not nbRangs:
+            nbRangs = self.nb_rangs
+        assert nbRangs, Exception("nbRangs non défini")
+        return longueurDePlanche_m * 100 * nbRangs / intraRangCm
+     
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
         return(self.quantite * self.variete.rendement_plants_graines_pourcent / 100)
@@ -238,8 +248,19 @@ class Plant(models.Model):
             intra_rang_cm = self.intra_rang_cm
         if not nb_rangs:
             nb_rangs = self.nb_rangs
-                        
+        if nb_rangs == 0:
+            return 0                
         return ((self.quantite * intra_rang_cm)/nb_rangs)/100
+    
+    def surfaceSurPlanche_m2(self, intra_rang_cm=None, nb_rangs=None):
+        """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
+        intra_rang_cm et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend ceux du plant défini"""
+        if not intra_rang_cm:
+            intra_rang_cm = self.intra_rang_cm
+        if not nb_rangs:
+            nb_rangs = self.nb_rangs
+                        
+        return (self.longueurSurPlanche_m() * self.planche.largeur_cm/100)
     
     def nbPlantsPlacables(self, longueurDePlanche_m, intraRangCm=None, nbRangs=None):
         if not intraRangCm:

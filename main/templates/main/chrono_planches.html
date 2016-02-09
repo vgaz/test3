@@ -105,11 +105,11 @@ function  balisagePlants()
     for (ii=0;ii<l_series.length;ii++)
         {
         // decalage debut
-        debut = l_series[ii].getAttribute("debut")
+        debut = l_series[ii].getAttribute("date_debut")
         deltaH = moment(debut).diff(moment(date_debut_vue), 'hours')
         l_series[ii].style.marginLeft = deltaH * pxParH + "px" 
         // decalage fin
-        fin = l_series[ii].getAttribute("fin")
+        fin = l_series[ii].getAttribute("date_fin")
         deltaH = moment(fin).diff(moment(debut), "hours")
         l_series[ii].style.width = deltaH * pxParH  + "px"
         // placement des évenements "divers"
@@ -241,7 +241,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     <div id="cadre_chrono_pl{{planche.id}}" class="cadre_chrono">
     <div class="barre_du_jour"> </div>
    
-    <h2>{{planche.nom}} ({{planche.num}}) 
+    <h2>{{planche.nom}} {{planche.num}}({{planche.longueur_m}} m x {{planche.largeur_cm}} cm) 
         <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie({{planche.num}});return false"> 
         <div class="suppr_planche" onclick="supprime_planche({{planche.id}});return false;">
             <img src="{{STATIC_URL}}images/toDelete.jpeg" title="supprimer la planche">
@@ -259,10 +259,10 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}">
                                     
         <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" 
-            title="id={{serie.id}} planche={{planche.num}} variete={{serie.variete}} quantite={{serie.quantite}} nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}} Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
+            title="id={{serie.id}} planche={{planche.num}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
         <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
         <div class="variete" style="display: inline;z-index:3; ">
-        {{serie.variete}} x {{serie.quantite}}</div> 
+        {{serie.variete}} x {{serie.quantite}}</div>
         <a href="javascript:editeDeplacement({{serie.id}})">>></a><br/>
         <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
         <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
