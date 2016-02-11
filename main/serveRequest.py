@@ -83,13 +83,13 @@ def serveRequest(request):
     
     if cde == 'supprime_serie':
         try:
-            id_plant = int(request.POST.get("id", 0))
-            if id_plant == 0:
+            id_serie = int(request.POST.get("id", 0))
+            if id_serie == 0:
                 print("return _")
                 raise(Exception, "série non supprimable")
             
-            id_plant = int(id_plant)
-            plant = Plant.objects.get(id=id_plant)
+            id_serie = int(id_serie)
+            plant = Plant.objects.get(id=id_serie)
             
             ## suppression de la production associée
             try:
@@ -105,9 +105,9 @@ def serveRequest(request):
                 obj.delete()
              
             plant.delete()                
-            print ("Suppression plant", id_plant)
+            print ("Supprime série", id_serie)
          
-            s_json = '{"status":"true","id_plant":%d}'%id_plant
+            s_json = '{"status":"true","id_serie":%d}'%id_serie
         except:
             s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
 
@@ -178,10 +178,10 @@ def serveRequest(request):
            
         return HttpResponse(s_json)
 
-    if cde == "deplacement_plant":
+    if cde == "deplacement_serie":
         ## deplacement de plants d'une planche vers une autre
         try:
-            plant = Plant.objects.get(id=int(request.POST.get("id_plant")))
+            plant = Plant.objects.get(id=int(request.POST.get("id")))
             b_deplacementPartiel = request.POST.get("deplacement_partiel") == "true"
             if b_deplacementPartiel:
                 # nb de plants à déplacer

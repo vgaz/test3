@@ -16,71 +16,6 @@ function checkConnexion()
 		document.getElementById('connexion').innerHTML = "<a href='../expert_mode_login/'>Connexion in expert mode</a>"
 	}
 
-
-function checkProfForm()
-{
-	bDisableSubmit = false
-
-	// check if almost one rack is selected
-	l_rep = document.getElementsByClassName("InputList")
-	
-	for (ii=0; ii< l_rep.length; ii++) 
-		{
-		l_inputs = l_rep[ii].getElementsByTagName("input");
-		bOneCheckedAtLeast = false;
-		for (i=0; i< l_inputs.length; i++) 
-			{
-			if (l_inputs[i].checked == 1)
-				{
-				bOneCheckedAtLeast = true;
-				break;
-				}
-			}
-		if (bOneCheckedAtLeast == false)
-			{
-			l_rep[ii].style.borderColor = "red";
-			bDisableSubmit = true
-			}
-		else
-			l_rep[ii].style.borderColor = "white";
-		}
-
-	if (bDisableSubmit)
-		document.forms.mainForm.submit.disabled = true
-	else
-		document.forms.mainForm.submit.disabled = false
-					
-}
-
-function colorScores()
-	{
-	// change background color for all elements with class score depending on attribute "ratio"
-	l_rep = document.getElementsByClassName("score");
-
-	for (i=0; i < l_rep.length; i++) 
-		l_rep[i].style.backgroundColor = getScoreColor( parseInt(l_rep[i].getAttribute("ratio")))
-	
-
-}
-
-function getHandleOfClass(root, className, id)
-    {
-    // get value of <div class="className"   PAS TESTE !!!!!!!!!!!!!!!!!!
-    if (root == null)
-        l_elts = document.getElementsByClassName(className)
-    else
-        l_elts = root.getElementsByClassName(className)
-
-    // return the first value of tag name element
-    for(ii=0; ii < l_elts.length; ii++)
-        if (l_elts[ii].getAttribute("id") == id)
-            return (l_elts[ii])
-
-    return ("")
-    }
-    
-
-
 function getValueOfTagName(root, tagName, attrName)
 	{
 	// get value of <tagName name="attrName" value="the value that will be returned"
@@ -149,49 +84,6 @@ function requestServer(param)
 	return hReq.responseText
  	}
 
-
-
-function showHideEquals(buttonName, rawName)
-	{
-    button = document.getElementsByName(buttonName)
-        
-    l_elt = document.getElementsByName(rawName)  // find all elements
-    if (button[0].value=='Show all')
-    	{
-    	newstyle = ""
-        button[0].value="Hide equals"
-    	for (ii=0; ii<l_elt.length; ii++)
-        	l_elt[ii].style.display = newstyle
-    	}
-    else
-        // hide equal scores
-    	{
-    	button[0].value = "Show all"
-    	for (ii=0; ii<l_elt.length; ii++) 
-        	{
-            l_td = l_elt[ii].getElementsByClassName('score')   
-            bEquals = true
-            for (iii=0; iii<l_td.length; iii++)
-        		{
-            	if ( (l_td[0].getAttribute('nb_tests_ok') != l_td[iii].getAttribute('nb_tests_ok')) || (l_td[0].getAttribute('nb_tests_ko') != l_td[iii].getAttribute('nb_tests_ko')))
-            		{
-            		bEquals = false
-            		break
-            		}	
-        		}
-        	if (bEquals == true)
-        		l_elt[ii].style.display = "none"
-        	}    	
-    	}
-	}
-
-
-function uploadComment(bin_version)
-    {
-    comment = document.getElementById('txtarea_general_comment').value.replace("\n", "\\n")
-    request = 'set_bin_version_comment={"bin_version":"' + bin_version + '","comment":"' + comment + '"}'
-    document.getElementById('txtarea_general_comment').innerHTML = requestServer(request)
-    }   
 
 function validateAndRunJob(s_vmVersion, s_debug)
 	{

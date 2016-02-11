@@ -38,7 +38,7 @@ display:none;
 display:inline;
 }
 
-#div_deplacement_plants
+#divDeplacementSerie
     {
     text-align:left;
     padding:10px;
@@ -99,6 +99,35 @@ function    init()
 	    
     }
 
+
+function  deplacement(hForm)
+    {
+	// déplacement d'une serie vers une autre planche 
+    s_request = "cde=deplacement_plant&id_serie=" + document.getElementById("deplacement_id_serie").value
+    s_request += "&id_planche_src=0"
+    s_request += "&num_planche_dest=" + document.getElementById("deplacement_num_planche_dest").value
+    s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
+    s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
+    s_request += "&deplacement_partiel=" + document.getElementById("deplacement_partiel").checked
+    s_request += "&nb_plants=" + document.getElementById("deplacement_nb_plants").value
+    b_simu = document.getElementById("deplacement_simulation").checked
+    s_request += "&simu=" + b_simu
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == 'true')
+        {
+        document.getElementById("divDeplacementSerie").style.display = "none"
+      	alert(jsonRep.msg)
+        if (b_simu == "false")
+        	{
+        	// on rafraichit la page
+        	window.location.replace(window.location.pathname)
+        	}
+        }
+    else
+    	document.getElementById("divInfoDebug").innerHTML = jsonRep.err
+    }
+    
 function  balisagePlants()
     {
     l_series = document.getElementsByClassName("chrono_serie")
@@ -170,12 +199,13 @@ function prepareAjouteSerie(num_planche)
     document.getElementById("editSerie_titre").innerHTML = "Edition d'une nouvelle série"
     }
     
-function prepareEditeSerie(hDivSerie)
+function prepareEditeSerie(id_serie)
     {
-    hDiv = document.getElementById('divEditSerie')
+    hDiv = document.getElementById("divEditSerie")
     hDiv.style.display = "block"
     hDiv.style.position = "absolute"
     hDiv.style.left = "10px"
+    hDivSerie = document.getElementById(id_serie)
     hDiv.style.top = hDivSerie.offsetTop + 80 + "px" // 80 pour aller en dessous du div de serie
     document.getElementById("editSerie_id_serie").value = hDivSerie.getAttribute("id")
     document.getElementById("editSerie_id_serie").readOnly = true
@@ -197,7 +227,26 @@ function prepareEditeSerie(hDivSerie)
     document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
 
     }
-        
+
+function prepareDeplacementSerie(id_serie)
+    {
+    hDiv = document.getElementById("divDeplacementSerie")
+    hDiv.style.display = "block"
+    hDiv.style.position = "absolute"
+    hDiv.style.left = "10px"
+    hDivSerie = document.getElementById(id_serie)
+    hDiv.style.top = hDivSerie.offsetTop + 80 + "px" // 80 pour aller en dessous du div de serie
+    document.getElementById("deplacement_id_serie").value = hDivSerie.getAttribute("id")
+    document.getElementById("deplacement_num_planche_orig").value =  hDivSerie.getAttribute("num_planche")
+    document.getElementById("deplacement_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
+    document.getElementById("deplacement_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
+    document.getElementById("deplacement_quantite").value = hDivSerie.getAttribute("quantite")
+    document.getElementById("deplacement_variete").value = hDivSerie.getAttribute("variete")
+    document.getElementById("deplacement_date_debut").value = hDivSerie.getAttribute("date_debut_f")
+    document.getElementById("deplacement_date_fin").value = hDivSerie.getAttribute("date_fin_f")
+   
+    }
+           
 function editePlant(hPlant)
     {
     // recup evenements liés à cette série
@@ -241,10 +290,10 @@ function editePlant(hPlant)
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
 <input hidden type="text" id="mode" value="echelle" />
-Pour les planches <input style="width: 300px" type="text" name="num_planches" value=" {% for planche in l_planches %}{{planche.num}},{% endfor %}" />
- Visionnage du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
-<input style="margin-left: 20px" type="submit" value="Envoyer" />
-<input style="margin-left: 20px" type="submit" name="direction" value="recul" />
+Pour les planches   <input style="width: 300px" type="text" name="num_planches" value=" {% for planche in l_planches %}{{planche.num}},{% endfor %}" />
+ Visionnage du      <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
+                    <input style="margin-left: 20px" type="submit" value="Envoyer" />
+                    <input style="margin-left: 20px" type="submit" name="direction" value="recul" />
 <input type="submit" name="direction" value="avance" />
 Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
 <button onclick="changelePas(-1);return(false)">-</button><button onclick="changelePas(1);return(false)">+</button>
@@ -261,10 +310,9 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
            
     </h2>
 
-        {# plants existants en base #}
+        {# séries existantes en base #}
         {% for serie in planche.l_plants %}
         <div class="chrono_serie"   id="{{serie.id}}" num_planche="{{planche.num}}" 
-                                    onclick="prepareEditeSerie(this);return false"
                                     nom_variete="{{serie.variete}}" id_variete="{{serie.variete.id}}" 
                                     quantite="{{serie.quantite}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
@@ -276,7 +324,8 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
         <div class="variete" style="display: inline;z-index:3; ">
         {{serie.variete}} x {{serie.quantite}}</div>
-        <a href="javascript:editeDeplacement({{serie.id}})">>></a><br/>
+        <a href="#" onclick="javascript:prepareEditeSerie({{serie.id}});return(false)">EDITER</a>
+        <a href="#" onclick="javascript:prepareDeplacementSerie({{serie.id}});return(false)">DEPLACER</a><br/>
         <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
         <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
         <div class="evts" style="display:inline;position:relative;float:left;"> </div>
@@ -297,12 +346,12 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    	    	{% endfor %}
 	    	      </select>
 	    </p>
-        <p>Quantité : <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
-        <p>Nb rangs : <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
-           Intra rangs (cm) : <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
-	    <p>Début (jj/mm/aa) : <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
+        <p>Quantité :               <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
+        <p>Nb rangs :               <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
+           Dans le rang (cm) :       <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
+	    <p>Début (jj/mm/aa) :       <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
 	    <p>Fin (jj/mm/aa) ou vide : <input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
-	    <br/><br/><b>Evenements</b>
+	    <br/><b>Evenements</b>
 	    <div id="editPlant_evts"> </div>
 	    <input type='button' value='+' onclick="ajouteEvenement()"/><br/>
 	    <hr/>
@@ -311,17 +360,18 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    <input type='submit' value='Sauver' /><br/>
 	</div>
     </form>
-    <div id="div_deplacement_plants">
-        <h3>Déplacement de plants</h3>
-        Plant/s N°<input style="width: 30px;margin-left: 10px;display: inline" type="text" id="deplacement_id_plant" value=""/>
-        <b>(<div id="deplacement_variete" style="display: inline"> </div>)</b>
-        vers planche N°<input style="width: 30px;margin-left: 10px" type="text" id="deplacement_num_planche_dest" value=""/><br/>
-        Espacement dans le rang (cm)<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_intra_rang_cm" value=""/><br/>
-        Nombre de rangs<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_nb_rangs" value=""/><br/>
-        <input type="checkbox" id="deplacement_partiel" />Déplacement partiel.
-        Nb de plants :<input style="width: 30px" type="text" id="deplacement_nb_plants" value=""/><br/>
-        <input type="checkbox" id="deplacement_simulation" />Simulation
-        <input type="submit" style="margin-left: 30px"  value="Déplacement" onclick="deplacement(this)" />
+    
+    <div id="divDeplacementSerie">
+        <h3>Déplacement de la série N°<input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" /></h3>
+        Nb de plants :              <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
+        De la planche N°            <input id="deplacement_num_planche_orig"   value="" type="text" readonly style="width: 30px;margin-left: 10px"/>
+        vers la planche N°          <input id="deplacement_num_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
+        dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
+        Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
+        Déplacement partiel         <input id="deplacement_partiel"                     type="checkbox" />
+        Nb de plants :              <input id="deplacement_nb_plants"          value="" type="text" style="width: 30px" /><br/>
+        Simulation                  <input id="deplacement_simulation"                  type="checkbox" />
+        <input type="submit" value="Déplacement" onclick="deplacement(this)" style="margin-left: 30px" />
     </div>
 
 </div>
