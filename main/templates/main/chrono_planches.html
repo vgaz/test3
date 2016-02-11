@@ -134,13 +134,16 @@ function ajouteEvenement()
     document.getElementById("editPlant_evts").innerHTML += '<table><tr><td>Nom : <input type="hidden" value="0" name="edit_evt_id[]"/><input type="text" value="" name="edit_evt_nom[]"/></td></tr><tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" name="edit_evt_date[]"/></td></tr><tr><td>Durée max (j): <input style="width: 60px" type="text" value="1" name="edit_evt_duree_j"/></td></tr></table>'
     }
 
-function supprimePlant(id_serie)
+function supprimeSerie(id_serie)
     {
-    s_request = "cde=supprime_plant&id="+ id_serie
+    s_request = "cde=supprime_serie&id=" + id_serie
+    alert(s_request)
     rep = requestServer(s_request)  
-    jsonRep = JSON.parse(rep)        
-    document.getElementById('divEditSerie').style.display = "none"
-    document.getElementById('matrice').removeChild(document.getElementById(id_serie))
+    jsonRep = JSON.parse(rep)   
+    if (jsonRep.status == 'true')
+        window.location.reload()    
+    else
+        alert(jsonRep.err)
     }
 
 function supprime_planche(plId)
@@ -303,7 +306,8 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    <div id="editPlant_evts"> </div>
 	    <input type='button' value='+' onclick="ajouteEvenement()"/><br/>
 	    <hr/>
-	    <input type='button' value='Supprimer' name='supprime' onclick="supprimePlant(document.getElementById('editPlant_plantId').innerHTML)"/><br/>
+        <input type='button' value='Supprimer' name='supprime' onclick="supprimeSerie(document.getElementById('editSerie_id_serie').value)"/>
+        <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return False"/>
 	    <input type='submit' value='Sauver' /><br/>
 	</div>
     </form>

@@ -81,12 +81,12 @@ def serveRequest(request):
         return HttpResponse( s_json, content_type="application/json")
 
     
-    if cde == 'supprime_plant':
+    if cde == 'supprime_serie':
         try:
-            id_plant = request.POST.get("id", "_")
-            if '_' in id_plant:
+            id_plant = int(request.POST.get("id", 0))
+            if id_plant == 0:
                 print("return _")
-                raise(Exception, "_ in id plant")
+                raise(Exception, "série non supprimable")
             
             id_plant = int(id_plant)
             plant = Plant.objects.get(id=id_plant)
