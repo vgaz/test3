@@ -118,11 +118,7 @@ function  deplacement(hForm)
         {
         document.getElementById("divDeplacementSerie").style.display = "none"
       	alert(jsonRep.msg)
-        if (b_simu == "false")
-        	{
-        	// on rafraichit la page
-        	window.location.replace(window.location.pathname)
-        	}
+        window.location.reload()
         }
     else
     	document.getElementById("divInfoDebug").innerHTML = jsonRep.err
