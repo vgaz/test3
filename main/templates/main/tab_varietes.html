@@ -12,13 +12,17 @@
           <tr>
           {% if var.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
           <td><h2>{{var.nom|title}} {% if var.famille %} ({{var.famille.nom}}) {% endif %} </h2>
-          	  Plantation du {{var.date_min_plantation}} au {{var.date_max_plantation}}.<br/>
-              Jours de croissance :  <input style="width: 100px" type="text" name="{{var.pk}}_duree_avant_recolte_j" value="{{var.duree_avant_recolte_j}}" /> <br/>
-              Distance dans le rang (cm) : <input style="width: 100px" type="text" name="{{var.pk}}_intra_rang_cm" value="{{var.intra_rang_cm}}" /><br/>
-              Unité de comptage : {{var.nomUniteProd}} <br/>
-              Rendement plants/graines : {{var.rendement_plants_graines_pourcent}} % <br/>
-              Production hebdomadaire {% if var.unite_prod == 2 %}(u){% else %}(g){% endif %} :  {{var.prod_hebdo_moy_g}}  <br/>
-              </td>
+            Plantation possible du {{var.date_min_plantation_pc}} au {{var.date_max_plantation_pc}} en plein champ.<br/>
+            Plantation possible du {{var.date_min_plantation_sa}} au {{var.date_max_plantation_sa}} sous abris.<br/>
+            Jours de croissance :  <input style="width: px" type="text" name="{{var.pk}}_duree_avant_recolte_pc_j" value="{{var.duree_avant_recolte_pc_j}}" /> <br/>
+            Distance dans le rang (cm) : <input style="width: 100px" type="text" name="{{var.pk}}_intra_rang_cm" value="{{var.intra_rang_cm}}" /><br/>
+            Unité de comptage : {{var.nomUniteProd}} <br/>
+            Rendement plants/graines : {{var.rendement_plants_graines_pourcent}} % <br/>
+            Production hebdomadaire {% if var.unite_prod == 2 %}(u){% else %}(g){% endif %} : {{var.prod_hebdo_moy_g}}  <br/>
+            </td>
+          </tr>
+          <tr>
+              
           </tr>
       </table>
       {% if var.avec.distinct %} <img src="{{ STATIC_URL }}images/smileyOK.jpg" width="32px" height="32px"  title="Avec"/> 

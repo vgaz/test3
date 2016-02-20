@@ -317,7 +317,8 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     quantite="{{serie.quantite}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
-                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}" >
+                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}"
+                                    style="border-color: {{serie.variete.couleur}}" >
                                     
         <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" 
             title="id={{serie.id}} planche={{planche.num}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />

@@ -10,9 +10,7 @@ from main.Tools import MyTools
 def creationEvt(e_date, e_type, id_serie, duree_j=1, nom=""):
     """création d'une evenement en base
     retourne l'instance de l'évènement"""
-    if isinstance(e_date, str):
-        e_date = MyTools.getDateFrom_d_m_y(e_date)
-        
+    if isinstance(e_date, str): e_date = MyTools.getDateFrom_d_m_y(e_date)
     evt = Evenement()
     evt.type = e_type
     evt.date = e_date
@@ -32,9 +30,7 @@ def creationSerie(id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_de
     serie.planche_id = id_planche
     serie.quantite = quantite
     serie.save()
-    serie.evt_debut_id = creationEvt(date_debut, Evenement.TYPE_DEBUT, serie.id, 1, "Début %s"%serie.variete.nom).id
-    serie.evt_fin_id = creationEvt(date_fin, Evenement.TYPE_FIN,serie.id,  1, "Fin %s"%serie.variete.nom).id
-    serie.save()
+    serie.fixeDates(date_debut, date_fin)
     return serie
    
 def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None): 
@@ -43,7 +39,7 @@ def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None):
     planche.longueur_m = longueur_m
     planche.largeur_cm = largeur_cm
     planche.bSerre = bSerre
-    planche.num = 9999
+#     planche.num = 9999
     if s_nom:
         planche.nom = s_nom
     else:
@@ -141,22 +137,25 @@ class Planche(models.Model):
         if self.bSerre: s_lieu = "sous serre"
         else:           s_lieu = "plein champ"
         return "%s %d, %d m x %d cm; %s" % ( self.nom, self.num, self.longueur_m, self.largeur_cm, s_lieu)
-    
 
 class Variete(models.Model):
-    """variété de plante"""
+    """variété de légume"""
     nom = models.CharField(max_length=100)
     famille = models.ForeignKey(Famille, null=True, blank=True)
     avec = models.ManyToManyField("self", related_name="avec", blank=True)
     sans = models.ManyToManyField("self", related_name="sans", blank=True)
-    date_min_plantation = models.CharField("date (jj/mm) de début de plantation", max_length=10, default="0/0")
-    date_max_plantation = models.CharField("date (jj/mm) de fin de plantation", max_length=10, default="0/0")
-    duree_avant_recolte_j = models.IntegerField("durée en terre avant récolte (jours)", default=0)
+    date_min_plantation_pc = models.CharField("date (jj/mm) de début de plantation en plein champ", max_length=10, default="0/0")
+    date_max_plantation_pc = models.CharField("date (jj/mm) de fin de plantation en plein champ", max_length=10, default="0/0")
+    date_min_plantation_sa = models.CharField("date (jj/mm) de début de plantation sous abris", max_length=10, default="0/0")
+    date_max_plantation_sa = models.CharField("date (jj/mm) de fin de plantation sous abris", max_length=10, default="0/0")
+    duree_avant_recolte_pc_j = models.IntegerField("durée en terre avant récolte (jours)", default=0)
+    duree_avant_recolte_sa_j = models.IntegerField("durée en terre avant récolte (jours)", default=0)
     prod_hebdo_moy_g = models.CommaSeparatedIntegerField("suite de production hebdomadaire moyenne (grammes) pour un plant", max_length=20, default="0") ##attention, pour les légumes "à la pièce" ( choux, salades..), ne saisir qu'une valeur 
     rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
     intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
-    ##image = models.ImageField()
+    b_choisi = models.BooleanField(default=True)
+    couleur = models.CharField(max_length=16)
     
     class Meta:
         ordering = ['nom']
@@ -278,24 +277,23 @@ class Plant(models.Model):
      
     def fixeDates(self, dateDebut, dateFin=None):
         """ crée les evts de debut et fin de vie du/des plants"""
-        e = Evenement()
-        e.type = Evenement.TYPE_DEBUT
-        e.date = dateDebut
-        e.plant_base_id = self.id
-        e.nom = "début %s"%self.variete.nom
-        e.save()
-        self.evt_debut_id = e.id
-        print ("evt debut", e)
-        e = Evenement()
-        e.type = Evenement.TYPE_FIN
-        if dateFin:
-            e.date = dateFin
-        else:
-            e.date = dateDebut + datetime.timedelta(days = self.variete.duree_avant_recolte_j)
-        e.plant_base_id = self.id
-        e.nom = "fin %s"%self.variete.nom
-        e.save()
-        self.evt_fin_id = e.id
+        if isinstance(dateDebut, str): dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
+        if isinstance(dateFin, str): dateFin = MyTools.getDateFrom_d_m_y(dateFin)
+        
+        self.evt_debut_id = creationEvt(dateDebut, 
+                                        Evenement.TYPE_DEBUT, 
+                                        self.id, 
+                                        1, 
+                                        "début %s"%self.variete.nom).id
+       
+        if not dateFin:
+            if self.planche.bSerre:
+                dateFin = self.evt_debut.date + datetime.timedelta(days = self.variete.duree_avant_recolte_sa_j)
+            else:
+                dateFin = self.evt_debut.date + datetime.timedelta(days = self.variete.duree_avant_recolte_pc_j)
+        
+        self.evt_fin_id = creationEvt(dateFin, Evenement.TYPE_DEBUT, self.id, 1, "fin %s"%self.variete.nom).id        
+
         self.save()
    
     def __str__(self):
@@ -307,7 +305,6 @@ class Plant(models.Model):
                                                                                                         self.evt_fin.date)
 
       
-        #             print("nouvelle serie ", plants)
 
 class Evenement(models.Model):
     
@@ -323,7 +320,7 @@ class Evenement(models.Model):
     duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)
     nom = models.CharField(max_length=100, default="")
     texte = models.TextField(default="")
-    bFini = models.BooleanField(default=False)
+    b_fini = models.BooleanField(default=False)
 
     class Meta: 
         ordering = ['date']

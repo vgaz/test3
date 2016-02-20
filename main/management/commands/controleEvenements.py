@@ -14,7 +14,7 @@ class Command(BaseCommand):
         
         self.stdout.write(args)
 
-        l_EvtsRecents = Evenement.objects.filter(bFinie=False, date__gt = datetime.date.today())
+        l_EvtsRecents = Evenement.objects.filter(b_fini=False, date__gt = datetime.date.today())
         
         for evt in l_EvtsRecents:
             msg = "%s" % evt.nom
