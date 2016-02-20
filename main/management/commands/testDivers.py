@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from main import serveRequest, views
 from django.test import RequestFactory
 
-from main.models import Plant, essai_deplacement_plants, clonePlant, Evenement
+from main.models import Plant, essai_deplacement_plants, cloneSerie, Evenement
 
 
 class Command(BaseCommand):
@@ -21,10 +21,12 @@ class Command(BaseCommand):
 #         planification.planif(date_debut_vue, date_fin_vue)
 #         return
         
-#         id_plant = 1
+        id_serie = 4
 #         reste  = essai_deplacement_plants(id_plant, 3, 60, 2)
-#         plant = Plant.objects.get(id=id_plant)
-#         plant2 = clonePlant(plant)
+        plant = Plant.objects.get(id=id_serie)
+        plant2 = cloneSerie(plant)
+        return 
+    
 #         ## maj quantités
 #         plant2.quantite = plant.quantite - reste 
 #         plant2.save()

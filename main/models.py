@@ -102,17 +102,18 @@ def essai_deplacement_plants(idPlant, numPlancheDest, intraRangCm, nbRangs):
         ## pas assez de place, on retourne le nb de plants restant à placer apres remplissage du reste de la planche
         return int(plant.nbPlantsPlacables(abs(reste_m), intraRangCm, nbRangs))
 
-def clonePlant(plant):
-    plant2 = Plant.objects.get(id=plant.id)
-    plant2.id = None
-    plant2.save() ## creation d'un nouveau plant
+def cloneSerie(serie):
+    """clonage d'une série"""
+    serie2 = Plant.objects.get(id=serie.id)
+    serie2.id = None
+    serie2.save() ## mode de création d'une nouvelle serie
     ## duplication des évenements
-    for evt in Evenement.objects.filter(plant_base_id=plant.id):
+    for evt in Evenement.objects.filter(plant_base_id=serie.id):
         evt2 = Evenement.objects.get(id=evt.id)
         evt2.id = None
-        evt2.plant_base_id = plant2.id
+        evt2.plant_base_id = serie2.id
         evt2.save()
-    return plant2
+    return serie2
     
 class Famille(models.Model):
     """famille associée à la plante"""
