@@ -61,32 +61,33 @@ def creationPlanches(request):
 #########################################################"
     
 def chronoPlanches(request):
+
+    try:    
+        print(request.POST)
+        s_msg = ""
+        delta20h = datetime.timedelta(hours=20)
+        date_du_jour = datetime.datetime.now()
     
-    s_msg = ""
-    delta20h = datetime.timedelta(hours=20)
-    date_du_jour = datetime.datetime.now()
+        if request.POST.get("date_debut_vue",""):
+            date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
+            date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
+        else:
+            delta = datetime.timedelta(days=60)
+            date_debut_vue = date_du_jour - delta
+            date_fin_vue = date_du_jour + delta + delta20h
+            
+        decalage_j = int(request.POST.get("decalage_j", 10))
+        delta = datetime.timedelta(days = decalage_j)
+        if request.POST.get("direction", "") == "avance":
+            date_debut_vue += delta 
+            date_fin_vue += delta
+            
+        if request.POST.get("direction", "") == "recul":
+            date_debut_vue -= delta 
+            date_fin_vue -= delta        
 
-    if request.POST.get("date_debut_vue",""):
-        date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
-        date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
-    else:
-        delta = datetime.timedelta(days=60)
-        date_debut_vue = date_du_jour - delta
-        date_fin_vue = date_du_jour + delta + delta20h
-    
-    decalage_j = int(request.POST.get("decalage_j", 10))
-    delta = datetime.timedelta(days = decalage_j)
-    if request.POST.get("direction", "") == "avance":
-        date_debut_vue += delta 
-        date_fin_vue += delta
-    if request.POST.get("direction", "") == "recul":
-        date_debut_vue -= delta 
-        date_fin_vue -= delta        
-
-    try:
-        # gestion de la cration d'une nouvelle série de plants
-        if int(request.POST.get("editSerie_id_serie", -1)) == 0:
-
+        # gestion de la création d'une nouvelle série de plants
+        if request.POST.get("editSerie_id_serie") and  int(request.POST.get("editSerie_id_serie", -1)) == 0:
             snouv = creationSerie(Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
                                  int(request.POST.get("editSerie_id_variete")), 
                                  int(request.POST.get("editSerie_quantite")), 
@@ -94,12 +95,8 @@ def chronoPlanches(request):
                                  int(request.POST.get("editSerie_nb_rangs")), 
                                  request.POST.get("editSerie_date_debut"), 
                                  request.POST.get("editSerie_date_fin"))
-#             l_evts = request.POST.get("evt_date[]")
-#             for index, evt in enumerate(l_evts):
-#                 print(str(evt))
             print(snouv)
             s_msg += "Nouvelle serie créée = %s"%(snouv)
-            
             
         s_nums = request.POST.get("num_planches", request.GET.get("num_planches", ""))
         if s_nums:
@@ -108,7 +105,7 @@ def chronoPlanches(request):
         else:
             l_planches = Planche.objects.all().order_by('num')
     except:
-        s_msg += str(sys.exc_info()[1])
+        s_msg += str(sys.exc_info())
         return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
     
     ## ajout des evts liés à cette planche
@@ -121,11 +118,12 @@ def chronoPlanches(request):
         ## on en deduit les plants impliqués, même partiellement
         l_plantsId = list(set([evt.plant_base_id for evt in l_evts]))
         laPlanche.l_plants = Plant.objects.filter(planche_id = laPlanche, id__in = l_plantsId ).order_by('variete_id')
-        ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle 
+        ## on récupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle 
         s_evts_plants = ""
         for plant in laPlanche.l_plants:
             plant.l_evts = Evenement.objects.filter(plant_base_id = plant.id, type = Evenement.TYPE_DIVERS).order_by('date')
-            
+    
+
     return render(request,
                  'main/chrono_planches.html',
                  {
@@ -254,7 +252,7 @@ def prevision_recolte(request):
     if request.POST.get("date_debut_vue",""):
         date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
         date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
-    else:
+    else:        
         delta = datetime.timedelta(days=30)
         date_debut_vue = date_du_jour - delta
         date_fin_vue = date_du_jour + delta + delta20h
@@ -325,7 +323,7 @@ def quizFamilles(request):
         
         varAsked = Variete.objects.get(id=idVarAsked)
      
-        print("var ", varAsked.id, varAsked.nom, varAsked.famille)
+#         print("var", varAsked.id, varAsked.nom, varAsked.famille)
         
         repIdFam = int(request.POST.get('famChoice', -1))
         

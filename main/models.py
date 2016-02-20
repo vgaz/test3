@@ -276,7 +276,7 @@ class Plant(models.Model):
         return longueurDePlanche_m * 100 * nbRangs / intraRangCm
      
     def fixeDates(self, dateDebut, dateFin=None):
-        """ crée les evts de debut et fin de vie du/des plants"""
+        """Crée les evts de debut et fin de vie du/des plants"""
         if isinstance(dateDebut, str): dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
         if isinstance(dateFin, str): dateFin = MyTools.getDateFrom_d_m_y(dateFin)
         
