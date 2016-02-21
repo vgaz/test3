@@ -1,39 +1,8 @@
 //
-// gestion des planches, plants et evts
+// gestion des planches, séries et evts
 //
 	
-
-function editePlant(hPlant)
-    {
-    // recup evenements liés à ce plant
-    id_plant = hPlant.getAttribute("id")
-    
-    document.getElementById('divEditEvenement').style.display = 'inline'
-    
-    if (id_plant.search("_") != 1)
-        majListEvts(id_plant)
-        
-    // maj variété
-    id_variet  = hPlant.getAttribute("variete")
-    list = document.getElementById("editPlant_select_var").getElementsByTagName("option")
-    for(ii=0;ii<list.length;ii++)
-        if (list[ii].value == id_variet)
-            {
-            document.getElementById("editPlant_select_var").options[ii].selected=true
-            break
-           }
-
-    // maj attributs plant                   
-    document.getElementById("editPlant_id_planche").innerHTML = "A FAIRE"
-    document.getElementById("editPlant_plantId").innerHTML = id_plant
-    document.getElementById("editPlant_quantite").value = hPlant.getAttribute("quantite")
-    document.getElementById("editPlant_date_debut").value =  hPlant.getAttribute("date_debut")
-    document.getElementById("editPlant_date_fin").value =  hPlant.getAttribute("date_fin")
-    document.getElementById("divEditPlant").style.display = "inline"
-    }
-        
-
-    
+   
 function changelePas(delta)
 {
     decalage_j += delta
@@ -49,10 +18,10 @@ function getTicket()
 }
    
     
-function majListEvts(id_plant)
+function majListEvts(id_serie)
     {
-    // recup evts du plant
-    s_request = "cde=getEvtsPlant&id="+ id_plant
+    // recup evts du serie
+    s_request = "cde=getEvtsPlant&id="+ id_serie
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)
     s_debut = ""
@@ -70,27 +39,14 @@ function majListEvts(id_plant)
         }    
     s_evts += s_debut + s_fin + "</table>\n"
 
-    document.getElementById("editPlant_evts").innerHTML = s_evts
+    document.getElementById("editeSerie_evts").innerHTML = s_evts
     }
     
-function  editeDeplacement(id_plant_orig)
-    {
-    	hPlant = document.getElementById(id_plant_orig)
-    	hDivDepl = document.getElementById("div_deplacement_plants")
-    	hDivDepl.style.display = "block"
-    	hDivDepl.style.left = "10px"
-    	document.getElementById("deplacement_variete").innerHTML = hPlant.getAttribute("nom_variete")
-    	document.getElementById("deplacement_id_plant").value = id_plant_orig
-    	document.getElementById("deplacement_intra_rang_cm").value = hPlant.getAttribute("intra_rang_cm")
-    	document.getElementById("deplacement_nb_rangs").value = hPlant.getAttribute("nb_rangs")
-    	hDivDepl.style.top = hPlant.offsetTop + "px"
-//    	alert ("id planche = " + hPlant.parentNode.getAttribute("id"))
 
-    }    
 function  deplacement(hForm)
     {
 	//appel serveRequest 
-    s_request = "cde=deplacement_plant&id_plant=" + document.getElementById("deplacement_id_plant").value
+    s_request = "cde=deplacement_serie&id_serie=" + document.getElementById("deplacement_id_serie").value
     s_request += "&id_planche_src=0"
     s_request += "&num_planche_dest=" + document.getElementById("deplacement_num_planche_dest").value
     s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value

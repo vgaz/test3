@@ -12,8 +12,8 @@ import main.Tools.MyTools as MyTools
 
 import datetime
 
-from main.models import Variete, Famille, Evenement, Planche, Plant, Production
-from main.models import recupListePlantsEnDateDu, creationPlanche, creationSerie
+from main.models import Variete, Famille, Evenement, Planche, Serie, Production
+from main.models import recupListeSeriesEnDateDu, creationPlanche, creationSerie
 from main.forms import PlancheForm
 
 #################################################
@@ -113,15 +113,15 @@ def chronoPlanches(request):
         ## on prend tous les evts de l'encadrement pour les planches sélectionnées
         l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
                                           date__lte = date_fin_vue, 
-                                          plant_base__in = Plant.objects.filter(planche_id = laPlanche))
+                                          serie__in = Serie.objects.filter(planche_id = laPlanche))
 
-        ## on en deduit les plants impliqués, même partiellement
-        l_plantsId = list(set([evt.plant_base_id for evt in l_evts]))
-        laPlanche.l_plants = Plant.objects.filter(planche_id = laPlanche, id__in = l_plantsId ).order_by('variete_id')
-        ## on récupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle 
-        s_evts_plants = ""
-        for plant in laPlanche.l_plants:
-            plant.l_evts = Evenement.objects.filter(plant_base_id = plant.id, type = Evenement.TYPE_DIVERS).order_by('date')
+        ## on en deduit les series impliqués, même partiellement
+        l_seriesId = list(set([evt.serie_id for evt in l_evts]))
+        laPlanche.l_series = Serie.objects.filter(planche_id = laPlanche, id__in = l_seriesId ).order_by('variete_id')
+        ## on récupère de nouveau tous les évenements des series impactés , même ceux hors fenetre temporelle 
+        s_evts_series = ""
+        for serie in laPlanche.l_series:
+            serie.l_evts = Evenement.objects.filter(serie_id = serie.id, type = Evenement.TYPE_DIVERS).order_by('date')
     
 
     return render(request,
@@ -130,7 +130,7 @@ def chronoPlanches(request):
                   "appVersion": constant.APP_VERSION,
                   "appName": constant.APP_NAME,
                   "l_planches": l_planches,
-                  "s_evts_plants":s_evts_plants,
+                  "s_evts_series":s_evts_series,
                   "d_evtTypes":Evenement.D_NOM_TYPES,
                   "l_vars": Variete.objects.all(),                  
                   "date_debut_vue": date_debut_vue,
@@ -166,14 +166,12 @@ def evenementsPlanches(request):
         date_debut_vue -= delta 
         date_fin_vue -= delta        
     
-    ## on prend tous les evts de l'encadrement pour la planche courrante
+    ## on prend tous les evts deserie l'encadrement pour la planche courante
     l_evts = Evenement.objects.filter(date__gte = date_debut_vue, date__lte = date_fin_vue)
     for evt in l_evts:
-        plant = Plant.objects.get(id = evt.plant_base_id)
-        planche = Planche.objects.get(id = plant.planche_id)
+        serie = Serie.objects.get(id = evt.serie_id)
+        planche = Planche.objects.get(id = serie.planche_id)
         evt.planche_num = planche.num
-
-#     plant_base__in = Plant.objects.filter(planche_id = laPlanche))
 
     return render(request,
                  'main/evenements.html',
@@ -227,7 +225,7 @@ def editionPlanche(request):
     if request.POST.get("delta", "") == "-10":
         dateVue += datetime.timedelta(days=-10)
 
-    l_plants = recupListePlantsEnDateDu(dateVue, planche.id)
+    l_series = recupListeSeriesEnDateDu(dateVue, planche.id)
 
     
     return render(request,
@@ -238,7 +236,7 @@ def editionPlanche(request):
                   "l_vars":Variete.objects.all(),
                   "l_evtTypes":Evenement.D_NOM_TYPES.items(),
                   "d_evtTypes":Evenement.D_NOM_TYPES,
-                  "l_plants":l_plants,
+                  "l_series":l_series,
                   "date":dateVue
                   })
 

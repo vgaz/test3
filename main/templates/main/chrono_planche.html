@@ -29,7 +29,7 @@
     NomEvtDeId = {  {% for evtType in l_typesEvt %} '{{evtType.id}}':'{{evtType.nom}}',{% endfor %}  }
     
     jsonEvts = '{"evts":[{% for evt in l_evts %}\
-                {"id":"{{evt.id}}","nom":"{{evt.nom}}","date":"{{evt.date|safe}}","duree":"{{evt.duree_j}}","type":"{{evt.type}}","id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}\
+                {"id":"{{evt.id}}","nom":"{{evt.nom}}","date":"{{evt.date|safe}}","duree":"{{evt.duree_j}}","type":"{{evt.type}}","id_plant":"{{evt.serie_id}}"}{% if not forloop.last %},{% endif %}\
                 {% endfor %}]}'	
 
 function    init()
@@ -52,7 +52,7 @@ function    init()
         }
 
     //document.getElementById("divInfoDebug").innerHTML = s_info
-    balisagePlants()
+    balisageSeries()
     
     // ajout ligne date du jour
     hBarreCeJour = document.getElementById("date_du_jour")
@@ -61,7 +61,7 @@ function    init()
     hBarreCeJour.style.marginLeft = delta * pxParH + "px" 
     }
     
-function  balisagePlants()
+function  balisageSeries()
     {
     for (pl in EvtsDePlant)
         {
@@ -69,7 +69,7 @@ function  balisagePlants()
         fin = ""
         for (ii=0;ii<hJsonEvts.evts.length;ii++)
             {
-            // on balaye plant par plant car les evt sont ordonnés par id_plant
+            // on balaye serie par serie car les evt sont ordonnés par id_plant
             
             if (hJsonEvts.evts[ii].id_plant == pl)
                 {
@@ -113,7 +113,7 @@ function changelePas(delta)
 
 {% endblock %}
 
-{% block title %}Suivi temporel des plants de la planche {{planche.num}} ({{planche.largeur_cm}} cm x {{planche.longueur_m}} m) {% endblock %}
+{% block title %}Suivi temporel des séries de la planche {{planche.num}} ({{planche.largeur_cm}} cm x {{planche.longueur_m}} m) {% endblock %}
 
 {% block content %}
 
@@ -138,13 +138,13 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     <div id="cadre_chrono">
     <div id="date_du_jour"> </div>
         
-        {# plants existants en base #}
-        {% for plant in l_plants %}
-        <div class="chrono_plant" id="{{plant.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
-        variete="{{plant.variete_id}}" debut="{{plant.debut}}" fin="{{plant.duree_j}}" >
-        <div><div class="num_plant" style="display: inline;">({{plant.id}}) </div><div class="variete" style="display: inline;">{{plant.variete}}</div><br/>
+        {# séries existantes en base #}
+        {% for serie in l_plants %}
+        <div class="chrono_plant" id="{{serie.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
+        variete="{{serie.variete_id}}" debut="{{serie.debut}}" fin="{{serie.duree_j}}" >
+        <div><div class="num_plant" style="display: inline;">({{serie.id}}) </div><div class="variete" style="display: inline;">{{serie.variete}}</div><br/>
 
-        <div class="debut" style="display: inline;float:left">ddd{{plant.debut}}</div><br/><div class="fin" style="display:inline;float:right">{{plant.fin}}fin ?</div>
+        <div class="debut" style="display: inline;float:left">ddd{{serie.debut}}</div><br/><div class="fin" style="display:inline;float:right">{{serie.fin}}fin ?</div>
         <br/><div class="evts" style="display: inline;float:left"> </div></div>
         </div>
         {% endfor %}

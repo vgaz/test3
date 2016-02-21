@@ -16,14 +16,14 @@ def creationEvt(e_date, e_type, id_serie, duree_j=1, nom=""):
     evt.date = e_date
     evt.duree_j = duree_j
     evt.nom = nom
-    evt.plant_base_id = id_serie
+    evt.serie_id = id_serie
     evt.save()
     return evt
 
  
-def creationSerie(id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_debut, date_fin):
+def creationSerie(id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_debut, date_fin=None):
     """Création d'une série de plants ou graines"""
-    serie = Plant()
+    serie = Serie()
     serie.variete_id = id_var
     serie.intra_rang_cm = intra_rang_cm
     serie.nb_rangs = nb_rangs
@@ -32,14 +32,13 @@ def creationSerie(id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_de
     serie.save()
     serie.fixeDates(date_debut, date_fin)
     return serie
-   
+
 def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None): 
     """Création d'une planche"""
     planche  = Planche()
     planche.longueur_m = longueur_m
     planche.largeur_cm = largeur_cm
     planche.bSerre = bSerre
-#     planche.num = 9999
     if s_nom:
         planche.nom = s_nom
     else:
@@ -47,44 +46,43 @@ def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None):
         
     planche.save()
     
-    if num :
-        planche.num = num
-    else:
-        planche.num = planche.id
+    if num is not None :    planche.num = num
+    else:                   planche.num = planche.id
+        
     planche.save()
     return planche
            
-def recupListePlantsEnDateDu(la_date, id_planche):
+def recupListeSeriesEnDateDu(la_date, id_planche):
     """Filtrage des séries de plants presents à telle date"""
     l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = la_date)
-    l_PlantsIds = list(l_evts_debut.values_list('plant_base_id', flat=True))
-    ## recup des evenements de fin ayant les mêmes id_plant que les evts de debut 
-    l_evts = Evenement.objects.filter(type = Evenement.TYPE_FIN, plant_base_id__in = l_PlantsIds, date__gte = la_date)
-    ## récup des id de plants dans cet encarement temporel
-    l_PlantsIds = l_evts.values_list('plant_base_id', flat=True)
-    l_plants = Plant.objects.filter(id__in = l_PlantsIds)
+    l_SeriesIds = list(l_evts_debut.values_list('serie_id', flat=True))
+    ## recup des evenements de fin ayant les mêmes id_serie que les evts de debut 
+    l_evts = Evenement.objects.filter(type = Evenement.TYPE_FIN, serie_id__in = l_SeriesIds, date__gte = la_date)
+    ## récup des id de series dans cet encarement temporel
+    l_SeriesIds = l_evts.values_list('serie_id', flat=True)
+    l_series = Serie.objects.filter(id__in = l_SeriesIds)
     if id_planche:
-        l_plants = Plant.objects.filter(planche_id = id_planche)
+        l_series = Serie.objects.filter(planche_id = id_planche)
     
-    return l_plants
+    return l_series
 
 
-def essai_deplacement_plants(idPlant, numPlancheDest, intraRangCm, nbRangs): 
-    """tentative de placement de plants ref <idPlant> sur planche <idPlancheDest> en fonction du nb de rang et distance dans le rang
-    retourne le nombre de plants restants à placer ailleurs si le nb de plants est trop important pour la planche (déjà occupée ou trop courte par exemple)
+def essaiDeplacementSeries(idSerie, numPlancheDest, intraRangCm, nbRangs): 
+    """tentative de placement de series ref <idSerie> sur planche <idPlancheDest> en fonction du nb de rang et distance dans le rang
+    retourne le nombre de series restants à placer ailleurs si le nb de series est trop important pour la planche (déjà occupée ou trop courte par exemple)
     0 si tout peut etre placé sur la planche 
     """
-    plant = Plant.objects.get(id = idPlant)
+    serie = Serie.objects.get(id = idSerie)
     planche = Planche.objects.get(num = numPlancheDest)
     
     cumul_max_m = 0
     ## pour chaque jour sur la planche, on calcule la distance de planche restante
-    for day in MyTools.jourApresJour(plant.evt_debut.date, plant.evt_fin.date):
+    for day in MyTools.jourApresJour(serie.evt_debut.date, serie.evt_fin.date):
         cumul_m = 0
-        ## recup des plants sur la planche à cette date et cumul des longeur sur planche    
-        l_plants = recupListePlantsEnDateDu(day, planche.id)
+        ## recup des series sur la planche à cette date et cumul des longeur sur planche    
+        l_series = recupListeSeriesEnDateDu(day, planche.id)
         
-        for p in l_plants:
+        for p in l_series:
             cumul_m += p.longueurSurPlanche_m()
 
         print (day, cumul_m, "m occupés sur ", planche.longueur_m, "m (cumul max =", cumul_max_m, ")" )
@@ -92,31 +90,31 @@ def essai_deplacement_plants(idPlant, numPlancheDest, intraRangCm, nbRangs):
         cumul_max_m = max((cumul_max_m, cumul_m))
         
     libre_m = planche.longueur_m - cumul_max_m
-    print ("libre=%dm besoin=%dm"%(libre_m, plant.longueurSurPlanche_m( intraRangCm, nbRangs)))
+    print ("libre=%dm besoin=%dm"%(libre_m, serie.longueurSurPlanche_m( intraRangCm, nbRangs)))
 
-    reste_m = libre_m - plant.longueurSurPlanche_m(intraRangCm, nbRangs)
+    reste_m = libre_m - serie.longueurSurPlanche_m(intraRangCm, nbRangs)
     if reste_m >=0:
-        ## assez de place, on peut caser tous les plants
+        ## assez de place, on peut caser tous les series
         return 0
     else:
-        ## pas assez de place, on retourne le nb de plants restant à placer apres remplissage du reste de la planche
-        return int(plant.nbPlantsPlacables(abs(reste_m), intraRangCm, nbRangs))
+        ## pas assez de place, on retourne le nb de series restant à placer apres remplissage du reste de la planche
+        return int(serie.nbSeriesPlacables(abs(reste_m), intraRangCm, nbRangs))
 
 def cloneSerie(serie):
     """clonage d'une série"""
-    serie2 = Plant.objects.get(id=serie.id)
+    serie2 = Serie.objects.get(id=serie.id)
     serie2.id = None
     serie2.save() ## mode de création d'une nouvelle serie
     ## duplication des évenements
-    for evt in Evenement.objects.filter(plant_base_id=serie.id):
+    for evt in Evenement.objects.filter(serie_id=serie.id):
         evt2 = Evenement.objects.get(id=evt.id)
         evt2.id = None
-        evt2.plant_base_id = serie2.id
+        evt2.serie_id = serie2.id
         evt2.save()
     return serie2
     
 class Famille(models.Model):
-    """famille associée à la plante"""
+    """famille associée à la varieté"""
     nom = models.CharField(max_length=100)
     
     class Meta: 
@@ -219,10 +217,10 @@ class Production(models.Model):
                                                              self.qte_prod, 
                                                              self.variete.nomUniteProd())
 
-class Plant(models.Model):
+class Serie(models.Model):
     
     class Meta:
-        verbose_name = "Plant ou série de plants"
+        verbose_name = "Serie ou série de plants"
 
     variete = models.ForeignKey(Variete)
     nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
@@ -248,7 +246,7 @@ class Plant(models.Model):
 
     def longueurSurPlanche_m(self, intra_rang_cm=None, nb_rangs=None):
         """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
-        intra_rang_cm et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend ceux du plant défini"""
+        intra_rang_cm et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend les parametres prédéfinis"""
         if not intra_rang_cm:
             intra_rang_cm = self.intra_rang_cm
         if not nb_rangs:
@@ -259,7 +257,7 @@ class Plant(models.Model):
     
     def surfaceSurPlanche_m2(self, intra_rang_cm=None, nb_rangs=None):
         """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
-        intra_rang_cm et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend ceux du plant défini"""
+        intra_rang_cm et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend ceux prédéfinis"""
         if not intra_rang_cm:
             intra_rang_cm = self.intra_rang_cm
         if not nb_rangs:
@@ -267,7 +265,7 @@ class Plant(models.Model):
                         
         return (self.longueurSurPlanche_m() * self.planche.largeur_cm/100)
     
-    def nbPlantsPlacables(self, longueurDePlanche_m, intraRangCm=None, nbRangs=None):
+    def nbSeriesPlacables(self, longueurDePlanche_m, intraRangCm=None, nbRangs=None):
         if not intraRangCm:
             intraRangCm = self.intra_rang_cm
         assert intraRangCm, Exception("intraRangCm non défini")
@@ -315,7 +313,7 @@ class Evenement(models.Model):
     D_NOM_TYPES = {TYPE_DEBUT:"Début", TYPE_FIN:"Fin", TYPE_DIVERS:"Divers"}
 
     type =  models.PositiveIntegerField()
-    plant_base = models.ForeignKey(Plant)
+    serie = models.ForeignKey(Serie)
     date = models.DateTimeField()
     date_creation = models.DateTimeField(default=datetime.datetime.now())
     duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)
@@ -331,5 +329,5 @@ class Evenement(models.Model):
 
                     
     def __str__(self):
-        return "Evt %s %s pour plant %d, %s pour %d j"%(self.nomType(), self.id or "?", self.plant_base_id, self.date, self.duree_j )
+        return "Evt %s %s pour serie %d, %s pour %d j"%(self.nomType(), self.id or "?", self.serie_id, self.date, self.duree_j )
              

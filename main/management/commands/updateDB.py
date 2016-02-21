@@ -106,10 +106,11 @@ class Command(BaseCommand):
 
             v.save()
  
+ 
         creationPlanche(10000, 100, False, "Planche Virtuelle", constant.PLANCHE_VIRTUELLE_NUM)
         creationPlanche(100, 100, False, "", 1)
         creationPlanche(80, 100, False, "", 2)
-        creationPlanche(30, 100, False, "Serre3", 3)
+        creationPlanche(30, 100, True, "Serre3", 3)
         print("end of command " + self.__doc__)  
         
         
