@@ -20,10 +20,13 @@ def creationEvt(e_date, e_type, id_serie, duree_j=1, nom=""):
     evt.save()
     return evt
 
- 
-def creationSerie(id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_debut, date_fin=None):
-    """Création d'une série de plants ou graines"""
-    serie = Serie()
+
+def creationEditionSerie(id_serie, id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_debut, date_fin=None):
+    """Création ou edition d'une série de plants"""
+    if id_serie == 0:
+        serie = Serie() ## nelle serie
+    else:
+        serie = Serie.objects.get(id=id_serie)
     serie.variete_id = id_var
     serie.intra_rang_cm = intra_rang_cm
     serie.nb_rangs = nb_rangs
@@ -275,28 +278,29 @@ class Serie(models.Model):
         return longueurDePlanche_m * 100 * nbRangs / intraRangCm
      
     def fixeDates(self, dateDebut, dateFin=None):
-        """Crée les evts de debut et fin de vie du/des plants"""
+        """Crée les evts de début et fin de vie du/des plants"""
         if isinstance(dateDebut, str): dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
-        if isinstance(dateFin, str): dateFin = MyTools.getDateFrom_d_m_y(dateFin)
-        
         self.evt_debut_id = creationEvt(dateDebut, 
                                         Evenement.TYPE_DEBUT, 
                                         self.id, 
                                         1, 
                                         "début %s"%self.variete.nom).id
-       
         if not dateFin:
             if self.planche.bSerre:
                 dateFin = self.evt_debut.date + datetime.timedelta(days = self.variete.duree_avant_recolte_sa_j)
             else:
                 dateFin = self.evt_debut.date + datetime.timedelta(days = self.variete.duree_avant_recolte_pc_j)
         
-        self.evt_fin_id = creationEvt(dateFin, Evenement.TYPE_DEBUT, self.id, 1, "fin %s"%self.variete.nom).id        
+        if isinstance(dateFin, str): dateFin = MyTools.getDateFrom_d_m_y(dateFin)
+        self.evt_fin_id = creationEvt(dateFin, 
+                                      Evenement.TYPE_DEBUT, 
+                                      self.id, 1, 
+                                      "fin %s"%self.variete.nom).id        
 
         self.save()
    
     def __str__(self):
-        return "Série (%d) de %d plant(s) de %s sur planche %d, %d cm dans le rang sur %d rangs, du %s au %s" %(  self.id, self.quantite, self.variete.nom, 
+        return "Série N°%d de %d plants de %s sur planche %d, %d cm dans le rang sur %d rangs, du %s au %s" %(  self.id, self.quantite, self.variete.nom, 
                                                                                                         self.planche.num,
                                                                                                         self.intra_rang_cm, 
                                                                                                         self.nb_rangs, 

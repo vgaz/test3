@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
-        creationPlanche(10000, 100, False, "Planche Virtuelle", constant.PLANCHE_VIRTUELLE_NUM)
+#         creationPlanche(10000, 100, False, "Planche Virtuelle", constant.PLANCHE_VIRTUELLE_NUM)
 
 #         from main import planification
 # 
@@ -23,10 +23,11 @@ class Command(BaseCommand):
 #         planification.planif(date_debut_vue, date_fin_vue)
 #         return
         
-        id_serie = 4
+        id_serie = 3
 #         reste  = essaiDeplacementSeries(id_plant, 3, 60, 2)
-        serie = serie.objects.get(id=id_serie)
+        serie = Serie.objects.get(id=id_serie)
         serie2 = cloneSerie(serie)
+        print (serie2)
         return 
     
 #         ## maj quantités

@@ -13,7 +13,7 @@ import main.Tools.MyTools as MyTools
 import datetime
 
 from main.models import Variete, Famille, Evenement, Planche, Serie, Production
-from main.models import recupListeSeriesEnDateDu, creationPlanche, creationSerie
+from main.models import recupListeSeriesEnDateDu, creationPlanche, creationEditionSerie
 from main.forms import PlancheForm
 
 #################################################
@@ -87,16 +87,17 @@ def chronoPlanches(request):
             date_fin_vue -= delta        
 
         # gestion de la création d'une nouvelle série de plants
-        if request.POST.get("editSerie_id_serie") and  int(request.POST.get("editSerie_id_serie", -1)) == 0:
-            snouv = creationSerie(Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
-                                 int(request.POST.get("editSerie_id_variete")), 
-                                 int(request.POST.get("editSerie_quantite")), 
-                                 int(request.POST.get("editSerie_intra_rang_cm")), 
-                                 int(request.POST.get("editSerie_nb_rangs")), 
-                                 request.POST.get("editSerie_date_debut"), 
-                                 request.POST.get("editSerie_date_fin"))
+        if request.POST.get("editSerie_id_serie"):
+            snouv = creationEditionSerie(int(request.POST.get("editSerie_id_serie")),
+                                        Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
+                                        int(request.POST.get("editSerie_id_variete")), 
+                                        int(request.POST.get("editSerie_quantite")), 
+                                        int(request.POST.get("editSerie_intra_rang_cm")), 
+                                        int(request.POST.get("editSerie_nb_rangs")), 
+                                        request.POST.get("editSerie_date_debut"), 
+                                        request.POST.get("editSerie_date_fin"))
             print(snouv)
-            s_msg += "Nouvelle serie créée = %s"%(snouv)
+            s_msg += str(snouv)
             
         s_nums = request.POST.get("num_planches", request.GET.get("num_planches", ""))
         if s_nums:
@@ -185,7 +186,7 @@ def evenementsPlanches(request):
                   "decalage_j": decalage_j
                   })
     
-    #################################################
+#################################################
 
 class CreationPlanche(CreateView):
     
@@ -202,8 +203,6 @@ class CreationPlanche(CreateView):
     
     def dispatch(self, *args, **kwargs):
         return super(CreationPlanche, self).dispatch(*args, **kwargs)
-  
-
 
 #################################################
 
@@ -227,7 +226,6 @@ def editionPlanche(request):
 
     l_series = recupListeSeriesEnDateDu(dateVue, planche.id)
 
-    
     return render(request,
                  'main/edition_planche.html',
                  {
@@ -296,7 +294,7 @@ def prevision_recolte(request):
 
 def tab_varietes(request):
     
-    l_vars = Variete.objects.filter(famille__isnull=False)
+    l_vars = Variete.objects.filter(b_choisi=True)
     for v in l_vars:
         v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
      

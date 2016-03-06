@@ -182,13 +182,13 @@ function supprime_planche(plId)
         alert(jsonRep.err)
     }
 
-function prepareAjouteSerie(num_planche)
+function prepareAjouteSerie(hCaller, num_planche)
     {
-    hDiv = document.getElementById('divEditSerie')
+    hDiv = document.getElementById("divEditSerie")
     hDiv.style.display = "block"
     hDiv.style.position = "absolute"
     hDiv.style.left = "10px"
-    hDiv.top = hDiv.offsetTop
+    hDiv.style.top = hCaller.offsetTop + "px" // decale à la hauteur de la planche à garnir
     document.getElementById("editSerie_num_planche").value = num_planche
     document.getElementById("editSerie_id_serie").value = 0
     document.getElementById("editSerie_id_serie").readOnly = true
@@ -299,7 +299,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     <div class="barre_du_jour"> </div>
    
     <h2>{{planche}}
-        <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie({{planche.num}});return false"> 
+        <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie(this, {{planche.num}});return false"> 
            
     </h2>
 

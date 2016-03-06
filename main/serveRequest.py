@@ -8,7 +8,7 @@ Created on Nov 26, 2013
 from django.http import HttpResponse
 
 from main.models import Evenement, Serie, Planche, Production
-from main.models import creationPlanche, creationSerie, essaiDeplacementSeries, cloneSerie
+from main.models import creationPlanche, creationEditionSerie, essaiDeplacementSeries, cloneSerie
 import sys, traceback
 import datetime
 from main import constant
@@ -51,17 +51,18 @@ def serveRequest(request):
     if cde =='sauve_serie':
         try:
             # gestion de la création d'une nouvelle série de plants
-            if request.POST.get("editSerie_id_serie") and  int(request.POST.get("editSerie_id_serie", -1)) == 0:
-                snouv = creationSerie(Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
-                                     int(request.POST.get("editSerie_id_variete")), 
-                                     int(request.POST.get("editSerie_quantite")), 
-                                     int(request.POST.get("editSerie_intra_rang_cm")), 
-                                     int(request.POST.get("editSerie_nb_rangs")), 
-                                     request.POST.get("editSerie_date_debut"), 
-                                     request.POST.get("editSerie_date_fin"))
-                print(snouv)
-                s_msg += "Nouvelle série créée = %s"%(snouv)
-                s_json = '{"status":"true","msg":%s}'%snouv
+            if request.POST.get("editSerie_id_serie"):
+                id_serie = int(request.POST.get("editSerie_id_serie"))
+                serie = creationEditionSerie(id_serie,
+                                    Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
+                                    int(request.POST.get("editSerie_id_variete")), 
+                                    int(request.POST.get("editSerie_quantite")), 
+                                    int(request.POST.get("editSerie_intra_rang_cm")), 
+                                    int(request.POST.get("editSerie_nb_rangs")), 
+                                    request.POST.get("editSerie_date_debut"), 
+                                    request.POST.get("editSerie_date_fin"))
+                print(serie)
+                s_json = '{"status":"true","msg":"%s"}'%serie
         except:
             ex_type, ex, tb = sys.exc_info()
             print (ex_type, ex)
@@ -187,7 +188,7 @@ def serveRequest(request):
             intra_rang_cm = int(request.POST.get("intra_rang_cm"))
             planche_dest = Planche.objects.get(num=int(request.POST.get("num_planche_dest")))
             b_simu = request.POST.get("simulation") == "true"
-            reste = essai_deplacement_serie(serie.id, planche_dest.num, intra_rang_cm, nb_rangs)
+            reste = essaiDeplacementSeries(serie.id, planche_dest.num, intra_rang_cm, nb_rangs)
             
             if b_simu:
                 if reste == 0:
