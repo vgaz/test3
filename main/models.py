@@ -150,9 +150,10 @@ class Variete(models.Model):
     date_max_plantation_pc = models.CharField("date (jj/mm) de fin de plantation en plein champ", max_length=10, default="0/0")
     date_min_plantation_sa = models.CharField("date (jj/mm) de début de plantation sous abris", max_length=10, default="0/0")
     date_max_plantation_sa = models.CharField("date (jj/mm) de fin de plantation sous abris", max_length=10, default="0/0")
-    duree_avant_recolte_pc_j = models.IntegerField("durée en terre avant récolte (jours)", default=0)
-    duree_avant_recolte_sa_j = models.IntegerField("durée en terre avant récolte (jours)", default=0)
-    prod_hebdo_moy_g = models.CommaSeparatedIntegerField("suite de production hebdomadaire moyenne (grammes) pour un plant", max_length=20, default="0") ##attention, pour les légumes "à la pièce" ( choux, salades..), ne saisir qu'une valeur 
+    duree_avant_recolte_pc_j = models.IntegerField("durée plein champ avant récolte (jours)", default=0)
+    duree_avant_recolte_sa_j = models.IntegerField("durée en serre avant récolte (jours)", default=0)
+    prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)
+    etalement_recolte_j = models.IntegerField("éta  lement de la récolte (jours)", default=0)
     rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
     intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
@@ -186,8 +187,8 @@ class Variete(models.Model):
 
     def prodSemaines(self, productionDemandee):
         """ retourne une liste de production(s) escomptée(s) par semaine (en kg ou en unités)"""
-        if self.prod_hebdo_moy_g == "0":
-            assert "prod hebdo non donnée pour %s"%self.prod_hebdo_moy_g.variete.nom
+        if self.prod_kg_par_m2 == "0":
+            assert "rendement /m2 non donnée pour %s"%self.nom
         
         l_ret = []
         
@@ -233,6 +234,18 @@ class Serie(models.Model):
     evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
     
+    def prodSemaines(self):
+        """Retourne la production sur n semaines"""
+        l_ret = []
+        prodKg = variete.prod_kg_par_m2 * self.donneSurface()
+        nbSemaines = int(variete.etalement_recolte_j / 7) + 1
+        poidsParSem = prodKg / nbSemaines
+        cumul = prodKg
+        while (cumul>0):
+            l_ret.append(int(poidsParSem))
+            cumul -= int(poidsParSem)                
+                
+        return(l_ret)
     
     def donneSurface(self):
         if not intraRangCm:

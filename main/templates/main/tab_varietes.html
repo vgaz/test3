@@ -30,7 +30,8 @@
             <br/>
             Unité de comptage (Kg ou U) : <input style="width: 40px" type="text" name="{{var.pk}}_nomUniteProd" value="{{var.nomUniteProd}}" /><br/>
             Rendement plants/graines (%):  <input style="width:40px" type="text" name="{{var.pk}}_rendement_plants_graines_pourcent" value="{{var.rendement_plants_graines_pourcent}}" /> <br/>
-            Production hebdomadaire {% if var.unite_prod == 2 %}(u){% else %}(g){% endif %} <input style="width: 40px" type="text" name="{{var.pk}}_prod_hebdo_moy_g" value="{{var.prod_hebdo_moy_g}}" />  <br/>
+            Production kg/ha <input style="width: 40px" type="text" name="{{var.pk}}_prod_kg_ha" value="{{var.prod_kg_ha}}" /> 
+            {% if var.unite_prod == 2 %}(u){% else %}(g){% endif %}  <br/>
             </td>
           </tr>
           <tr>
