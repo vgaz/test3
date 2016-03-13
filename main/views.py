@@ -284,17 +284,38 @@ def prevision_recolte(request):
 #################################################
 
 def tab_varietes(request):
+    s_info = ""
+    try:
+        l_vars = Variete.objects.filter(b_choisi=True)
+        if request.POST:
+            for v in l_vars:
+                s_pk = "v_%s_"% str(v.pk)
+                print(s_pk)
+                v.date_min_plantation_pc = request.POST.get(s_pk + "date_min_plantation_pc",'0/0')
+                v.date_max_plantation_pc = request.POST.get(s_pk + "date_max_plantation_pc",'0/0')
+                v.date_min_plantation_sa = request.POST.get(s_pk + "date_min_plantation_sa",'0/0')
+                v.date_max_plantation_sa = request.POST.get(s_pk + "date_max_plantation_sa",'0/0')
+                v.duree_avant_recolte_pc_j = int(request.POST.get(s_pk + "duree_avant_recolte_pc_j",0))
+                v.duree_avant_recolte_sa_j = int(request.POST.get(s_pk + "duree_avant_recolte_sa_j",0))
+                v.prod_kg_par_m2 = float(request.POST.get(s_pk + "prod_kg_par_m2",0))
+                v.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent",100))
+                v.intra_rang_cm = int(request.POST.get(s_pk + "intra_rang_cm",10))
+                v.save()
+      
     
-    l_vars = Variete.objects.filter(b_choisi=True)
-    for v in l_vars:
-        v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
-     
+        for v in l_vars:
+            v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
+    
+    except:
+        s_info += str(sys.exc_info()[1])
+        
     return render(request,
                  'main/tab_varietes.html',
                  {
                   "l_vars":l_vars,
                   "l_fams":Famille.objects.all(),
                   "appVersion":constant.APP_VERSION,
+                  "info":s_info
                   })
     
 #################################################

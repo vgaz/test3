@@ -147,10 +147,10 @@ class Variete(models.Model):
     famille = models.ForeignKey(Famille, null=True, blank=True)
     avec = models.ManyToManyField("self", related_name="avec", blank=True)
     sans = models.ManyToManyField("self", related_name="sans", blank=True)
-    date_min_plantation_pc = models.CharField("date (jj/mm) de début de plantation en plein champ", max_length=10, default="0/0")
-    date_max_plantation_pc = models.CharField("date (jj/mm) de fin de plantation en plein champ", max_length=10, default="0/0")
-    date_min_plantation_sa = models.CharField("date (jj/mm) de début de plantation sous abris", max_length=10, default="0/0")
-    date_max_plantation_sa = models.CharField("date (jj/mm) de fin de plantation sous abris", max_length=10, default="0/0")
+    date_min_plantation_pc = models.CharField(verbose_name="date (jj/mm) de début de plantation en plein champ", max_length=10, default="0/0")
+    date_max_plantation_pc = models.CharField(verbose_name="date (jj/mm) de fin de plantation en plein champ", max_length=10, default="0/0")
+    date_min_plantation_sa = models.CharField(verbose_name="date (jj/mm) de début de plantation sous abris", max_length=10, default="0/0")
+    date_max_plantation_sa = models.CharField(verbose_name="date (jj/mm) de fin de plantation sous abris", max_length=10, default="0/0")
     duree_avant_recolte_pc_j = models.IntegerField("durée plein champ avant récolte (jours)", default=0)
     duree_avant_recolte_sa_j = models.IntegerField("durée en serre avant récolte (jours)", default=0)
     prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)
@@ -164,7 +164,13 @@ class Variete(models.Model):
         ordering = ['nom']
             
     def __str__(self):
-        return(self.nom) 
+        return """%s \ndate_min_plantation_pc:%s date_max_plantation_pc:%s
+                    date_min_plantation_sa:%s date_max_plantation_sa:%s"""%(self.nom, 
+                                                                      self.date_min_plantation_pc,
+                                                                      self.date_max_plantation_pc,
+                                                                      self.date_min_plantation_sa,
+                                                                      self.date_max_plantation_sa
+                                                                      ) 
 
     def nomUniteProd(self):
         return constant.D_NOM_UNITE_PROD[self.unite_prod]  
