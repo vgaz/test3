@@ -50,19 +50,18 @@ def serveRequest(request):
     ## --------------- creation ou maj serie de plants 
     if cde =='sauve_serie':
         try:
-            # gestion de la création d'une nouvelle série de plants
-            if request.POST.get("editSerie_id_serie"):
-                id_serie = int(request.POST.get("editSerie_id_serie"))
-                serie = creationEditionSerie(id_serie,
-                                    Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
-                                    int(request.POST.get("editSerie_id_variete")), 
-                                    int(request.POST.get("editSerie_quantite")), 
-                                    int(request.POST.get("editSerie_intra_rang_cm")), 
-                                    int(request.POST.get("editSerie_nb_rangs")), 
-                                    request.POST.get("editSerie_date_debut"), 
-                                    request.POST.get("editSerie_date_fin"))
-                print(serie)
-                s_json = '{"status":"true","msg":"%s"}'%serie
+            # gestion de la création ou édition d'une série de plants
+            serie = creationEditionSerie(
+                                int(request.POST.get("id_serie")),
+                                Planche.objects.get(num=int(request.POST.get("num_planche"))).id, 
+                                int(request.POST.get("id_variete")), 
+                                int(request.POST.get("quantite")), 
+                                int(request.POST.get("intra_rang_cm")), 
+                                int(request.POST.get("nb_rangs")), 
+                                request.POST.get("date_debut"), 
+                                request.POST.get("date_fin"))
+            print(serie)
+            s_json = '{"status":"true","msg":"%s"}'%serie
         except:
             ex_type, ex, tb = sys.exc_info()
             print (ex_type, ex)

@@ -239,6 +239,31 @@ function prepareDeplacementSerie(id_serie)
     document.getElementById("deplacement_quantite").value = hDivSerie.getAttribute("quantite")
    
     }
+
+                                       
+function sauveSerie()
+    {
+    // sauvegarde d'une serie
+    s_request = "cde=sauve_serie&id_serie=" + document.getElementById("editSerie_id_serie").value
+    s_request += "&id_variete=" + document.getElementById("editSerie_id_variete").value
+    s_request += "&num_planche=" + document.getElementById("editSerie_num_planche").value
+    s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
+    s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
+    s_request += "&quantite=" + document.getElementById("editSerie_quantite").value
+    s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
+    s_request += "&date_fin=" + document.getElementById("editSerie_date_fin").value
+
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == 'true')
+        {
+        alert(jsonRep.msg)
+        window.location.reload()
+        }
+    else
+        document.getElementById("divInfoDebug").innerHTML = jsonRep.err
+
+    }
            
 function editePlant(hPlant)
     {
@@ -351,7 +376,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    <hr/>
         <input type='button' value='Supprimer' name='supprime' onclick="supprimeSerie(document.getElementById('editSerie_id_serie').value)"/>
         <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return False"/>
-	    <input type='submit' value='Sauver' /><br/>
+	    <input type='button' value='Sauver' onclick="sauveSerie();return False" /><br/>
 	</div>
     </form>
     

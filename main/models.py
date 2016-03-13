@@ -23,6 +23,7 @@ def creationEvt(e_date, e_type, id_serie, duree_j=1, nom=""):
 
 def creationEditionSerie(id_serie, id_planche, id_var, quantite, intra_rang_cm, nb_rangs, date_debut, date_fin=None):
     """Création ou edition d'une série de plants"""
+    print(__name__)
     if id_serie == 0:
         serie = Serie() ## nelle serie
     else:
@@ -153,7 +154,6 @@ class Variete(models.Model):
     duree_avant_recolte_pc_j = models.IntegerField("durée plein champ avant récolte (jours)", default=0)
     duree_avant_recolte_sa_j = models.IntegerField("durée en serre avant récolte (jours)", default=0)
     prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)
-    etalement_recolte_j = models.IntegerField("éta  lement de la récolte (jours)", default=0)
     rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
     intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
@@ -224,7 +224,7 @@ class Production(models.Model):
 class Serie(models.Model):
     
     class Meta:
-        verbose_name = "Serie ou série de plants"
+        verbose_name = "Série de plants"
 
     variete = models.ForeignKey(Variete)
     nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
@@ -233,29 +233,12 @@ class Serie(models.Model):
     quantite = models.PositiveIntegerField(default=1)
     evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
+    l_prelevement = []
     
-    def prodSemaines(self):
-        """Retourne la production sur n semaines"""
-        l_ret = []
-        prodKg = variete.prod_kg_par_m2 * self.donneSurface()
-        nbSemaines = int(variete.etalement_recolte_j / 7) + 1
-        poidsParSem = prodKg / nbSemaines
-        cumul = prodKg
-        while (cumul>0):
-            l_ret.append(int(poidsParSem))
-            cumul -= int(poidsParSem)                
-                
-        return(l_ret)
+    def prodEstimee_kg(self):
+        """Retourne le poids (kg) de production escomptée""" 
+        return variete.prod_kg_par_m2 * self.surfaceSurPlanche_m2()
     
-    def donneSurface(self):
-        if not intraRangCm:
-            intraRangCm = self.intra_rang_cm
-        assert intraRangCm, Exception("intraRangCm non défini")
-        if not nbRangs:
-            nbRangs = self.nb_rangs
-        assert nbRangs, Exception("nbRangs non défini")
-        return longueurDePlanche_m * 100 * nbRangs / intraRangCm
-     
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
         return(self.quantite * self.variete.rendement_plants_graines_pourcent / 100)
@@ -267,12 +250,15 @@ class Serie(models.Model):
             intra_rang_cm = self.intra_rang_cm
         if not nb_rangs:
             nb_rangs = self.nb_rangs
+        assert intra_rang_cm, Exception("intra_rang_cm non défini")
+        assert nb_rangs, Exception("nb_rangs non défini")
+        
         if nb_rangs == 0:
             return 0                
         return ((self.quantite * intra_rang_cm)/nb_rangs)/100
     
     def surfaceSurPlanche_m2(self, intra_rang_cm=None, nb_rangs=None):
-        """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
+        """ retourne la surface occupée sur la planche en fonction des distances inter-rang et dans le rang
         intra_rang_cm et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend ceux prédéfinis"""
         if not intra_rang_cm:
             intra_rang_cm = self.intra_rang_cm

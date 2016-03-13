@@ -97,7 +97,7 @@ class Command(BaseCommand):
                     print("ajout variété" , v.nom)
 
             v = Variete.objects.get(nom = variet)
-                
+            v.b_choisi = False
             ## mise à jour des variétés qui peuvent ou pas aller avec celle-ci
             for var in l_varAvec:
                 v.avec.add(Variete.objects.get( nom = var ))

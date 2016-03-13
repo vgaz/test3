@@ -1,20 +1,20 @@
 variete,famille,date_min_plantation_pc,date_max_plantation_pc,date_min_plantation_sa,date_max_plantation_sa,duree_avant_recolte_pc_j,duree_avant_recolte_sa_j,etalement_recolte_j,rendement_plants_graines_pourcent,intra_rang_cm,prod_kg_m2,unite_prod,couleur
-ail,amaryllidacée,20/03,20/05,20/03,20/05,120,100,,80,20,7000,kg,
-artichaut,astéracée,20/03,20/05,20/03,20/05,100,80,,50,50,7001,u,
-aubergine, solanacée,20/03,20/05,20/03,20/05,100,80,,90,60,7002,u,
-betterave, chénopodiacée,20/03,20/05,20/03,20/05,60,50,,90,25,7003,kg,
-blette, chénopodiacée,,,,,,,,,,7004,kg,
-carotte, apiacée,20/03,20/05,20/03,20/05,90,70,,75,13,7005,kg,orange
+ail,amaryllidacée,20/03,20/05,20/03,20/05,120,100,5,80,20,7000,kg,
+artichaut,astéracée,20/03,20/05,20/03,20/05,100,80,60,50,50,7001,u,
+aubergine,solanacée,20/03,20/05,20/03,20/05,100,80,60,90,60,7002,u,
+betterave,chénopodiacée,20/03,20/05,20/03,20/05,60,50,90,90,25,7003,kg,
+blette,chénopodiacée,,,,,,,90,,,7004,kg,
+carotte,apiacée,20/03,20/05,20/03,20/05,90,70, ,75,13,7005,kg,orange
 chou brocoli,brassicacée ou crucifère,20/03,20/05,20/03,20/05,150,150,,97,60,7006,u,
 chou pointu, brassicacée ou crucifère,,,,,,,,,,7007,u,blue
 chou fleur, brassicacée ou crucifère,20/03,20/05,20/03,20/05,150,150,,95,60,7008,u,
 chou de bruxelles, brassicacée ou crucifère,,,,,180,180,,60,,7009,kg,
 ciboulette,amaryllidacée,20/4,20/5,20/4,20/5,50,50,,80,25,7010,kg,
-concombre, cucurbitacée,,,,,,,,80,,7011,u,DarkGreen
-cornichon, cucurbitacée,,,,,,,,84,,7012,kg,
-courge, cucurbitacée,20/4,20/5,20/4,20/5,180,180,,90,100,7013,u,
+concombre,cucurbitacée,,,,,,,,80,,7011,u,DarkGreen
+cornichon,cucurbitacée,,,,,,,,84,,7012,kg,
+courge,cucurbitacée,20/4,20/5,20/4,20/5,180,180,,90,100,7013,u,
 courgette, cucurbitacée,20/4,20/5,20/4,20/5,60,60,,85,100,7016,u,
-échalotte,amaryllidacée,1/10,1/11,1/10,1/11,180,180,,92,40,7017,kg ,brown
+échalote,amaryllidacée,1/10,1/11,1/10,1/11,180,180,,92,40,7017,kg ,brown
 épinard, chénopodiacée,,,,,,,,,,7018,kg,
 fève,fabacée ou légumineuse,,,,,,,,,,7019,kg,
 haricots verts, fabacée ou légumineuse,,,,,,,,60,,7020,kg,

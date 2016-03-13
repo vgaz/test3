@@ -84,20 +84,7 @@ def chronoPlanches(request):
             
         if request.POST.get("direction", "") == "recul":
             date_debut_vue -= delta 
-            date_fin_vue -= delta        
-
-        # gestion de la création d'une nouvelle série de plants
-        if request.POST.get("editSerie_id_serie"):
-            snouv = creationEditionSerie(int(request.POST.get("editSerie_id_serie")),
-                                        Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
-                                        int(request.POST.get("editSerie_id_variete")), 
-                                        int(request.POST.get("editSerie_quantite")), 
-                                        int(request.POST.get("editSerie_intra_rang_cm")), 
-                                        int(request.POST.get("editSerie_nb_rangs")), 
-                                        request.POST.get("editSerie_date_debut"), 
-                                        request.POST.get("editSerie_date_fin"))
-            print(snouv)
-            s_msg += str(snouv)
+            date_fin_vue -= delta
             
         s_nums = request.POST.get("num_planches", request.GET.get("num_planches", ""))
         if s_nums:
@@ -278,6 +265,10 @@ def prevision_recolte(request):
         tab_previsions += "['%s', %d, %d, %d],"%(MyTools.getYMDFromDate(prod.date_semaine), prod.variete_id, prod.qte_dde, prod.qte_prod)
     tab_previsions += "]" 
 
+    ## calcul des productions à partir des séries dont la prodution est dans la fenetre étudiée
+    l_series = Serie.objects.filter(evt_debut_date__gte = date_debut_sem_vue,
+                                    evt_fin_date__lte = date_fin_sem_vue)
+    
     return render(request,
                  'main/prevision_recolte.html',
                  {
