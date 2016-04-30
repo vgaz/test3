@@ -24,24 +24,26 @@ class Command(BaseCommand):
             p.save()  
 
         try:
-            p = Planche.objects.get(num = 1)
+            ficname = "Planches.csv"
+            np=0
+            with open(ficname, "r+t", encoding="utf-8") as hF:
+                reader = csv.DictReader(hF)
+                for d_line in reader:                
+                    nomPlanche = d_line.get("nom")
+                    np+=1
+                    try:
+                        p = Planche.objects.get(nom = nomPlanche)
+                    except:
+                        p = Planche()              
+                        p.num = np        
+                        p.nom = nomPlanche
+                        p.longueur_m = int(d_line.get("longueur (m)"))
+                        p.largeur_cm = int(d_line.get("largeur (m)"))*100
+                        p.save()               
         except:
-            p = Planche()              
-            p.num = 1        
-            p.nom = "planche1"
-            p.longueur_m=100
-            p.largeur_cm=100
-            p.save()  
+            print("erreur acces planches.csv") 
               
-        try:
-            p = Planche.objects.get(num = 2)
-        except:
-            p = Planche()              
-            p.num = 2 
-            p.nom = "planche2"
-            p.longueur_m=60
-            p.largeur_cm=100
-            p.save()
+
             
     def handle(self, *args, **options):
            
@@ -53,7 +55,7 @@ class Command(BaseCommand):
         with open(ficname, "r+t", encoding="utf-8") as hF:
             reader = csv.DictReader(hF)
             for d_line in reader:
-                variet = d_line.get("variete").lower()
+                variet = d_line.get("variete", "").lower()
                 try:
                     v = Variete.objects.get(nom = variet)
                 except:

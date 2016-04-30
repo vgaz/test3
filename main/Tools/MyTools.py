@@ -62,6 +62,20 @@ def getDateFrom_d_m_y(s_time):
 
 ######################################################################## 
 
+def getDateFrom_m_d_y(s_time):
+    if "/" in s_time:
+        m,d,y = s_time.split("/")
+
+    if "-" in s_time:
+        d,m,y = s_time.split("-")
+        
+    if len(y)==2:
+        y= "20" + y   # if only 2 digits for year     
+    _date =  datetime.date(int(y),int(m),int(d))
+    return (_date)
+
+######################################################################## 
+
 def getYMDFromDate(dateIn, sep="-"):
     s_date = dateIn.strftime('%Y-%m-%d')
     if sep != "-":

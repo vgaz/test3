@@ -82,7 +82,7 @@ def chronoPlanches(request):
         date_fin_vue -= delta        
 
     try:
-        # gestion de la cration d'une nouvelle série de plants
+        # gestion de la création d'une nouvelle série de plants
         if int(request.POST.get("editSerie_id_serie", -1)) == 0:
 
             snouv = creationSerie(Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
@@ -116,10 +116,10 @@ def chronoPlanches(request):
                                           date__lte = date_fin_vue, 
                                           plant_base__in = Plant.objects.filter(planche_id = laPlanche))
 
-        ## on en deduit les plants impliqués, même partiellement
+        ## on en deduit les splantséries impliquées, même partiellement
         l_plantsId = list(set([evt.plant_base_id for evt in l_evts]))
         laPlanche.l_plants = Plant.objects.filter(planche_id = laPlanche, id__in = l_plantsId ).order_by('variete_id')
-        ## on recupère de nouveau tous les évenements des plants impactés , même ceux hors fenetre temporelle 
+        ## on recupère de nouveau tous les évenements des séries de plants impactées , même ceux hors fenetre temporelle 
         s_evts_plants = ""
         for plant in laPlanche.l_plants:
             plant.l_evts = Evenement.objects.filter(plant_base_id = plant.id, type = Evenement.TYPE_DIVERS).order_by('date')
@@ -299,7 +299,7 @@ def prevision_recolte(request):
 def tab_varietes(request):
     
     l_vars = Variete.objects.filter(famille__isnull=False)
-    for v in l_vars:
+    for v in l_vars:ra 
         v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
      
     return render(request,

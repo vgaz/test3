@@ -1,50 +1,30 @@
-variete,avec,sans
-"ail","betterave, camomille, carotte, céleri, concombre, cornichon, fraise, laitue, sarriette, tomate, pissenlit, pomme de terre","asperge, choux, haricot, pois"
-"asperge","artichaut, persil, poireau, pois, tomate, pomme de terre","ail, betterave, oignon"
-"aubergine","estragon, haricot, persil, piment, pois, thym, tomate","oignon, pomme de terre"
-"Basilic","choux, haricot, tomate",
-"bette à carde",oignon,
-"betterave","céleri, chou, chou-fleur, chou-rave, laitue, oignon, radis","asperge, carotte, haricot grimpant, tomate"
-brocoli,"aneth, capucine, romarin, sauge, fève, céleri, camomille, menthe, oignon, origan, pomme de terre","fraise, laitue, radis"
-carotte,"ail, cerfeuil, ciboulette, échalote, épinard, fève, haricot nain, laitue, oignon, panais, persil, poireau, pois, radis, romarin, sauge, tomate","aneth, betterave"
-céleri à côtes,"ail, betterave, chou, chou-fleur, concombre, cornichon, courge, épinard, fenouil, haricot nain, poireau, pois, radis, tomate","carotte, maïs, persil"
-céleri-rave,"ail, chou, chou-fleur, concombre, cornichon, courge, épinard, fenouil, haricot nain, poireau, pois, pomme de terre, radis, tomate","carotte, maïs, persil"
-cerfeuil,"carotte, radis",
-chicorée,"chou, chou-fleur, chou-rave, fenouil"
-chou-fleur,"aneth, betterave, camomille, capucine, céleri, concombre, cornichon, cresson, fève, haricot nain, menthe, oignon, panais, pois, pomme de terre, radis, sauge, hysope, romarin","chicorée, courgette, pâtisson, fraise, vigne"
-chou-rave,"betterave, brocoli, camomille, capucine, concombre, cornichon, fève, haricot nain, laitue, mâche, menthe, panais, pois, romarin, sarriette, sauge, thym, aneth, hysope, oignon, origan, radis","ail, chicorée, échalote, fenouil, fraise, haricot à rames, poireau, tomate, vigne,"
-chou,"betterave, brocoli, camomille, capucine, céleri, concombre, cornichon, cresson, fève, haricot nain, laitue, mâche, menthe, panais, pois, pomme de terre, romarin, sarriette, sauge, thym, aneth, hysope, oignon, origan","ail, chicorée, échalote, fenouil, fraise, poireau, radis, vigne"
-chou de Bruxelles,"aneth, betterave, capucine, céleri, fève, haricot, laitue, menthe, pomme de terre, romarin, sauge, hysope","fraise, pois, vigne"
-ciboulette,,"pois,fève,haricot"
-citrouille,"fève, maïs, menthe, capucine, radis",pomme de terre
-concombre,"aneth, choux, haricot, laitue, maïs, oignon, pois, tournesol, fève, brocoli, céleri, radis","melon, pomme de terre, tomate, sauge"
-coriandre,"pomme de terre",
-cornichon,"aneth, choux, haricot, laitue, maïs, oignon, pois, tournesol","melon, pomme de terre, tomate"
-courge,"basilic, capucine, laitue, maïs, melon, fève, menthe","pomme de terre"
-courgette,"radis, menthe, pois, radis, haricots",pomme de terre
-epinard,"céleri, choux, fève, fraise, haricot, maïs, poireau, radis, laitue, concombre, pois, aubergine, oignon","betterave, pomme de terre, tomate, poivron"
-fenouil,"asperge, céleri, concombre, cornichon, courge, potiron","choux, haricot, pois, tomate"
-fève,"ail, carotte, céleri, radis","betterave, pomme de terre"
-fraise,"ail, haricot, laitue, oignon, poireau, thym",choux
-haricot,"aubergine, carotte, céleri, choux, concombre, cornichon, épinard, laitue, mâche, pomme de terre, sarriette","ail, betterave, échalote, fenouil, oignon"
-haricot rame,"aubergine, carotte, céleri, choux, concombre, cornichon, épinard, laitue, maïs, pois senteur, pomme de terre, sarriette","ail, betterave, échalote, fenouil, oignon"
-laitue,"artichaut, betterave, carotte, choux, chou-fleur, concombre, cornichon, courge, fraise, oignon, poireau, pois, radis, trèfle","épinard, persil, tournesol"
-mâche,poireau,
-maïs,"concombre, cornichon, courge, fève, haricot, pois, potiron, tomate","betterave, céleri, laitue, menthe, romarin"
-melon,"maïs, tournesol",
-menthe,"choux, navet, pois, radis, tomate",
-navet,"laitue, menthe, pois, romarin",ail
-oignon,"betterave, camomille, carotte, fenouil, fraise, laitue, poireau, sarriette, tomate, chou, pomme de terre","chou, fève, haricot, pois, pomme de terre"
-panais,radis,aneth
-persil,"poireau, radis, tomate","chou, haricot, laitue, pois"
-piment,"aubergine, tomate, basilic, carotte, marjolaine, oignon, origan",fenouil
-poireau,"betterave, carotte, céleri, épinard, laitue, oignon, pomme de terre, tomate","choux, haricot, pois, fève, brocoli"
-pois,"asperge, aubergine, carotte, céleri, chou, concombre, cornichon, fève, laitue, maïs, navet, radis, épinard, tomate, haricot, courgette, céleri, pomme de terre hâtive, menthe","ail, échalote, oignon, persil, poireau, ciboulette, pomme de terre tardive"
-pomme de terre,"capucine, céleri, choux, fève, haricot, pois, raifort, ail, maïs, laitue, oignon, pétunia, œillet d'Inde, radis, potiron, courgette","aubergine, concombre, cornichon, courge, framboisier, oignon, pommier, tomate, tournesol, citrouille, courgette, épinard, potiron"
-potiron,"laitue, maïs, melon",pomme de terre
-radis,"ail, carotte, cresson, haricot, laitue, persil, pois, tomate, fève, chou, chou-fleur, concombre, courge, courgette","chou, courge, pomme de terre, vigne, hysope"
-raifort,pomme de terre,
-romarin,"carotte, choux, fenouil, persil, pois, pomme de terre, thym, tomate",
-tomate,"aneth, asperge, basilic, carotte, céleri, ciboulette chinoise, maïs, oignon, persil, radis, pois, sauge, poireau, souci, oeillet d'inde (tagète), capucine","betterave, fenouil, haricot, pois, pomme de terre, chou, concombre"
-topinambour,pomme de terre,
-tournesol,"concombre, cornichon","laitue, maïs, pomme de terre"
+variete,famille,date_min_plantation,date_max_plantation,rendement_plants_graines_pourcent,duree_avant_recolte_j,intra_rang_cm,prod_hebdo_moy_g,unite_prod
+ail,amaryllidacée,20/03,20/05,80,120,20,"100,100,100",kg
+artichaut,astéracée,20/03,20/05,50,100,50,300,u
+aubergine,solanacée,20/03,20/05,90,100,60,1,u
+betterave,chénopodiacée,20/03,20/05,90,60,25,120,kg
+blette,chénopodiacée,,,,,40,"200,200,200",kg
+carotte,apiacée,20/03,20/05,75,90,6,45,kg
+chou brocoli,brassicacée,20/03,20/05,97,150,60,1,u
+chou pointu,brassicacée,,,,,90,1,u
+chou fleur,brassicacée,20/03,20/05,95,150,60,1,u
+chou de bruxelles,brassicacée,,,60,180,100,,kg
+ciboulette,amaryllidacée,20/4,20/5,80,50,25,100,kg
+concombre,cucurbitacée,,,80,,150,1,u
+cornichon,cucurbitacée,,,84,,100,,kg
+courge buternut,cucurbitacée,20/4,20/5,90,180,100,1,u
+courge longue de Nice,cucurbitacée,20/4,20/5,90,180,100,1,u
+courge potimaron,cucurbitacée,20/4,20/5,85,180,100,1,u
+courgette,cucurbitacée,20/4,20/5,85,60,100,1,u
+échalotte,amaryllidacée,1/10,1/11,92,180,40,100,kg 
+épinard,chénopodiacée,,,,,20,,kg
+fève,fabacée ou légumineuse,,,,,30,,kg
+haricots verts,fabacée ou légumineuse,,,60,,50,,kg
+oignon blanc,amaryllidacée,,,,,40,,kg
+poireau,amaryllidacée,,,,,10,,kg
+potiron,cucurbitacée,,,,,80,1,u
+radis,brassicacée,20/03,20/05,20,10,4,,kg
+salade chicorée,astéracée,20/03,20/05,30,20,1,,u
+tomate,solanacée,20/03,20/05,80,90,60,,kg
+pomme de terre,solanacée,,,80,,30,,kg
+thym,lamiacée,,,,,50,,kg
