@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand       
 
-from main import serveRequest, views
+from main import serveRequest, views, constant
 from django.test import RequestFactory
 
-from main.models import Plant, essai_deplacement_plants, clonePlant, Evenement
+from main.models import Serie, essaiDeplacementSeries, cloneSerie, Evenement, creationPlanche
 
 
 class Command(BaseCommand):
@@ -12,6 +12,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
+#         creationPlanche(10000, 100, False, "Planche Virtuelle", constant.PLANCHE_VIRTUELLE_NUM)
+
 #         from main import planification
 # 
 #         delta20h = datetime.timedelta(hours=20)
@@ -21,10 +23,13 @@ class Command(BaseCommand):
 #         planification.planif(date_debut_vue, date_fin_vue)
 #         return
         
-#         id_plant = 1
-#         reste  = essai_deplacement_plants(id_plant, 3, 60, 2)
-#         plant = Plant.objects.get(id=id_plant)
-#         plant2 = clonePlant(plant)
+        id_serie = 3
+#         reste  = essaiDeplacementSeries(id_plant, 3, 60, 2)
+        serie = Serie.objects.get(id=id_serie)
+        serie2 = cloneSerie(serie)
+        print (serie2)
+        return 
+    
 #         ## maj quantités
 #         plant2.quantite = plant.quantite - reste 
 #         plant2.save()

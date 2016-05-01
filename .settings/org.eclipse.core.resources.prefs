@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//main/Tools/ChangeFileContent.py=utf-8
+encoding//main/Tools/HttpTools.py=utf-8
 encoding//main/Tools/MySocket.py=utf-8
 encoding//main/Tools/MyTelnet.py=utf-8
 encoding//main/Tools/MyTools.py=utf-8

@@ -43,7 +43,7 @@ function ajouteNouveauPlant()
     
     document.getElementById("matrice").innerHTML += s_plant
     plan_courrant = s_nouveauPlanId
-    affichePlants()
+    afficheSeries()
                 
     }
    
@@ -102,29 +102,31 @@ function majPlant()
 			}
     }
 
+/*
 function affichePlants()
     {
     l_plants = document.getElementsByClassName("plant")
     for(ii=0;ii<l_plants.length;ii++)
         affichePlant(l_plants[ii])
     }
-    
-function affichePlant(obj_plant)
+*/
+  
+function affichePlant(hSerie)
     {
-    // on affiche le contenu du plant à partir des attributs 
-    obj_plant.getElementsByClassName("num_plant")[0].innerHTML = obj_plant.getAttribute("id")
-    obj_plant.getElementsByClassName("variete")[0].innerHTML = jsonVarietes[obj_plant.getAttribute("variete")]
-    obj_plant.getElementsByClassName("quantite")[0].innerHTML = obj_plant.getAttribute("quantite")
-    obj_plant.getElementsByClassName("date_debut")[0].innerHTML = obj_plant.getAttribute("date_debut")
-    obj_plant.getElementsByClassName("date_fin")[0].innerHTML = obj_plant.getAttribute("date_fin")
-    obj_plant.getElementsByClassName("coord_x_cm")[0].innerHTML = "x:" + obj_plant.getAttribute("coord_x_cm") + "cm"
-    obj_plant.getElementsByClassName("coord_y_cm")[0].innerHTML = "y:" + obj_plant.getAttribute("coord_y_cm") + "cm"
-    obj_plant.getElementsByClassName("hauteur_cm")[0].innerHTML = "h:" + obj_plant.getAttribute("hauteur_cm") + "cm"
-    obj_plant.getElementsByClassName("largeur_cm")[0].innerHTML = "l:" + obj_plant.getAttribute("largeur_cm") + "cm"  
-    obj_plant.style.height = obj_plant.getAttribute("hauteur_cm") * pxParCm + "px"  
-    obj_plant.style.width = obj_plant.getAttribute("largeur_cm") * pxParCm + "px"  
-    obj_plant.style.marginLeft = obj_plant.getAttribute("coord_x_cm") * pxParCm + "px"  
-    obj_plant.style.marginTop = obj_plant.getAttribute("coord_y_cm") * pxParCm + "px"  
+    // on affiche le contenu de la série à partir des attributs 
+    hSerie.getElementsByClassName("num_plant")[0].innerHTML = hSerie.getAttribute("id")
+    hSerie.getElementsByClassName("variete")[0].innerHTML = jsonVarietes[hSerie.getAttribute("variete")]
+    hSerie.getElementsByClassName("quantite")[0].innerHTML = hSerie.getAttribute("quantite")
+    hSerie.getElementsByClassName("date_debut")[0].innerHTML = hSerie.getAttribute("date_debut")
+    hSerie.getElementsByClassName("date_fin")[0].innerHTML = hSerie.getAttribute("date_fin")
+    hSerie.getElementsByClassName("coord_x_cm")[0].innerHTML = "x:" + hSerie.getAttribute("coord_x_cm") + "cm"
+    hSerie.getElementsByClassName("coord_y_cm")[0].innerHTML = "y:" + hSerie.getAttribute("coord_y_cm") + "cm"
+    hSerie.getElementsByClassName("hauteur_cm")[0].innerHTML = "h:" + hSerie.getAttribute("hauteur_cm") + "cm"
+    hSerie.getElementsByClassName("largeur_cm")[0].innerHTML = "l:" + hSerie.getAttribute("largeur_cm") + "cm"  
+    hSerie.style.height = hSerie.getAttribute("hauteur_cm") * pxParCm + "px"  
+    hSerie.style.width = hSerie.getAttribute("largeur_cm") * pxParCm + "px"  
+    hSerie.style.marginLeft = hSerie.getAttribute("coord_x_cm") * pxParCm + "px"  
+    hSerie.style.marginTop = hSerie.getAttribute("coord_y_cm") * pxParCm + "px"  
     
     }
                

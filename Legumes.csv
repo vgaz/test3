@@ -1,31 +1,28 @@
-variete;famille;date_min_plantation;date_max_plantation;rendement_plants_graines_pourcent;duree_avant_recolte_j;intra_rang_cm;prod_hebdo_moy_g;unite_prod;;;;;
-ail;amaryllidacée;20/03;20/05;80;120;20;"100;100;100";kg;;;
-artichaut;astéracée;20/03;20/05;50;100;50;300;u;;;;;
-aubergine;solanacée;20/03;20/05;90;100;60;1;u;;;;;
-betterave;chénopodiacée;20/03;20/05;90;60;25;"120;12";kg;;;;
-blette;chénopodiacée;;;;;;"200;200;200;200;200";kg;
-carotte;apiacée;20/03;20/05;75;90;13;"45;45;45";kg;;;
-chou brocoli;brassicacée;20/03;20/05;97;150;60;1;u;;;;;
-chou pointu;brassicacée;;;;;;1;u;;;;;
-chou fleur;brassicacée;20/03;20/05;95;150;60;1;u;;;;;
-chou de bruxelles;brassicacée;;;60;180;;;kg;;;;;
-ciboulette;amaryllidacée;20/4;20/5;80;50;25;100;kg;;;;;
-concombre;cucurbitacée;;;80;;;"1;0;0;1";u;;
-cornichon;cucurbitacée;;;84;;;;kg;;;;;
-courge buternut;cucurbitacée;20/4;20/5;90;180;100;1;u;;;;;
-courge longue de Nice;cucurbitacée;20/4;20/5;90;180;100;1;u;;;;;
-courge potimaron;cucurbitacée;20/4;20/5;85;180;100;1;u;;;;;
-courgette;cucurbitacée;20/4;20/5;85;60;100;"1;1;1;1;1";u;
-échalotte;amaryllidacée;1/10;1/11;92;180;40;100;kg ;;;;;
-épinard;chénopodiacée;;;;;;;kg;;;;;
-fève;fabacée ou légumineuse;;;;;;;kg;;;;;
-haricots verts;fabacée ou légumineuse;;;60;;;kg;;;;;;
-oignon blanc;amaryllidacée;;;;;;;kg;;;;;
-poireau;amaryllidacée;;;;;;kg;;;;;;
-potiron;cucurbitacée;;;;;;1;u;;;;;
-radis;brassicacée;20/03;20/05;20;10;"5;5";kg;;;;;
-salade chicorée;astéracée;20/03;20/05;30;20;1;u;;;;;;
-tomate;solanacée;20/03;20/05;80;90;60;"150;150;150;150;100;100";kg
-pomme de terre;solanacée;;;80;;;kg;;;;;;
-luzerne;fabacée ou légumineuse;;;70;;;;kg;;;;;
-thym;lamiacée;;;;;;;kg;;;;;
+variete,famille,date_min_plantation_pc,date_max_plantation_pc,date_min_plantation_sa,date_max_plantation_sa,duree_avant_recolte_pc_j,duree_avant_recolte_sa_j,etalement_recolte_j,rendement_plants_graines_pourcent,intra_rang_cm,prod_kg_m2,unite_prod,couleur
+ail,amaryllidacée,20/03,20/05,20/03,20/05,120,100,5,80,20,7000,kg,
+artichaut,astéracée,20/03,20/05,20/03,20/05,100,80,60,50,50,7001,u,
+aubergine,solanacée,20/03,20/05,20/03,20/05,100,80,60,90,60,7002,u,
+betterave,chénopodiacée,20/03,20/05,20/03,20/05,60,50,90,90,25,7003,kg,
+blette,chénopodiacée,,,,,,,90,,,7004,kg,
+carotte,apiacée,20/03,20/05,20/03,20/05,90,70, ,75,13,7005,kg,orange
+chou brocoli,brassicacée ou crucifère,20/03,20/05,20/03,20/05,150,150,,97,60,7006,u,
+chou pointu, brassicacée ou crucifère,,,,,,,,,,7007,u,blue
+chou fleur, brassicacée ou crucifère,20/03,20/05,20/03,20/05,150,150,,95,60,7008,u,
+chou de bruxelles, brassicacée ou crucifère,,,,,180,180,,60,,7009,kg,
+ciboulette,amaryllidacée,20/4,20/5,20/4,20/5,50,50,,80,25,7010,kg,
+concombre,cucurbitacée,,,,,,,,80,,7011,u,DarkGreen
+cornichon,cucurbitacée,,,,,,,,84,,7012,kg,
+courge,cucurbitacée,20/4,20/5,20/4,20/5,180,180,,90,100,7013,u,
+courgette, cucurbitacée,20/4,20/5,20/4,20/5,60,60,,85,100,7016,u,
+échalote,amaryllidacée,1/10,1/11,1/10,1/11,180,180,,92,40,7017,kg ,brown
+épinard, chénopodiacée,,,,,,,,,,7018,kg,
+fève,fabacée ou légumineuse,,,,,,,,,,7019,kg,
+haricots verts, fabacée ou légumineuse,,,,,,,,60,,7020,kg,
+oignon blanc, amaryllidacée,,,,,,,,,,7021,kg,
+poireau, amaryllidacée,,,,,,,,,,7022,kg,
+potiron,cucurbitacée,,,,,,,,,,7023,u,
+radis,brassicacée ou crucifère,20/03,20/05,20/03,20/05,10,10,,20,"5,5",7024,,
+salade chicorée,astéracée,20/03,20/05,20/03,20/05,20,20,,30,1,7025,,
+tomate,solanacée,20/03,20/05,20/03,20/05,90,90,,80,60,7026,kg,
+pomme de terre,solanacée,,,,,,,,80,,7027,,
+luzerne,fabacée ou légumineuse,,,,,,,,70,,7028,kg,

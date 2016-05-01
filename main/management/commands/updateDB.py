@@ -2,7 +2,7 @@
 import csv
 
 from django.core.management.base import BaseCommand       
-from main.models import Famille, Planche, Variete
+from main.models import Famille, Planche, Variete, creationPlanche
 
 from main import constant
 import sys
@@ -48,6 +48,7 @@ class Command(BaseCommand):
             print("erreur acces planches.csv, %s"%sys.exc_info()[1]) 
               
 
+
             
     def handle(self, *args, **options):
            
@@ -67,12 +68,16 @@ class Command(BaseCommand):
                     v = Variete()
                     v.nom = variet
 
-                v.date_min_plantation = d_line.get("date_min_plantation", "0/0")
-                v.date_max_plantation = d_line.get("date_max_plantation", "0/0")
-                v.duree_avant_recolte_j = int(d_line.get("duree_avant_recolte_j") or 0 )
-                v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g", "0")
-                v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g", "0")
 
+                v.date_min_plantation_pc = d_line.get("date_min_plantation_pc")
+                v.date_max_plantation_pc = d_line.get("date_max_plantation_pc")
+                v.duree_avant_recolte_pc_j = int(d_line.get("duree_avant_recolte_pc_j") or 0 )
+                v.date_min_plantation_sa = d_line.get("date_min_plantation_sa")
+                v.date_max_plantation_sa = d_line.get("date_max_plantation_sa")
+                v.duree_avant_recolte_sa_j = int(d_line.get("duree_avant_recolte_sa_j") or 0 )
+                v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
+                v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
+                v.couleur = d_line.get("couleur","green")
                 
                 if d_line.get("unite_prod") == 'u': 
                     v.unite_prod = constant.UNITE_PROD_PIECE
@@ -123,7 +128,6 @@ class Command(BaseCommand):
             l_ajoutSiBesoin.extend(l_varAvec)
             l_ajoutSiBesoin.extend(l_varSans)
             
-#             print(d_line)
             for _v in set(l_ajoutSiBesoin):
                 if _v and _v not in l_variets and _v not in l_variets_sup:
                     v = Variete()
@@ -133,7 +137,7 @@ class Command(BaseCommand):
                     print("ajout variété" , v.nom)
 
             v = Variete.objects.get(nom = variet)
-                
+            v.b_choisi = False
             ## mise à jour des variétés qui peuvent ou pas aller avec celle-ci
             for var in l_varAvec:
                 v.avec.add(Variete.objects.get( nom = var ))
@@ -141,9 +145,12 @@ class Command(BaseCommand):
                 v.sans.add(Variete.objects.get( nom = var ))
 
             v.save()
-        
-        self.creationPlanches()
-
+ 
+ 
+        creationPlanche(10000, 100, False, "Planche Virtuelle", constant.PLANCHE_VIRTUELLE_NUM)
+        creationPlanche(100, 100, False, "", 1)
+        creationPlanche(80, 100, False, "", 2)
+        creationPlanche(30, 100, True, "Serre3", 3)
         print("end of command " + self.__doc__)  
         
         

@@ -7,8 +7,8 @@ Created on Nov 26, 2013
 
 from django.http import HttpResponse
 
-from main.models import Evenement, Plant, Planche, Production
-from main.models import creationPlanche, creationSerie, essai_deplacement_plants, clonePlant
+from main.models import Evenement, Serie, Planche, Production
+from main.models import creationPlanche, creationEditionSerie, essaiDeplacementSeries, cloneSerie
 import sys, traceback
 import datetime
 from main import constant
@@ -16,9 +16,8 @@ from main import constant
 def serveRequest(request):
     """Received a request and return specific response"""
     rep = ""
-    ## --------------- renvoi de tous les evenements d'un plant
     cde = request.POST.get("cde","")
-    print(request.POST)#
+    print(request.POST)
     
     if cde == "getEvtsPlant": 
         ## retour des évenements des plants (sauf debut et fin déjà affichés spécifiquement)
@@ -49,30 +48,21 @@ def serveRequest(request):
         return HttpResponse( s_json, content_type="application/json")
 
     ## --------------- creation ou maj serie de plants 
-    if cde =='sauve_plant':
+    if cde =='sauve_serie':
         try:
-            print (request.POST)
-            id_plant = request.POST.get("id_pl#ant")
-            if '_' in id_plant:
-                plant = Plant() ## un nouveau
-            else:
-                plant = Plant.objects.get(id=int(id_plant)) ## un déjà créé
-     
-            plant.variete_id = request.POST.get("variete", 0)
-            plant.quantite = int(request.POST.get("quantite", 0))
-            plant.largeur_cm = int(request.POST.get("largeur_cm",0))
-            plant.hauteur_cm = int(request.POST.get("hauteur_cm",0))
-            plant.intra_rang_cm = int(request.POST.get("intra_rang_cm",0))
-            plant.nb_rangs = int(request.POST.get("nb_rangs", 0))
-            plant.planche = Planche.objects.get(num=int(request.POST.get("id_planche",0)))
-            plant.production_id = 0
-            plant.quatite = 1
-            plant.save()
-            plant.fixeDates(MyTools.getDateFrom_d_m_y(request.POST.get("date_debut")), 
-                            None or request.POST.get("date_fin", ""))
-            print(plant)
-            s_json = '{"status":"true","id_plant":%d}'%plant.pk
-        except:#
+            # gestion de la création ou édition d'une série de plants
+            serie = creationEditionSerie(
+                                int(request.POST.get("id_serie")),
+                                Planche.objects.get(num=int(request.POST.get("num_planche"))).id, 
+                                int(request.POST.get("id_variete")), 
+                                int(request.POST.get("quantite")), 
+                                int(request.POST.get("intra_rang_cm")), 
+                                int(request.POST.get("nb_rangs")), 
+                                request.POST.get("date_debut"), 
+                                request.POST.get("date_fin"))
+            print(serie)
+            s_json = '{"status":"true","msg":"%s"}'%serie
+        except:
             ex_type, ex, tb = sys.exc_info()
             print (ex_type, ex)
             traceback.print_tb(tb)
@@ -81,37 +71,38 @@ def serveRequest(request):
         return HttpResponse( s_json, content_type="application/json")
 
     
-    if cde == 'supprime_plant':
+    if cde == 'supprime_serie':
         try:
-            id_plant = request.POST.get("id", "_")
-            if '_' in id_plant:
+            id_serie = int(request.POST.get("id", 0))
+            if id_serie == 0:
                 print("return _")
-                raise(Exception, "_ in id plant")
+                raise(Exception, "série non supprimable")
             
-            id_plant = int(id_plant)
-            plant = Plant.objects.get(id=id_plant)
+            id_serie = int(id_serie)
+            serie = Serie.objects.get(id=id_serie)
             
             ## suppression de la production associée
             try:
                 prod = None
-                prod = Production.objects.get(id = plant.production_id)
-                prod.delete()##@todo: erreur il faut retrancher de la seule production de ces plants 
+                prod = Production.objects.get(id = serie.production_id)
+                prod.delete()##@todo: erreur il faut retrancher de la seule production de ces series 
             except:
                 pass    
 
             ## supression des évenements associés
-            for obj in Evenement.objects.filter(plant_base_id = plant.id):
+            for obj in Evenement.objects.filter(serie_base_id = serie.id):
                 print ("Suppression ", obj)
                 obj.delete()
              
-            plant.delete()                
-            print ("Suppression plant", id_plant)
+            serie.delete()                
+            print ("Supprime série", id_serie)
          
-            s_json = '{"status":"true","id_plant":%d}'%id_plant
+            s_json = '{"status":"true","id_serie":%d}'%id_serie
         except:
             s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")
+
 
     if cde == 'supprime_planche':
         try:
@@ -178,11 +169,12 @@ def serveRequest(request):
            
         return HttpResponse(s_json)
 
-    if cde == "deplacement_plant":
-        ## deplacement de plants d'une planche vers une autre
+
+    if cde == "deplacement_serie":
+        ## deplacement d'une serie de plants d'une planche vers une autre
         try:
-            plant = Plant.objects.get(id=int(request.POST.get("id_plant")))
-            b_deplacementPartiel = request.POST.get("deplacement_partiel") == "true"
+            serie = Serie.objects.get(id=int(request.POST.get("id_serie")))
+            b_deplacementPartiel = request.POST.get("partiel") == "true"
             if b_deplacementPartiel:
                 # nb de plants à déplacer
                 nb_plants = request.POST.get("nb_plants") ## peut etre chaine vide donc pas castable
@@ -194,8 +186,8 @@ def serveRequest(request):
             nb_rangs = int(request.POST.get("nb_rangs"))
             intra_rang_cm = int(request.POST.get("intra_rang_cm"))
             planche_dest = Planche.objects.get(num=int(request.POST.get("num_planche_dest")))
-            b_simu = request.POST.get("simu") == "true"
-            reste = essai_deplacement_plants(plant.id, planche_dest.num, intra_rang_cm, nb_rangs)
+            b_simu = request.POST.get("simulation") == "true"
+            reste = essaiDeplacementSeries(serie.id, planche_dest.num, intra_rang_cm, nb_rangs)
             
             if b_simu:
                 if reste == 0:
@@ -203,27 +195,28 @@ def serveRequest(request):
                 else:
                     rep = "SIMULATION\\nReste %d plants non déplaçables. Déplacement incomplet."%reste            
             elif reste == 0:
-                ## si on peut tout transférer sur une seule planche, le plant chage de planche
+                ## si on peut tout transférer sur une seule planche, la série change de planche
                 ## sinon, on cree une nouvelle serie de plants vers la planche partiellement accueillante et on garde le reste
                 ## changement de planche
-                plant.planche_id = planche_dest.id
-                plant.nb_rangs = nb_rangs
-                plant.intra_rang_cm = intra_rang_cm
-                plant.save()
+                print("changt complet de planche")
+                serie.planche_id = planche_dest.id
+                serie.nb_rangs = nb_rangs
+                serie.intra_rang_cm = intra_rang_cm
+                serie.save()
                 rep ="Tous les plants ont été déplacés"
             else:
-                ## Création nouvelle série de #plants sur planche dest
-                plant2 = clonePlant(plant) ## creation d'un nouveau plant
+                ## Création nouvelle série de plants sur planche dest
+                serie2 = cloneSerie(serie) ## creation d'une nouvelle série
                 ## maj quantités
-                plant2.quantite = plant.quantite - reste 
-                plant.quantite = reste
-                plant.save()
+                serie2.quantite = serie.quantite - reste 
+                serie.quantite = reste
+                serie.save()
                 ## changement de planche
-                plant2.planche_id = planche_dest.id
-                plant2.nb_rangs = nb_rangs
-                plant2.intra_rang_cm = intra_rang_cm
-                plant2.save() 
-                rep = "plant %d déplacé partiellement (reste %d) sur planche %d "%(plant.id, reste, planche_dest.num)
+                serie2.planche_id = planche_dest.id
+                serie2.nb_rangs = nb_rangs
+                serie2.intra_rang_cm = intra_rang_cm
+                serie2.save() 
+                rep = "série %d déplacé partiellement (reste %d) sur planche %d "%(serie.id, reste, planche_dest.num)
 
             s_json = '{"status":"true", "msg":"%s"}'%rep
         except:

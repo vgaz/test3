@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from main import serveRequest
 from django.test import TestCase, RequestFactory
 
-from main.models import Evenement, Plant, Planche
+from main.models import Evenement, Serie, Planche
 from main import constant
 import datetime
 
@@ -33,11 +33,11 @@ class Command(BaseCommand):
 # 
 #         l_objs = Planche.objects.all()
 #        
-#         l_objs = Plant.objects.all()
+#         l_objs = Serie.objects.all()
 #         for evt in l_objs:
 #             print (evt)         
 #         
-#         l_objs = Evenement.objects.filter(plant_base_id = int(request.POST.get("id", 0)))
+#         l_objs = Evenement.objects.filter(serie_id = int(request.POST.get("id", 0)))
 #         for evt in l_objs:
 #             print (evt)
         serveRequest.serveRequest(request)

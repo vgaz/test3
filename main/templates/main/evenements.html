@@ -75,14 +75,14 @@ Visionnage du <input style="width: 100px" type="text" name="date_debut_vue" valu
 </form>
 
 <br/><br/>
-        {# plants existants en base #}
+        {# séries existantes en base #}
         <table>
         <tr><th>Date</th><th>Planche</th><th>Libellé</th></tr>
         {% for evt in l_evts %}
             {% if evt.date|date:'d/m/Y' ==  date_du_jour|date:'d/m/Y' %}
-            <tr id="{{evt.id}}"><td class="tdEvt2">{{evt.date|date:'d/m/Y'}}</td><td class="tdEvt2">{{evt.planche_num}}</td><td class="tdEvt2">{{evt.nom}}</td></tr>
+            <tr id="{{evt.id}}"><td class="tdEvt2">{{evt.date|date:'d/m/Y'}}</td><td class="tdEvt2">{{evt.planche_num}}</td><td class="tdEvt2">{{evt.nom|title}}</td></tr>
             {% else %}
-            <tr id="{{evt.id}}"><td class="tdEvt">{{evt.date|date:'d/m/Y'}}</td><td class="tdEvt">{{evt.planche_num}}</td><td class="tdEvt">{{evt.nom}}</td></tr>
+            <tr id="{{evt.id}}"><td class="tdEvt">{{evt.date|date:'d/m/Y'}}</td><td class="tdEvt">{{evt.planche_num}}</td><td class="tdEvt">{{evt.nom|title}}</td></tr>
             {% endif %}
             
         {% endfor %}

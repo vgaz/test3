@@ -38,7 +38,7 @@ display:none;
 display:inline;
 }
 
-#div_deplacement_plants
+#divDeplacementSerie
     {
     text-align:left;
     padding:10px;
@@ -72,7 +72,7 @@ display:inline;
 											"date":"{{evt.date|safe}}",
 											"duree_j":"{{evt.duree_j}}",
 											"type":"{{evt.type}}",
-											"id_serie":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}{% endfor%}
+											"id_serie":"{{evt.serie_id}}"}{% if not forloop.last %},{% endif %}{% endfor%}
 		{% endfor %}{% endfor %}]
 
 function    init()
@@ -84,7 +84,7 @@ function    init()
     // nb px par jour en fonction des bornes , on ajoute 1 pour inclure le dernier jour plein 
     pxParH = window.getComputedStyle(document.getElementsByClassName("cadre_chrono")[0]).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours')
 
-    balisagePlants()
+    balisageSeries()
     
     // ajout ligne date du jour
     delta_h = moment(date_du_jour).diff(moment(date_debut_vue), 'hours')
@@ -99,17 +99,42 @@ function    init()
 	    
     }
 
-function  balisagePlants()
+
+function  deplacement(hForm)
+    {
+	// déplacement d'une serie vers une autre planche 
+    s_request = "cde=deplacement_serie&id_serie=" + document.getElementById("deplacement_id_serie").value
+    s_request += "&id_planche_src=0"
+    s_request += "&num_planche_dest=" + document.getElementById("deplacement_num_planche_dest").value
+    s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
+    s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
+    s_request += "&partiel=" + document.getElementById("deplacement_partiel").checked
+    s_request += "&nb_plants=" + document.getElementById("deplacement_nb_plants").value
+    b_simu = document.getElementById("deplacement_simulation").checked
+    s_request += "&simulation=" + b_simu
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == 'true')
+        {
+        document.getElementById("divDeplacementSerie").style.display = "none"
+      	alert(jsonRep.msg)
+        window.location.reload()
+        }
+    else
+    	document.getElementById("divInfoDebug").innerHTML = jsonRep.err
+    }
+    
+function  balisageSeries()
     {
     l_series = document.getElementsByClassName("chrono_serie")
-    for (ii=0;ii<l_series.length;ii++)
+    for (ii=0; ii<l_series.length; ii++)
         {
         // decalage debut
-        debut = l_series[ii].getAttribute("debut")
+        debut = l_series[ii].getAttribute("date_debut")
         deltaH = moment(debut).diff(moment(date_debut_vue), 'hours')
         l_series[ii].style.marginLeft = deltaH * pxParH + "px" 
         // decalage fin
-        fin = l_series[ii].getAttribute("fin")
+        fin = l_series[ii].getAttribute("date_fin")
         deltaH = moment(fin).diff(moment(debut), "hours")
         l_series[ii].style.width = deltaH * pxParH  + "px"
         // placement des évenements "divers"
@@ -131,16 +156,19 @@ function  balisagePlants()
  
 function ajouteEvenement() 
     {
-    document.getElementById("editPlant_evts").innerHTML += '<table><tr><td>Nom : <input type="hidden" value="0" name="edit_evt_id[]"/><input type="text" value="" name="edit_evt_nom[]"/></td></tr><tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" name="edit_evt_date[]"/></td></tr><tr><td>Durée max (j): <input style="width: 60px" type="text" value="1" name="edit_evt_duree_j"/></td></tr></table>'
+    document.getElementById("editeSerie_evts").innerHTML += '<table><tr><td>Nom : <input type="hidden" value="0" name="edit_evt_id[]"/><input type="text" value="" name="edit_evt_nom[]"/></td></tr><tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" name="edit_evt_date[]"/></td></tr><tr><td>Durée max (j): <input style="width: 60px" type="text" value="1" name="edit_evt_duree_j"/></td></tr></table>'
     }
 
-function supprimePlant(id_serie)
+function supprimeSerie(id_serie)
     {
-    s_request = "cde=supprime_plant&id="+ id_serie
+    s_request = "cde=supprime_serie&id=" + id_serie
+    alert(s_request)
     rep = requestServer(s_request)  
-    jsonRep = JSON.parse(rep)        
-    document.getElementById('divEditSerie').style.display = "none"
-    document.getElementById('matrice').removeChild(document.getElementById(id_serie))
+    jsonRep = JSON.parse(rep)   
+    if (jsonRep.status == 'true')
+        window.location.reload()    
+    else
+        alert(jsonRep.err)
     }
 
 function supprime_planche(plId)
@@ -154,17 +182,29 @@ function supprime_planche(plId)
         alert(jsonRep.err)
     }
 
-function prepareAjouteSerie(num_planche)
+function prepareAjouteSerie(hCaller, num_planche)
     {
-    document.getElementById('divEditSerie').style.display = "block"
+    hDiv = document.getElementById("divEditSerie")
+    hDiv.style.display = "block"
+    hDiv.style.position = "absolute"
+    hDiv.style.left = "10px"
+    hDiv.style.top = hCaller.offsetTop + "px" // decale à la hauteur de la planche à garnir
     document.getElementById("editSerie_num_planche").value = num_planche
     document.getElementById("editSerie_id_serie").value = 0
-
+    document.getElementById("editSerie_id_serie").readOnly = true
+    document.getElementById("editSerie_titre").innerHTML = "Edition d'une nouvelle série"
     }
-function prepareEditeSerie(hDivSerie)
+    
+function prepareEditeSerie(id_serie)
     {
-    document.getElementById('divEditSerie').style.display = "block"
+    hDiv = document.getElementById("divEditSerie")
+    hDiv.style.display = "block"
+    hDiv.style.position = "absolute"
+    hDiv.style.left = "10px"
+    hDivSerie = document.getElementById(id_serie)
+    hDiv.style.top = hDivSerie.offsetTop + 80 + "px" // 80 pour aller en dessous du div de serie
     document.getElementById("editSerie_id_serie").value = hDivSerie.getAttribute("id")
+    document.getElementById("editSerie_id_serie").readOnly = true
     document.getElementById("editSerie_num_planche").value =  hDivSerie.getAttribute("num_planche")
     document.getElementById("editSerie_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
     document.getElementById("editSerie_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
@@ -180,9 +220,51 @@ function prepareEditeSerie(hDivSerie)
             document.getElementById("editSerie_id_variete").options[ii].selected=true
             break
            }
+    document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
 
     }
-        
+
+function prepareDeplacementSerie(id_serie)
+    {
+    hDiv = document.getElementById("divDeplacementSerie")
+    hDiv.style.display = "block"
+    hDiv.style.position = "absolute"
+    hDiv.style.left = "10px"
+    hDivSerie = document.getElementById(id_serie)
+    hDiv.style.top = hDivSerie.offsetTop + 80 + "px" // 80 pour aller en dessous du div de serie
+    document.getElementById("deplacement_id_serie").value = hDivSerie.getAttribute("id")
+    document.getElementById("deplacement_num_planche_orig").value =  hDivSerie.getAttribute("num_planche")
+    document.getElementById("deplacement_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
+    document.getElementById("deplacement_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
+    document.getElementById("deplacement_quantite").value = hDivSerie.getAttribute("quantite")
+   
+    }
+
+                                       
+function sauveSerie()
+    {
+    // sauvegarde d'une serie
+    s_request = "cde=sauve_serie&id_serie=" + document.getElementById("editSerie_id_serie").value
+    s_request += "&id_variete=" + document.getElementById("editSerie_id_variete").value
+    s_request += "&num_planche=" + document.getElementById("editSerie_num_planche").value
+    s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
+    s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
+    s_request += "&quantite=" + document.getElementById("editSerie_quantite").value
+    s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
+    s_request += "&date_fin=" + document.getElementById("editSerie_date_fin").value
+
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == 'true')
+        {
+        alert(jsonRep.msg)
+        window.location.reload()
+        }
+    else
+        document.getElementById("divInfoDebug").innerHTML = jsonRep.err
+
+    }
+           
 function editePlant(hPlant)
     {
     // recup evenements liés à cette série
@@ -193,20 +275,20 @@ function editePlant(hPlant)
         
     // maj variété
     id_variet  = hPlant.getAttribute("variete")
-    list = document.getElementById("editPlant_select_var").getElementsByTagName("option")
+    list = document.getElementById("editeSerie_select_var").getElementsByTagName("option")
     for(ii=0;ii<list.length;ii++)
         if (list[ii].value == id_variet)
             {
-            document.getElementById("editPlant_select_var").options[ii].selected=true
+            document.getElementById("editeSerie_select_var").options[ii].selected=true
             break
            }
 
-    // maj attributs plant               
-    document.getElementById("editPlant_id_planche").innerHTML = {{planche.num}}
-    document.getElementById("editPlant_plantId").innerHTML = id_serie
-    document.getElementById("editPlant_quantite").value = hPlant.getAttribute("quantite")
-    document.getElementById("editPlant_date_debut").value =  hPlant.getAttribute("date_debut")
-    document.getElementById("editPlant_date_fin").value =  hPlant.getAttribute("date_fin")
+    // maj attributs série               
+    document.getElementById("editeSerie_id_planche").innerHTML = {{planche.num}}
+    document.getElementById("editeSerie_plantId").innerHTML = id_serie
+    document.getElementById("editeSerie_quantite").value = hPlant.getAttribute("quantite")
+    document.getElementById("editeSerie_date_debut").value =  hPlant.getAttribute("date_debut")
+    document.getElementById("editeSerie_date_fin").value =  hPlant.getAttribute("date_fin")
     document.getElementById("divEditSerie").style.display = "inline"
     }
 
@@ -214,7 +296,7 @@ function editePlant(hPlant)
 
 {% endblock %}
 
-{% block title %}Suivi temporel des plants sur les planches{% endblock %}
+{% block title %}Suivi temporel des series sur les planches{% endblock %}
 
 {% block content %}
 {{s_msg}}
@@ -226,10 +308,10 @@ function editePlant(hPlant)
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
 <input hidden type="text" id="mode" value="echelle" />
-Pour les planches <input style="width: 300px" type="text" name="num_planches" value=" {% for planche in l_planches %}{{planche.num}},{% endfor %}" />
- Visionnage du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
-<input style="margin-left: 20px" type="submit" value="Envoyer" />
-<input style="margin-left: 20px" type="submit" name="direction" value="recul" />
+Pour les planches   <input style="width: 300px" type="text" name="num_planches" value="{% for planche in l_planches %}{{planche.num}},{% endfor %}" />
+ Visionnage du      <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
+                    <input style="margin-left: 20px" type="submit" value="Envoyer" />
+                    <input style="margin-left: 20px" type="submit" name="direction" value="recul" />
 <input type="submit" name="direction" value="avance" />
 Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
 <button onclick="changelePas(-1);return(false)">-</button><button onclick="changelePas(1);return(false)">+</button>
@@ -241,29 +323,28 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     <div id="cadre_chrono_pl{{planche.id}}" class="cadre_chrono">
     <div class="barre_du_jour"> </div>
    
-    <h2>{{planche.nom}} ({{planche.num}}) 
-        <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie({{planche.num}});return false"> 
-        <div class="suppr_planche" onclick="supprime_planche({{planche.id}});return false;">
-            <img src="{{STATIC_URL}}images/toDelete.jpeg" title="supprimer la planche">
-        </div>
+    <h2>{{planche}}
+        <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie(this, {{planche.num}});return false"> 
+           
     </h2>
 
-        {# plants existants en base #}
-        {% for serie in planche.l_plants %}
-        <div class="chrono_serie"  id="{{serie.id}}"  num_planche="{{planche.num}}" 
-                                    onclick="prepareEditeSerie(this);return false"
+        {# séries existantes en base #}
+        {% for serie in planche.l_series %}
+        <div class="chrono_serie"   id="{{serie.id}}" num_planche="{{planche.num}}" 
                                     nom_variete="{{serie.variete}}" id_variete="{{serie.variete.id}}" 
                                     quantite="{{serie.quantite}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
-                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}">
+                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}"
+                                    style="border-color: {{serie.variete.couleur}}" >
                                     
         <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" 
-            title="id={{serie.id}} planche={{planche.num}} variete={{serie.variete}} quantite={{serie.quantite}} nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}} Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
+            title="id={{serie.id}} planche={{planche.num}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
         <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
         <div class="variete" style="display: inline;z-index:3; ">
-        {{serie.variete}} x {{serie.quantite}}</div> 
-        <a href="javascript:editeDeplacement({{serie.id}})">>></a><br/>
+        {{serie.variete}} x {{serie.quantite}}</div>
+        <a href="#" onclick="javascript:prepareEditeSerie({{serie.id}});return(false)">EDITER</a>
+        <a href="#" onclick="javascript:prepareDeplacementSerie({{serie.id}});return(false)">DEPLACER</a><br/>
         <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
         <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
         <div class="evts" style="display:inline;position:relative;float:left;"> </div>
@@ -274,7 +355,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 
 
 	<div id="divEditSerie" style="display:none" class="BlueFrame" >
-		<h2>Edition d'une série</h2>
+		<h2 id="editSerie_titre"> </h2>
 		<p>
 		Série <input style="width:40px" type="text" id="editSerie_id_serie"  name="editSerie_id_serie" value="" />
 		sur planche N° <input style="width: 40px" type="text" id="editSerie_num_planche" name="editSerie_num_planche" value="0" /></p>
@@ -284,30 +365,34 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    	    	{% endfor %}
 	    	      </select>
 	    </p>
-        <p>Quantité : <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
-        <p>Nb rangs : <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
-           Intra rangs (cm) : <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
-	    <p>Début (jj/mm/aaaa) : <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
-	    <p>Fin (jj/mm/aaaa) ou vide : <input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
-	    <br/><br/><b>Evenements</b>
-	    <div id="editPlant_evts"> </div>
+        <p>Quantité :               <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
+        <p>Nb rangs :               <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
+           Dans le rang (cm) :      <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
+	    <p>Début (jj/mm/aa) :       <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
+	    <p>Fin (jj/mm/aa) ou vide : <input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
+	    <br/><b>Evenements</b>
+	    <div id="editeSerie_evts"> </div>
 	    <input type='button' value='+' onclick="ajouteEvenement()"/><br/>
 	    <hr/>
-	    <input type='button' value='Supprimer' name='supprime' onclick="supprimePlant(document.getElementById('editPlant_plantId').innerHTML)"/><br/>
-	    <input type='submit' value='Sauver' /><br/>
+        <input type='button' value='Supprimer' name='supprime' onclick="supprimeSerie(document.getElementById('editSerie_id_serie').value)"/>
+        <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return False"/>
+	    <input type='button' value='Sauver' onclick="sauveSerie();return False" /><br/>
 	</div>
     </form>
-    <div id="div_deplacement_plants">
-        <h3>Déplacement de plants</h3>
-        Plant/s N°<input style="width: 30px;margin-left: 10px;display: inline" type="text" id="deplacement_id_plant" value=""/>
-        <b>(<div id="deplacement_variete" style="display: inline"> </div>)</b>
-        vers planche N°<input style="width: 30px;margin-left: 10px" type="text" id="deplacement_num_planche_dest" value=""/><br/>
-        Espacement dans le rang (cm)<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_intra_rang_cm" value=""/><br/>
-        Nombre de rangs<input style="margin-left: 10px;width: 30px" type="text" id="deplacement_nb_rangs" value=""/><br/>
-        <input type="checkbox" id="deplacement_partiel" />Déplacement partiel.
-        Nb de plants :<input style="width: 30px" type="text" id="deplacement_nb_plants" value=""/><br/>
-        <input type="checkbox" id="deplacement_simulation" />Simulation
-        <input type="submit" style="margin-left: 30px"  value="Déplacement" onclick="deplacement(this)" />
+    
+    <div id="divDeplacementSerie">
+        <h3>Déplacement de la série N°<input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" /></h3>
+        Nb de série :               <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
+        De la planche N°            <input id="deplacement_num_planche_orig"   value="" type="text" readonly style="width: 30px;margin-left: 10px"/>
+        vers la planche N°          <input id="deplacement_num_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
+        dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
+        Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
+        Déplacement partiel         <input id="deplacement_partiel"                     type="checkbox" />
+        Nb de plants :              <input id="deplacement_nb_plants"          value="" type="text" style="width: 30px" /><br/>
+        Simulation                  <input id="deplacement_simulation"                  type="checkbox" />
+        <input type="submit" value="Déplacement" onclick="deplacement(this)" style="margin-left: 30px" />
+        <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divDeplacementSerie').style.display='none';return False"/>
+        
     </div>
 
 </div>
