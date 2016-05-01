@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from main.models import Famille, Planche, Variete
 
 from main import constant
-
+import sys
    
 class Command(BaseCommand):
     """updateDB command"""
@@ -34,14 +34,18 @@ class Command(BaseCommand):
                     try:
                         p = Planche.objects.get(nom = nomPlanche)
                     except:
-                        p = Planche()              
+                        p = Planche()
+                        print (np)          
                         p.num = np        
                         p.nom = nomPlanche
-                        p.longueur_m = int(d_line.get("longueur (m)"))
-                        p.largeur_cm = int(d_line.get("largeur (m)"))*100
-                        p.save()               
+                        print(nomPlanche)
+                        p.longueur_m = int(d_line.get("longueur (m)", 0))
+                        p.largeur_cm = int(float(d_line.get("largeur (m)", "0").replace(",","."))*100)
+                        p.bSerre = (p.nom[0]=="S")
+                        p.save()
+                        print (p)               
         except:
-            print("erreur acces planches.csv") 
+            print("erreur acces planches.csv, %s"%sys.exc_info()[1]) 
               
 
             
@@ -63,11 +67,11 @@ class Command(BaseCommand):
                     v = Variete()
                     v.nom = variet
 
-                v.date_min_plantation = d_line.get("date_min_plantation")
-                v.date_max_plantation = d_line.get("date_max_plantation")
+                v.date_min_plantation = d_line.get("date_min_plantation", "0/0")
+                v.date_max_plantation = d_line.get("date_max_plantation", "0/0")
                 v.duree_avant_recolte_j = int(d_line.get("duree_avant_recolte_j") or 0 )
-                v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
-                v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
+                v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g", "0")
+                v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g", "0")
 
                 
                 if d_line.get("unite_prod") == 'u': 
