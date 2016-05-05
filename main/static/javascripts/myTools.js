@@ -100,3 +100,12 @@ function validateAndRunJob(s_vmVersion, s_debug)
         window.open(url, '_self')
         }
     }
+    
+function supprime_planche(plId)
+    {
+    s_request = "cde=supprime_planche&id=" + plId
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status != 'true')
+        alert(jsonRep.err)
+    }

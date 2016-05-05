@@ -48,8 +48,6 @@ def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None):
     else:
         planche.nom = "Planche"
         
-    planche.save()
-    
     if num is not None :    planche.num = num
     else:                   planche.num = planche.id
         

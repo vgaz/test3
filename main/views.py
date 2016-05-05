@@ -34,21 +34,20 @@ def creationPlanches(request):
     """gestion de la requete de post """
     s_msg = ""
     if request.POST:
-        quantite = in>>>>>>> refs/remotes/github_test3/dev
-t(request.POST.get("quantite", 0))        
+        quantite = int(request.POST.get("quantite", 0))        
         numPl = int(request.POST.get("num_prem"))           
         s_msg = ""
         for index in range(numPl, numPl + quantite):
             pl = creationPlanche(int(request.POST.get("longueur_m")), 
                                  int(request.POST.get("largeur_cm")), 
                                  request.POST.get("bSerre") == "on",
-                                 s_nom = request.POST.get("prefixe", "Planche"),
+                                 s_nom = request.POST.get("prefixe", "Planche") + str(index),
                                  num = index
                                  )
             
             s_msg = "Planches créées"
             print (pl)
-    l_planches = Planche.objects.all().order_by('num')
+    l_planches = Planche.objects.all().order_by('nom')
 
     return render(request,
                  'main/creation_planches.html',
@@ -69,10 +68,6 @@ def chronoPlanches(request):
         delta20h = datetime.timedelta(hours=20)
         date_du_jour = datetime.datetime.now()
     
-        s_msg = ""
-        delta20h = datetime.timedelta(hours=20)
-        date_du_jour = datetime.datetime.now()
-    
         if request.POST.get("date_debut_vue",""):
             date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
             date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
@@ -80,39 +75,15 @@ def chronoPlanches(request):
             delta = datetime.timedelta(days=60)
             date_debut_vue = date_du_jour - delta
             date_fin_vue = date_du_jour + delta + delta20h
-        
+            
         decalage_j = int(request.POST.get("decalage_j", 10))
         delta = datetime.timedelta(days = decalage_j)
         if request.POST.get("direction", "") == "avance":
             date_debut_vue += delta 
             date_fin_vue += delta
+            
         if request.POST.get("direction", "") == "recul":
             date_debut_vue -= delta 
-            date_fin_vue -= delta        
-
-        # gestion de la création d'une nouvelle série de plants
-        if int(request.POST.get("editSerie_id_serie", -1)) == 0:
-
-            snouv = creationSerie(Planche.objects.get(num=int(request.POST.get("editSerie_num_planche"))).id, 
-                                 int(request.POST.get("editSerie_id_variete")), 
-                                 int(request.POST.get("editSerie_quantite")), 
-                                 int(request.POST.get("editSerie_intra_rang_cm")), 
-                                 int(request.POST.get("editSerie_nb_rangs")), 
-                                 request.POST.get("editSerie_date_debut"), 
-                                 request.POST.get("editSerie_date_fin"))
-            print(snouv)
-            s_msg += "Nouvelle serie créée = %s"%(snouv)
-
-            
-        decalage_j = int(request.POST.get("decalage_j", 10))
-        delta = datetime.timedelta(days = decalage_j)
-        if request.POST.get("direction", "") == "avance":
-            date_debut_vue += delta 
-            date_fin_vue += delta
-            
-        if request.POST.get("direction", "") == "recul":
-            date_debu>>>>>>> refs/remotes/github_test3/dev
-t_vue -= delta 
             date_fin_vue -= delta
             
         s_nums = request.POST.get("num_planches", request.GET.get("num_planches", ""))
@@ -132,10 +103,10 @@ t_vue -= delta
                                           date__lte = date_fin_vue, 
                                           serie__in = Serie.objects.filter(planche_id = laPlanche))
 
-        ## on en deduit les series impliquérs, même partiellement
+        ## on en deduit les series impliquées, même partiellement
         l_seriesId = list(set([evt.serie_id for evt in l_evts]))
         laPlanche.l_series = Serie.objects.filter(planche_id = laPlanche, id__in = l_seriesId ).order_by('variete_id')
-        ## on récupère de nouveau tous les évenements des series impactérs , même ceux hors fenetre temporelle 
+        ## on récupère de nouveau tous les évenements des series impactées , même ceux hors fenetre temporelle 
         s_evts_series = ""
         for serie in laPlanche.l_series:
             serie.l_evts = Evenement.objects.filter(serie_id = serie.id, type = Evenement.TYPE_DIVERS).order_by('date')
@@ -295,8 +266,7 @@ def prevision_recolte(request):
     tab_previsions += "]" 
 
     ## calcul des productions à partir des séries dont la prodution est dans la fenetre étudiée
-    l_series = Serie.>>>>>>> refs/remotes/github_test3/dev
-objects.filter(evt_debut_date__gte = date_debut_sem_vue,
+    l_series = Serie.objects.filter(evt_debut_date__gte = date_debut_sem_vue,
                                     evt_fin_date__lte = date_fin_sem_vue)
     
     return render(request,
@@ -333,7 +303,6 @@ def tab_varietes(request):
                 v.save()
       
     
-
         for v in l_vars:
             v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
     
@@ -388,3 +357,7 @@ def quizFamilles(request):
             }
           )  
     
+    
+
+
+#################################################
