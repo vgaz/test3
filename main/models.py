@@ -7,6 +7,9 @@ from main.Tools import MyTools
 
 ## fabrique d'éléments et enregistrement dans la base
 
+def nomSerie(s_espece, s_variete, s_dateJMA):
+    return "%s %s %s"%(s_espece, s_variete, s_dateJMA)
+
 def creationEvt(e_date, e_type, id_serie, duree_j=1, nom=""):
     """création d'une evenement en base
     retourne l'instance de l'évènement"""
@@ -114,7 +117,7 @@ def cloneSerie(serie):
         evt2.serie_id = serie2.id
         evt2.save()
     return serie2
-    
+
 class Famille(models.Model):
     """famille associée à la varieté"""
     nom = models.CharField(max_length=100)
@@ -139,24 +142,36 @@ class Planche(models.Model):
         else:           s_lieu = "plein champ"
         return "%s %d, %d m x %d cm; %s" % ( self.nom, self.num, self.longueur_m, self.largeur_cm, s_lieu)
 
-class Variete(models.Model):
-    """variété de légume"""
+
+class Espece(models.Model):
+    """Espèce de légume"""
     nom = models.CharField(max_length=100)
     famille = models.ForeignKey(Famille, null=True, blank=True)
     avec = models.ManyToManyField("self", related_name="avec", blank=True)
     sans = models.ManyToManyField("self", related_name="sans", blank=True)
+    unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
+        
+    class Meta:
+        ordering = ['nom']
+        
+    def __str__(self):
+        return self.nom                    
+
+
+class Variete(models.Model):
+    """variété de légume"""
+    nom = models.CharField(max_length=100)    
+    espece = models.ForeignKey(Espece, null=True, blank=True)
+    prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)
+    rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
+    intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
+    couleur = models.CharField(max_length=16)
     date_min_plantation_pc = models.CharField(verbose_name="date (jj/mm) de début de plantation en plein champ", max_length=10, default="0/0")
     date_max_plantation_pc = models.CharField(verbose_name="date (jj/mm) de fin de plantation en plein champ", max_length=10, default="0/0")
     date_min_plantation_sa = models.CharField(verbose_name="date (jj/mm) de début de plantation sous abris", max_length=10, default="0/0")
     date_max_plantation_sa = models.CharField(verbose_name="date (jj/mm) de fin de plantation sous abris", max_length=10, default="0/0")
     duree_avant_recolte_pc_j = models.IntegerField("durée plein champ avant récolte (jours)", default=0)
     duree_avant_recolte_sa_j = models.IntegerField("durée en serre avant récolte (jours)", default=0)
-    prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)
-    rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
-    intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
-    unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
-    b_choisi = models.BooleanField(default=True)
-    couleur = models.CharField(max_length=16)
     
     class Meta:
         ordering = ['nom']
@@ -196,7 +211,7 @@ class Variete(models.Model):
         
         l_ret = []
         
-        for prodSemUnitaire in self.prod_hebdo_moy_g.split(","):
+        for prodSemUnitaire in self.prod_especehebdo_moy_g.split(","):
 
             if self.unite_prod == constant.UNITE_PROD_PIECE:
                 l_ret.append(int(productionDemandee * float(prodSemUnitaire)))
@@ -231,12 +246,20 @@ class Serie(models.Model):
         verbose_name = "Série de plants"
 
     variete = models.ForeignKey(Variete)
+    dateEnTerre = models.DateTimeField("date de mise en terre (plantation ou semis)")
+    dureeAvantDebutRecolte_j = models.IntegerField("durée min avant début de récolte (jours)", default=0)
+    etalementRecolte_seriej = models.IntegerField("durée étalement possible de la récolte (jours)", default=0)
+
     nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
     intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=0)
     planche = models.ForeignKey("Planche", default=0, blank=True)
     quantite = models.PositiveIntegerField(default=1)
     evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
+    
+
+    intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
+
     l_prelevement = []
     
     def prodEstimee_kg(self):
@@ -303,12 +326,14 @@ class Serie(models.Model):
         self.save()
    
     def __str__(self):
-        return "Série N°%d de %d plants de %s sur planche %d, %d cm dans le rang sur %d rangs, du %s au %s" %(  self.id, self.quantite, self.variete.nom, 
-                                                                                                        self.planche.num,
-                                                                                                        self.intra_rang_cm, 
-                                                                                                        self.nb_rangs, 
-                                                                                                        self.evt_debut.date,
-                                                                                                        self.evt_fin.date)
+        return "Série N°%d de %d plants de %s %s sur planche %d, %d cm dans le rang sur %d rangs, du %s au %s" %(  self.id, self.quantite, 
+                                                                                                                   self.variete.espece.nom,
+                                                                                                                   self.variete.nom, 
+                                                                                                                   self.planche.num,
+                                                                                                                   self.intra_rang_cm, 
+                                                                                                                   self.nb_rangs, 
+                                                                                                                   self.evt_debut.date,
+                                                                                                                   self.evt_fin.date)
 
       
 

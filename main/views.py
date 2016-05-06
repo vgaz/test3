@@ -12,7 +12,7 @@ import main.Tools.MyTools as MyTools
 
 import datetime
 
-from main.models import Variete, Famille, Evenement, Planche, Serie, Production
+from main.models import Espece, Evenement, Famille, Variete,  Planche, Serie, Production
 from main.models import recupListeSeriesEnDateDu, creationPlanche, creationEditionSerie
 from main.forms import PlancheForm
 
@@ -291,12 +291,6 @@ def tab_varietes(request):
             for v in l_vars:
                 s_pk = "v_%s_"% str(v.pk)
                 print(s_pk)
-                v.date_min_plantation_pc = request.POST.get(s_pk + "date_min_plantation_pc",'0/0')
-                v.date_max_plantation_pc = request.POST.get(s_pk + "date_max_plantation_pc",'0/0')
-                v.date_min_plantation_sa = request.POST.get(s_pk + "date_min_plantation_sa",'0/0')
-                v.date_max_plantation_sa = request.POST.get(s_pk + "date_max_plantation_sa",'0/0')
-                v.duree_avant_recolte_pc_j = int(request.POST.get(s_pk + "duree_avant_recolte_pc_j",0))
-                v.duree_avant_recolte_sa_j = int(request.POST.get(s_pk + "duree_avant_recolte_sa_j",0))
                 v.prod_kg_par_m2 = float(request.POST.get(s_pk + "prod_kg_par_m2",0))
                 v.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent",100))
                 v.intra_rang_cm = int(request.POST.get(s_pk + "intra_rang_cm",10))
@@ -327,22 +321,20 @@ def quizFamilles(request):
 
     if form.is_valid():
         
-        idVarAsked = request.POST.get('variete')
-        
-        varAsked = Variete.objects.get(id=idVarAsked)
-     
-#         print("var", varAsked.id, varAsked.nom, varAsked.famille)
-        
+        espDemandee = request.POST.get('variete')
+             
         repIdFam = int(request.POST.get('famChoice', -1))
         
         print('rep', repIdFam)
-         
-        if repIdFam == varAsked.famille.id:
+        
+        espece = Espece.objects.get(id=espDemandee)
+
+        if repIdFam == espece.famille.id:
             message = "BRAVO"
         else:
             message = "PERDU"
 
-        message += ", %s est de la famille des %ss " % (varAsked.nom, varAsked.famille.nom)
+        message += ", %s est de la famille des %ss " % (espDemandee.nom, espDemandee.famille.nom)
 
         ## restart a new form
         form = forms.FormFamilyQuiz()
