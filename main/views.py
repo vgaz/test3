@@ -316,33 +316,37 @@ def tab_varietes(request):
 
 def quizFamilles(request):
     message = ""
+    color= "white"
     
     form = forms.FormFamilyQuiz(request.POST or None)
 
     if form.is_valid():
         
-        espDemandee = request.POST.get('variete')
+        s_espDemandee = request.POST.get('espece')
              
         repIdFam = int(request.POST.get('famChoice', -1))
         
         print('rep', repIdFam)
         
-        espece = Espece.objects.get(id=espDemandee)
+        espece = Espece.objects.get(id=s_espDemandee)
 
         if repIdFam == espece.famille.id:
-            message = "BRAVO"
+            s_rep = "BRAVO"
+            color = 'lime'
         else:
-            message = "PERDU"
+            s_rep = "PERDU"
+            color= 'red'
 
-        message += ", %s est de la famille des %ss " % (espDemandee.nom, espDemandee.famille.nom)
+        message += "%s, la/le %s est de la famille des %ss" % (s_rep, espece.nom, espece.famille.nom)
 
         ## restart a new form
         form = forms.FormFamilyQuiz()
 
-    form.var = random(Variete.objects.filter(famille__isnull=False).values("nom", "id"))
+    form.esp = random(Espece.objects.filter(famille__isnull=False).values("nom", "id"))
 
     return render(request, 'main/quizFamilles.html',
             {
+             "color":color,
              "message" : message,
              "form": form,
              "appVersion": constant.APP_VERSION
