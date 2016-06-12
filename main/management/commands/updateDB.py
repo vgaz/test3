@@ -60,7 +60,6 @@ class Command(BaseCommand):
         ## maj base de légumes
         l_fams = Famille.objects.all().values_list("nom", flat=True)
         print ("l_fams ", l_fams)
-        l_fams_sup = []
 
         ## maj espèces et familles
         ficname = "production.csv"
@@ -94,6 +93,7 @@ class Command(BaseCommand):
                 
     
         ## maj séries
+        print("---------------- MAJ SERIES")
         ficname = "planning.csv"
         with open(ficname, "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
@@ -115,7 +115,7 @@ class Command(BaseCommand):
                     espece = Espece.objects.get(nom=s_espece) 
                     v.espece_id = espece.id
                     v.save()
-                    print(v)
+                    print("variété", v)
                     
                     ## maj série
                     dateEnTerre = datetime.datetime.strptime(s_dateEnTerre, constant.FORMAT_DATE)
@@ -126,19 +126,22 @@ class Command(BaseCommand):
                         serie.dateEnTerre = dateEnTerre
                         serie.variete = v
                         
-                    serie.dureeAvantDebutRecolte_j = int(d_line.get("Durée avant récolte (j)",0))
-                    serie.etalementRecolte_seriej = int(d_line.get("Étalement récolte (j)",0))
-                    serie.save()
-                    serie.fixeDates(dateEnTerre)
-                    
-                    serie.nb_rangs = int(d_line.get("Nombre de rangs retenus", 0))
-                    serie.intra_rang_cm = int(d_line.get("Intra rang (cm)", 0))
-                    serie.quantite = int(d_line.get("Nombre de pieds", 0))
-                    
-                    serie.planche_id = 0
-
-                    serie.save()
-
+                    try:
+                        serie.dureeAvantDebutRecolte_j = int(d_line.get("Durée avant récolte (j)", "0"))
+                        serie.etalementRecolte_seriej = int(d_line.get("Étalement récolte (j)", "0"))
+                        serie.save()
+                        serie.fixeDates(dateEnTerre)
+                        
+                        serie.nb_rangs = int(d_line.get("Nombre de rangs retenus", "0"))
+                        serie.intra_rang_cm = int(d_line.get("Intra rang (cm)", "0"))
+                        serie.quantite = int(d_line.get("Nombre de pieds", "0"))
+                        
+                        serie.planche_id = 0
+    
+                        serie.save()
+                    except:
+                        print(sys.exc_info()[1]) 
+                        
 # 
 #         
 #         ficname = "Legumes.csv"
