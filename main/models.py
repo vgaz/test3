@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 import datetime
+import sys, traceback
 
 from main import constant  
 from main.Tools import MyTools
@@ -240,6 +241,22 @@ class Production(models.Model):
                                                              self.qte_prod, 
                                                              self.variete.nomUniteProd())
 
+class implantation(models.Model):
+    planche = models.ForeignKey("Planche")
+    debut_m = models.FloatField("Début de la culture (m)", default=0)
+    fin_m = models.FloatField("Début de la culture (m)", default=0)
+
+    def longueur_m(self):
+        return self.fin_m - self.debut_m
+    
+    def surface_m2(self):
+        try:
+            return self.longueur_m() * self.planche.largeur_cm/100
+        except:
+            traceback.print_tb(sys.exc_info())
+            return 0
+
+    
 class Serie(models.Model):
     
     class Meta:
@@ -249,17 +266,14 @@ class Serie(models.Model):
     dateEnTerre = models.DateTimeField("date de mise en terre (plantation ou semis)")
     dureeAvantDebutRecolte_j = models.IntegerField("durée min avant début de récolte (jours)", default=0)
     etalementRecolte_seriej = models.IntegerField("durée étalement possible de la récolte (jours)", default=0)
-
     nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
     intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=0)
+    l_implantation = models.CommaSeparatedIntegerField("implantation/s sur les planches", max_length=200)
     planche = models.ForeignKey("Planche", default=0, blank=True)
     quantite = models.PositiveIntegerField(default=1)
     evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
     
-
-    intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
-
     l_prelevement = []
     
     def prodEstimee_kg(self):
@@ -305,19 +319,21 @@ class Serie(models.Model):
      
     def fixeDates(self, dateDebut, dateFin=None):
         """Crée les evts de début et fin de vie du/des plants"""
-        if isinstance(dateDebut, str): dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
+        if isinstance(dateDebut, str): 
+            dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
+            
         self.evt_debut_id = creationEvt(dateDebut, 
                                         Evenement.TYPE_DEBUT, 
                                         self.id, 
                                         1, 
                                         "début %s"%self.variete.nom).id
-        if not dateFin:
-            if self.planche.bSerre:
-                dateFin = self.evt_debut.date + datetime.timedelta(days = self.variete.duree_avant_recolte_sa_j)
-            else:
-                dateFin = self.evt_debut.date + datetime.timedelta(days = self.variete.duree_avant_recolte_pc_j)
         
-        if isinstance(dateFin, str): dateFin = MyTools.getDateFrom_d_m_y(dateFin)
+        if dateFin and isinstance(dateFin, str): 
+            dateFin = MyTools.getDateFrom_d_m_y(dateFin)
+
+        if not dateFin:
+            dateFin = self.evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j + self.etalementRecolte_seriej)
+
         self.evt_fin_id = creationEvt(dateFin, 
                                       Evenement.TYPE_DEBUT, 
                                       self.id, 1, 

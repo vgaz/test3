@@ -67,7 +67,7 @@ class Command(BaseCommand):
         with open(ficname, "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
             for d_line in reader:
-                nomEspece = d_line.get("Légume").lower().strip()
+                nomEspece = d_line.get("Légume", "").lower().strip()
                 if nomEspece:
                     try:
                         esp = Espece.objects.get(nom = nomEspece)
@@ -99,11 +99,11 @@ class Command(BaseCommand):
             reader = csv.DictReader(hF)
             for d_line in reader:
                 
-                s_espece = d_line.get("Légume").lower().strip()
+                s_espece = d_line.get("Légume", "").lower().strip()
                 s_variet = d_line.get("Variété", "").lower().strip()
                 s_dateEnTerre = d_line.get("Date en terre","")
                 if s_espece and s_variet and s_dateEnTerre:
-                    print ("s_espece XXXXXXXXX ", s_espece)
+                    print ("s_espece", s_espece)
                     try:
                         v = Variete.objects.get(nom = s_variet)
 
@@ -118,27 +118,27 @@ class Command(BaseCommand):
                     print(v)
                     
                     ## maj série
+                    dateEnTerre = datetime.datetime.strptime(s_dateEnTerre, constant.FORMAT_DATE)
                     try:                        
-                        ##s_nomSerie = nomSerie(espece, s_variet, s_dateEnTerre)
-                        dureeAvantDebutRecolte_j = d_line.get("Durée avant récolte (j)")
-                        etalementRecolte_j = d_line.get("Étalement récolte (j)")
-                        dateEnTerre = datetime.datetime.strptime(s_dateEnTerre, constant.FORMAT_DATE)
                         serie = Serie.objects.get(dateEnTerre = dateEnTerre, variete = v)
                     except:
                         serie = Serie()
                         serie.dateEnTerre = dateEnTerre
                         serie.variete = v
-                        serie.save()
                         
-                        print("AAAAAAAAAAA")
-                        
-                    try:
-                        a=1
-                        
+                    serie.dureeAvantDebutRecolte_j = int(d_line.get("Durée avant récolte (j)",0))
+                    serie.etalementRecolte_seriej = int(d_line.get("Étalement récolte (j)",0))
+                    serie.save()
+                    serie.fixeDates(dateEnTerre)
+                    
+                    serie.nb_rangs = int(d_line.get("Nombre de rangs retenus", 0))
+                    serie.intra_rang_cm = int(d_line.get("Intra rang (cm)", 0))
+                    serie.quantite = int(d_line.get("Nombre de pieds", 0))
+                    
+                    serie.planche_id = 0
 
-                    except:
-                        print(sys.exc_info()[1]) 
-                        continue
+                    serie.save()
+
 # 
 #         
 #         ficname = "Legumes.csv"
