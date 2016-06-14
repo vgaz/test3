@@ -299,7 +299,7 @@ function editePlant(hPlant)
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
 <input hidden type="text" id="mode" value="echelle" />
-Pour les planches   <input style="width: 300px" type="text" name="num_planches" value="{% for planche in l_planches %}{{planche.num}},{% endfor %}" />
+Pour les planches <input style="width: 300px" type="text" name="noms_planches" value="{% for planche in l_planches %}{{planche.nom}},{% endfor %}" />
  Visionnage du      <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
                     <input style="margin-left: 20px" type="submit" value="Envoyer" />
                     <input style="margin-left: 20px" type="submit" name="direction" value="recul" />
@@ -329,8 +329,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}"
                                     style="border-color: {{serie.variete.couleur}}" >
                                     
-        <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" 
-            title="id={{serie.id}} planche={{planche.num}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
+        <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="id={{serie.id}} planche={{planche.num}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
         <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
         <div class="variete" style="display: inline;z-index:3; ">
         {{serie.variete}} x {{serie.quantite}}</div>

@@ -256,6 +256,26 @@ class implantation(models.Model):
             traceback.print_tb(sys.exc_info())
             return 0
 
+
+class SerieManager(models.Manager):
+    
+    def surPlancheDansPeriode(self, idPlanche, dateDebut, dateFin):
+        l_allSeries = super(SerieManager, self).get_queryset()
+        l_series = l_allSeries
+#         return l_allSeries
+
+        for serie in l_allSeries:
+            print("=========", serie)
+            if datetime.datetime.date(serie.evt_debut.date) > datetime.datetime.date(dateFin)\
+                 or datetime.datetime.date(serie.evt_fin.date) < datetime.datetime.date(dateDebut):
+                print("exclude.............", serie)
+                l_series.exclude(id=serie.id)
+        
+        print (30*"x", l_series)
+
+        return l_series           
+
+
     
 class Serie(models.Model):
     
@@ -273,8 +293,9 @@ class Serie(models.Model):
     quantite = models.PositiveIntegerField(default=1)
     evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
-    
     l_prelevement = []
+    
+    objects = SerieManager()
     
     def prodEstimee_kg(self):
         """Retourne le poids (kg) de production escomptée""" 
@@ -345,7 +366,7 @@ class Serie(models.Model):
         return "Série N°%d de %d plants de %s %s sur planche %d, %d cm dans le rang sur %d rangs, du %s au %s" %(  self.id, self.quantite, 
                                                                                                                    self.variete.espece.nom,
                                                                                                                    self.variete.nom, 
-                                                                                                                   self.planche.num,
+                                                                                                                   0,#"self.planche.num",
                                                                                                                    self.intra_rang_cm, 
                                                                                                                    self.nb_rangs, 
                                                                                                                    self.evt_debut.date,

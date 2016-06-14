@@ -86,41 +86,32 @@ def chronoPlanches(request):
             date_debut_vue -= delta 
             date_fin_vue -= delta
             
-        s_nums = request.POST.get("num_planches", request.GET.get("num_planches", ""))
-        if s_nums:
-            l_nums = [int(num.strip()) for num in s_nums.strip(',').split(",")]
-            l_planches = Planche.objects.filter(num__in = l_nums).order_by('num')
+        s_noms = request.POST.get("noms_planches", request.GET.get("noms_planches", ""))
+        if s_noms:
+            l_noms = [int(num.strip()) for num in s_nums.strip(',').split(",")]
+            l_planches = Planche.objects.filter(nom__in = l_nums).order_by('nom')
         else:
-            l_planches = Planche.objects.all().order_by('num')
+            l_planches = Planche.objects.all().order_by('nom')
     except:
         s_msg += str(sys.exc_info())
         return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
     
-    ## ajout des evts liés à cette planche
+    ## ajout des séries liées à cette planche
     for laPlanche in l_planches:
-        ## on prend tous les evts de l'encadrement pour les planches sélectionnées
-        l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
-                                          date__lte = date_fin_vue, 
-                                          serie__in = Serie.objects.filter(planche_id = laPlanche))
-
-        ## on en deduit les series impliquées, même partiellement
-        l_seriesId = list(set([evt.serie_id for evt in l_evts]))
-        laPlanche.l_series = Serie.objects.filter(planche_id = laPlanche, id__in = l_seriesId ).order_by('variete_id')
-        ## on récupère de nouveau tous les évenements des series impactées , même ceux hors fenetre temporelle 
-        s_evts_series = ""
-        for serie in laPlanche.l_series:
-            serie.l_evts = Evenement.objects.filter(serie_id = serie.id, type = Evenement.TYPE_DIVERS).order_by('date')
-    
+        ## on ajoute un champ listant toutes les séries touchées par l'encadrement choisi
+        ##laPlanche.l_series 
+        l1 = Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue)
+#         for serie in laPlanche.l_series:
+#             serie.l_evts = Evenement.objects.filter(serie_id = serie.id, type = Evenement.TYPE_DIVERS).order_by('date')
 
     return render(request,
                  'main/chrono_planches.html',
                  {
                   "appVersion": constant.APP_VERSION,
                   "appName": constant.APP_NAME,
-                  "l_planches": l_planches,
-                  "s_evts_series":s_evts_series,
-                  "d_evtTypes":Evenement.D_NOM_TYPES,
                   "l_vars": Variete.objects.all(),                  
+                  "l_planches": l_planches,
+                  "d_evtTypes":Evenement.D_NOM_TYPES,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
                   "date_du_jour": date_du_jour,
