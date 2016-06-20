@@ -43,6 +43,7 @@ def getDateFrom_y_m_d(s_time):
         y,m,d = s_time.split("/")
     if "-" in s_time:
         y,m,d = s_time.split("-")
+        
     _date =  datetime.date(int(y),int(m),int(d))
     return (_date)
     
@@ -50,6 +51,7 @@ def getDateFrom_y_m_d(s_time):
 ######################################################################## 
 
 def getDateFrom_d_m_y(s_time):
+    
     if "/" in s_time:
         d,m,y = s_time.split("/")
 
@@ -816,7 +818,9 @@ def changeDivContent(resultFilePath, divId, content):
 ######################################################################################
 if __name__ == '__main__':
 
-    print(getDateFrom_d_m_y("22/3/45"))
+    
+    print(getDateFrom_y_m_d("2016-04-15"))
+    exit(0)
     print(getDateFrom_d_m_y("22/3/1945"))
     exit(0)
     dateDebut = datetime.datetime.now()

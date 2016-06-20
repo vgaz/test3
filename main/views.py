@@ -11,6 +11,7 @@ from main import forms, constant, planification
 import main.Tools.MyTools as MyTools
 
 import datetime
+import traceback
 
 from main.models import Espece, Evenement, Famille, Variete,  Planche, Serie, Production
 from main.models import recupListeSeriesEnDateDu, creationPlanche, creationEditionSerie
@@ -62,47 +63,43 @@ def creationPlanches(request):
     
 def chronoPlanches(request):
 
-    try:    
-        print(request.POST)
-        s_msg = ""
-        delta20h = datetime.timedelta(hours=20)
-        date_du_jour = datetime.datetime.now()
+    print(request.POST)
+    s_msg = ""
+    delta20h = datetime.timedelta(hours=0)
+    date_du_jour = datetime.datetime.now()
     
-        if request.POST.get("date_debut_vue",""):
-            date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
-            date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
-        else:
-            delta = datetime.timedelta(days=60)
-            date_debut_vue = date_du_jour - delta
-            date_fin_vue = date_du_jour + delta + delta20h
+    if request.POST.get("date_debut_vue",""):     
+        date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
+        date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
+    else:
+        delta = datetime.timedelta(days=60)
+        date_debut_vue = datetime.datetime.date(date_du_jour - delta)
+        date_fin_vue = datetime.datetime.date(date_du_jour + delta + delta20h)
             
-        decalage_j = int(request.POST.get("decalage_j", 10))
-        delta = datetime.timedelta(days = decalage_j)
-        if request.POST.get("direction", "") == "avance":
-            date_debut_vue += delta 
-            date_fin_vue += delta
-            
-        if request.POST.get("direction", "") == "recul":
-            date_debut_vue -= delta 
-            date_fin_vue -= delta
-            
-        s_noms = request.POST.get("noms_planches", request.GET.get("noms_planches", ""))
-        if s_noms:
-            l_noms = [int(num.strip()) for num in s_nums.strip(',').split(",")]
-            l_planches = Planche.objects.filter(nom__in = l_nums).order_by('nom')
-        else:
-            l_planches = Planche.objects.all().order_by('nom')
-    except:
-        s_msg += str(sys.exc_info())
-        return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
+    decalage_j = int(request.POST.get("decalage_j", 10))
+    delta = datetime.timedelta(days = decalage_j)
+    if request.POST.get("direction", "") == "avance":
+        date_debut_vue += delta 
+        date_fin_vue += delta
+        
+    if request.POST.get("direction", "") == "recul":
+        date_debut_vue -= delta 
+        date_fin_vue -= delta
+        
+    s_noms = request.POST.get("noms_planches", request.GET.get("noms_planches", ""))
+    if s_noms:
+        l_noms = [nom.strip() for nom in s_noms.strip(',').split(",")]
+        l_planches = Planche.objects.filter(nom__in = l_noms).order_by('nom')
+    else:
+        l_planches = Planche.objects.all().order_by('nom')
+
     
     ## ajout des séries liées à cette planche
     for laPlanche in l_planches:
         ## on ajoute un champ listant toutes les séries touchées par l'encadrement choisi
-        ##laPlanche.l_series 
-        l1 = Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue)
-#         for serie in laPlanche.l_series:
-#             serie.l_evts = Evenement.objects.filter(serie_id = serie.id, type = Evenement.TYPE_DIVERS).order_by('date')
+        laPlanche.l_series = Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue)
+        for serie in laPlanche.l_series:
+            serie.l_evts = Evenement.objects.filter(serie_id = serie.id, type = Evenement.TYPE_DIVERS).order_by('date')
 
     return render(request,
                  'main/chrono_planches.html',

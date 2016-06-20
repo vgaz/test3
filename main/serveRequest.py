@@ -178,7 +178,7 @@ def serveRequest(request):
                 if nb_plants:
                     nb_plants = int(nb_plants)
                 else:
-                    raise Exception("demande de deplacement partiel mais nb_plants non défini")                
+                    raise Exception("demande de déplacement partiel mais quantité non définie")                
             
             nb_rangs = int(request.POST.get("nb_rangs"))
             intra_rang_cm = int(request.POST.get("intra_rang_cm"))
@@ -200,7 +200,7 @@ def serveRequest(request):
                 serie.nb_rangs = nb_rangs
                 serie.intra_rang_cm = intra_rang_cm
                 serie.save()
-                rep ="Tous les plants ont été déplacés"
+                rep ="Touts les plants ont été déplacés"
             else:
                 ## Création nouvelle série de plants sur planche dest
                 serie2 = cloneSerie(serie) ## creation d'une nouvelle série
@@ -213,7 +213,7 @@ def serveRequest(request):
                 serie2.nb_rangs = nb_rangs
                 serie2.intra_rang_cm = intra_rang_cm
                 serie2.save() 
-                rep = "série %d déplacé partiellement (reste %d) sur planche %d "%(serie.id, reste, planche_dest.num)
+                rep = "Série %d déplacée partiellement (reste %d) sur planche %d "%(serie.id, reste, planche_dest.num)
 
             s_json = '{"status":"true", "msg":"%s"}'%rep
         except:

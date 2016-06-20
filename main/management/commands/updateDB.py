@@ -2,11 +2,12 @@
 import csv
 
 from django.core.management.base import BaseCommand
-from main.models import Famille, Planche, Serie, Variete, Espece
+from main.models import Famille, Planche, Serie, Variete, Espece, Implantation
 
 from main import constant
 
 import sys, datetime
+from pkgutil import ImpLoader
    
 class Command(BaseCommand):
     """updateDB command"""
@@ -16,13 +17,23 @@ class Command(BaseCommand):
         print("création des planches de base")
         
         try:
-            p = Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_NUM )
+            p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
         except:
             p = Planche()
-            p.num = constant.PLANCHE_VIRTUELLE_NUM
-            p.nom = "PLANCHE VIRTUELLE"
+            p.nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP
             p.longueur_m = 10000
-            p.largeur_cm = 100
+            p.largeur_cm = 1000
+            p.bSerre = False 
+            p.save()  
+
+        try:
+            p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS)
+        except:
+            p = Planche()
+            p.nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS
+            p.longueur_m = 10000
+            p.largeur_cm = 1000
+            p.bSerre = True
             p.save()  
 
         try:
@@ -59,7 +70,7 @@ class Command(BaseCommand):
         
         ## maj base de légumes
         l_fams = Famille.objects.all().values_list("nom", flat=True)
-        print ("l_fams ", l_fams)
+        print ("l_fams", l_fams)
 
         ## maj espèces et familles
         ficname = "production.csv"
@@ -71,10 +82,11 @@ class Command(BaseCommand):
                     try:
                         esp = Espece.objects.get(nom = nomEspece)
                     except: 
-                        ## besoin création
+                        ## création
                         self.stdout.write("Ajout " + nomEspece)
                         esp = Espece()
                         esp.nom = nomEspece
+                        esp.prod_kg_par_m2 = float(d_line.get("Rendement (kg/m²)","0").replace(",","."))
                         esp.save()
                     
                     nomFam = d_line.get("Famille","").lower().strip()
@@ -90,10 +102,9 @@ class Command(BaseCommand):
                         ## maj famille de l'espèce
                         esp.famille_id = famille.id
                         esp.save()
-                
-    
+
         ## maj séries
-        print("---------------- MAJ SERIES")
+        print("// MAJ SERIES")
         ficname = "planning.csv"
         with open(ficname, "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
@@ -106,7 +117,6 @@ class Command(BaseCommand):
                     print ("s_espece", s_espece)
                     try:
                         v = Variete.objects.get(nom = s_variet)
-
                     except:
                         self.stdout.write("Ajout " + s_variet)
                         v = Variete()
@@ -131,18 +141,29 @@ class Command(BaseCommand):
                         serie.etalementRecolte_seriej = int(d_line.get("Étalement récolte (j)", "0"))
                         serie.save()
                         serie.fixeDates(dateEnTerre)
-                        
                         serie.nb_rangs = int(d_line.get("Nombre de rangs retenus", "0"))
                         serie.intra_rang_cm = int(d_line.get("Intra rang (cm)", "0"))
                         serie.quantite = int(d_line.get("Nombre de pieds", "0"))
-                        
                         serie.planche_id = 0
-    
+                        
+                        ## implantation par defaut
+                        serie.bSerre = d_line.get("lieu", "SERRE") == "SERRE"
+                        l_imp = []
+                        implantation = Implantation()
+                        if serie.bSerre:    
+                            implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS).id
+                        else:
+                            implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP).id
+
+                        implantation.save()
+                        print(">>>>>>>>>> ajout impl de base", implantation)
+                        l_imp.append(implantation.id)
+                        
+                        serie.l_implantation = l_imp
                         serie.save()
                     except:
                         print(sys.exc_info()[1]) 
-                        
-# 
+ 
 #         
 #         ficname = "Legumes.csv"
 #         with open(ficname, "r+t", encoding="utf-8") as hF:
