@@ -4,9 +4,7 @@ from django.core.management.base import BaseCommand
 from main import serveRequest, views, constant
 from django.test import RequestFactory
 
-from main.models import Serie, essaiDeplacementSeries, cloneSerie, Evenement, creationPlanche,\
-    Planche
-from main.Tools import MyTools
+from main.models import Serie, essaiDeplacementSeries, cloneSerie, Evenement, creationPlanche
 
 
 class Command(BaseCommand):
@@ -19,18 +17,12 @@ class Command(BaseCommand):
 #         from main import planification
 # 
 #         delta20h = datetime.timedelta(hours=20)
-        date_debut_vue = MyTools.getDateFrom_d_m_y("1/1/2016")
-        date_fin_vue = MyTools.getDateFrom_d_m_y("1/8/2016")
+#         date_debut_vue = datetime.datetime.strptime("18/5/2015", constant.FORMAT_DATE)
+#         date_fin_vue = datetime.datetime.strptime("24/5/2015", constant.FORMAT_DATE) + delta20h
 # 
 #         planification.planif(date_debut_vue, date_fin_vue)
 #         return
-        laPlanche = Planche.objects.get(id=11)
-        print( Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue))
-
-        laPlanche = Planche.objects.get(id=1)
-        print( Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue))
-
-        return
+        
         id_serie = 3
 #         reste  = essaiDeplacementSeries(id_plant, 3, 60, 2)
         serie = Serie.objects.get(id=id_serie)
