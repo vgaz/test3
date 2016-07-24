@@ -103,7 +103,7 @@ function  deplacement(hForm)
 	// déplacement d'une serie vers une autre planche 
     s_request = "cde=deplacement_serie&id_serie=" + document.getElementById("deplacement_id_serie").value
     s_request += "&id_planche_src=0"
-    s_request += "&num_planche_dest=" + document.getElementById("deplacement_num_planche_dest").value
+    s_request += "&id_planche_dest=" + document.getElementById("deplacement_id_planche_dest").value
     s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
     s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
     s_request += "&partiel=" + document.getElementById("deplacement_partiel").checked
@@ -213,7 +213,7 @@ function prepareEditeSerie(id_serie)
 
     }
 
-function prepareDeplacementSerie(id_serie)
+function prepareDeplacementSerie(id_serie, plancheDestId)
     {
     hDiv = document.getElementById("divDeplacementSerie")
     hDiv.style.display = "block"
@@ -226,7 +226,8 @@ function prepareDeplacementSerie(id_serie)
     document.getElementById("deplacement_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
     document.getElementById("deplacement_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
     document.getElementById("deplacement_quantite").value = hDivSerie.getAttribute("quantite")
-   
+    document.getElementById("deplacement_id_planche_dest").value = plancheDestId
+
     }
 
                                        
@@ -254,6 +255,7 @@ function sauveSerie()
 
     }
            
+           
 function editePlant(hPlant)
     {
     // recup evenements liés à cette série
@@ -280,6 +282,26 @@ function editePlant(hPlant)
     document.getElementById("editeSerie_date_fin").value =  hPlant.getAttribute("date_fin")
     document.getElementById("divEditSerie").style.display = "inline"
     }
+
+function allowDrop(event) {
+    event.preventDefault()
+    document.getElementById(event.target.id).style.background=orange
+
+    
+}
+
+function dragStart(event) {
+    event.dataTransfer.setData("Text", event.target.id);
+    //alert("id serie a deplacer="+ event.target.id)
+}
+function drop(event) {
+    event.preventDefault();
+    var serieID = event.dataTransfer.getData("Text");
+    pl_id = event.target.id.split("__")[1]
+    alert("target =" + pl_id)
+    //event.target.appendChild(document.getElementById(data));
+    prepareDeplacementSerie(serieID, pl_id)
+}
 
 </script>
 
@@ -309,7 +331,9 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 <br/><br/>
     {% for planche in l_planches %}
 	<br/>
-    <div id="cadre_chrono_pl{{planche.id}}" class="cadre_chrono">
+    <div id="pl__{{planche.id}}" class="cadre_chrono"
+                                ondragover="allowDrop(event)" 
+                                ondrop="drop(event)">
     <div class="barre_du_jour"> </div>
    
     <h2>{{planche}}
@@ -325,8 +349,13 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
                                     nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}"
-                                    style="border-color: {{serie.variete.couleur}}" >
+                                    style="border-color: {{serie.variete.couleur}}"
+                                    >
                                     
+        <div    id="{{serie.id}}" 
+                draggable="true" 
+                ondragstart="dragStart(event)" 
+                >XXXX</div> 
         <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="id={{serie.id}} planche={{planche.num}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
         <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
         <div class="variete" style="display: inline;z-index:3; ">
@@ -372,7 +401,8 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         <h3>Déplacement de la série N°<input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" /></h3>
         Quantité :                  <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
         De la planche N°            <input id="deplacement_num_planche_orig"   value="" type="text" readonly style="width: 30px;margin-left: 10px"/>
-        vers la planche N°          <input id="deplacement_num_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
+        vers la planche N°          <input id="deplacement_id_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
+        vers la planche num         <input id="deplacement_num_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
         dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
         Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
         Déplacement partiel         <input id="deplacement_partiel"                     type="checkbox" />
