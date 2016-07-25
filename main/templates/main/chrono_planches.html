@@ -95,6 +95,20 @@ function    init()
 	    hBarreJour.style.height = window.getComputedStyle(l_planches[ii]).height
 	    hBarreJour.style.marginLeft = delta_h * pxParH + "px" 
 	    }
+    document.ondragover = scrollIfNeeded
+
+    }
+
+function scrollIfNeeded(e)
+    {
+    //myPosX = e.clientX;
+    myPosY = e.clientY;
+    //document.getElementById("divInfoDebug").innerHTML = "X:"+myPosX + " Y:" + myPosY
+    
+    if  (myPosY < 100) // dans le haut de l'ecran
+        window.scrollBy(0, -4)
+    if  (myPosY > 500) // dans le bas de l'ecran
+        window.scrollBy(0, 4)    
     }
 
 
@@ -285,18 +299,17 @@ function editePlant(hPlant)
 
 function allowDrop(event) {
     event.preventDefault()
-    document.getElementById(event.target.id).style.background=orange
-
-    
+    event.target.style.background="green"
 }
 
 function dragStart(event) {
     event.dataTransfer.setData("Text", event.target.id);
     //alert("id serie a deplacer="+ event.target.id)
 }
+
 function drop(event) {
     event.preventDefault();
-    var serieID = event.dataTransfer.getData("Text");
+    serieID = event.dataTransfer.getData("Text");
     pl_id = event.target.id.split("__")[1]
     alert("target =" + pl_id)
     //event.target.appendChild(document.getElementById(data));
@@ -327,20 +340,20 @@ Pour les planches <input style="width: 300px" type="text" name="noms_planches" v
 Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
 <button onclick="changelePas(-1);return(false)">-</button><button onclick="changelePas(1);return(false)">+</button>
 
-
 <br/><br/>
     {% for planche in l_planches %}
 	<br/>
-    <div id="pl__{{planche.id}}" class="cadre_chrono"
-                                ondragover="allowDrop(event)" 
-                                ondrop="drop(event)">
-    <div class="barre_du_jour"> </div>
+    <div     class="cadre_chrono">
+        <div class="barre_du_jour"> </div>
    
-    <h2>{{planche}}
-        <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie(this, {{planche.num}});return false"> 
-           
-    </h2>
-
+        <h2     id="pl__{{planche.id}}"
+                ondragover="allowDrop(event)"
+                ondragleave="event.target.style.background='white'"
+                ondrop="drop(event)">
+            {{planche}}
+            <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie(this, {{planche.num}});return false"> 
+        </h2>
+    
         {# séries existantes en base #}
         {% for serie in planche.l_series %}
         <div class="chrono_serie"   id="{{serie.id}}" num_planche="{{planche.num}}" 
@@ -350,26 +363,20 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
                                     nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}"
                                     style="border-color: {{serie.variete.couleur}}"
-                                    >
-                                    
-        <div    id="{{serie.id}}" 
-                draggable="true" 
-                ondragstart="dragStart(event)" 
-                >XXXX</div> 
-        <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="id={{serie.id}} planche={{planche.num}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
-        <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
-        <div class="variete" style="display: inline;z-index:3; ">
-        {{serie.variete}} x {{serie.quantite}}</div>
-        <a href="#" onclick="javascript:prepareEditeSerie({{serie.id}});return(false)">EDITER</a>
-        <a href="#" onclick="javascript:prepareDeplacementSerie({{serie.id}});return(false)">DEPLACER</a><br/>
-        <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
-        <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
-        <div class="evts" style="display:inline;position:relative;float:left;"> </div>
+                                    draggable="true" ondragstart="dragStart(event)" >
+
+            <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="id={{serie.id}} planche={{planche.num}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
+            <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
+            <div class="variete" style="display: inline;z-index:3; ">{{serie.variete}} x {{serie.quantite}}</div>
+            <a href="#" onclick="javascript:prepareEditeSerie({{serie.id}});return(false)">EDITER</a>
+            <a href="#" onclick="javascript:prepareDeplacementSerie({{serie.id}});return(false)">DEPLACER</a><br/>
+            <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
+            <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
+            <div class="evts" style="display:inline;position:relative;float:left;"> </div>
         </div>
         {% endfor %}
     </div>
     {% endfor %}
-
 
 	<div id="divEditSerie" style="display:none" class="BlueFrame" >
 		<h2 id="editSerie_titre"> </h2>
