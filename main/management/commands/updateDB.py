@@ -130,10 +130,9 @@ class Command(BaseCommand):
                     ## maj série
                     dateEnTerre = datetime.datetime.strptime(s_dateEnTerre, constant.FORMAT_DATE)
                     try:                        
-                        serie = Serie.objects.get(dateEnTerre = dateEnTerre, variete = v)
+                        serie = Serie.objects.get(evt_debut__date = dateEnTerre, variete = v)
                     except:
                         serie = Serie()
-                        serie.dateEnTerre = dateEnTerre
                         serie.variete = v
                         
                     try:
@@ -144,7 +143,7 @@ class Command(BaseCommand):
                         serie.nb_rangs = int(d_line.get("Nombre de rangs retenus", "0"))
                         serie.intra_rang_cm = int(d_line.get("Intra rang (cm)", "0"))
                         serie.quantite = int(d_line.get("Nombre de pieds", "0"))
-                        serie.planche_id = 0
+                        serie.save()
                         
                         ## implantation par defaut
                         serie.bSerre = d_line.get("lieu", "SERRE") == "SERRE"
@@ -154,7 +153,7 @@ class Command(BaseCommand):
                             implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS).id
                         else:
                             implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP).id
-
+                        implantation.surface_m2 = serie.surfaceSurPlanche_m2()
                         implantation.save()
                         print(">>>>>>>>>> ajout impl de base", implantation)
                         l_imp.append(implantation.id)

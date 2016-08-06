@@ -184,7 +184,7 @@ def serveRequest(request):
             intra_rang_cm = int(request.POST.get("intra_rang_cm"))
             planche_dest = Planche.objects.get(id=int(request.POST.get("id_planche_dest")))
             b_simu = request.POST.get("simulation") == "true"
-            reste = essaiDeplacementSeries(serie.id, planche_dest.num, intra_rang_cm, nb_rangs)
+            reste = essaiDeplacementSeries(serie.id, planche_dest, intra_rang_cm, nb_rangs)
             
             if b_simu:
                 if reste == 0:

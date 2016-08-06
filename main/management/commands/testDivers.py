@@ -5,7 +5,7 @@ from main import serveRequest, views, constant
 from django.test import RequestFactory
 
 from main.models import Serie, essaiDeplacementSeries, cloneSerie, Evenement, creationPlanche,\
-    Planche
+    Planche,Implantation
 from main.Tools import MyTools
 
 
@@ -21,14 +21,23 @@ class Command(BaseCommand):
 #         delta20h = datetime.timedelta(hours=20)
         date_debut_vue = MyTools.getDateFrom_d_m_y("1/1/2016")
         date_fin_vue = MyTools.getDateFrom_d_m_y("1/8/2016")
+        la_date = MyTools.getDateFrom_d_m_y("1/8/2016")
+        l_implantations = Implantation.objects.filter(planche_id = 2)
+
+    
+        l_series = Serie.objects.filter(evt_debut__date__lte = la_date,
+                                        evt_fin__date__gte = la_date,
+                                        implantations__id__in = l_implantations).values_list("id",flat=True)
+        print(l_series)
+        return
 # 
 #         planification.planif(date_debut_vue, date_fin_vue)
 #         return
-        laPlanche = Planche.objects.get(id=11)
-        print( Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue))
-
-        laPlanche = Planche.objects.get(id=1)
-        print( Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue))
+#         laPlanche = Planche.objects.get(id=11)
+#         print( Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue))
+# 
+#         laPlanche = Planche.objects.get(id=1)
+#         print( Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue))
 
         return
         id_serie = 3

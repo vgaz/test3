@@ -10,8 +10,6 @@ import logging
 
 ## fabrique d'éléments et enregistrement dans la base
 
-def nomSerie(s_espece, s_variete, s_dateJMA):
-    return "%s %s %s"%(s_espece, s_variete, s_dateJMA)
 
 def creationEvt(e_date, e_type, id_serie, duree_j=1, nom=""):
     """création d'une evenement en base
@@ -60,47 +58,43 @@ def creationPlanche(longueur_m, largeur_cm, bSerre, s_nom="", num=None):
     planche.save()
     return planche
            
-def recupListeSeriesEnDateDu(la_date, id_planche):
-    """Filtrage des séries de plants presents à telle date"""
-    l_evts_debut = Evenement.objects.filter(type = Evenement.TYPE_DEBUT, date__lte = la_date)
-    l_SeriesIds = list(l_evts_debut.values_list('serie_id', flat=True))
-    ## recup des evenements de fin ayant les mêmes id_serie que les evts de debut 
-    l_evts = Evenement.objects.filter(type = Evenement.TYPE_FIN, serie_id__in = l_SeriesIds, date__gte = la_date)
-    ## récup des id de series dans cet encarement temporel
-    l_SeriesIds = l_evts.values_list('serie_id', flat=True)
-    l_series = Serie.objects.filter(id__in = l_SeriesIds)
-    if id_planche:
-        l_series = Serie.objects.filter(planche_id = id_planche)
+def recupListeImplantationsEnDateDu(la_date, planche):
+    """Filtrage des implantations présents à telle date"""
+    ## on ne renvoie que les implantations de cette planche
+    l_implantations = Implantation.objects.filter(planche_id = planche.id)##   serie_id__in)
+    l_series = Serie.objects.filter(evt_debut__date__lte = la_date,
+                                    evt_fin__date__gte = la_date,
+                                    implantations__id__in = l_implantations)
     
-    return l_series
+    ##.values_list("id",flat=True)
+    return l_implantations
 
 
-def essaiDeplacementSeries(idSerie, numPlancheDest, intraRangCm, nbRangs): 
+def essaiDeplacementSeries(idSerie, plancheDest, intraRangCm, nbRangs): 
     """tentative de placement de series ref <idSerie> sur planche <idPlancheDest> en fonction du nb de rang et distance dans le rang
     retourne le nombre de series restants à placer ailleurs si le nb de series est trop important pour la planche (déjà occupée ou trop courte par exemple)
     0 si tout peut etre placé sur la planche 
     """
     serie = Serie.objects.get(id = idSerie)
-    planche = Planche.objects.get(num = numPlancheDest)
     
-    cumul_max_m = 0
-    ## pour chaque jour sur la planche, on calcule la distance de planche restante
+    cumul_max_m2 = 0
+    ## pour chaque jour sur la planche, on calcule la surface de planche restante
     for day in MyTools.jourApresJour(serie.evt_debut.date, serie.evt_fin.date):
-        cumul_m = 0
-        ## recup des series sur la planche à cette date et cumul des longeur sur planche    
-        l_series = recupListeSeriesEnDateDu(day, planche.id)
+        cumul_m2 = 0
+        ## recup des implantations déjà en place à cette date    
+        l_implantations = recupListeImplantationsEnDateDu(day, plancheDest)
         
-        for p in l_series:
-            cumul_m += p.longueurSurPlanche_m()
+        for imp in l_implantations:
+            cumul_m2 += imp.surface_m2()
 
-        print (day, cumul_m, "m occupés sur ", planche.longueur_m, "m (cumul max =", cumul_max_m, ")" )
+        print (day, cumul_m2, "m2 occupés sur ", plancheDest.surface_m2(), "m2 (cumul max =", cumul_max_m2, ")" )
     
-        cumul_max_m = max((cumul_max_m, cumul_m))
+        cumul_max_m2 = max((cumul_max_m2, cumul_m2))
         
-    libre_m = planche.longueur_m - cumul_max_m
-    print ("libre=%dm besoin=%dm"%(libre_m, serie.longueurSurPlanche_m( intraRangCm, nbRangs)))
+    libre_m2 = plancheDest.surface_m2 - cumul_max_m2
+    print ("libre=%dm besoin=%dm"%(libre_m2, serie.longueurSurPlanche_m( intraRangCm, nbRangs)))
 
-    reste_m = libre_m - serie.longueurSurPlanche_m(intraRangCm, nbRangs)
+    reste_m = libre_m2 - serie.longueurSurPlanche_m(intraRangCm, nbRangs)
     if reste_m >=0:
         ## assez de place, on peut caser tous les series
         return 0
@@ -241,21 +235,23 @@ class Production(models.Model):
 
 class Implantation(models.Model):
     planche = models.ForeignKey("Planche")
-    debut_m = models.FloatField("Début de la culture (m)", default=0)
-    fin_m = models.FloatField("Début de la culture (m)", default=0)
+#     debut_m = models.FloatField("Début de la culture (m)", default=0)
+#     fin_m = models.FloatField("Début de la culture (m)", default=0)
+    surface_m2 = models.FloatField("surface en m2)", default=0)## en attendant le placement plus précis...@todo
 
     def longueur_m(self):
         return self.fin_m - self.debut_m
     
     def surface_m2(self):
-        try:
-            return self.longueur_m() * self.planche.largeur_cm/100
-        except:
-            traceback.print_tb(sys.exc_info())
-            return 0
+        return self.surface_m2
+#         try:
+#             return self.longueur_m() * self.planche.largeur_cm/100
+#         except:
+#             traceback.print_tb(sys.exc_info())
+#             return 0
 
     def __str__(self):
-        return "implantation sur planche %d de %f à %f m)"%( self.planche.id, self.debut_m, self.fin_m)
+        return "implantation N°%d de %d m2 sur planche %d)"%(self.id, self.surface_m2, self.planche.id)
 
 
 class SerieManager(models.Manager):
@@ -287,23 +283,49 @@ class SerieManager(models.Manager):
         l_series = super(SerieManager, self).get_queryset().filter(id__in=l_ids)
         return l_series           
 
+class Evenement(models.Model):
+    
+    TYPE_DEBUT = 1
+    TYPE_FIN = 2
+    TYPE_DIVERS = 3
+    D_NOM_TYPES = {TYPE_DEBUT:"Début", TYPE_FIN:"Fin", TYPE_DIVERS:"Divers"}
+
+    type =  models.PositiveIntegerField()
+#     serie = models.ForeignKey(Serie)
+    date = models.DateTimeField()
+    date_creation = models.DateTimeField(default=datetime.datetime.now())
+    duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)
+    nom = models.CharField(max_length=100, default="")
+    texte = models.TextField(default="")
+    b_fini = models.BooleanField(default=False)
+
+    class Meta: 
+        ordering = ['date']
+    
+    def nomType(self):
+        return self.D_NOM_TYPES[self.type]  
+
+                    
+    def __str__(self):
+        return "Evt %s %s pour serie %d, %s pour %d j"%(self.nomType(), self.id or "?", self.serie_id, self.date, self.duree_j )
+             
+
+
 class Serie(models.Model):
     
     class Meta:
         verbose_name = "Série de plants"
 
     variete = models.ForeignKey(Variete)
-    dateEnTerre = models.DateTimeField("date de mise en terre (plantation ou semis)")
     dureeAvantDebutRecolte_j = models.IntegerField("durée min avant début de récolte (jours)", default=0)
     etalementRecolte_j = models.IntegerField("durée étalement possible de la récolte (jours)", default=0)
     nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
     intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=0)
     bSerre = models.BooleanField(default=False)
-    l_implantation = models.CommaSeparatedIntegerField("implantation/s sur les planches", max_length=200)
-    planche = models.ForeignKey("Planche", default=0, blank=True)
+    implantations = models.ManyToManyField(Implantation)
     quantite = models.PositiveIntegerField(default=1)
-    evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
-    evt_fin = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
+    evt_debut = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
+    evt_fin = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     l_prelevement = []
     
     objects = SerieManager()
@@ -350,7 +372,7 @@ class Serie(models.Model):
         return longueurDePlanche_m * 100 * nbRangs / intraRangCm
      
     def fixeDates(self, dateDebut, dateFin=None):
-        """Crée les evts de début et fin de vie du/des plants"""
+        """Crée les evts de début et fin de vie des plants en terre"""
         if isinstance(dateDebut, str): 
             dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
             
@@ -383,31 +405,3 @@ class Serie(models.Model):
                                                                                                                    self.evt_debut.date,
                                                                                                                    self.evt_fin.date)
 
-      
-
-class Evenement(models.Model):
-    
-    TYPE_DEBUT = 1
-    TYPE_FIN = 2
-    TYPE_DIVERS = 3
-    D_NOM_TYPES = {TYPE_DEBUT:"Début", TYPE_FIN:"Fin", TYPE_DIVERS:"Divers"}
-
-    type =  models.PositiveIntegerField()
-    serie = models.ForeignKey(Serie)
-    date = models.DateTimeField()
-    date_creation = models.DateTimeField(default=datetime.datetime.now())
-    duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)
-    nom = models.CharField(max_length=100, default="")
-    texte = models.TextField(default="")
-    b_fini = models.BooleanField(default=False)
-
-    class Meta: 
-        ordering = ['date']
-    
-    def nomType(self):
-        return self.D_NOM_TYPES[self.type]  
-
-                    
-    def __str__(self):
-        return "Evt %s %s pour serie %d, %s pour %d j"%(self.nomType(), self.id or "?", self.serie_id, self.date, self.duree_j )
-             

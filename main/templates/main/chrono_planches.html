@@ -112,7 +112,7 @@ function scrollIfNeeded(e)
     }
 
 
-function  deplacement(hForm)
+function  deplaceSerie()
     {
 	// déplacement d'une serie vers une autre planche 
     s_request = "cde=deplacement_serie&id_serie=" + document.getElementById("deplacement_id_serie").value
@@ -126,9 +126,9 @@ function  deplacement(hForm)
     s_request += "&simulation=" + b_simu
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)
+    document.getElementById("divDeplacementSerie").style.display = "none"
     if (jsonRep.status == 'true')
         {
-        document.getElementById("divDeplacementSerie").style.display = "none"
       	alert(jsonRep.msg)
         window.location.reload()
         }
@@ -244,6 +244,20 @@ function prepareDeplacementSerie(id_serie, plancheDestId)
 
     }
 
+function testeDeplacementSerie(id_serie, plancheDestId)
+    {
+    // tout se fait en aveugle comme si on editait à la main
+    hDivSerie = document.getElementById(id_serie)
+    document.getElementById("deplacement_id_serie").value = hDivSerie.getAttribute("id")
+    document.getElementById("deplacement_num_planche_orig").value =  hDivSerie.getAttribute("num_planche")
+    document.getElementById("deplacement_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
+    document.getElementById("deplacement_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
+    document.getElementById("deplacement_quantite").value = hDivSerie.getAttribute("quantite")
+    document.getElementById("deplacement_id_planche_dest").value = plancheDestId
+    document.getElementById("deplacement_simulation").value = true
+    deplaceSerie()
+    }
+
                                        
 function sauveSerie()
     {
@@ -313,9 +327,14 @@ function drop(event) {
     pl_id = event.target.id.split("__")[1]
     alert("target =" + pl_id)
     //event.target.appendChild(document.getElementById(data));
-    prepareDeplacementSerie(serieID, pl_id)
+    testeDeplacementSerie(serieID, pl_id)
 }
 
+function unfocus(event)
+    {
+    if ( event.target.className == "droptarget" )
+        event.target.style.background='white'
+    }
 </script>
 
 {% endblock %}
@@ -347,8 +366,9 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         <div class="barre_du_jour"> </div>
    
         <h2     id="pl__{{planche.id}}"
+                class="droptarget"
                 ondragover="allowDrop(event)"
-                ondragleave="event.target.style.background='white'"
+                ondragleave="unfocus(event)"
                 ondrop="drop(event)">
             {{planche}}
             <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie(this, {{planche.num}});return false"> 
@@ -415,7 +435,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         Déplacement partiel         <input id="deplacement_partiel"                     type="checkbox" />
         Nb de plants :              <input id="deplacement_nb_plants"          value="" type="text" style="width: 30px" /><br/>
         Simulation                  <input id="deplacement_simulation"                  type="checkbox" />
-        <input type="submit" value="Déplacement" onclick="deplacement(this)" style="margin-left: 30px" />
+        <input type="submit" value="Déplacement" onclick="deplaceSerie()" style="margin-left: 30px" />
         <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divDeplacementSerie').style.display='none';return False"/>
         
     </div>

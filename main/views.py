@@ -11,10 +11,9 @@ from main import forms, constant, planification
 import main.Tools.MyTools as MyTools
 
 import datetime
-import traceback
 
 from main.models import Espece, Evenement, Famille, Variete,  Planche, Serie, Production
-from main.models import recupListeSeriesEnDateDu, creationPlanche, creationEditionSerie
+from main.models import recupListeImplantationsEnDateDu, creationPlanche
 from main.forms import PlancheForm
 
 #################################################
