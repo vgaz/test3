@@ -86,12 +86,12 @@ def chronoPlanches(request):
             date_debut_vue -= delta 
             date_fin_vue -= delta
             
-        s_nums = request.POST.get("num_planches", request.GET.get("num_planches", ""))
+        s_nums = request.POST.get("nom_planches", request.GET.get("nom_planches", ""))
         if s_nums:
             l_nums = [int(num.strip()) for num in s_nums.strip(',').split(",")]
-            l_planches = Planche.objects.filter(num__in = l_nums).order_by('num')
+            l_planches = Planche.objects.filter(num__in = l_nums).order_by('nom')
         else:
-            l_planches = Planche.objects.all().order_by('num')
+            l_planches = Planche.objects.all().order_by('nom')
     except:
         s_msg += str(sys.exc_info())
         return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
@@ -195,7 +195,7 @@ class CreationPlanche(CreateView):
 
 def editionPlanche(request):
 
-    planche = Planche.objects.get(num = int(request.GET.get("num_planche", 0)))
+    planche = Planche.objects.get(id = int(request.GET.get("id_planche", 0)))
     s_date = request.POST.get("date", "")
     if s_date:
         dateVue = datetime.datetime.strptime(s_date, constant.FORMAT_DATE)
@@ -285,8 +285,9 @@ def prevision_recolte(request):
 
 def tab_varietes(request):
     s_info = ""
+    l_vars = []
     try:
-        l_vars = Variete.objects.filter(b_choisi=True)
+        l_vars = Variete.objects.all()##filter(b_choisi=True)
         if request.POST:
             for v in l_vars:
                 s_pk = "v_%s_"% str(v.pk)
@@ -297,9 +298,9 @@ def tab_varietes(request):
                 v.save()
       
     
-        for v in l_vars:
-            v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
-    
+#         for v in l_vars:
+#             v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
+#     
     except:
         s_info += str(sys.exc_info()[1])
         

@@ -97,7 +97,18 @@ class Command(BaseCommand):
                         ## maj famille de l'espèce
                         esp.famille_id = famille.id
                         esp.save()
-                
+
+                    unite = d_line.get("Unité","").lower().strip()
+                    if not unite:
+                        print("pas d'unité pour", esp.nom)
+                    if unite == "kg":
+                        esp.unite_prod = constant.UNITE_PROD_KG
+                    else:
+                        esp.unite_prod = constant.UNITE_PROD_PIECE
+                    esp.save()      
+ 
+                    
+                    
     
         ## maj espèces, variétés et séries
         ficname = "planning.csv"

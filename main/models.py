@@ -148,6 +148,9 @@ class Espece(models.Model):
         
     def __str__(self):
         return self.nom                    
+ 
+    def nomUniteProd(self):
+        return constant.D_NOM_UNITE_PROD[self.unite_prod]
 
 
 class Variete(models.Model):
@@ -177,11 +180,9 @@ class Variete(models.Model):
                                                                       self.date_max_plantation_sa
                                                                       ) 
 
-    def nomUniteProd(self):
-        return constant.D_NOM_UNITE_PROD[self.unite_prod]  
 
     def plantsPourProdHebdo(self, productionDemandee):
-        """ retourne nb de plants en fonction de la prod escomptée (en kg ou en unité
+        """ A REFAIRE retourne nb de plants en fonction de la prod escomptée (en kg ou en unité
         pour les plantes donnant sur plusieurs semaines, on prend le rendement de la première semaine"""
         print ("productionDemandee_kg", productionDemandee)
         print ("self.prod_hebdo_moy_g", self.prod_hebdo_moy_g)  
@@ -189,28 +190,28 @@ class Variete(models.Model):
             print ("attention , réponse bidon dans  plantsPourProdHebdo %s"%self.nom)
             return productionDemandee
         
-        if self.unite_prod == constant.UNITE_PROD_PIECE:
-            return productionDemandee
-        
+#         if self.unite_prod == constant.UNITE_PROD_PIECE:
+#             return productionDemandee
+#         
         ret =  int( (float(productionDemandee) * 1000) / float(self.prod_hebdo_moy_g.split(",")[0])  )
         print (ret)
         return (ret)
 
-    def prodSemaines(self, productionDemandee):
-        """ retourne une liste de production(s) escomptée(s) par semaine (en kg ou en unités)"""
-        if self.prod_kg_par_m2 == "0":
-            assert "rendement /m2 non donnée pour %s"%self.nom
-        
-        l_ret = []
-        
-        for prodSemUnitaire in self.prod_especehebdo_moy_g.split(","):
-
-            if self.unite_prod == constant.UNITE_PROD_PIECE:
-                l_ret.append(int(productionDemandee * float(prodSemUnitaire)))
-            else:
-                l_ret.append(int((float(prodSemUnitaire)/1000) * productionDemandee) + 1)
-
-        return (l_ret)
+#     def prodSemaines(self, productionDemandee):
+#         """ retourne une liste de production(s) escomptée(s) par semaine (en kg ou en unités)"""
+#         if self.prod_kg_par_m2 == "0":
+#             assert "rendement /m2 non donnée pour %s"%self.nom
+#         
+#         l_ret = []
+#         
+#         for prodSemUnitaire in self.prod_especehebdo_moy_g.split(","):
+# 
+#             if self.unite_prod == constant.UNITE_PROD_PIECE:
+#                 l_ret.append(int(productionDemandee * float(prodSemUnitaire)))
+#             else:
+#                 l_ret.append(int((float(prodSemUnitaire)/1000) * productionDemandee) + 1)
+# 
+#         return (l_ret)
 
   
 

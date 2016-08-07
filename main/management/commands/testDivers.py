@@ -67,7 +67,7 @@ class Command(BaseCommand):
         self.factory = RequestFactory()
 
         # Create an instance of a POST request.
-        request = self.factory.post('/chrono_planches/?num_planches=', 
+        request = self.factory.post('/chrono_planches/?nom_planches=', 
                                     data={"editSerie_id":"0",
                                           "editSerie_num_planche":"12",
                                           "editSerie_id_variete":"6", 

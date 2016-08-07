@@ -16,7 +16,7 @@
       <table>
           <tr>
           {% if var.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
-          <td><h2>{{var.nom|title}} {% if var.famille %} ({{var.famille.nom}}) {% endif %} </h2>
+          <td><h2>{{var.espece.nom|title}} {{var.nom|title}} {% if var.famille %} ({{var.famille.nom}}) {% endif %} </h2>
             Plantation possible du
             <input style="width:40px" type="text" name="v_{{var.pk}}_date_min_plantation_pc" value="{{var.date_min_plantation_pc}}" />
             au
@@ -30,7 +30,7 @@
             Durée de pousse avant récolte plein champ (jours) : <input style="width: 40px" type="text" name="v_{{var.pk}}_duree_avant_recolte_pc_j" value="{{var.duree_avant_recolte_pc_j}}" /> <br/>
             Durée de pousse avant récolte sous abris (jours) : <input style="width: 40px" type="text" name="v_{{var.pk}}_duree_avant_recolte_sa_j" value="{{var.duree_avant_recolte_sa_j}}" /> <br/>
             Distance dans le rang (cm) : <input style="width:40px" type="text" name="v_{{var.pk}}_intra_rang_cm" value="{{var.intra_rang_cm}}" /> <br/>
-            Unité de comptage : <input style="width: 40px" type="text" name="v_{{var.pk}}_nomUniteProd" value="{{var.nomUniteProd}}" /><br/>
+            Unité de comptage : <input style="width: 40px" type="text" name="v_{{var.pk}}_nomUniteProd" value="{{var.espece.nomUniteProd}}" /><br/>
             Rendement plants/graines (%):  <input style="width:40px" type="text" name="v_{{var.pk}}_rendement_plants_graines_pourcent" value="{{var.rendement_plants_graines_pourcent}}" /> <br/>
             Production kg/m2 <input style="width: 40px" type="text" name="v_{{var.pk}}_prod_kg_par_m2" value="{{var.prod_kg_par_m2}}" /> <br/>
             </td>
