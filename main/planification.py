@@ -53,10 +53,10 @@ def planif(dateDebut, dateFin):
             nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
             print ("Besoin de %d nouveaux plants"%(nb_plants_a_installer))
             serie = creationEditionSerie(None,
-                                  Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_NUM).id,
+#                                   Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_NUM).id,
                                   var.id, 
                                   nb_plants_a_installer, 
-                                  var.intra_rang_cm, 
+                                  var.intra_rang_m, 
                                   0, 
                                   dateSemaine, 
                                   date_fin)

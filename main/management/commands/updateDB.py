@@ -1,48 +1,53 @@
 # -*- coding: utf-8 -*-
 import csv
+import datetime
 
 from django.core.management.base import BaseCommand
-from main.models import Famille, Planche, Serie, Variete, Espece, nomSerie
+from main.models import Famille, Planche, Serie, Variete, Espece, Implantation
 
 from main import constant
 
-import sys, datetime
+import sys
    
 class Command(BaseCommand):
     """updateDB command"""
     help = "updateDB"
 
     def creationPlanches(self):
-        print("création des planches de base")
+        """Création des planches de base et celles du fichier"""
         
         try:
-            p = Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_NUM )
+            p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
         except:
             p = Planche()
-            p.num = constant.PLANCHE_VIRTUELLE_NUM
-            p.nom = "PLANCHE VIRTUELLE"
+            p.nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP
             p.longueur_m = 10000
-            p.largeur_cm = 100
+            p.largeur_m = 1
+            p.save()  
+
+        try:
+            p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS)
+        except:
+            p = Planche()
+            p.nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS
+            p.longueur_m = 10000
+            p.largeur_m = 1
             p.save()  
 
         try:
             ficname = "Planches.csv"
-            np=0
             with open(ficname, "r+t", encoding="ISO-8859-1") as hF:
                 reader = csv.DictReader(hF)
                 for d_line in reader:                
                     nomPlanche = d_line.get("nom")
-                    np+=1
                     try:
                         p = Planche.objects.get(nom = nomPlanche)
                     except:
                         p = Planche()
-                        print (np)          
-                        p.num = np        
                         p.nom = nomPlanche
                         print(nomPlanche)
                         p.longueur_m = int(d_line.get("longueur (m)", 0))
-                        p.largeur_cm = int(float(d_line.get("largeur (m)", "0").replace(",","."))*100)
+                        p.largeur_m = float(d_line.get("largeur (m)", "0").replace(",","."))
                         p.bSerre = (p.nom[0]=="S")
                         p.save()
                         print (p)               
@@ -70,9 +75,10 @@ class Command(BaseCommand):
                 nomEspece = d_line.get("Légume").lower().strip()
                 if nomEspece:
                     try:
+                        ## déjà presente
                         esp = Espece.objects.get(nom = nomEspece)
                     except: 
-                        ## besoin création
+                        ## absente : création
                         self.stdout.write("Ajout " + nomEspece)
                         esp = Espece()
                         esp.nom = nomEspece
@@ -93,70 +99,75 @@ class Command(BaseCommand):
                         esp.save()
                 
     
-        ## maj séries
+        ## maj espèces, variétés et séries
         ficname = "planning.csv"
         with open(ficname, "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
             for d_line in reader:
                 
-                s_espece = d_line.get("Légume").lower().strip()
+                s_espece = d_line.get("Légume", "").lower().strip()
                 s_variet = d_line.get("Variété", "").lower().strip()
                 s_dateEnTerre = d_line.get("Date en terre","")
-                if s_espece and s_variet and s_dateEnTerre:
-                    print ("s_espece XXXXXXXXX ", s_espece)
-                    try:
-                        v = Variete.objects.get(nom = s_variet)
+                
+                if not s_espece or not s_variet:
+                    print ("Ignore", d_line)
+                    continue
+                
+                try:
+                    v = Variete.objects.get(nom = s_variet)
 
-                    except:
-                        self.stdout.write("Ajout " + s_variet)
-                        v = Variete()
+                except:
+                    self.stdout.write("Ajout " + s_variet)
+                    v = Variete()
+                
+                v.nom = s_variet
+                espece = Espece.objects.get(nom=s_espece) 
+                v.espece_id = espece.id
+                v.save()
+                print(v)
+                
+                ## maj série
+                if not s_dateEnTerre:
+                    print ("Ignore ligne date en terre absente", d_line)
+                    continue
+
+                try:
+                    dateEnTerre = datetime.datetime.strptime(s_dateEnTerre, constant.FORMAT_DATE)
+                    serie = Serie.objects.get(evt_debut__date = dateEnTerre, variete = v)
+                except:
+                    serie = Serie()
+                    serie.variete = v
+                    serie.save()
                     
-                    v.nom = s_variet
-                    espece = Espece.objects.get(nom=s_espece) 
-                    v.espece_id = espece.id
-                    v.save()
-                    print(v)
+                try:
+                    serie.dureeAvantDebutRecolte_j = int(d_line.get("Durée avant récolte (j)", "0"))
+                    serie.etalementRecolte_seriej = int(d_line.get("Étalement récolte (j)", "0"))
+                    serie.save()
+                    serie.fixeDates(dateEnTerre)
+                    serie.nb_rangs = int(d_line.get("Nombre de rangs retenus", "0"))
+                    serie.intra_rang_m = float(d_line.get("Intra rang (cm)", "0"))/100   ## renseigné en cm
+                    serie.quantite = int(d_line.get("Nombre de pieds", "0"))
+                    serie.save()
+                                            
+                    ## implantation par defaut sur planche virtuelles serre ou plein champ
+                    serie.bSerre = d_line.get("lieu", "SERRE") == "SERRE"
+                    implantation = Implantation()
+                    if serie.bSerre:    
+                        implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS).id
+                    else:
+                        implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP).id
+                    ## on place toute la série sur cette implantation par défaut
                     
-                    ## maj série
-                    try:                        
-                        serie = Serie.objects.get(evt_debut__date = dateEnTerre, variete = v)
+                    implantation.surface_m2 = serie.quantite*serie.intra_rang_m/serie.nb_rangs * constant.LARGEUR_PLANCHES_VIRTUELLES
+                    implantation.save()
+                    print(">>>>>>>>>>>>>>>>> ajout impl de base", implantation)
+                    
+                    serie.implantations.add(implantation)
+                    serie.save()
 
-                    except:
-                        serie = Serie()
-                        serie.variete = v
-                        serie.save()
-                        
-                        
-                    try:
-                        serie.dureeAvantDebutRecolte_j = int(d_line.get("Durée avant récolte (j)", "0"))
-                        serie.etalementRecolte_seriej = int(d_line.get("Étalement récolte (j)", "0"))
-                        serie.save()
-                        serie.fixeDates(dateEnTerre)
-                        serie.nb_rangs = int(d_line.get("Nombre de rangs retenus", "0"))
-                        serie.intra_rang_cm = int(d_line.get("Intra rang (cm)", "0"))
-                        serie.quantite = int(d_line.get("Nombre de pieds", "0"))
-                        serie.save()
-
-                        
-                        ## implantation par defaut
-                        serie.bSerre = d_line.get("lieu", "SERRE") == "SERRE"
-                        l_imp = []
-                        implantation = Implantation()
-                        if serie.bSerre:    
-                            implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS).id
-                        else:
-                            implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP).id
-                        implantation.surface_m2 = serie.surfaceSurPlanche_m2()
-                        implantation.save()
-                        print(">>>>>>>>>> ajout impl de base", implantation)
-                        l_imp.append(implantation.id)
-                        
-                        serie.l_implantation = l_imp
-                        serie.save()
-
-                    except:
-                        print(sys.exc_info()[1]) 
-                        continue
+                except:
+                    print(sys.exc_info()[1]) 
+                    continue
 # 
 #         
 #         ficname = "Legumes.csv"

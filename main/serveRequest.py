@@ -6,7 +6,6 @@ Created on Nov 26, 2013
 '''
 
 from django.http import HttpResponse
-
 from main.models import Evenement, Serie, Planche, Production
 from main.models import creationPlanche, creationEditionSerie, essaiDeplacementSeries, cloneSerie
 import sys, traceback
@@ -53,10 +52,10 @@ def serveRequest(request):
             # gestion de la création ou édition d'une série de plants
             serie = creationEditionSerie(
                                 int(request.POST.get("id_serie")),
-                                Planche.objects.get(num=int(request.POST.get("num_planche"))).id, 
+                                ##Planche.objects.get(num=int(request.POST.get("num_planche"))).id, 
                                 int(request.POST.get("id_variete")), 
                                 int(request.POST.get("quantite")), 
-                                int(request.POST.get("intra_rang_cm")), 
+                                request.POST.get("intra_rang_cm")/100, 
                                 int(request.POST.get("nb_rangs")), 
                                 request.POST.get("date_debut"), 
                                 request.POST.get("date_fin"))
@@ -181,14 +180,14 @@ def serveRequest(request):
                     raise Exception("demande de deplacement partiel mais nb_plants non défini")                
             
             nb_rangs = int(request.POST.get("nb_rangs"))
-            intra_rang_cm = int(request.POST.get("intra_rang_cm"))
+            intra_rang_m = request.POST.get("intra_rang_cm")/100
             planche_dest = Planche.objects.get(id=int(request.POST.get("id_planche_dest")))
             b_simu = request.POST.get("simulation") == "true"
-            reste = essaiDeplacementSeries(serie.id, planche_dest, intra_rang_cm, nb_rangs)
+            reste = essaiDeplacementSeries(serie.id, planche_dest, intra_rang_m, nb_rangs)
             
             if b_simu:
                 if reste == 0:
-                    rep = "SIMULATION\\nTous les plants sont déplaçables sur la planche %s" % planche_dest.num
+                    rep = "SIMULATION\\nTous les plants sont déplaçables sur la planche %s" % planche_dest.nom
                 else:
                     rep = "SIMULATION\\nReste %d plants non déplaçables. Déplacement incomplet."%reste            
             elif reste == 0:
@@ -198,11 +197,11 @@ def serveRequest(request):
                 print("changt complet de planche")
                 serie.planche_id = planche_dest.id
                 serie.nb_rangs = nb_rangs
-                serie.intra_rang_cm = intra_rang_cm
+                serie.intra_rang_m = intra_rang_m
                 serie.save()
                 rep ="Tous les plants ont été déplacés"
             else:
-                ## Création nouvelle série de plants sur planche dest
+                ## Création nouvelle implantation de plants sur planche dest @todo
                 serie2 = cloneSerie(serie) ## creation d'une nouvelle série
                 ## maj quantités
                 serie2.quantite = serie.quantite - reste 
@@ -211,9 +210,9 @@ def serveRequest(request):
                 ## changement de planche
                 serie2.planche_id = planche_dest.id
                 serie2.nb_rangs = nb_rangs
-                serie2.intra_rang_cm = intra_rang_cm
+                serie2.intra_rang_m = intra_rang_m
                 serie2.save() 
-                rep = "série %d déplacé partiellement (reste %d) sur planche %d "%(serie.id, reste, planche_dest.num)
+                rep = "série %d déplacé partiellement (reste %d) sur planche %s "%(serie.id, reste, planche_dest.nom)
 
             s_json = '{"status":"true", "msg":"%s"}'%rep
         except:

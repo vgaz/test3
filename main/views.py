@@ -39,7 +39,7 @@ def creationPlanches(request):
         s_msg = ""
         for index in range(numPl, numPl + quantite):
             pl = creationPlanche(int(request.POST.get("longueur_m")), 
-                                 int(request.POST.get("largeur_cm")), 
+                                 request.POST.get("largeur_cm")/100, 
                                  request.POST.get("bSerre") == "on",
                                  s_nom = request.POST.get("prefixe", "Planche") + str(index),
                                  num = index
@@ -154,12 +154,12 @@ def evenementsPlanches(request):
         date_debut_vue -= delta 
         date_fin_vue -= delta        
     
-    ## on prend tous les evts deserie l'encadrement pour la planche courante
+    ## on prend tous les evts de l'encadrement pour la planche courante
     l_evts = Evenement.objects.filter(date__gte = date_debut_vue, date__lte = date_fin_vue)
     for evt in l_evts:
         serie = Serie.objects.get(id = evt.serie_id)
         planche = Planche.objects.get(id = serie.planche_id)
-        evt.planche_num = planche.num
+        evt.planche_id = planche.id
 
     return render(request,
                  'main/evenements.html',
@@ -293,7 +293,7 @@ def tab_varietes(request):
                 print(s_pk)
                 v.prod_kg_par_m2 = float(request.POST.get(s_pk + "prod_kg_par_m2",0))
                 v.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent",100))
-                v.intra_rang_cm = int(request.POST.get(s_pk + "intra_rang_cm",10))
+                v.intra_rang_m = request.POST.get(s_pk + "intra_rang_cm",10)/100
                 v.save()
       
     
