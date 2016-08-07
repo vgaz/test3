@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 import datetime
-import sys, traceback
 
 from main import constant  
 from main.Tools import MyTools
-
-import logging
 
 ## fabrique d'éléments et enregistrement dans la base
 
@@ -128,8 +125,8 @@ class Famille(models.Model):
 
 class Planche(models.Model):
     """ planche de culture"""
-    num = models.PositiveIntegerField(null=True, blank=True, default=0)
-    nom = models.CharField(max_length=100, blank=True, default="", unique=True)
+    num = models.PositiveIntegerField(null=True, blank=True)
+    nom = models.CharField(max_length=100, blank=True, default="")
     longueur_m = models.IntegerField()
     largeur_cm = models.IntegerField()
     bSerre = models.BooleanField(default=False)
@@ -137,7 +134,7 @@ class Planche(models.Model):
     def __str__(self):
         if self.bSerre: s_lieu = "sous serre"
         else:           s_lieu = "plein champ"
-        return "%s : %d m x %d cm; %s (%d)" % ( self.nom, self.longueur_m, self.largeur_cm, s_lieu, self.id)
+        return "%s %d, %d m x %d cm; %s" % ( self.nom, self.num, self.longueur_m, self.largeur_cm, s_lieu)
 
 
 class Espece(models.Model):
@@ -147,7 +144,6 @@ class Espece(models.Model):
     avec = models.ManyToManyField("self", related_name="avec", blank=True)
     sans = models.ManyToManyField("self", related_name="sans", blank=True)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
-    prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)     
         
     class Meta:
         ordering = ['nom']
@@ -160,7 +156,7 @@ class Variete(models.Model):
     """variété de légume"""
     nom = models.CharField(max_length=100)    
     espece = models.ForeignKey(Espece, null=True, blank=True)
-    prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)     ## peut etre different de l'espece
+    prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)
     rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
     intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
     couleur = models.CharField(max_length=16)
@@ -175,7 +171,13 @@ class Variete(models.Model):
         ordering = ['nom']
             
     def __str__(self):
-        return "%s %s"%(self.espece.nom, self.nom)
+        return """%s \ndate_min_plantation_pc:%s date_max_plantation_pc:%s
+                    date_min_plantation_sa:%s date_max_plantation_sa:%s"""%(self.nom, 
+                                                                      self.date_min_plantation_pc,
+                                                                      self.date_max_plantation_pc,
+                                                                      self.date_min_plantation_sa,
+                                                                      self.date_max_plantation_sa
+                                                                      ) 
 
     def nomUniteProd(self):
         return constant.D_NOM_UNITE_PROD[self.unite_prod]  
@@ -194,11 +196,10 @@ class Variete(models.Model):
         
         ret =  int( (float(productionDemandee) * 1000) / float(self.prod_hebdo_moy_g.split(",")[0])  )
         print (ret)
-        return ret
+        return (ret)
 
     def prodSemaines(self, productionDemandee):
         """ retourne une liste de production(s) escomptée(s) par semaine (en kg ou en unités)"""
-        
         if self.prod_kg_par_m2 == "0":
             assert "rendement /m2 non donnée pour %s"%self.nom
         
@@ -233,6 +234,7 @@ class Production(models.Model):
                                                              self.qte_prod, 
                                                              self.variete.nomUniteProd())
 
+<<<<<<< HEAD
 class Implantation(models.Model):
     planche = models.ForeignKey("Planche")
 #     debut_m = models.FloatField("Début de la culture (m)", default=0)
@@ -311,6 +313,8 @@ class Evenement(models.Model):
              
 
 
+=======
+>>>>>>> refs/remotes/remote_origin/dev
 class Serie(models.Model):
     
     class Meta:
@@ -318,21 +322,34 @@ class Serie(models.Model):
 
     variete = models.ForeignKey(Variete)
     dureeAvantDebutRecolte_j = models.IntegerField("durée min avant début de récolte (jours)", default=0)
-    etalementRecolte_j = models.IntegerField("durée étalement possible de la récolte (jours)", default=0)
+    etalementRecolte_seriej = models.IntegerField("durée étalement possible de la récolte (jours)", default=0)
+
     nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
     intra_rang_cm = models.PositiveIntegerField("distance dans le rang", default=0)
+<<<<<<< HEAD
     bSerre = models.BooleanField(default=False)
     implantations = models.ManyToManyField(Implantation)
+=======
+    planche = models.ForeignKey("Planche", default=0, blank=True)
+>>>>>>> refs/remotes/remote_origin/dev
     quantite = models.PositiveIntegerField(default=1)
+<<<<<<< HEAD
     evt_debut = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     l_prelevement = []
+=======
+    evt_debut = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
+    evt_fin = models.ForeignKey("Evenement", related_name="+", null=True, default=0)
+>>>>>>> refs/remotes/remote_origin/dev
     
-    objects = SerieManager()
+
+    intra_rang_cm = models.IntegerField("distance dans le rang (cm)", default=10)
+
+    l_prelevement = []
     
     def prodEstimee_kg(self):
         """Retourne le poids (kg) de production escomptée""" 
-        return self.variete.espece.prod_kg_par_m2 * self.surfaceSurPlanche_m2()
+        return variete.prod_kg_par_m2 * self.surfaceSurPlanche_m2()
     
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
@@ -372,22 +389,27 @@ class Serie(models.Model):
         return longueurDePlanche_m * 100 * nbRangs / intraRangCm
      
     def fixeDates(self, dateDebut, dateFin=None):
+<<<<<<< HEAD
         """Crée les evts de début et fin de vie des plants en terre"""
         if isinstance(dateDebut, str): 
             dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
             
+=======
+        """Crée les evts de début et fin de vie du/des plants"""
+        if isinstance(dateDebut, str): dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
+>>>>>>> refs/remotes/remote_origin/dev
         self.evt_debut_id = creationEvt(dateDebut, 
                                         Evenement.TYPE_DEBUT, 
                                         self.id, 
                                         1, 
                                         "début %s"%self.variete.nom).id
-        
-        if dateFin and isinstance(dateFin, str): 
-            dateFin = MyTools.getDateFrom_d_m_y(dateFin)
-
         if not dateFin:
-            dateFin = self.evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j + self.etalementRecolte_seriej)
-
+            if self.planche.bSerre:
+                dateFin = self.evt_debut.date + datetime.timedelta(days = self.variete.duree_avant_recolte_sa_j)
+            else:
+                dateFin = self.evt_debut.date + datetime.timedelta(days = self.variete.duree_avant_recolte_pc_j)
+        
+        if isinstance(dateFin, str): dateFin = MyTools.getDateFrom_d_m_y(dateFin)
         self.evt_fin_id = creationEvt(dateFin, 
                                       Evenement.TYPE_DEBUT, 
                                       self.id, 1, 
@@ -399,7 +421,11 @@ class Serie(models.Model):
         return "Série N°%d de %d plants de %s %s sur planche xxxx, %d cm dans le rang sur %d rangs, du %s au %s" %(  self.id, self.quantite, 
                                                                                                                    self.variete.espece.nom,
                                                                                                                    self.variete.nom, 
+<<<<<<< HEAD
                                                                                                                    #"self.planche.num",
+=======
+                                                                                                                   self.planche.num,
+>>>>>>> refs/remotes/remote_origin/dev
                                                                                                                    self.intra_rang_cm, 
                                                                                                                    self.nb_rangs, 
                                                                                                                    self.evt_debut.date,

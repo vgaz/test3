@@ -42,7 +42,7 @@ display:inline;
     {
     text-align:left;
     padding:10px;
-    width: 500px;
+    width: 400px;
     height: 25	0px;
     background: white;
     color: black;
@@ -87,7 +87,8 @@ function    init()
     balisageSeries()
     
     // ajout ligne date du jour
-    delta_h = moment(date_du_jour).diff(moment(date_debut_vue), "hours")
+    delta_h = moment(date_du_jour).diff(moment(date_debut_vue), 'hours')
+    
     l_planches = document.getElementsByClassName("cadre_chrono")
     for (ii=0;ii<l_planches.length;ii++)
     	{
@@ -95,6 +96,7 @@ function    init()
 	    hBarreJour.style.height = window.getComputedStyle(l_planches[ii]).height
 	    hBarreJour.style.marginLeft = delta_h * pxParH + "px" 
 	    }
+<<<<<<< HEAD
     document.ondragover = scrollIfNeeded
 
     }
@@ -109,6 +111,9 @@ function scrollIfNeeded(e)
         window.scrollBy(0, -4)
     if  (myPosY > 500) // dans le bas de l'ecran
         window.scrollBy(0, 4)    
+=======
+	    
+>>>>>>> refs/remotes/remote_origin/dev
     }
 
 
@@ -138,13 +143,12 @@ function  deplaceSerie()
     
 function  balisageSeries()
     {
-    // placement des séries sur les planches
     l_series = document.getElementsByClassName("chrono_serie")
     for (ii=0; ii<l_series.length; ii++)
         {
         // decalage debut
         debut = l_series[ii].getAttribute("date_debut")
-        deltaH = moment(debut).diff(moment(date_debut_vue), "hours")
+        deltaH = moment(debut).diff(moment(date_debut_vue), 'hours')
         l_series[ii].style.marginLeft = deltaH * pxParH + "px" 
         // decalage fin
         fin = l_series[ii].getAttribute("date_fin")
@@ -159,6 +163,7 @@ function  balisageSeries()
             //positionnement des évènements
             deltaPx = moment(l_evts_plants[jj]["date"]).diff(moment(debut), 'hours') * pxParH
             s_evt += "<div class='evt' style='left:" + deltaPx + "px;width:" + l_evts_plants[jj]["duree_j"] * 24 * pxParH + "px;' title='" + l_evts_plants[jj]["nom"] + '\n' + moment(l_evts_plants[jj]["date"]).format("DD/MM/YYYY") + "' > </div>"
+            //s_evt = "<div style='position:absolute'><img title='" + l_evts_plants[jj]["nom"] + '\n' + moment(l_evts_plants[jj]["date"]).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + "px;width:" + l_evts_plants[jj]["duree_j"] * 24 * pxParH + "px;height:13px'></div>"
             }
         document.getElementById(l_series[ii].getAttribute("id")).getElementsByClassName("evts")[0].innerHTML = s_evt
         }
@@ -351,7 +356,7 @@ function unfocus(event)
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
 <input hidden type="text" id="mode" value="echelle" />
-Pour les planches <input style="width: 300px" type="text" name="noms_planches" value="{% for planche in l_planches %}{{planche.nom}},{% endfor %}" />
+Pour les planches   <input style="width: 300px" type="text" name="num_planches" value="{% for planche in l_planches %}{{planche.num}},{% endfor %}" />
  Visionnage du      <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
                     <input style="margin-left: 20px" type="submit" value="Envoyer" />
                     <input style="margin-left: 20px" type="submit" name="direction" value="recul" />
@@ -393,6 +398,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
             <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
             <div class="evts" style="display:inline;position:relative;float:left;"> </div>
+
         </div>
         {% endfor %}
     </div>
@@ -426,7 +432,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     
     <div id="divDeplacementSerie">
         <h3>Déplacement de la série N°<input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" /></h3>
-        Quantité :                  <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
+        Nb de série :               <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
         De la planche N°            <input id="deplacement_num_planche_orig"   value="" type="text" readonly style="width: 30px;margin-left: 10px"/>
         vers la planche N°          <input id="deplacement_id_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
         vers la planche num         <input id="deplacement_num_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>

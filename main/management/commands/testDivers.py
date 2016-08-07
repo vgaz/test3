@@ -19,6 +19,7 @@ class Command(BaseCommand):
 #         from main import planification
 # 
 #         delta20h = datetime.timedelta(hours=20)
+<<<<<<< HEAD
         date_debut_vue = MyTools.getDateFrom_d_m_y("1/1/2016")
         date_fin_vue = MyTools.getDateFrom_d_m_y("1/8/2016")
         la_date = MyTools.getDateFrom_d_m_y("1/8/2016")
@@ -30,9 +31,14 @@ class Command(BaseCommand):
                                         implantations__id__in = l_implantations).values_list("id",flat=True)
         print(l_series)
         return
+=======
+#         date_debut_vue = datetime.datetime.strptime("18/5/2015", constant.FORMAT_DATE)
+#         date_fin_vue = datetime.datetime.strptime("24/5/2015", constant.FORMAT_DATE) + delta20h
+>>>>>>> refs/remotes/remote_origin/dev
 # 
 #         planification.planif(date_debut_vue, date_fin_vue)
 #         return
+<<<<<<< HEAD
 #         laPlanche = Planche.objects.get(id=11)
 #         print( Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue))
 # 
@@ -40,6 +46,9 @@ class Command(BaseCommand):
 #         print( Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue))
 
         return
+=======
+        
+>>>>>>> refs/remotes/remote_origin/dev
         id_serie = 3
 #         reste  = essaiDeplacementSeries(id_plant, 3, 60, 2)
         serie = Serie.objects.get(id=id_serie)
