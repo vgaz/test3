@@ -12,8 +12,7 @@ import main.Tools.MyTools as MyTools
 
 import datetime
 
-from main.models import Espece, Evenement, Famille, Variete,  Planche, Serie, Production
-from main.models import recupListeImplantationsEnDateDu, creationPlanche
+from main.models import *
 from main.forms import PlancheForm
 
 #################################################
@@ -96,8 +95,10 @@ def chronoPlanches(request):
         s_msg += str(sys.exc_info())
         return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
     
-    ## ajout des evts liés à cette planche
+    ## ajout des evenements par série 
     for laPlanche in l_planches:
+        l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, laPlanche)
+        
         ## on prend tous les evts de l'encadrement pour les planches sélectionnées
         l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
                                           date__lte = date_fin_vue, 

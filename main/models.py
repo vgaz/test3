@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-import datetime
+import datetime, logging
 
 from main import constant  
 from main.Tools import MyTools
@@ -51,16 +51,7 @@ def creationPlanche(longueur_m, largeur_m, bSerre, s_nom=""):
     planche.save()
     return planche
            
-def recupListeImplantationsEnDateDu(la_date, planche):
-    """Filtrage des implantations présents à telle date"""
-    ## on ne renvoie que les implantations de cette planche
-    l_implantations = Implantation.objects.filter(planche_id = planche.id)##   serie_id__in)
-    l_series = Serie.objects.filter(evt_debut__date__lte = la_date,
-                                    evt_fin__date__gte = la_date,
-                                    implantations__id__in = l_implantations)
-    
-    ##.values_list("id",flat=True)
-    return l_implantations
+
 
 
 def essaiDeplacementSeries(idSerie, plancheDest, intraRangCm, nbRangs): 
@@ -75,7 +66,7 @@ def essaiDeplacementSeries(idSerie, plancheDest, intraRangCm, nbRangs):
     for day in MyTools.jourApresJour(serie.evt_debut.date, serie.evt_fin.date):
         cumul_m2 = 0
         ## recup des implantations déjà en place à cette date    
-        l_implantations = recupListeImplantationsEnDateDu(day, plancheDest)
+        ###  @todo l_implantations = recupListeImplantationsEnDateDu(day, plancheDest)XXXX
         
         for imp in l_implantations:
             cumul_m2 += imp.surface_m2()
@@ -256,6 +247,27 @@ class Implantation(models.Model):
 
 class SerieManager(models.Manager):
     
+    def activesEnDateDu(self, la_date, planche=None):
+        """Filtrage des séries présentes à telle date, sur telle planche"""
+        l_series = Serie.objects.filter(evt_debut__date__lte = la_date, evt_fin__date__gte = la_date).distinct()
+        if planche:
+            l_series = l_series.filter(implantations__planche_id = planche.id)
+        
+        return l_series
+
+    def activesSurPeriode(self, date_debut, date_fin, planche=None):
+        """Filtrage des séries présentes, au moins partiellement, dans un encadrement de dates
+        on ne renvoie que les implantations de cette planche"""
+        if planche:
+            l_series = Serie.objects.filter(implantations__planche_id = planche.id)
+        else:
+            l_series = Serie.objects.all()
+        l_series = l_series.distinct()
+        l_series = l_series.exclude(evt_debut__date__lt = date_debut,
+                                    evt_debut__date__gt = date_fin)
+        return l_series
+
+
     def surPlancheDansPeriode(self, idPlanche, dateDebut, dateFin):
         """retourne les séries de la planche contenues dans un interval de temps donné"""
         l_allSeries = super(SerieManager, self).get_queryset()
@@ -263,7 +275,6 @@ class SerieManager(models.Manager):
         
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.INFO)
-#         logging.getLogger('console').setLevel(logging.INFO)
         
         for serie in l_allSeries:
             ## list des id d'implantations de cette série
@@ -327,6 +338,7 @@ class Serie(models.Model):
     evt_debut = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     l_prelevement = []
+    objects = SerieManager()
     
     def prodEstimee_kg(self):
         """Retourne le poids (kg) de production escomptée""" 
