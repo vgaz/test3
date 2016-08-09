@@ -107,15 +107,13 @@ class Command(BaseCommand):
                         esp.unite_prod = constant.UNITE_PROD_PIECE
                     esp.save()      
  
-                    
-                    
-    
+
         ## maj espèces, variétés et séries
         ficname = "planning.csv"
         with open(ficname, "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
             for d_line in reader:
-                
+                ## une ligne par série
                 s_espece = d_line.get("Légume", "").lower().strip()
                 s_variet = d_line.get("Variété", "").lower().strip()
                 s_dateEnTerre = d_line.get("Date en terre","")
@@ -144,8 +142,11 @@ class Command(BaseCommand):
 
                 try:
                     dateEnTerre = datetime.datetime.strptime(s_dateEnTerre, constant.FORMAT_DATE)
-                    serie = Serie.objects.get(evt_debut__date = dateEnTerre, variete = v)
+                    serie = Serie.objects.get(evt_debut__date = dateEnTerre,
+                                              variete__espece_nom = s_espece,
+                                              variete_nom = s_variet)
                 except:
+                    ## nouvelle série
                     serie = Serie()
                     serie.variete = v
                     serie.save()

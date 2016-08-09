@@ -371,13 +371,14 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                 ondragover="allowDrop(event)"
                 ondragleave="unfocus(event)"
                 ondrop="drop(event)">
-            {{planche}}
+            {{planche.nom}} ({{planche.id}})
             <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie(this, {{planche.id}});return false"> 
         </h2>
-    
+
         {# séries existantes en base #}
         {% for serie in planche.l_series %}
-        <div class="chrono_serie"   id="{{serie.id}}" id_planche="{{planche.id}}" 
+
+        <div class="chrono_serie"   id="{{serie.id}}"
                                     nom_variete="{{serie.variete}}" id_variete="{{serie.variete.id}}" 
                                     quantite="{{serie.quantite}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
@@ -394,7 +395,6 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
             <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
             <div class="evts" style="display:inline;position:relative;float:left;"> </div>
-
         </div>
         {% endfor %}
     </div>

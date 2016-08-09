@@ -93,25 +93,29 @@ def chronoPlanches(request):
             l_planches = Planche.objects.all().order_by('nom')
     except:
         s_msg += str(sys.exc_info())
-        return render(request, 'main/erreur.html',  { "appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
+        return render(request, 'main/erreur.html',  {"appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
     
-    ## ajout des evenements par série 
+    ## ajout des séries 
     for laPlanche in l_planches:
-        l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, laPlanche)
-        
-        ## on prend tous les evts de l'encadrement pour les planches sélectionnées
-        l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
-                                          date__lte = date_fin_vue, 
-                                          serie__in = Serie.objects.filter(planche_id = laPlanche))
-
-        ## on en deduit les series impliquées, même partiellement
-        l_seriesId = list(set([evt.serie_id for evt in l_evts]))
-        laPlanche.l_series = Serie.objects.filter(planche_id = laPlanche, id__in = l_seriesId ).order_by('variete_id')
-        ## on récupère de nouveau tous les évenements des series impactées , même ceux hors fenetre temporelle 
-        s_evts_series = ""
+        laPlanche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, laPlanche)
         for serie in laPlanche.l_series:
-            serie.l_evts = Evenement.objects.filter(serie_id = serie.id, type = Evenement.TYPE_DIVERS).order_by('date')
-    
+            print(serie.variete)
+            serie.evt_debut = serie.evenements.get(type = Evenement.TYPE_DEBUT)
+            serie.evt_fin = serie.evenements.get(type = Evenement.TYPE_FIN)
+
+#         ## on prend tous les evts de l'encadrement pour les planches sélectionnées
+#         l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
+#                                           date__lte = date_fin_vue, 
+#                                           serie__in = Serie.objects.filter(planche_id = laPlanche))
+
+#         ## on en deduit les series impliquées, même partiellement
+#         l_seriesId = list(set([evt.serie_id for evt in l_evts]))
+#         laPlanche.l_series = Serie.objects.filter(planche_id = laPlanche, id__in = l_seriesId ).order_by('variete_id')
+#         ## on récupère de nouveau tous les évenements des series impactées , même ceux hors fenetre temporelle 
+#         s_evts_series = ""
+#         for serie in laPlanche.l_series:
+#             serie.l_evts = Evenement.objects.filter(serie_id = serie.id, type = Evenement.TYPE_DIVERS).order_by('date')
+#     
 
     return render(request,
                  'main/chrono_planches.html',
@@ -119,7 +123,7 @@ def chronoPlanches(request):
                   "appVersion": constant.APP_VERSION,
                   "appName": constant.APP_NAME,
                   "l_planches": l_planches,
-                  "s_evts_series":s_evts_series,
+#                   "s_evts_series":s_evts_series,
                   "d_evtTypes":Evenement.D_NOM_TYPES,
                   "l_vars": Variete.objects.all(),                  
                   "date_debut_vue": date_debut_vue,

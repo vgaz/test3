@@ -8,7 +8,7 @@ from main.Tools import MyTools
 ## fabrique d'éléments et enregistrement dans la base
 
 
-def creationEvt(e_date, e_type, id_serie, duree_j=1, nom=""):
+def creationEvt(e_date, e_type, nom="", duree_j=1):
     """création d'une evenement en base
     retourne l'instance de l'évènement"""
     if isinstance(e_date, str): e_date = MyTools.getDateFrom_d_m_y(e_date)
@@ -17,7 +17,6 @@ def creationEvt(e_date, e_type, id_serie, duree_j=1, nom=""):
     evt.date = e_date
     evt.duree_j = duree_j
     evt.nom = nom
-    evt.serie_id = id_serie
     evt.save()
     return evt
 
@@ -163,13 +162,7 @@ class Variete(models.Model):
         ordering = ['nom']
             
     def __str__(self):
-        return """%s %s\ndate_min_plantation_pc:%s date_max_plantation_pc:%s
-                    date_min_plantation_sa:%s date_max_plantation_sa:%s"""%(self.nom, self.espece.nom,
-                                                                      self.date_min_plantation_pc,
-                                                                      self.date_max_plantation_pc,
-                                                                      self.date_min_plantation_sa,
-                                                                      self.date_max_plantation_sa
-                                                                      ) 
+        return "%s %s"%(self.espece.nom, self.nom) 
 
 
     def plantsPourProdHebdo(self, productionDemandee):
@@ -317,7 +310,10 @@ class Evenement(models.Model):
 
                     
     def __str__(self):
-        return "Evt %s %s pour serie %d, %s pour %d j"%(self.nomType(), self.id or "?", self.serie_id, self.date, self.duree_j )
+        return "Evt %s (%s) %s pour %d j"%(self.nomType(), 
+                                           self.id or "?", 
+                                           self.date, 
+                                           self.duree_j )
              
 
 
@@ -335,6 +331,7 @@ class Serie(models.Model):
     bSerre = models.BooleanField(default=False)
     implantations = models.ManyToManyField(Implantation)
     quantite = models.PositiveIntegerField(default=1)
+    evenements = models.ManyToManyField(Evenement)
     evt_debut = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     l_prelevement = []
@@ -342,7 +339,7 @@ class Serie(models.Model):
     
     def prodEstimee_kg(self):
         """Retourne le poids (kg) de production escomptée""" 
-        return variete.prod_kg_par_m2 * self.surfaceSurPlanche_m2()
+        return self.variete.prod_kg_par_m2 * self.surfaceSurPlanche_m2()
     
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
@@ -364,10 +361,10 @@ class Serie(models.Model):
     
     def surfaceSurPlanche_m2(self, intra_rang_m=None, nb_rangs=None):
         """ retourne la surface occupée en fonction des distances inter-rang et dans le rang
-        de toutes les implantation A FAIRE
+        de toutes les implantation A FAIRE@todo
         intra_rang_m et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend ceux prédéfinis"""
-                        
-        return self.longueurSurPlanche_m() * self.planche.largeur_m
+        return 0
+        ##return self.longueurSurPlanche_m() * self.planche.largeur_m
     
     def nbSeriesPlacables(self, longueurDePlanche_m, intraRang_m=None, nbRangs=None):
         if not intraRang_m:
@@ -383,21 +380,19 @@ class Serie(models.Model):
         if isinstance(dateDebut, str): 
             dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
             
-        self.evt_debut_id = creationEvt(dateDebut, 
-                                        Evenement.TYPE_DEBUT, 
-                                        self.id, 
-                                        1, 
-                                        "début %s"%self.variete.nom).id
+        evt_debut = creationEvt(dateDebut, Evenement.TYPE_DEBUT, "début %s"%self.variete.nom)
+        self.evenements.add(evt_debut)
+        self.evt_debut_id = evt_debut.id
+
         if not dateFin:
             dateFin = self.evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j)
         
         if isinstance(dateFin, str): 
             dateFin = MyTools.getDateFrom_d_m_y(dateFin)
             
-        self.evt_fin_id = creationEvt(dateFin, 
-                                      Evenement.TYPE_DEBUT, 
-                                      self.id, 1, 
-                                      "fin %s"%self.variete.nom).id        
+        evt_fin = creationEvt(dateFin, Evenement.TYPE_FIN, "fin %s"%self.variete.nom)       
+        self.evt_fin_id = evt_fin.id
+        self.evenements.add(evt_fin)
 
         self.save()
    

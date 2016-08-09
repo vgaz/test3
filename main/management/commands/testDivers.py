@@ -17,8 +17,9 @@ class Command(BaseCommand):
         date_fin_vue = MyTools.getDateFrom_d_m_y("1/9/2016")
         la_date = MyTools.getDateFrom_d_m_y("1/8/2016")
 #         l_implantations = Implantation.objects.filter(planche_id = 2)
-        planche = Planche.objects.get(id=4)
-        l_series = seriesSurPeriode(date_debut_vue, date_fin_vue, planche)
+        planche = Planche.objects.get(id=1)
+        
+        l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)
         print(l_series.values_list("id",flat=True))
         
         l_series = Serie.objects.activesEnDateDu(la_date, planche)
