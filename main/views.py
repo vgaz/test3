@@ -98,10 +98,9 @@ def chronoPlanches(request):
     ## ajout des séries 
     for laPlanche in l_planches:
         laPlanche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, laPlanche)
-        for serie in laPlanche.l_series:
-            print(serie.variete)
-            serie.evt_debut = serie.evenements.get(type = Evenement.TYPE_DEBUT)
-            serie.evt_fin = serie.evenements.get(type = Evenement.TYPE_FIN)
+#       for serie in laPlanche.l_series:
+#             serie.evt_debut = serie.evenements.get(type = Evenement.TYPE_DEBUT)
+#             serie.evt_fin = serie.evenements.get(type = Evenement.TYPE_FIN)
 
 #         ## on prend tous les evts de l'encadrement pour les planches sélectionnées
 #         l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 

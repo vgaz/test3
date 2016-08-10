@@ -29,7 +29,7 @@ display:none;
     
 .evt
 {
-    background: orange;
+    background: red;
     position:absolute;
     height:13px;
 }
@@ -65,15 +65,6 @@ display:inline;
     date_fin_vue = "{{date_fin_vue|safe}}"
     date_du_jour = "{{date_du_jour|safe}}"
     decalage_j = {{decalage_j|safe}}
-    // evenement par serie id
-    l_evts_plants=[    {% for planche in l_planches %}{% for serie in planche.l_plants %}
-			{% for evt in serie.l_evts %}  {"id":"{{evt.id}}",
-											"nom":"{{evt.nom}}",
-											"date":"{{evt.date|safe}}",
-											"duree_j":"{{evt.duree_j}}",
-											"type":"{{evt.type}}",
-											"id_serie":"{{evt.serie_id}}"}{% if not forloop.last %},{% endif %}{% endfor%}
-		{% endfor %}{% endfor %}]
 
 function    init()
     {
@@ -144,24 +135,24 @@ function  balisageSeries()
         {
         // decalage debut
         debut = l_series[ii].getAttribute("date_debut")
-        deltaH = moment(debut).diff(moment(date_debut_vue), 'hours')
-        l_series[ii].style.marginLeft = deltaH * pxParH + "px" 
+        deltaHD = moment(debut).diff(moment(date_debut_vue), 'hours')
+        l_series[ii].style.marginLeft = deltaHD * pxParH + "px" 
         // decalage fin
         fin = l_series[ii].getAttribute("date_fin")
-        deltaH = moment(fin).diff(moment(debut), "hours")
-        l_series[ii].style.width = deltaH * pxParH  + "px"
-        // placement des évenements "divers"
-        s_evt = ""
-    	for (jj=0;jj<l_evts_plants.length;jj++)
+        deltaHF = moment(fin).diff(moment(debut), "hours")
+        l_series[ii].style.width = deltaHF * pxParH  + "px"
+        
+        // décalages des évenements "divers"
+        l_evts = document.getElementsByClassName("evt")
+    	for (jj=0;jj<l_evts.length;jj++)
     		{
-    		if (l_evts_plants[jj]["id_serie"] != l_series[ii].getAttribute("id"))
-    			continue
-            //positionnement des évènements
-            deltaPx = moment(l_evts_plants[jj]["date"]).diff(moment(debut), 'hours') * pxParH
-            s_evt += "<div class='evt' style='left:" + deltaPx + "px;width:" + l_evts_plants[jj]["duree_j"] * 24 * pxParH + "px;' title='" + l_evts_plants[jj]["nom"] + '\n' + moment(l_evts_plants[jj]["date"]).format("DD/MM/YYYY") + "' > </div>"
-            //s_evt = "<div style='position:absolute'><img title='" + l_evts_plants[jj]["nom"] + '\n' + moment(l_evts_plants[jj]["date"]).format("DD/MM/YYYY") + "' src='{{STATIC_URL}}images/puce.png' style='margin-left:" + deltaPx + "px;width:" + l_evts_plants[jj]["duree_j"] * 24 * pxParH + "px;height:13px'></div>"
+            deltaH = moment(l_evts[jj].getAttribute("date")).diff(moment(debut), 'hours')
+            //deltaPx = moment(l_evts[jj].getAttribute("date")) * pxParH
+            l_evts[jj].style.left = deltaH * pxParH +"px"
+            l_evts[jj].style.width = l_evts[jj].getAttribute("duree_j") * 24 * pxParH + "px"
+            
+            //setAttribute("style", s_style)
             }
-        document.getElementById(l_series[ii].getAttribute("id")).getElementsByClassName("evts")[0].innerHTML = s_evt
         }
     }
 
@@ -394,7 +385,10 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             <a href="#" onclick="javascript:prepareDeplacementSerie({{serie.id}});return(false)">DEPLACER</a><br/>
             <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
             <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
-            <div class="evts" style="display:inline;position:relative;float:left;"> </div>
+            {% for evt in serie.evenements.all%}
+                <div class='evt' date="{{evt.date|date:'Y-m-d'}}" duree_j="{{evt.duree_j}}" nom="{{evt.nom}}" 
+                        texte ="{{evt.texte}}" title="{{evt.nom}} au {{evt.date|date:'d/m/Y'}}" > </div>            
+            {% endfor %}
         </div>
         {% endfor %}
     </div>
