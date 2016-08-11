@@ -31,20 +31,25 @@ def home(request):
 
 def creationPlanches(request):
     """gestion de la requete de post """
-    s_msg = ""
+    s_msg = "Création planche "
     if request.POST:
         quantite = int(request.POST.get("quantite", 0))        
         numPl = int(request.POST.get("num_prem"))           
         s_msg = ""
         for index in range(numPl, numPl + quantite):
+            bSerre = request.POST.get("bSerre") == "on"
+            if bSerre : 
+                prefixe = "S_"
+            else:
+                prefixe = "C_"
             pl = creationPlanche(int(request.POST.get("longueur_m")), 
-                                 request.POST.get("largeur_cm")/100, 
-                                 request.POST.get("bSerre") == "on",
-                                 s_nom = request.POST.get("prefixe", "Planche") + str(index),
-                                 num = index
+                                 int(request.POST.get("largeur_cm"))/100, 
+                                 bSerre,
+                                 s_nom = "%s%s%s"%(prefixe,
+                                                   request.POST.get("prefixe", "PL"),
+                                                   str(index) )
                                  )
-            
-            s_msg = "Planches créées"
+            s_msg += str(pl)
             print (pl)
     l_planches = Planche.objects.all().order_by('nom')
 
@@ -98,24 +103,6 @@ def chronoPlanches(request):
     ## ajout des séries 
     for laPlanche in l_planches:
         laPlanche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, laPlanche)
-        break## juste pour testXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-#       for serie in laPlanche.l_series:
-#             serie.evt_debut = serie.evenements.get(type = Evenement.TYPE_DEBUT)
-#             serie.evt_fin = serie.evenements.get(type = Evenement.TYPE_FIN)
-
-#         ## on prend tous les evts de l'encadrement pour les planches sélectionnées
-#         l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
-#                                           date__lte = date_fin_vue, 
-#                                           serie__in = Serie.objects.filter(planche_id = laPlanche))
-
-#         ## on en deduit les series impliquées, même partiellement
-#         l_seriesId = list(set([evt.serie_id for evt in l_evts]))
-#         laPlanche.l_series = Serie.objects.filter(planche_id = laPlanche, id__in = l_seriesId ).order_by('variete_id')
-#         ## on récupère de nouveau tous les évenements des series impactées , même ceux hors fenetre temporelle 
-#         s_evts_series = ""
-#         for serie in laPlanche.l_series:
-#             serie.l_evts = Evenement.objects.filter(serie_id = serie.id, type = Evenement.TYPE_DIVERS).order_by('date')
-#     
 
     return render(request,
                  'main/chrono_planches.html',
@@ -123,7 +110,6 @@ def chronoPlanches(request):
                   "appVersion": constant.APP_VERSION,
                   "appName": constant.APP_NAME,
                   "l_planches": l_planches,
-#                   "s_evts_series":s_evts_series,
                   "d_evtTypes":Evenement.D_NOM_TYPES,
                   "l_vars": Variete.objects.all(),                  
                   "date_debut_vue": date_debut_vue,
@@ -139,8 +125,8 @@ def evenementsPlanches(request):
     delta20h = datetime.timedelta(hours=20)
     date_du_jour = datetime.datetime.now()
     if request.POST.get("aujourdhui","off") == "on":
-        date_debut_vue = MyTools.getDateFrom_d_m_y(date_du_jour) 
-        date_fin_vue = date_debut_vue
+        date_debut_vue = date_du_jour
+        date_fin_vue = date_du_jour
         print(date_debut_vue, date_fin_vue)
     elif request.POST.get("date_debut_vue",""):
         date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
@@ -159,12 +145,10 @@ def evenementsPlanches(request):
         date_debut_vue -= delta 
         date_fin_vue -= delta        
     
-    ## on prend tous les evts de l'encadrement pour la planche courante
-    l_evts = Evenement.objects.filter(date__gte = date_debut_vue, date__lte = date_fin_vue)
-    for evt in l_evts:
-        serie = Serie.objects.get(id = evt.serie_id)
-        planche = Planche.objects.get(id = serie.planche_id)
-        evt.planche_id = planche.id
+    ## on prend tous les evts de l'encadrement
+    l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
+                                      date__lte = date_fin_vue)
+    
 
     return render(request,
                  'main/evenements.html',

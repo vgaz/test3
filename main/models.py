@@ -56,7 +56,7 @@ def creationPlanche(longueur_m, largeur_m, bSerre, s_nom=""):
 def essaiDeplacementSeries(idSerie, plancheDest, intraRangCm, nbRangs): 
     """tentative de placement de series ref <idSerie> sur planche <idPlancheDest> en fonction du nb de rang et distance dans le rang
     retourne le nombre de series restants à placer ailleurs si le nb de series est trop important pour la planche (déjà occupée ou trop courte par exemple)
-    0 si tout peut etre placé sur la planche 
+    0 si tout peut etre placé sur la planche @todo
     """
     serie = Serie.objects.get(id = idSerie)
     
@@ -122,7 +122,8 @@ class Planche(models.Model):
     def __str__(self):
         if self.bSerre: s_lieu = "sous serre"
         else:           s_lieu = "plein champ"
-        return "%s (%d), %d m x %d m; %s" % ( self.nom, self.id, self.longueur_m, self.largeur_m, self.surface_m2(), s_lieu)
+        return "%s (%d), %d m x %d m = %dm2; %s" % ( self.nom, self.id, 
+                                              self.longueur_m, self.largeur_m, self.surface_m2(), s_lieu)
 
 
 class Espece(models.Model):
@@ -242,7 +243,8 @@ class SerieManager(models.Manager):
     
     def activesEnDateDu(self, la_date, planche=None):
         """Filtrage des séries présentes à telle date, sur telle planche"""
-        l_series = Serie.objects.filter(evt_debut__date__lte = la_date, evt_fin__date__gte = la_date).distinct()
+        l_series = Serie.objects.filter(evt_debut__date__lte = la_date, 
+                                        evt_fin__date__gte = la_date).distinct()
         if planche:
             l_series = l_series.filter(implantations__planche_id = planche.id)
         
@@ -255,37 +257,14 @@ class SerieManager(models.Manager):
             l_series = Serie.objects.filter(implantations__planche_id = planche.id)
         else:
             l_series = Serie.objects.all()
+            
         l_series = l_series.distinct()
+
         l_series = l_series.exclude(evt_debut__date__lt = date_debut,
                                     evt_debut__date__gt = date_fin)
-        return l_series
-
-
-    def surPlancheDansPeriode(self, idPlanche, dateDebut, dateFin):
-        """retourne les séries de la planche contenues dans un interval de temps donné"""
-        l_allSeries = super(SerieManager, self).get_queryset()
-        l_ids = []
-        
-        logger = logging.getLogger(__name__)
-        logger.setLevel(logging.INFO)
-        
-        for serie in l_allSeries:
-            ## list des id d'implantations de cette série
-            l_impIds = list(eval(serie.l_implantation))
-            ## recup des implantations et de leur planche associée
-            l_planches_imp = Implantation.objects.filter(id__in=l_impIds).values_list('planche_id', flat=True)
-                
-            if idPlanche not in l_planches_imp:
-                continue
-            
-            debutSerie = MyTools.getDateFrom_y_m_d(str(serie.evt_debut.date).split(" ")[0])
-            finSerie = MyTools.getDateFrom_y_m_d(str(serie.evt_fin.date).split(" ")[0])
-            if  (debutSerie > dateDebut and debutSerie < dateFin) \
-               or (finSerie > dateDebut and finSerie < dateFin):
-                l_ids.append(serie.id)
-        
-        l_series = super(SerieManager, self).get_queryset().filter(id__in=l_ids)
-        return l_series           
+         
+         
+        return l_series     
 
 class Evenement(models.Model):
     
@@ -385,7 +364,7 @@ class Serie(models.Model):
         self.evt_debut_id = evt_debut.id
 
         if not dateFin:
-            dateFin = self.evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j)
+            dateFin = evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j)
         
         if isinstance(dateFin, str): 
             dateFin = MyTools.getDateFrom_d_m_y(dateFin)
@@ -396,9 +375,9 @@ class Serie(models.Model):
 
         self.save()
    
-    def __str__(self):
+    def __str__(self):       
         return "Série N°%d de %d plants de %s %s sur planche xxxx, %d cm dans le rang sur %d rangs, du %s au %s" %(  self.id, self.quantite, 
                                                                                                                    self.variete.espece.nom,
-                                                                                                          self.evt_debut.date,
+                                                                                                                   self.evt_debut.date,
                                                                                                                    self.evt_fin.date)
 

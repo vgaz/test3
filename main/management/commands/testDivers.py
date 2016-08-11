@@ -13,17 +13,24 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
+        
+        for e in  Evenement.objects.all():
+            print (e)
+        return
         date_debut_vue = MyTools.getDateFrom_d_m_y("1/1/2016")
         date_fin_vue = MyTools.getDateFrom_d_m_y("1/9/2016")
-        la_date = MyTools.getDateFrom_d_m_y("1/8/2016")
+        la_date = MyTools.getDateFrom_d_m_y("14/03/2016")
 #         l_implantations = Implantation.objects.filter(planche_id = 2)
         planche = Planche.objects.get(id=1)
         
+        l_series = Serie.objects.activesEnDateDu(la_date, planche)
+        print("séries actives en date du", la_date, l_series.values_list("id",flat=True))
+        
+        return 
+    
         l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)
         print(l_series.values_list("id",flat=True))
         
-        l_series = Serie.objects.activesEnDateDu(la_date, planche)
-        print("séries actives en date du", la_date, l_series.values_list("id",flat=True))
         
         return
 #         date_debut_vue = datetime.datetime.strptime("18/5/2015", constant.FORMAT_DATE)

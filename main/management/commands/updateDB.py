@@ -3,7 +3,7 @@ import csv
 import datetime
 
 from django.core.management.base import BaseCommand
-from main.models import Famille, Planche, Serie, Variete, Espece, Implantation
+from main.models import *
 
 from main import constant
 
@@ -142,7 +142,8 @@ class Command(BaseCommand):
 
                 try:
                     dateEnTerre = datetime.datetime.strptime(s_dateEnTerre, constant.FORMAT_DATE)
-                    serie = Serie.objects.get(evt_debut__date = dateEnTerre,
+                    serie = Serie.objects.get(evenements__type = Evenement.TYPE_DEBUT,
+                                              evenements__date = dateEnTerre,
                                               variete__espece_nom = s_espece,
                                               variete_nom = s_variet)
                 except:
