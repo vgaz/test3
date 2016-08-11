@@ -87,6 +87,7 @@ function    init()
 	    hBarreJour.style.height = window.getComputedStyle(l_planches[ii]).height
 	    hBarreJour.style.marginLeft = delta_h * pxParH + "px" 
 	    }
+	// décalage vertical si besoin 
     document.ondragover = scrollIfNeeded
 
     }
@@ -94,7 +95,7 @@ function    init()
 function scrollIfNeeded(e)
     {
     //myPosX = e.clientX;
-    myPosY = e.clientY;
+    myPosY = e.clientY
     //document.getElementById("divInfoDebug").innerHTML = "X:"+myPosX + " Y:" + myPosY
     
     if  (myPosY < 100) // dans le haut de l'ecran
@@ -143,15 +144,14 @@ function  balisageSeries()
         l_series[ii].style.width = deltaHF * pxParH  + "px"
         
         // décalages des évenements "divers"
-        l_evts = document.getElementsByClassName("evt")
-    	for (jj=0;jj<l_evts.length;jj++)
-    		{
+        l_evts = l_series[ii].getElementsByClassName("evt")
+        for (jj=0;jj<l_evts.length;jj++)
+            {
             deltaH = moment(l_evts[jj].getAttribute("date")).diff(moment(debut), 'hours')
             //deltaPx = moment(l_evts[jj].getAttribute("date")) * pxParH
             l_evts[jj].style.left = deltaH * pxParH +"px"
             l_evts[jj].style.width = l_evts[jj].getAttribute("duree_j") * 24 * pxParH + "px"
-            
-            //setAttribute("style", s_style)
+            //alert("evt " + jj + " ; " + l_evts[jj].getAttribute("date") + " " + l_evts[jj].getAttribute("nom") + " " + l_evts[jj].style.left )
             }
         }
     }
@@ -387,7 +387,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
             {% for evt in serie.evenements.all%}
                 <div class='evt' date="{{evt.date|date:'Y-m-d'}}" duree_j="{{evt.duree_j}}" nom="{{evt.nom}}" 
-                        texte ="{{evt.texte}}" title="{{evt.nom}} au {{evt.date|date:'d/m/Y'}}" > </div>            
+                        texte ="{{evt.texte}}" title="{{evt.nom}} le {{evt.date|date:'d/m/Y'}}" > </div>            
             {% endfor %}
         </div>
         {% endfor %}

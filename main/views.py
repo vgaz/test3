@@ -85,10 +85,10 @@ def chronoPlanches(request):
             date_debut_vue -= delta 
             date_fin_vue -= delta
             
-        s_nums = request.POST.get("nom_planches", request.GET.get("nom_planches", ""))
-        if s_nums:
-            l_nums = [int(num.strip()) for num in s_nums.strip(',').split(",")]
-            l_planches = Planche.objects.filter(num__in = l_nums).order_by('nom')
+        s_noms = request.POST.get("nom_planches", request.GET.get("nom_planches", ""))
+        if s_noms:
+            l_noms = [int(num.strip()) for num in s_noms.strip(',').split(",")]
+            l_planches = Planche.objects.filter(num__in = l_noms).order_by('nom')
         else:
             l_planches = Planche.objects.all().order_by('nom')
     except:
@@ -98,6 +98,7 @@ def chronoPlanches(request):
     ## ajout des séries 
     for laPlanche in l_planches:
         laPlanche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, laPlanche)
+        break## juste pour testXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #       for serie in laPlanche.l_series:
 #             serie.evt_debut = serie.evenements.get(type = Evenement.TYPE_DEBUT)
 #             serie.evt_fin = serie.evenements.get(type = Evenement.TYPE_FIN)
