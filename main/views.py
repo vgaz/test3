@@ -148,7 +148,12 @@ def evenementsPlanches(request):
     ## on prend tous les evts de l'encadrement
     l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
                                       date__lte = date_fin_vue)
-    
+    for evt in l_evts:
+        ## on ajoute les numeros de planche
+        serie = evt.serie_set.all()[0]
+        evt.l_planches = [imp.planche for imp in serie.implantations.all()]
+        for pl in evt.l_planches:
+            print (evt, pl.nom)
 
     return render(request,
                  'main/evenements.html',
