@@ -47,7 +47,7 @@ def serveRequest(request):
         return HttpResponse( s_json, content_type="application/json")
 
     ## --------------- creation ou maj serie de plants 
-    if cde =='sauve_serie':
+    if cde =="sauve_serie":
         try:
             # gestion de la création ou édition d'une série de plants
             serie = creationEditionSerie(
@@ -121,30 +121,29 @@ def serveRequest(request):
 
     
     ## --------------- request to update database 
-    if cde == "sauveEvt":
+    if cde == "sauve_evt": 
         try:
             e_id = int(request.POST.get("id",0))
-            print (request.POST )
-            e_type = int(request.POST.get("type", ""))
+            id_serie = int(request.POST.get("id_serie",0))
+            assert(id_serie != 0, "bad id_serie in sauve_evt")
             date = datetime.datetime.strptime(request.POST.get("date",""), constant.FORMAT_DATE)
             print (date)
             duree_j = int(request.POST.get("duree_j", 1))
-            plant_id = int(request.POST.get("id_plant", 0))
             nom = request.POST.get("nom","")
 
             if e_id == 0:
-                ## svg d'un nouvel evt
+                ## nouvel evt
                 evt = Evenement()
+                evt.type = Evenement.TYPE_DIVERS
             else:
                 # maj d'un evt deja existant
                 evt = Evenement.objects.get(id=e_id)
-                
-            evt.type = e_type
-            evt.plant_base_id = plant_id
+
             evt.date = date
-            evt.duree_j = 1
+            evt.duree_j = duree_j
             evt.nom = nom
             evt.save()
+            Serie.objects.get(id=id_serie).evenements.add(evt)
             print(evt)
                 
             s_json = '{"status":"true"}'
