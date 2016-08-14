@@ -26,26 +26,12 @@
     decalage_j = {{decalage_j|safe}}
     NomEvtDeId = {  {% for evtType in l_typesEvt %} '{{evtType.id}}':'{{evtType.nom}}',{% endfor %}  }
     
-    jsonEvts = '{"evts":[{% for evt in l_evts %}\
-                {"id":"{{evt.id}}","nom":"{{evt.nom}}","date":"{{evt.date|safe}}","duree":"{{evt.duree_j}}","planche_num":"{{evt.planche_num}}","type":"{{evt.type}}","id_plant":"{{evt.plant_base_id}}"}{% if not forloop.last %},{% endif %}\
-                {% endfor %}]}'	
-
+    
 function    init()
     {
-    // creation d'une liste d'evts pour chaque id_plant
-    hJsonEvts = JSON.parse(jsonEvts)
-    EvtsDePlant = {}
-    for (ii=0;ii<hJsonEvts.evts.length;ii++)
-        {
-        s_info += hJsonEvts.evts[ii].id_plant + " " + hJsonEvts.evts[ii].type + " " + hJsonEvts.evts[ii].date + '<br/>'
-        if (EvtsDePlant[hJsonEvts.evts[ii].id_plant] == null)
-            EvtsDePlant[hJsonEvts.evts[ii].id_plant] = new Array()
-        EvtsDePlant[hJsonEvts.evts[ii].id_plant].push(hJsonEvts.evts[ii].id)
-        }
+    
     document.getElementById("decalage_j").value = decalage_j
     }
-    
-
     
 
 </script>
@@ -71,22 +57,21 @@ Visionnage du <input style="width: 100px" type="text" name="date_debut_vue" valu
 <br/><br/>
         {# séries existantes en base #}
         <table>
-        <tr><th>Date</th><th>Planche</th><th>Libellé</th></tr>
+        <tr><th>Date</th><th>Planche</th><th>Titre</th></tr>
         {% for evt in l_evts %}
             {% for planche in evt.l_planches %}
+                <tr id="{{evt.id}}">
                 {% if evt.date|date:'d/m/Y' ==  date_du_jour|date:'d/m/Y' %}
-                    <tr id="{{evt.id}}">
                     <td class="tdEvt2">{{evt.date|date:'d/m/Y'}}</td>
                     <td class="tdEvt2">{{planche.nom}}</td>
                     <td class="tdEvt2">{{evt.nom|title}}</td>
                     </tr>
                 {% else %}
-                    <tr id="{{evt.id}}">
-                        <td class="tdEvt">{{evt.date|date:'d/m/Y'}}</td>
-                        <td class="tdEvt">{{planche.nom}}</td>
-                        <td class="tdEvt">{{evt.nom|title}}</td>
-                    </tr>
+                    <td class="tdEvt">{{evt.date|date:'d/m/Y'}}</td>
+                    <td class="tdEvt">{{planche.nom}}</td>
+                    <td class="tdEvt">{{evt.nom|title}}</td>
                 {% endif %}
+                </tr>
             {% endfor %}
         {% endfor %}
         </table>
