@@ -3,6 +3,11 @@
 {% block javascript %}
 
 <style>
+#editeSerie_evts
+{
+    text-align:left;
+
+}
 
 #date_du_jour
 {
@@ -215,7 +220,6 @@ function prepareEditeSerie(id_serie)
     {
     hDiv = document.getElementById("divEditSerie")
     document.getElementById("ajoutEvenement").style.display = "none"
-
     hDiv.style.display = "block"
     hDiv.style.position = "absolute"
     hDiv.style.left = "10px"
@@ -237,9 +241,17 @@ function prepareEditeSerie(id_serie)
             {
             document.getElementById("editSerie_id_variete").options[ii].selected=true
             break
-           }
+            }
     document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
-
+    // mise à jour evts
+    idDivEvt = document.getElementById("editeSerie_evts")
+    l_evts = hDivSerie.getElementsByClassName("evt")
+    s_evts = "<ul>"
+    for(ii=0;ii<l_evts.length;ii++)
+        s_evts += "<li>" + l_evts[ii].getAttribute("date") + " "  + l_evts[ii].getAttribute("nom") + " " + "</li>" 
+    s_evts += "</ul>"
+    idDivEvt.innerHTML = s_evts
+    
     }
 
 function prepareDeplacementSerie(id_serie, plancheDestId)
@@ -465,7 +477,6 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         Nb de série :               <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
         De la planche N°            <input id="deplacement_id_planche_orig"   value="" type="text" readonly style="width: 30px;margin-left: 10px"/>
         vers la planche N°          <input id="deplacement_id_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
-        vers la planche id          <input id="deplacement_id_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
         dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
         Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
         Déplacement partiel         <input id="deplacement_partiel"                     type="checkbox" />
