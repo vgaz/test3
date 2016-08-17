@@ -25,7 +25,7 @@ display:none;
 .chrono_serie
     {
     width: 30%;
-    height: 75px;
+    padding-bottom:15px;
     background: white;
     color: black;
     border: 5px solid green;
@@ -36,7 +36,7 @@ display:none;
 {
     background: red;
     position:absolute;
-    height:13px;
+    height:15px;
 }
 .suppr_planche
 {
@@ -418,7 +418,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="id={{serie.id}} planche={{planche.id}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
             <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
             <div class="variete" style="display: inline;z-index:3; ">{{serie.variete}} x {{serie.quantite}}</div>
-            <a href="#" onclick="javascript:prepareEditeSerie({{serie.id}});return(false)">EDITER</a>
+            <br/><a href="#" onclick="javascript:prepareEditeSerie({{serie.id}});return(false)">EDITER</a>
             <a href="#" onclick="javascript:prepareDeplacementSerie({{serie.id}});return(false)">DEPLACER</a><br/>
             <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
             <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
