@@ -123,7 +123,8 @@ class Planche(models.Model):
         if self.bSerre: s_lieu = "sous serre"
         else:           s_lieu = "plein champ"
         return "%s (%d), %d m x %d m = %dm2; %s" % ( self.nom, self.id, 
-                                              self.longueur_m, self.largeur_m, self.surface_m2(), s_lieu)
+                                                     self.longueur_m, self.largeur_m, 
+                                                     self.surface_m2(), s_lieu)
 
 
 class Espece(models.Model):
@@ -133,7 +134,8 @@ class Espece(models.Model):
     avec = models.ManyToManyField("self", related_name="avec", null=True, blank=True)
     sans = models.ManyToManyField("self", related_name="sans", null=True, blank=True)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
-        
+    rendementGermination = models.FloatField("Rendement germination)", default=1)
+    
     class Meta:
         ordering = ['nom']
         

@@ -98,7 +98,11 @@ def chronoPlanches(request):
             l_planches = Planche.objects.all().order_by('nom')
     except:
         s_msg += str(sys.exc_info())
-        return render(request, 'main/erreur.html',  {"appVersion":constant.APP_VERSION, "appName":constant.APP_NAME, "message":s_msg})
+        return render(request, 'main/erreur.html',  
+                      {"appVersion":constant.APP_VERSION, 
+                       "appName":constant.APP_NAME, 
+                       "message":s_msg}
+                      )
     
     ## ajout des séries 
     for laPlanche in l_planches:
@@ -256,12 +260,14 @@ def prevision_recolte(request):
     tab_previsions = "[" 
     for prod in Production.objects.filter(date_semaine__gte = date_debut_sem_vue, date_semaine__lte = date_fin_sem_vue):
         print (prod)
-        tab_previsions += "['%s', %d, %d, %d],"%(MyTools.getYMDFromDate(prod.date_semaine), prod.variete_id, prod.qte_dde, prod.qte_prod)
+        tab_previsions += "['%s', %d, %d, %d],"%(MyTools.getYMDFromDate(prod.date_semaine), 
+                                                 prod.variete_id, 
+                                                 prod.qte_dde, 
+                                                 prod.qte_prod)
     tab_previsions += "]" 
 
     ## calcul des productions à partir des séries dont la prodution est dans la fenetre étudiée
-    l_series = Serie.objects.filter(evt_debut_date__gte = date_debut_sem_vue,
-                                    evt_fin_date__lte = date_fin_sem_vue)
+    l_series = Serie.objects.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue)
     
     return render(request,
                  'main/prevision_recolte.html',

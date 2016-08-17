@@ -23,6 +23,7 @@ class Command(BaseCommand):
             p.nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP
             p.longueur_m = 10000
             p.largeur_m = 1
+            p.bSerre = False
             p.save()  
 
         try:
@@ -32,6 +33,7 @@ class Command(BaseCommand):
             p.nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS
             p.longueur_m = 10000
             p.largeur_m = 1
+            p.bSerre = True
             p.save()  
 
         try:
@@ -157,9 +159,20 @@ class Command(BaseCommand):
                     serie.etalementRecolte_seriej = int(d_line.get("Étalement récolte (j)", "0"))
                     serie.save()
                     serie.fixeDates(dateEnTerre)
-                    serie.nb_rangs = int(d_line.get("Nombre de rangs retenus", "0"))
+                    serie.nb_rangs = int(float(d_line.get("Nombre de rangs retenus", 0).replace(",",".")))
                     serie.intra_rang_m = float(d_line.get("Intra rang (cm)", "0"))/100   ## renseigné en cm
                     serie.quantite = int(d_line.get("Nombre de pieds", "0"))
+                    serie.rendementGermination = float(d_line.get("Rendement germination", 1))
+                    delaiCroissancePlants_j = int(d_line.get("Délai croissance plants (j)", "0"))
+                    if delaiCroissancePlants_j != 0:
+                        ## on ajoute un évenement de fabrication des plants
+                        evt = creationEvt(serie.evt_debut.date - datetime.timedelta(days=delaiCroissancePlants_j), 
+                                    Evenement.TYPE_DIVERS,
+                                    "fabrication plants %s %s x %d"%(serie.variete.espece.nom, 
+                                                                     serie.variete.nom,
+                                                                     serie.quantite * serie.rendementGermination),
+                                    1)
+                        serie.evenements.add(evt)
                     serie.save()
                                             
                     ## implantation par defaut sur planche virtuelles serre ou plein champ
