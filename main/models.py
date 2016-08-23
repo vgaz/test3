@@ -378,8 +378,13 @@ class Serie(models.Model):
         self.save()
    
     def __str__(self):       
-        return "Série N°%d de %d plants de %s %s sur planche xxxx, %d cm dans le rang sur %d rangs, du %s au %s" %(  self.id, self.quantite, 
-                                                                                                                   self.variete.espece.nom,
-                                                                                                                   self.evt_debut.date,
-                                                                                                                   self.evt_fin.date)
+        return "%s %s (N°%d) x %d sur planche xxxx, intra-rang %d m x %d rangs (%s m2), du %s au %s" %(self.variete.espece.nom,
+                                                                                                    self.variete.nom,
+                                                                                                    self.id, 
+                                                                                                    self.quantite,
+                                                                                                    self.intra_rang_m,
+                                                                                                    self.nb_rangs,
+                                                                                                    self.surfaceSurPlanche_m2(), 
+                                                                                                    self.evt_debut.date,
+                                                                                                    self.evt_fin.date)
 

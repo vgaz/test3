@@ -112,7 +112,8 @@ function scrollIfNeeded(e)
 function sauveEvenement()
     {
     // recup données et ajout
-    s_request = "cde=sauve_evt&id=0&id_serie=" + document.getElementById("editSerie_id_serie").value
+    id_serie = document.getElementById("editSerie_id_serie").value
+    s_request = "cde=sauve_evt&id=0&id_serie=" + id_serie
     s_request += "&nom=" + document.getElementById("edit_evt_nom").value
     s_request += "&date=" + document.getElementById("edit_evt_date").value
     s_request += "&duree_j=" + document.getElementById("edit_evt_duree_j").value
@@ -121,14 +122,15 @@ function sauveEvenement()
     if (jsonRep.status == 'false')
         document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>"+ jsonRep.err + "</div>"
 
-    // maj fenetre d'edition du plant
-    majListEvts(id_serie)    
+    // maj fenetre d'edition de la série
+    majListEvts(id_serie)
     
     // nettoyage nom et date de l'evt
     document.getElementById("edit_evt_nom").value = ""
     document.getElementById("edit_evt_date").value = ""
     document.getElementById("edit_evt_duree_j").value = ""
     //masquage de la fenetre d'édition de l'evt
+    document.getElementById("ajoutEvenement").style.display = "none"
     }
 
 function  deplaceSerie()
@@ -143,7 +145,7 @@ function  deplaceSerie()
     s_request += "&nb_plants=" + document.getElementById("deplacement_nb_plants").value
     b_simu = document.getElementById("deplacement_simulation").checked
     s_request += "&simulation=" + b_simu
-    rep = requestServer(s_request)  
+    rep = requestServer(s_request)
     jsonRep = JSON.parse(rep)
     document.getElementById("divDeplacementSerie").style.display = "none"
     if (jsonRep.status == 'true')
@@ -224,7 +226,7 @@ function prepareEditeSerie(id_serie)
     hDiv.style.position = "absolute"
     hDiv.style.left = "10px"
     hDivSerie = document.getElementById(id_serie)
-    hDiv.style.top = hDivSerie.offsetTop + 80 + "px" // 80 pour aller en dessous du div de serie
+    hDiv.style.top = hDivSerie.offsetTop + 60 + "px" // 80 pour aller en dessous du div de serie
     document.getElementById("editSerie_id_serie").value = hDivSerie.getAttribute("id")
     document.getElementById("editSerie_id_serie").readOnly = true
     document.getElementById("editSerie_id_planche").value =  hDivSerie.getAttribute("id_planche")
@@ -250,7 +252,9 @@ function prepareEditeSerie(id_serie)
     for(ii=0;ii<l_evts.length;ii++)
         s_evts += "<li>" + l_evts[ii].getAttribute("date") + " "  + l_evts[ii].getAttribute("nom") + " " + "</li>" 
     s_evts += "</ul>"
-    idDivEvt.innerHTML = s_evts
+    //idDivEvt.innerHTML = s_evts
+    majListEvts(id_serie)
+
     
     }
 
@@ -411,7 +415,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     quantite="{{serie.quantite}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
-                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_cm}}"
+                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_m}}*100"
                                     style="border-color: {{serie.variete.couleur}}"
                                     draggable="true" ondragstart="dragStart(event)" >
 

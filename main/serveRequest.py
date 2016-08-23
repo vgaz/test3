@@ -6,31 +6,27 @@ Created on Nov 26, 2013
 '''
 
 from django.http import HttpResponse
-from main.models import Evenement, Serie, Planche, Production
-from main.models import creationPlanche, creationEditionSerie, essaiDeplacementSeries, cloneSerie
+from main.models import *
 import sys, traceback
 import datetime
-from main import constant
+from django.core import serializers
 
 def serveRequest(request):
     """Received a request and return specific response"""
-    rep = ""
     cde = request.POST.get("cde","")
     print(request.POST)
     
-    if cde == "getEvtsPlant": 
-        ## retour des évenements des plants (sauf debut et fin déjà affichés spécifiquement)
+    if cde == "getEvtsSerie": 
+        ## retour des évenements d'une série)
         try:
-            l_evts = Evenement.objects.filter(plant_base_id = int(request.POST.get("id", 0)),
-                                              type = Evenement.TYPE_DIVERS)       
-            s_ = ','.join(['{"id":"%d","nom":"%s","date":"%s","duree_j":"%d","type":"%s"}'%( item.id, item.nom, 
-                                                                                             item.date.strftime(constant.FORMAT_DATE), item.duree_j, item.type) 
-                                                                                                for item in l_evts])           
-            s_json = '{"status":"true","l_evts":[%s]}'% s_
+            l_evts = Serie.objects.get(id = int(request.POST.get("id", 0))).evenements.all()
+            rep = serializers.serialize("json", l_evts)            
+            s_json = '{"status":true, "l_evts": %s}'%rep
+            print(s_json)
         except:
             print(__name__ + ': ' + str(sys.exc_info()[1]) )
             traceback.print_tb(sys.exc_info())
-            s_json = '{"status":"false","err":"%s"}'%(sys.exc_info()[1])
+            s_json = '{"status":false,"err":"%s"}'%(sys.exc_info()[1])
              
         return HttpResponse(s_json, content_type="application/json")
 
@@ -172,7 +168,7 @@ def serveRequest(request):
             b_deplacementPartiel = request.POST.get("partiel") == "true"
             if b_deplacementPartiel:
                 # nb de plants à déplacer
-                nb_plants = request.POST.get("nb_plants") ## peut etre chaine vide donc pas castable
+                nb_plants = int(request.POST.get("nb_plants", "0")) ## peut etre chaine vide donc pas castable
                 if nb_plants:
                     nb_plants = int(nb_plants)
                 else:

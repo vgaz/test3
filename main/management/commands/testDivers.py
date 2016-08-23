@@ -13,7 +13,18 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
-        
+        self.factory = RequestFactory()
+
+        # Create an instance of a POST request.
+        request = self.factory.post('/chrono_planches/?nom_planches=', 
+                                    data={"id":"12",
+                                          "cde":"getEvtsSerie"
+                                        }
+                                    )        
+        serveRequest.serveRequest(request)
+        return
+    
+    
         for e in  Evenement.objects.all():
             print (e)
         return
@@ -84,4 +95,5 @@ class Command(BaseCommand):
                                     )
         views.chronoPlanches(request)
 #         serveRequest.serveRequest(request)
-        
+
+    
