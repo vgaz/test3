@@ -287,7 +287,7 @@ def tab_varietes(request):
     s_info = ""
     l_vars = []
     try:
-        l_vars = Variete.objects.all()##filter(b_choisi=True)
+        l_vars = Variete.objects.all().order_by("espece")
         if request.POST:
             for v in l_vars:
                 s_pk = "v_%s_"% str(v.pk)
