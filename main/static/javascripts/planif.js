@@ -18,35 +18,7 @@ function getTicket()
 }
    
     
-function majListEvts(id_serie)
-    {
-    // recup evts du serie
-    s_request = "cde=getEvtsSerie&id=" + id_serie
-    rep = requestServer(s_request)  
-    jsonRep = JSON.parse(rep)
 
-    if (jsonRep.status == true)
-        {
-        s_debut = ""
-        s_fin = ""
-        s_evts = '<table border="1" width="100%">\n'
-        // récuperation de tous les evenements
-        for(ii=0;ii<jsonRep.l_evts.length;ii++)
-            {
-            d_evt = jsonRep.l_evts[ii].fields
-            s_evts += "<tr><td> " + d_evt.date + " </td><td> " + d_evt.duree_j + "j </td><td> "  + d_evt.nom + " </td>"
-            s_evts += "<td><a href='javascript:editeEvenement(" + d_evt.id + ")'><img align='right' src='{{STATIC_URL}}images/editor.png' title='Editer'></a></td>"
-            s_evts += "<td><a href='javascript:supprimeEvenement(" + d_evt.id + ")'><img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td></tr>"
-            }
-          
-        s_evts += s_debut + s_fin + "</table>\n"
-        }
-    else
-        alert("err")
-        
-    document.getElementById("editeSerie_evts").innerHTML = s_evts
-    }
-    
 
 function  deplacement(hForm)
     {

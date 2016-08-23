@@ -109,11 +109,26 @@ function scrollIfNeeded(e)
         window.scrollBy(0, 4)    
     }
 
+// gestion des événements
+     
+function ajouteEvenement() // un nouveau
+    {
+    document.getElementById("edit_evt_id").value = 0
+    document.getElementById("divEditEvenement").style.display = "block"
+    }
+function editeEvenement(idEvent)
+    {
+    document.getElementById("edit_evt_id").value = idEvent   
+    document.getElementById("divEditEvenement").style.display = "block"
+    }
+
+
 function sauveEvenement()
     {
     // recup données et ajout
     id_serie = document.getElementById("editSerie_id_serie").value
-    s_request = "cde=sauve_evt&id=0&id_serie=" + id_serie
+    s_request = "cde=sauve_evt&id_serie=" + id_serie
+    s_request += "&id=" + document.getElementById("edit_evt_id").value
     s_request += "&nom=" + document.getElementById("edit_evt_nom").value
     s_request += "&date=" + document.getElementById("edit_evt_date").value
     s_request += "&duree_j=" + document.getElementById("edit_evt_duree_j").value
@@ -128,10 +143,40 @@ function sauveEvenement()
     // nettoyage nom et date de l'evt
     document.getElementById("edit_evt_nom").value = ""
     document.getElementById("edit_evt_date").value = ""
-    document.getElementById("edit_evt_duree_j").value = ""
     //masquage de la fenetre d'édition de l'evt
-    document.getElementById("ajoutEvenement").style.display = "none"
+    document.getElementById("divEditEvenement").style.display = "none"
     }
+
+
+function majListEvts(id_serie)
+    {
+    // recup evts du serie
+    s_request = "cde=getEvtsSerie&id=" + id_serie
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)
+
+    if (jsonRep.status == true)
+        {
+        s_debut = ""
+        s_fin = ""
+        s_evts = '<table border="1" width="100%">\n'
+        // récuperation de tous les evenements
+        for(ii=0;ii<jsonRep.l_evts.length;ii++)
+            {
+            d_evt = jsonRep.l_evts[ii].fields
+            s_evts += "<tr><td> " + d_evt.date + " </td><td> " + d_evt.duree_j + "j </td><td> "  + d_evt.nom + " </td>"
+            s_evts += "<td><a href='javascript:editeEvenement(" + d_evt.id + ")'><img align='right' src='{{STATIC_URL}}images/editor.png' title='Editer'></a></td>"
+            s_evts += "<td><a href='javascript:supprimeEvenement(" + d_evt.id + ")'><img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td></tr>"
+            }
+          
+        s_evts += s_debut + s_fin + "</table>\n"
+        }
+    else
+        alert("Erreur " + jsonRep.err)
+        
+    document.getElementById("editeSerie_evts").innerHTML = s_evts
+    }
+
 
 function  deplaceSerie()
     {
@@ -156,6 +201,7 @@ function  deplaceSerie()
     else
     	document.getElementById("divInfoDebug").innerHTML = jsonRep.err
     }
+
     
 function  balisageSeries()
     {
@@ -185,11 +231,6 @@ function  balisageSeries()
     }
 
 
- 
-function ajouteEvenement() 
-    {
-    document.getElementById("ajoutEvenement").style.display = "block"
-    }
 
 function supprimeSerie(id_serie)
     {
@@ -221,7 +262,7 @@ function prepareAjouteSerie(hCaller, id_planche)
 function prepareEditeSerie(id_serie)
     {
     hDiv = document.getElementById("divEditSerie")
-    document.getElementById("ajoutEvenement").style.display = "none"
+    document.getElementById("divEditEvenement").style.display = "none"
     hDiv.style.display = "block"
     hDiv.style.position = "absolute"
     hDiv.style.left = "10px"
@@ -459,8 +500,9 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    <p>Fin (jj/mm/aa) ou vide : <input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
 	    <br/><b>Evenements</b><input type='button' value='+' onclick="ajouteEvenement()"/><br/>
 	    <div id="editeSerie_evts"> </div>
-	    <div id="ajoutEvenement">
+	    <div id="divEditEvenement">
 	            <table>
+	            <input type="hidden" value="" id="edit_evt_id"/>
 	            <tr><td>Nom : <input type="text" value="" id="edit_evt_nom"/></td></tr>
 	            <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
 	            <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>

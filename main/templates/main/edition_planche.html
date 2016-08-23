@@ -141,23 +141,7 @@ function ajouteEvenement()
     document.getElementById("edit_evt_type").value = ""   
     }
     
-function editeEvenement(idEvent)
-    {
-    document.getElementById("divEditEvenement").style.display = "block"
 
-    // recup evts
-    s_request = "cde=getEvt&id=" + idEvent
-    rep = requestServer(s_request)  
-    jsonRep = JSON.parse(rep)
-    if (jsonRep.status == 'true')
-        {
-        document.getElementById("edit_evt_id").value = jsonRep.evt.id
-        document.getElementById("edit_evt_nom").value = jsonRep.evt.nom
-        document.getElementById("edit_evt_date").value = jsonRep.evt.date
-        document.getElementById("edit_evt_duree_j").value = jsonRep.evt.duree
-        document.getElementById("edit_evt_type").value = jsonRep.evt.type       
-        }
-    }
 
 function supprimeEvenement(idEvent)
     {
