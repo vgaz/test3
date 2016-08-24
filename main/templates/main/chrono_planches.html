@@ -116,9 +116,12 @@ function ajouteEvenement() // un nouveau
     document.getElementById("edit_evt_id").value = 0
     document.getElementById("divEditEvenement").style.display = "block"
     }
-function editeEvenement(idEvent)
+    
+function editeEvenement(oEvent)
     {
-    document.getElementById("edit_evt_id").value = idEvent   
+    document.getElementById("edit_evt_id").value = oEvent.pk
+    document.getElementById("edit_evt_nom").value = oEvent.nom   
+    document.getElementById("edit_evt_date").value = new Date(t_date[0],t_date[1],t_date[2]).toLocaleDateString()
     document.getElementById("divEditEvenement").style.display = "block"
     }
 
@@ -134,7 +137,7 @@ function sauveEvenement()
     s_request += "&duree_j=" + document.getElementById("edit_evt_duree_j").value
     rep = requestServer(s_request)
     jsonRep = JSON.parse(rep)
-    if (jsonRep.status == 'false')
+    if (jsonRep.status == false)
         document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>"+ jsonRep.err + "</div>"
 
     // maj fenetre d'edition de la série
@@ -150,9 +153,8 @@ function sauveEvenement()
 
 function majListEvts(id_serie)
     {
-    // recup evts du serie
-    s_request = "cde=getEvtsSerie&id=" + id_serie
-    rep = requestServer(s_request)  
+    // recup evts de la série
+    rep = requestServer("cde=get_evts_serie&id=" + id_serie)  
     jsonRep = JSON.parse(rep)
 
     if (jsonRep.status == true)
@@ -163,18 +165,23 @@ function majListEvts(id_serie)
         // récuperation de tous les evenements
         for(ii=0;ii<jsonRep.l_evts.length;ii++)
             {
-            d_evt = jsonRep.l_evts[ii].fields
-            s_evts += "<tr><td> " + d_evt.date + " </td><td> " + d_evt.duree_j + "j </td><td> "  + d_evt.nom + " </td>"
-            s_evts += "<td><a href='javascript:editeEvenement(" + d_evt.id + ")'><img align='right' src='{{STATIC_URL}}images/editor.png' title='Editer'></a></td>"
-            s_evts += "<td><a href='javascript:supprimeEvenement(" + d_evt.id + ")'><img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td></tr>"
+            d_evt = jsonRep.l_evts[ii].fields   
+            d_evt["pk"] =jsonRep.l_evts[ii].pk //la clé pk n'est pas dans les fields, on la rajoute        
+            t_date = d_evt.date.split("T")[0].split("-")
+            date = new Date(t_date[0],t_date[1],t_date[2])
+            s_evts += "<tr><td> " + date.toLocaleDateString() + " </td><td> " + d_evt.duree_j + "j </td><td> "  + d_evt.nom + " </td>"
+            s_evts += "<td><a href='javascript:editeEvenement(" + JSON.stringify(d_evt) + ")'>"
+            s_evts += "<img align='right' src='{{STATIC_URL}}images/editor.png' title='Editer'></a></td>"
+            s_evts += "<td><a href='javascript:supprimeEvenement(" + d_evt.id + ")'>"
+            s_evts += "<img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td></tr>"
             }
           
         s_evts += s_debut + s_fin + "</table>\n"
+        document.getElementById("editeSerie_evts").innerHTML = s_evts
         }
     else
         alert("Erreur " + jsonRep.err)
         
-    document.getElementById("editeSerie_evts").innerHTML = s_evts
     }
 
 
@@ -287,12 +294,12 @@ function prepareEditeSerie(id_serie)
             }
     document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
     // mise à jour evts
-    idDivEvt = document.getElementById("editeSerie_evts")
-    l_evts = hDivSerie.getElementsByClassName("evt")
-    s_evts = "<ul>"
-    for(ii=0;ii<l_evts.length;ii++)
-        s_evts += "<li>" + l_evts[ii].getAttribute("date") + " "  + l_evts[ii].getAttribute("nom") + " " + "</li>" 
-    s_evts += "</ul>"
+    //idDivEvt = document.getElementById("editeSerie_evts")
+    //l_evts = hDivSerie.getElementsByClassName("evt")
+    //s_evts = "<ul>"
+    //for(ii=0;ii<l_evts.length;ii++)
+      //  s_evts += "<li>" + l_evts[ii].getAttribute("date") + " "  + l_evts[ii].getAttribute("nom") + " " + "</li>" 
+    //s_evts += "</ul>"
     //idDivEvt.innerHTML = s_evts
     majListEvts(id_serie)
 
@@ -502,7 +509,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    <div id="editeSerie_evts"> </div>
 	    <div id="divEditEvenement">
 	            <table>
-	            <input type="hidden" value="" id="edit_evt_id"/>
+	            <input type="hidden" id="edit_evt_id" value=""/>
 	            <tr><td>Nom : <input type="text" value="" id="edit_evt_nom"/></td></tr>
 	            <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
 	            <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>

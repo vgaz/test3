@@ -103,7 +103,8 @@ def chronoPlanches(request):
                        "appName":constant.APP_NAME, 
                        "message":s_msg}
                       )
-    
+    ## juste pour test wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+    l_planches = Planche.objects.filter(id=1)
     ## ajout des séries 
     for laPlanche in l_planches:
         laPlanche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, laPlanche)

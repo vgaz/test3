@@ -16,7 +16,7 @@ def serveRequest(request):
     cde = request.POST.get("cde","")
     print(request.POST)
     
-    if cde == "getEvtsSerie": 
+    if cde == "get_evts_serie": 
         ## retour des évenements d'une série)
         try:
             l_evts = Serie.objects.get(id = int(request.POST.get("id", 0))).evenements.all()
@@ -31,14 +31,14 @@ def serveRequest(request):
         return HttpResponse(s_json, content_type="application/json")
 
     ## --------------- renvoi d'un evt à partir de son identifiant
-    if cde == "getEvt": 
+    if cde == "get_evt": 
         try:
             evt = Evenement.objects.get(id = int(request.POST.get("id", 0)))
-            s_ = '{"id":"%d","nom":"%s","date":"%s","duree_j":"%s","type":"%s"}'%(evt.id, evt.nom, evt.date.strftime(constant.FORMAT_DATE), evt.duree_j, evt.type)       
-            s_json = '{"status":"true","evt":%s}'% s_
+            s_ = serializers.serialize("json", evt)       
+            s_json = '{"status":true,"evt":%s}'% s_
         except:
             traceback.print_tb(sys.exc_info())
-            s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
+            s_json = '{"status":false,"err":"%s"}'%sys.exc_info()[1]
              
         return HttpResponse( s_json, content_type="application/json")
 
@@ -142,10 +142,10 @@ def serveRequest(request):
             Serie.objects.get(id=id_serie).evenements.add(evt)
             print(evt)
                 
-            s_json = '{"status":"true"}'
+            s_json = '{"status":true}'
         except:
             traceback.print_tb(sys.exc_info())            
-            s_json = '{"status":"false","err":"%s %s"}'%(__name__, sys.exc_info()[1])
+            s_json = '{"status":false,"err":"%s %s"}'%(__name__, sys.exc_info()[1])
            
         return HttpResponse(s_json)
 

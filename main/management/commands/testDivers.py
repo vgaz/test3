@@ -18,7 +18,7 @@ class Command(BaseCommand):
         # Create an instance of a POST request.
         request = self.factory.post('/chrono_planches/?nom_planches=', 
                                     data={"id":"12",
-                                          "cde":"getEvtsSerie"
+                                          "cde":"get_evts_serie"
                                         }
                                     )        
         serveRequest.serveRequest(request)
