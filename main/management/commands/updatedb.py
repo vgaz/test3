@@ -10,7 +10,8 @@ from main import constant
 import sys
    
 class Command(BaseCommand):
-    """updateDB command"""
+    """updatedb commande
+    mise à jour des la base à partir des tableaux CSV"""
     help = "updateDB"
 
     def creationPlanches(self):

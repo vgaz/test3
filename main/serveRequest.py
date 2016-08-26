@@ -122,7 +122,7 @@ def serveRequest(request):
             e_id = int(request.POST.get("id",0))
             id_serie = int(request.POST.get("id_serie",0))
             assert(id_serie != 0, "bad id_serie in sauve_evt")
-            date = datetime.datetime.strptime(request.POST.get("date",""), constant.FORMAT_DATE)
+            date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))
             print (date)
             duree_j = int(request.POST.get("duree_j", 1))
             nom = request.POST.get("nom","")
@@ -149,14 +149,14 @@ def serveRequest(request):
            
         return HttpResponse(s_json)
 
-    if cde == "supprime_evenement":
+    if cde == "supprime_evt":
         try:
             evt = Evenement.objects.get(id=int(request.POST.get("id", 0)))
             print("will delete", evt)
             evt.delete()
-            s_json = '{"status":"true"}'
+            s_json = '{"status":true}'
         except:
-            s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
+            s_json = '{"status":false,"err":"%s"}'%sys.exc_info()[1]
            
         return HttpResponse(s_json)
 

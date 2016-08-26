@@ -4,19 +4,20 @@
 
 {% block content %}
 
-<div class="BlueFrame" style="list-style-type: none;width: 50%; margin-left: 20%">
+<div class="BlueFrame" style="list-style-type: none;width: 50%; margin-left: 3%">
 
 <form action="" method="POST">
 {% csrf_token %}
 
 {{info}}
-
+<h2>Variétés</h2><hr />
 {% for var in l_vars %}
  
       <table>
           <tr>
           {% if var.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
-          <td><h2>{{var.espece.nom|title}} {{var.nom|title}} {% if var.famille %} ({{var.famille.nom}}) {% endif %} </h2>
+          <td><h2>{{var.espece.nom|title}} {{var.nom|title}}</h2>
+            <p>{{var.espece.famille.nom|title}}</p>
             Plantation possible du
             <input style="width:40px" type="text" name="v_{{var.pk}}_date_min_plantation_pc" value="{{var.date_min_plantation_pc}}" />
             au
@@ -53,14 +54,14 @@
 
 
 <ul class="BlueFrame" style="list-style-type: none;">
-<b>Familles et variété</b>
-<br /><br />
+<h2>Familles et variétés</h2><hr/>
 {% for f in l_fams %}
-  <li><b>{{f.nom|title}}</b> ({{f.pk}})
+  <li><b>{{f.nom|title}}</b>
 	<ul>
-	
 	{% for var in l_vars %}
-	{% if var.famille.pk == f.pk %} <li>{{var.nom|title}}</li> {% endif %}
+	   {% if var.espece.famille.pk == f.pk %} 
+	   <li>{{var.espece.nom|title}} {{var.nom}}</li> 
+	   {% endif %}
 	{% endfor %}
 	</ul>
   

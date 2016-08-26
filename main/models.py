@@ -343,9 +343,9 @@ class Serie(models.Model):
     def surfaceSurPlanche_m2(self, intra_rang_m=None, nb_rangs=None):
         """ retourne la surface occupée en fonction des distances inter-rang et dans le rang
         de toutes les implantation A FAIRE@todo
-        intra_rang_m et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend ceux prédéfinis"""
-        return 0
-        ##return self.longueurSurPlanche_m() * self.planche.largeur_m
+        intra_rang_m et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend ceux prédéfinis
+        POUR le moment on prend une planche standard de 1,2m """
+        return self.longueurSurPlanche_m() * 1.2
     
     def nbSeriesPlacables(self, longueurDePlanche_m, intraRang_m=None, nbRangs=None):
         if not intraRang_m:
@@ -361,7 +361,8 @@ class Serie(models.Model):
         if isinstance(dateDebut, str): 
             dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
             
-        evt_debut = creationEvt(dateDebut, Evenement.TYPE_DEBUT, "début %s"%self.variete.nom)
+        evt_debut = creationEvt(dateDebut, Evenement.TYPE_DEBUT, "début %s %s"%(self.variete.espece.nom,
+                                                                                self.variete.nom))
         self.evenements.add(evt_debut)
         self.evt_debut_id = evt_debut.id
 
@@ -371,7 +372,8 @@ class Serie(models.Model):
         if isinstance(dateFin, str): 
             dateFin = MyTools.getDateFrom_d_m_y(dateFin)
             
-        evt_fin = creationEvt(dateFin, Evenement.TYPE_FIN, "fin %s"%self.variete.nom)       
+        evt_fin = creationEvt(dateFin, Evenement.TYPE_FIN, "fin %s %s"%(self.variete.espece.nom,
+                                                                     self.variete.nom))       
         self.evt_fin_id = evt_fin.id
         self.evenements.add(evt_fin)
 

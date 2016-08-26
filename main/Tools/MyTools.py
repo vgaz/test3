@@ -38,23 +38,23 @@ def getDateTime ():
 
 ######################################################################## 
 
-def getDateFrom_y_m_d(s_time):
-    if "/" in s_time:
-        y,m,d = s_time.split("/")
-    if "-" in s_time:
-        y,m,d = s_time.split("-")
+def getDateFrom_y_m_d(s_date):
+    if "/" in s_date:
+        y,m,d = s_date.split("/")
+    if "-" in s_date:
+        y,m,d = s_date.split("-")
     _date =  datetime.date(int(y),int(m),int(d))
     return (_date)
     
 
 ######################################################################## 
 
-def getDateFrom_d_m_y(s_time):
-    if "/" in s_time:
-        d,m,y = s_time.split("/")
+def getDateFrom_d_m_y(s_date):
+    if "/" in s_date:
+        d,m,y = s_date.split("/")
 
-    if "-" in s_time:
-        d,m,y = s_time.split("-")
+    if "-" in s_date:
+        d,m,y = s_date.split("-")
     if len(y)==2:
         y= "20" + y   # if only 2 digits for year     
     _date =  datetime.date(int(y),int(m),int(d))
@@ -62,12 +62,12 @@ def getDateFrom_d_m_y(s_time):
 
 ######################################################################## 
 
-def getDateFrom_m_d_y(s_time):
-    if "/" in s_time:
-        m,d,y = s_time.split("/")
+def getDateFrom_m_d_y(s_date):
+    if "/" in s_date:
+        m,d,y = s_date.split("/")
 
-    if "-" in s_time:
-        d,m,y = s_time.split("-")
+    if "-" in s_date:
+        d,m,y = s_date.split("-")
         
     if len(y)==2:
         y= "20" + y   # if only 2 digits for year     

@@ -126,9 +126,26 @@ function editeEvenement(oEvent)
     }
 
 
+function supprimeEvenement(oEvent)
+    {
+    // supprime evt
+    alert("sûr de vouloir supprimer l'evt " + oEvent.nom + " ?")
+    s_request = "cde=supprime_evt&id=" + oEvent.pk
+    rep = requestServer(s_request)
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == false)
+        document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>"+ jsonRep.err + "</div>"
+
+    // maj fenetre d'edition de la série
+    id_serie = document.getElementById("editSerie_id_serie").value
+    majListEvts(id_serie)
+    }
+
 function sauveEvenement()
     {
-    // recup données et ajout
+    // recup données et
+    // ajout si id = 0
+    // modifie si id != 0
     id_serie = document.getElementById("editSerie_id_serie").value
     s_request = "cde=sauve_evt&id_serie=" + id_serie
     s_request += "&id=" + document.getElementById("edit_evt_id").value
@@ -153,7 +170,7 @@ function sauveEvenement()
 
 function majListEvts(id_serie)
     {
-    // recup evts de la série
+    // recup et afichage des evts de la série
     rep = requestServer("cde=get_evts_serie&id=" + id_serie)  
     jsonRep = JSON.parse(rep)
 
@@ -169,10 +186,11 @@ function majListEvts(id_serie)
             d_evt["pk"] =jsonRep.l_evts[ii].pk //la clé pk n'est pas dans les fields, on la rajoute        
             t_date = d_evt.date.split("T")[0].split("-")
             date = new Date(t_date[0],t_date[1],t_date[2])
+            sj_evt = JSON.stringify(d_evt)
             s_evts += "<tr><td> " + date.toLocaleDateString() + " </td><td> " + d_evt.duree_j + "j </td><td> "  + d_evt.nom + " </td>"
-            s_evts += "<td><a href='javascript:editeEvenement(" + JSON.stringify(d_evt) + ")'>"
+            s_evts += "<td><a href='javascript:editeEvenement(" + sj_evt + ")'>"
             s_evts += "<img align='right' src='{{STATIC_URL}}images/editor.png' title='Editer'></a></td>"
-            s_evts += "<td><a href='javascript:supprimeEvenement(" + d_evt.id + ")'>"
+            s_evts += "<td><a href='javascript:supprimeEvenement(" + sj_evt + ")'>"
             s_evts += "<img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td></tr>"
             }
           
