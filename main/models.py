@@ -59,27 +59,38 @@ def essaiDeplacementSeries(idSerie, plancheDest, intraRangCm, nbRangs):
     0 si tout peut etre placé sur la planche @todo
     """
     serie = Serie.objects.get(id = idSerie)
-    
     cumul_max_m2 = 0
-    ## pour chaque jour sur la planche, on calcule la surface de planche restante
-    for day in MyTools.jourApresJour(serie.evt_debut.date, serie.evt_fin.date):
+    ## recherche de toutes les séries de cette planche présentes sur la même période
+    l_series_presentes = Serie.objects.activesSurPeriode(   serie.evt_debut.date, 
+                                                            serie.evt_fin.date, 
+                                                            plancheDest)
+    
+    ## recherche des dates de tous les changements potentiels de surface dispo
+    ## on stocke les dates concernées
+    l_dates_planche = [serie.evt_debut.date, serie.evt_fin.date]
+    for _serie in l_series_presentes:
+        l_dates_planche.add(_serie.evt_debut.date)
+        l_dates_planche.add(_serie.evt_fin.date)
+    sorted(l_dates_planche)
+    
+    ## pour chaque période sur la planche, on calcule la surface de planche prise
+    for jour in l_dates_planche:
         cumul_m2 = 0
-        ## recup des implantations déjà en place à cette date    
-        ###  @todo l_implantations = recupListeImplantationsEnDateDu(day, plancheDest)XXXX
-        
-        for imp in l_implantations:
-            cumul_m2 += imp.surface_m2()
+       
+        for serie in l_series_presentes:
+            if serie.activeEnDatedu(jour):
+                cumul_m2 += serie.surfaceOccupee_m2(plancheDest)
 
-        print (day, cumul_m2, "m2 occupés sur ", plancheDest.surface_m2(), "m2 (cumul max =", cumul_max_m2, ")" )
+        print (jour, cumul_m2, "m2 occupés sur ", plancheDest.surface_m2(), "m2 (cumul max =", cumul_max_m2, ")" )
     
         cumul_max_m2 = max((cumul_max_m2, cumul_m2))
         
-    libre_m2 = plancheDest.surface_m2 - cumul_max_m2
-    print ("libre=%dm besoin=%dm"%(libre_m2, serie.longueurSurPlanche_m( intraRangCm, nbRangs)))
+    libre_m2 = plancheDest.surface_m2() - cumul_max_m2
+    print ("libre=%dm2 besoin=%dm2"%(libre_m2, serie.longueurSurPlanche_m( intraRangCm, nbRangs)*plancheDest.largeur_m))
 
     reste_m = libre_m2 - serie.longueurSurPlanche_m(intraRangCm, nbRangs)
     if reste_m >=0:
-        ## assez de place, on peut caser tous les series
+        print ("assez de place, on peut placer toute la série %d"%serie.id)
         return 0
     else:
         ## pas assez de place, on retourne le nb de series restant à placer apres remplissage du reste de la planche
@@ -229,8 +240,6 @@ class Implantation(models.Model):
     def longueur_m(self):
         return self.fin_m - self.debut_m
     
-    def surface_m2(self):
-        return self.surface_m2
 #         try:
 #             return self.longueur_m() * self.planche.largeur_m
 #         except:
@@ -238,8 +247,9 @@ class Implantation(models.Model):
 #             return 0
 
     def __str__(self):
-        return "implantation N°%d de %d m2 sur planche %d"%(self.id, self.surface_m2, self.planche.id)
-
+        return "implantation N°%d de %d m2 sur planche %d"%(self.id, 
+                                                            self.surface_m2, 
+                                                            self.planche.id)
 
 class SerieManager(models.Manager):
     
@@ -264,9 +274,21 @@ class SerieManager(models.Manager):
 
         l_series = l_series.exclude(evt_debut__date__lt = date_debut,
                                     evt_debut__date__gt = date_fin)
-         
-         
-        return l_series     
+        
+        
+        return l_series
+    
+    def surfaceOccupee(self, planche=None): 
+        """renvoi la surface occupée, totale si pas de planche précisée"""
+        surface = 0
+        for impl in self.implantations.all():
+            if planche and impl.planche.id != impl.planche.id:
+                continue
+            surface += impl.surface_m2()
+        
+        return surface
+    
+  
 
 class Evenement(models.Model):
     
@@ -376,9 +398,16 @@ class Serie(models.Model):
                                                                      self.variete.nom))       
         self.evt_fin_id = evt_fin.id
         self.evenements.add(evt_fin)
-
         self.save()
-   
+        
+    def activeEnDatedu(self, date):  
+        """retourneTrue ou False si série encore en terre à telle date"""
+        if date >= self.evt_debut.date and date <= self.evt_fin.date:
+            return True
+        else:
+            return False
+        
+         
     def __str__(self):       
         return "%s %s (N°%d) x %d sur planche xxxx, intra-rang %d m x %d rangs (%s m2), du %s au %s" %(self.variete.espece.nom,
                                                                                                     self.variete.nom,
@@ -389,4 +418,6 @@ class Serie(models.Model):
                                                                                                     self.surfaceSurPlanche_m2(), 
                                                                                                     self.evt_debut.date,
                                                                                                     self.evt_fin.date)
+
+
 

@@ -43,7 +43,7 @@ display:none;
 display:inline;
 }
 
-#divDeplacementSerie
+#divDeplacementImplantation
     {
     text-align:left;
     padding:10px;
@@ -205,10 +205,11 @@ function majListEvts(id_serie)
 
 function  deplaceSerie()
     {
-	// déplacement d'une serie vers une autre planche 
+	// déplacement d'une implantation vers une autre planche 
     s_request = "cde=deplacement_serie&id_serie=" + document.getElementById("deplacement_id_serie").value
     s_request += "&id_planche_src=0"
     s_request += "&id_planche_dest=" + document.getElementById("deplacement_id_planche_dest").value
+    s_request += "&id_planche_orig=" + document.getElementById("deplacement_id_planche_orig").value
     s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
     s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
     s_request += "&partiel=" + document.getElementById("deplacement_partiel").checked
@@ -217,8 +218,8 @@ function  deplaceSerie()
     s_request += "&simulation=" + b_simu
     rep = requestServer(s_request)
     jsonRep = JSON.parse(rep)
-    document.getElementById("divDeplacementSerie").style.display = "none"
-    if (jsonRep.status == 'true')
+    document.getElementById("divDeplacementImplantation").style.display = "none"
+    if (jsonRep.status == true)
         {
       	alert(jsonRep.msg)
         window.location.reload()
@@ -311,22 +312,15 @@ function prepareEditeSerie(id_serie)
             break
             }
     document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
-    // mise à jour evts
-    //idDivEvt = document.getElementById("editeSerie_evts")
-    //l_evts = hDivSerie.getElementsByClassName("evt")
-    //s_evts = "<ul>"
-    //for(ii=0;ii<l_evts.length;ii++)
-      //  s_evts += "<li>" + l_evts[ii].getAttribute("date") + " "  + l_evts[ii].getAttribute("nom") + " " + "</li>" 
-    //s_evts += "</ul>"
-    //idDivEvt.innerHTML = s_evts
+
     majListEvts(id_serie)
 
     
     }
 
-function prepareDeplacementSerie(id_serie, plancheDestId)
+function prepareDeplacementImplantation(id_serie, plancheDestId)
     {
-    hDiv = document.getElementById("divDeplacementSerie")
+    hDiv = document.getElementById("divDeplacementImplantation")
     hDiv.style.display = "block"
     hDiv.style.position = "absolute"
     hDiv.style.left = "10px"
@@ -341,7 +335,7 @@ function prepareDeplacementSerie(id_serie, plancheDestId)
 
     }
 
-function testeDeplacementSerie(id_serie, plancheDestId)
+function testeDeplacementImplantation(id_serie, plancheDestId)
     {
     // tout se fait en aveugle comme si on editait à la main
     hDivSerie = document.getElementById(id_serie)
@@ -424,7 +418,7 @@ function drop(event) {
     pl_id = event.target.id.split("__")[1]
     alert("target =" + pl_id)
     //event.target.appendChild(document.getElementById(data));
-    testeDeplacementSerie(serieID, pl_id)
+    testeDeplacementImplantation(serieID, pl_id)
 }
 
 function unfocus(event)
@@ -475,6 +469,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         {% for serie in planche.l_series %}
 
         <div class="chrono_serie"   id="{{serie.id}}"
+                                    id=implantation={{serie.id_implantationSurPlanche}}
                                     nom_variete="{{serie.variete}}" 
                                     id_variete="{{serie.variete.id}}" 
                                     id_espece="{{serie.variete.espece.id}}" 
@@ -489,7 +484,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
             <div class="variete" style="display: inline;z-index:3; ">{{serie.variete}} x {{serie.quantite}}</div>
             <br/><a href="#" onclick="javascript:prepareEditeSerie({{serie.id}});return(false)">EDITER</a>
-            <a href="#" onclick="javascript:prepareDeplacementSerie({{serie.id}});return(false)">DEPLACER</a><br/>
+            <a href="#" onclick="javascript:prepareDeplacementImplantation({{serie.id}});return(false)">DEPLACER</a><br/>
             <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
             <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
             {% for evt in serie.evenements.all%}
@@ -543,7 +538,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	</div>
     </form>
     
-    <div id="divDeplacementSerie">
+    <div id="divDeplacementImplantation">
         <h3>Déplacement de la série N°<input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" /></h3>
         Nb de série :               <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
         De la planche N°            <input id="deplacement_id_planche_orig"   value="" type="text" readonly style="width: 30px;margin-left: 10px"/>
@@ -554,7 +549,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         Nb de plants :              <input id="deplacement_nb_plants"          value="" type="text" style="width: 30px" /><br/>
         Simulation                  <input id="deplacement_simulation"                  type="checkbox" />
         <input type="submit" value="Déplacement" onclick="deplaceSerie()" style="margin-left: 30px" />
-        <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divDeplacementSerie').style.display='none';return False"/>
+        <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divDeplacementImplantation').style.display='none';return False"/>
         
     </div>
 

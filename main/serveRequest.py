@@ -20,7 +20,7 @@ def serveRequest(request):
         ## retour des évenements d'une série)
         try:
             l_evts = Serie.objects.get(id = int(request.POST.get("id", 0))).evenements.all()
-            rep = serializers.serialize("json", l_evts)            
+            rep = serializers.serialize("json", l_evts)      
             s_json = '{"status":true, "l_evts": %s}'%rep
             print(s_json)
         except:
@@ -102,11 +102,13 @@ def serveRequest(request):
     if cde == 'supprime_planche':
         try:
             id_pl = int(request.POST.get("id"))
-            if id_pl == 1: raise ValueError("Refus de suppression. La planche virtuelle ne peut être détruite")
-            ## @afaire suppression des series de plants associés
+            planche = Planche.objects.get(id=id_pl)
+            if planche.nom == constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP or planche.nom == constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS:
+                raise ValueError("Refus de suppression. Une planche virtuelle ne peut être détruite")
+            ## @todo: suppression des series de plants associés
             ## suppression de la production associée
             ## supression des évenements associés à une serie de plants            
-            planche = Planche.objects.get(id=id_pl)
+            
             planche.delete()
             
             s_json = '{"status":"true","id_planche":%d}'%id_pl
@@ -161,22 +163,24 @@ def serveRequest(request):
         return HttpResponse(s_json)
 
 
-    if cde == "deplacement_serie":
+    if cde == "deplacement_implantation":
         ## deplacement d'une serie de plants d'une planche vers une autre
         try:
             serie = Serie.objects.get(id=int(request.POST.get("id_serie")))
-            b_deplacementPartiel = request.POST.get("partiel") == "true"
-            if b_deplacementPartiel:
+
+            if request.POST.get("partiel", "") == "true":
                 # nb de plants à déplacer
+                print ("demande de déplacement partiel")
                 nb_plants = int(request.POST.get("nb_plants", "0")) ## peut etre chaine vide donc pas castable
                 if nb_plants:
                     nb_plants = int(nb_plants)
                 else:
                     raise Exception("demande de deplacement partiel mais nb_plants non défini")                
             
-            nb_rangs = int(request.POST.get("nb_rangs"))
-            intra_rang_m = request.POST.get("intra_rang_cm")/100
+            nb_rangs = int(request.POST.get("nb_rangs", serie.nb_rangs))
+            intra_rang_m = float(request.POST.get("intra_rang_cm", serie.intra_rang_m*100))/100
             planche_dest = Planche.objects.get(id=int(request.POST.get("id_planche_dest")))
+            id_planche_orig = int(request.POST.get("id_planche_orig"))
             b_simu = request.POST.get("simulation") == "true"
             reste = essaiDeplacementSeries(serie.id, planche_dest, intra_rang_m, nb_rangs)
             
@@ -187,15 +191,14 @@ def serveRequest(request):
                     rep = "SIMULATION\\nReste %d plants non déplaçables. Déplacement incomplet."%reste            
             elif reste == 0:
                 ## si on peut tout transférer sur une seule planche, la série change de planche
-                ## sinon, on cree une nouvelle serie de plants vers la planche partiellement accueillante et on garde le reste
                 ## changement de planche
-                print("changt complet de planche")
-                serie.planche_id = planche_dest.id
-                serie.nb_rangs = nb_rangs
-                serie.intra_rang_m = intra_rang_m
-                serie.save()
-                rep ="Tous les plants ont été déplacés"
+                print("changement complet de planche via l'implantation")
+                impl = serie.implantations.get(planche_id = id_planche_orig)
+                impl.planche.id = planche_dest.id
+                impl.save()               
+                rep = "Tous les plants ont été déplacés sur la planche %d"%planche_dest.id
             else:
+                ## sinon, on cree une nouvelle serie de plants vers la planche partiellement accueillante et on garde le reste
                 ## Création nouvelle implantation de plants sur planche dest @todo
                 serie2 = cloneSerie(serie) ## creation d'une nouvelle série
                 ## maj quantités
@@ -209,9 +212,9 @@ def serveRequest(request):
                 serie2.save() 
                 rep = "série %d déplacé partiellement (reste %d) sur planche %s "%(serie.id, reste, planche_dest.nom)
 
-            s_json = '{"status":"true", "msg":"%s"}'%rep
+            s_json = '{"status":true, "msg":"%s"}'%rep
         except:
-            s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
+            s_json = '{"status":false,"err":"%s"}'%sys.exc_info()[1]
            
         return HttpResponse(s_json)
 

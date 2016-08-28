@@ -7,21 +7,35 @@ from django.test import RequestFactory
 from main.models import *
 from main.Tools import MyTools
 
-
 class Command(BaseCommand):
     help = "test divers"
 
     def handle(self, *args, **options):
         
+        
+
+        
         self.factory = RequestFactory()
+        serie.save()
+        
 
         # Create an instance of a POST request.
         request = self.factory.post('/chrono_planches/?nom_planches=', 
-                                    data={"id":"12",
-                                          "cde":"get_evts_serie"
+                                    data={  "cde":"deplacement_serie",
+                                            "id_serie":2,
+                                            "id_planche_dest":31,
+                                            "id_planche_orig":2,
+                                            "nb_rangs":3,
+                                            "intra_rang_cm":30,
+                                            "partiel":"",
+                                            "nb_plants":"",
+                                            "simulation":""                            
                                         }
                                     )        
         serveRequest.serveRequest(request)
+        
+        
+        
         return
     
     
@@ -96,4 +110,5 @@ class Command(BaseCommand):
         views.chronoPlanches(request)
 #         serveRequest.serveRequest(request)
 
-    
+   
+        
