@@ -16,15 +16,14 @@ class Command(BaseCommand):
 
         
         self.factory = RequestFactory()
-        serie.save()
         
 
         # Create an instance of a POST request.
         request = self.factory.post('/chrono_planches/?nom_planches=', 
-                                    data={  "cde":"deplacement_serie",
-                                            "id_serie":2,
-                                            "id_planche_dest":31,
-                                            "id_planche_orig":2,
+                                    data={  "cde":"deplacement_implantation",
+                                            "id_serie":53,
+                                            "id_implantation":42,
+                                            "id_planche_dest":3,
                                             "nb_rangs":3,
                                             "intra_rang_cm":30,
                                             "partiel":"",

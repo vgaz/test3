@@ -166,37 +166,33 @@ def serveRequest(request):
     if cde == "deplacement_implantation":
         ## deplacement d'une serie de plants d'une planche vers une autre
         try:
-            serie = Serie.objects.get(id=int(request.POST.get("id_serie")))
-
-            if request.POST.get("partiel", "") == "true":
-                # nb de plants à déplacer
-                print ("demande de déplacement partiel")
-                nb_plants = int(request.POST.get("nb_plants", "0")) ## peut etre chaine vide donc pas castable
-                if nb_plants:
-                    nb_plants = int(nb_plants)
-                else:
-                    raise Exception("demande de deplacement partiel mais nb_plants non défini")                
+            implantation = Implantation.objects.get(id=int(request.POST.get("id_implantation")))
+            serie = implantation.serie_set.all()[0]
+            ##id_planche_orig = implantation.planche.id  
             
             nb_rangs = int(request.POST.get("nb_rangs", serie.nb_rangs))
             intra_rang_m = float(request.POST.get("intra_rang_cm", serie.intra_rang_m*100))/100
             planche_dest = Planche.objects.get(id=int(request.POST.get("id_planche_dest")))
-            id_planche_orig = int(request.POST.get("id_planche_orig"))
             b_simu = request.POST.get("simulation") == "true"
             reste = essaiDeplacementSeries(serie.id, planche_dest, intra_rang_m, nb_rangs)
-            
+                      
+            if request.POST.get("partiel", "") == "true":
+                # nb de plants à déplacer
+                print ("demande de déplacement partiel")
+                quantite = int(request.POST.get("quantite")) ## peut etre chaine vide donc pas castable
+                
             if b_simu:
                 if reste == 0:
                     rep = "SIMULATION\\nTous les plants sont déplaçables sur la planche %s" % planche_dest.nom
                 else:
-                    rep = "SIMULATION\\nReste %d plants non déplaçables. Déplacement incomplet."%reste            
+                    rep = "SIMULATION\planche_dest\nReste %d plants non déplaçables. Déplacement incomplet."%reste            
             elif reste == 0:
                 ## si on peut tout transférer sur une seule planche, la série change de planche
                 ## changement de planche
                 print("changement complet de planche via l'implantation")
-                impl = serie.implantations.get(planche_id = id_planche_orig)
-                impl.planche.id = planche_dest.id
-                impl.save()               
-                rep = "Tous les plants ont été déplacés sur la planche %d"%planche_dest.id
+                implantation.planche_id = planche_dest.id
+                implantation.save()               
+                rep = "Tous les plants ont été déplacés sur la planche %s"%planche_dest.nom
             else:
                 ## sinon, on cree une nouvelle serie de plants vers la planche partiellement accueillante et on garde le reste
                 ## Création nouvelle implantation de plants sur planche dest @todo

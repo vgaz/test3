@@ -4,7 +4,9 @@
 
 <style>
 #editeSerie_evts
-{
+{        checkagain=true        checkagain=true
+
+
     text-align:left;
 
 }
@@ -48,13 +50,14 @@ display:inline;
     text-align:left;
     padding:10px;
     width: 400px;
-    height: 25	0px;
+    height: 25 0px;
     background: white;
     color: black;
     border: 5px solid brown;
     border-radius:10px;
-    position: absolute;
+    position:absolute;
     display:none;
+    draggable:"true";
     }  
       
 </style>
@@ -99,14 +102,24 @@ function    init()
 
 function scrollIfNeeded(e)
     {
-    //myPosX = e.clientX;
+    scrollpx = 0
     myPosY = e.clientY
     //document.getElementById("divInfoDebug").innerHTML = "X:"+myPosX + " Y:" + myPosY
-    
-    if  (myPosY < 100) // dans le haut de l'ecran
-        window.scrollBy(0, -4)
-    if  (myPosY > 500) // dans le bas de l'ecran
-        window.scrollBy(0, 4)    
+    if  (myPosY < 50) // haut de l'ecran
+        scrollpx = -30
+    else if  (myPosY < 100) // haut de l'ecran
+        scrollpx = -10  
+    else if  (myPosY > window.innerHeight - 50) // dans le bas de l'ecran
+        scrollpx = 30
+    else if  (myPosY > window.innerHeight - 100) // dans le bas de l'ecran
+        scrollpx = 10  
+        
+    if (scrollpx != 0)
+        {
+        window.scrollBy(0, scrollpx)
+        //setTimeout(scrollIfNeeded(e), 2000)        
+        }
+       
     }
 
 // gestion des événements
@@ -203,30 +216,6 @@ function majListEvts(id_serie)
     }
 
 
-function  deplaceSerie()
-    {
-	// déplacement d'une implantation vers une autre planche 
-    s_request = "cde=deplacement_serie&id_serie=" + document.getElementById("deplacement_id_serie").value
-    s_request += "&id_planche_src=0"
-    s_request += "&id_planche_dest=" + document.getElementById("deplacement_id_planche_dest").value
-    s_request += "&id_planche_orig=" + document.getElementById("deplacement_id_planche_orig").value
-    s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
-    s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
-    s_request += "&partiel=" + document.getElementById("deplacement_partiel").checked
-    s_request += "&nb_plants=" + document.getElementById("deplacement_nb_plants").value
-    b_simu = document.getElementById("deplacement_simulation").checked
-    s_request += "&simulation=" + b_simu
-    rep = requestServer(s_request)
-    jsonRep = JSON.parse(rep)
-    document.getElementById("divDeplacementImplantation").style.display = "none"
-    if (jsonRep.status == true)
-        {
-      	alert(jsonRep.msg)
-        window.location.reload()
-        }
-    else
-    	document.getElementById("divInfoDebug").innerHTML = jsonRep.err
-    }
 
     
 function  balisageSeries()
@@ -318,21 +307,20 @@ function prepareEditeSerie(id_serie)
     
     }
 
-function prepareDeplacementImplantation(id_serie, plancheDestId)
+function prepareDeplacementImplantation(id_serie, id_implantation, id_plancheDest)
     {
+    // boite de dialogue de confirmation de déplacement avant requete serveur
     hDiv = document.getElementById("divDeplacementImplantation")
     hDiv.style.display = "block"
-    hDiv.style.position = "absolute"
-    hDiv.style.left = "10px"
     hDivSerie = document.getElementById(id_serie)
-    hDiv.style.top = hDivSerie.offsetTop + 80 + "px" // 80 pour aller en dessous du div de serie
-    document.getElementById("deplacement_id_serie").value = hDivSerie.getAttribute("id")
-    document.getElementById("deplacement_id_planche_orig").value =  hDivSerie.getAttribute("id_planche")
+    hDiv.style.top = hDivSerie.offsetTop + "px" // décalage pour aller en dessous du div de série
+    document.getElementById("deplacement_id_serie").value = id_serie
+    document.getElementById("deplacement_id_implantation").value = id_implantation
+    //document.getElementById("deplacement_id_planche_orig").value =  hDivSerie.getAttribute("id_planche")
+    document.getElementById("deplacement_id_planche_dest").value = id_plancheDest
     document.getElementById("deplacement_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
     document.getElementById("deplacement_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
     document.getElementById("deplacement_quantite").value = hDivSerie.getAttribute("quantite")
-    document.getElementById("deplacement_id_planche_dest").value = plancheDestId
-
     }
 
 function testeDeplacementImplantation(id_serie, plancheDestId)
@@ -340,16 +328,42 @@ function testeDeplacementImplantation(id_serie, plancheDestId)
     // tout se fait en aveugle comme si on editait à la main
     hDivSerie = document.getElementById(id_serie)
     document.getElementById("deplacement_id_serie").value = hDivSerie.getAttribute("id")
-    document.getElementById("deplacement_id_planche_orig").value =  hDivSerie.getAttribute("id_planche")
+    //document.getElementById("deplacement_id_planche_orig").value =  hDivSerie.getAttribute("id_planche")
     document.getElementById("deplacement_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
     document.getElementById("deplacement_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
     document.getElementById("deplacement_quantite").value = hDivSerie.getAttribute("quantite")
     document.getElementById("deplacement_id_planche_dest").value = plancheDestId
     document.getElementById("deplacement_simulation").value = true
-    deplaceSerie()
+    deplaceImplantation()
     }
 
-                                       
+
+function  deplaceImplantation()
+    {
+    // déplacement d'une implantation vers une autre planche 
+    s_request = "cde=deplacement_implantation&id_serie=" + document.getElementById("deplacement_id_serie").value
+    s_request += "&id_implantation=" + document.getElementById("deplacement_id_implantation").value
+    s_request += "&id_planche_dest=" + document.getElementById("deplacement_id_planche_dest").value
+    s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
+    s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
+    s_request += "&partiel=" + document.getElementById("deplacement_partiel").checked
+    b_simu = document.getElementById("deplacement_simulation").checked
+    s_request += "&simulation=" + b_simu
+    rep = requestServer(s_request)
+    jsonRep = JSON.parse(rep)
+    document.getElementById("divDeplacementImplantation").style.display = "none"
+    if (jsonRep.status == true)
+        {
+        alert(jsonRep.msg)
+        window.location.reload()
+        }
+    else
+        {
+        document.getElementById("divInfoDebug").innerHTML = jsonRep.err
+        alert ("Erreur : " + jsonRep.err)
+        }
+    }
+                                     
 function sauveSerie()
     {
     // sauvegarde d'une serie
@@ -408,18 +422,21 @@ function allowDrop(event) {
 }
 
 function dragStart(event) {
-    event.dataTransfer.setData("Text", event.target.id);
+    event.dataTransfer.setData("id_serieDeplacee", event.target.id);
+    id_implantation = document.getElementById(event.target.id).getAttribute("id_implantation")
+    event.dataTransfer.setData("id_implantation", id_implantation);
     //alert("id serie a deplacer="+ event.target.id)
 }
 
 function drop(event) {
     event.preventDefault();
-    serieID = event.dataTransfer.getData("Text");
-    pl_id = event.target.id.split("__")[1]
-    alert("target =" + pl_id)
+    id_serie = event.dataTransfer.getData("id_serieDeplacee")
+    id_implantation = event.dataTransfer.getData("id_implantation");
+    id_plancheDest = event.target.id.split("__")[1]
+    alert("serie" + id_serie + " "+ id_implantation + "dde de déplacement vers planche " + id_plancheDest)
     //event.target.appendChild(document.getElementById(data));
-    testeDeplacementImplantation(serieID, pl_id)
-}
+    prepareDeplacementImplantation(id_serie, id_implantation, id_plancheDest)
+    }
 
 function unfocus(event)
     {
@@ -469,19 +486,19 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         {% for serie in planche.l_series %}
 
         <div class="chrono_serie"   id="{{serie.id}}"
-                                    id=implantation={{serie.id_implantationSurPlanche}}
+                                    id_implantation="{{serie.implantationPlanche.id}}"
                                     nom_variete="{{serie.variete}}" 
                                     id_variete="{{serie.variete.id}}" 
                                     id_espece="{{serie.variete.espece.id}}" 
                                     quantite="{{serie.quantite}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
-                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intra_rang_m}}*100"
+                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intraRang_cm}}"
                                     style="border-color: {{serie.variete.couleur}}"
                                     draggable="true" ondragstart="dragStart(event)" >
 
-            <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="id={{serie.id}} planche={{planche.id}} &#13;variete={{serie.variete}} quantite={{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intra_rang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
-            <div class="num_plant" style="display: inline;z-index:3;  ">({{serie.id}}) </div>
+            <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="série {{serie.id}}, {{serie.implantationPlanche}}&#13;variete={{serie.variete}} x {{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intraRang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
+            <div style="display: inline;z-index:3;  ">({{serie.id}}, impl : {{serie.implantationPlanche.id  }}) </div>
             <div class="variete" style="display: inline;z-index:3; ">{{serie.variete}} x {{serie.quantite}}</div>
             <br/><a href="#" onclick="javascript:prepareEditeSerie({{serie.id}});return(false)">EDITER</a>
             <a href="#" onclick="javascript:prepareDeplacementImplantation({{serie.id}});return(false)">DEPLACER</a><br/>
@@ -539,16 +556,18 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     </form>
     
     <div id="divDeplacementImplantation">
-        <h3>Déplacement de la série N°<input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" /></h3>
-        Nb de série :               <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
-        De la planche N°            <input id="deplacement_id_planche_orig"   value="" type="text" readonly style="width: 30px;margin-left: 10px"/>
+        <h3>Déplacement de la série <input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" />
+         implantation <input id="deplacement_id_implantation" value="" type="text" readonly style="width: 30px" /><br/>
+        </h3>
+        Quantité :                  <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
+        <!-- De la planche N°            <input id="deplacement_id_planche_orig"   value="" type="text" readonly style="width: 30px;margin-left: 10px"/> -->
         vers la planche N°          <input id="deplacement_id_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
         dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
         Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
         Déplacement partiel         <input id="deplacement_partiel"                     type="checkbox" />
         Nb de plants :              <input id="deplacement_nb_plants"          value="" type="text" style="width: 30px" /><br/>
         Simulation                  <input id="deplacement_simulation"                  type="checkbox" />
-        <input type="submit" value="Déplacement" onclick="deplaceSerie()" style="margin-left: 30px" />
+        <input type="submit" value="Déplacement" onclick="deplaceImplantation()" style="margin-left: 30px" />
         <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divDeplacementImplantation').style.display='none';return False"/>
         
     </div>

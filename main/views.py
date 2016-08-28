@@ -104,13 +104,16 @@ def chronoPlanches(request):
                        "message":s_msg}
                       )
     ## juste pour test wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    ##l_planches = Planche.objects.filter(id=1)
+    l_planches = Planche.objects.filter(id__in=[1,2,3,4])
     
-    
-    ## ajout des séries 
+    ## ajout des séries présente pour chaque planche
     for laPlanche in l_planches:
         laPlanche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, laPlanche)
-
+        ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de serie par planche)
+        for serie in laPlanche.l_series:
+            serie.implantationPlanche = serie.implantations.get(planche_id=laPlanche.id)
+            
+            
     return render(request,
                  'main/chrono_planches.html',
                  {

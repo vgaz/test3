@@ -340,6 +340,9 @@ class Serie(models.Model):
     l_prelevement = []
     objects = SerieManager()
     
+    def intraRang_cm(self):
+        return int(self.intra_rang_m *100)
+    
     def prodEstimee_kg(self):
         """Retourne le poids (kg) de production escomptée""" 
         return self.variete.prod_kg_par_m2 * self.surfaceSurPlanche_m2()
