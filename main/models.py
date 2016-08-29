@@ -94,6 +94,11 @@ def quantitePourSurface(largeurPlanche, surfaceChoisie, nbRangs, intraRang_m):
     quantité  =  (surface / largeur) x nbRangs / intra """
     return int(surfaceChoisie/largeurPlanche*nbRangs/intraRang_m)
 
+def surfacePourQuantite(largeurPlanche, quantite, nbRangs, intraRang_m):
+    """ estimation de la surface pour n de pieds implantables sur une planche
+    surface  =  (quantité XXXXXXXXXXXXXXxxurface / largeur) x nbRangs / intra """
+    return int(quantite * intraRang_m / nbRangs * largeurPlanche)
+
 def cloneSerie(serie):
     """clonage d'une série"""
     serie2 = Serie.objects.get(id=serie.id)
@@ -235,21 +240,26 @@ class Implantation(models.Model):
     planche = models.ForeignKey("Planche")
 #     debut_m = models.FloatField("Début de la culture (m)", default=0)
 #     fin_m = models.FloatField("Début de la culture (m)", default=0)
-    surface_m2 = models.FloatField("surface en m2", default=0)## en attendant le placement plus précis...@todo
+    quantite = models.FloatField("nombre de pieds", default=0) ## en attendant le placement plus précis...@todo
 
     def longueur_m(self):
         return self.fin_m - self.debut_m
-    
-#         try:
-#             return self.longueur_m() * self.planche.largeur_m
-#         except:
-#             traceback.print_tb(sys.exc_info())
-#             return 0
 
+    def serie(self):
+        """ retourne la série (unique) d'appartenance"""
+        return self.serie_set.all()[0]
+    
+    def surface_m2(self):
+        serie = self.serie()
+        return surfacePourQuantite(self.planche.largeur_m, 
+                            self.quantite, 
+                            serie.nb_rangs, 
+                            serie.intra_rang_m)
     def __str__(self):
-        return "implantation N°%d de %d m2 sur planche %d"%(self.id, 
-                                                            self.surface_m2, 
-                                                            self.planche.id)
+        return "implantation N°%d, %d pieds (%d m2) sur planche %d"%(self.id, 
+                                                                     self.quantite, 
+                                                                     self.surface_m2(), 
+                                                                     self.planche.id)
 
 class SerieManager(models.Manager):
     
@@ -363,7 +373,7 @@ class Serie(models.Model):
         for impl in self.implantations.all():
             if planche and impl.planche.id != planche.id:
                 continue
-            surface += impl.surface_m2
+            surface += impl.surface_m2()
         
         return surface
     
@@ -379,17 +389,22 @@ class Serie(models.Model):
         self.evt_debut_id = evt_debut.id
 
         if not dateFin:
-            dateFin = evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j)
+            dateFin = evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j) + datetime.timedelta(days = self.etalementRecolte_seriej)
         
         if isinstance(dateFin, str): 
             dateFin = MyTools.getDateFrom_d_m_y(dateFin)
             
-        evt_fin = creationEvt(dateFin, Evenement.TYPE_FIN, "fin %s %s"%(self.variete.espece.nom,
-                                                                     self.variete.nom))       
+        evt_fin = creationEvt(dateFin, Evenement.TYPE_FIN, "fin %s %s"%(self.variete.espece.nom, self.variete.nom))       
         self.evt_fin_id = evt_fin.id
         self.evenements.add(evt_fin)
-        self.save()
         
+        ## ajout evt de début de récolte
+        dateRecolte = evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j)
+        evt_recolte = creationEvt(dateRecolte, Evenement.TYPE_DIVERS, "Récolte %s %s"%(self.variete.espece.nom, self.variete.nom))       
+        self.evenements.add(evt_recolte)
+        
+        self.save()
+                
     def activeEnDatedu(self, date):  
         """retourneTrue ou False si série encore en terre à telle date"""
         if date >= self.evt_debut.date and date <= self.evt_fin.date:

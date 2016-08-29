@@ -185,7 +185,7 @@ class Command(BaseCommand):
                         implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP).id
                     ## on place toute la série sur cette implantation par défaut
                     
-                    implantation.surface_m2 = serie.quantite*serie.intra_rang_m/serie.nb_rangs * constant.LARGEUR_PLANCHES_VIRTUELLES
+                    implantation.quantite = serie.quantite
                     implantation.save()
                     print(">>>>>>>>>>>>>>>>> ajout impl de base", implantation)
                     
