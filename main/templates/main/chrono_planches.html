@@ -313,7 +313,8 @@ function prepareDeplacementImplantation(id_serie, id_implantation, id_plancheDes
     hDiv = document.getElementById("divDeplacementImplantation")
     hDiv.style.display = "block"
     hDivSerie = document.getElementById(id_serie)
-    hDiv.style.top = hDivSerie.offsetTop + "px" // décalage pour aller en dessous du div de série
+    hDiv.style.top = document.getElementById("pl__"+id_plancheDest).style.offsetTop + "px" // décalage pour aller sur la planche
+
     document.getElementById("deplacement_id_serie").value = id_serie
     document.getElementById("deplacement_id_implantation").value = id_implantation
     //document.getElementById("deplacement_id_planche_orig").value =  hDivSerie.getAttribute("id_planche")
@@ -344,6 +345,7 @@ function  deplaceImplantation()
     s_request = "cde=deplacement_implantation&id_serie=" + document.getElementById("deplacement_id_serie").value
     s_request += "&id_implantation=" + document.getElementById("deplacement_id_implantation").value
     s_request += "&id_planche_dest=" + document.getElementById("deplacement_id_planche_dest").value
+    s_request += "&quantite=" + document.getElementById("deplacement_quantite").value
     s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
     s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
     s_request += "&partiel=" + document.getElementById("deplacement_partiel").checked
@@ -433,7 +435,7 @@ function drop(event) {
     id_serie = event.dataTransfer.getData("id_serieDeplacee")
     id_implantation = event.dataTransfer.getData("id_implantation");
     id_plancheDest = event.target.id.split("__")[1]
-    alert("serie" + id_serie + " "+ id_implantation + "dde de déplacement vers planche " + id_plancheDest)
+    //alert("serie" + id_serie + " "+ id_implantation + "dde de déplacement vers planche " + id_plancheDest)
     //event.target.appendChild(document.getElementById(data));
     prepareDeplacementImplantation(id_serie, id_implantation, id_plancheDest)
     }
@@ -560,12 +562,10 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
          implantation <input id="deplacement_id_implantation" value="" type="text" readonly style="width: 30px" /><br/>
         </h3>
         Quantité :                  <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
-        <!-- De la planche N°            <input id="deplacement_id_planche_orig"   value="" type="text" readonly style="width: 30px;margin-left: 10px"/> -->
         vers la planche N°          <input id="deplacement_id_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
         dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
         Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
         Déplacement partiel         <input id="deplacement_partiel"                     type="checkbox" />
-        Nb de plants :              <input id="deplacement_nb_plants"          value="" type="text" style="width: 30px" /><br/>
         Simulation                  <input id="deplacement_simulation"                  type="checkbox" />
         <input type="submit" value="Déplacement" onclick="deplaceImplantation()" style="margin-left: 30px" />
         <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divDeplacementImplantation').style.display='none';return False"/>

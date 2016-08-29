@@ -14,9 +14,9 @@
 <div id="banner">
 	<div id="home"><h1>
         <a href="{% url 'home' %}"><img src="{{ STATIC_URL }}images/home.png" title="Home"/></a>
-        <a href="{% url 'evenements' %}" style:"font-color:white">Evenements</a>
-        <a href="{% url 'chrono_planches' %}">Suivi des séries</a>
-	    {% block title %}{% endblock %}</h1>
+        <a href="{% url 'evenements' %}" style:"font-color:white">Evenements</a> - 
+        <a href="{% url 'chrono_planches' %}">Suivi des séries</a></h1>
+	    <h1>{% block title %}{% endblock %}</h1>
     </div>
 	
 	<div id="appName"></div>

@@ -73,6 +73,15 @@ h1
 	margin-bottom:10px;
 }
 
+h1 a:link, a:visited {
+    color: #5b80b2;
+    text-decoration: none;
+}
+
+a:hover {
+    color: orange;
+}
+
 h2
 {
 	color:#005050;

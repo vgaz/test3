@@ -168,45 +168,42 @@ def serveRequest(request):
         try:
             implantation = Implantation.objects.get(id=int(request.POST.get("id_implantation")))
             serie = implantation.serie_set.all()[0]
-            ##id_planche_orig = implantation.planche.id  
-            
+
+            if request.POST.get("partiel", "") == "true":
+                # nb de plants à déplacer
+                print ("demande de déplacement partiel")
+            quantite = int(request.POST.get("quantite"))             
             nb_rangs = int(request.POST.get("nb_rangs", serie.nb_rangs))
             intra_rang_m = float(request.POST.get("intra_rang_cm", serie.intra_rang_m*100))/100
             planche_dest = Planche.objects.get(id=int(request.POST.get("id_planche_dest")))
             b_simu = request.POST.get("simulation") == "true"
-            reste = essaiDeplacementSeries(serie.id, planche_dest, intra_rang_m, nb_rangs)
-                      
-            if request.POST.get("partiel", "") == "true":
-                # nb de plants à déplacer
-                print ("demande de déplacement partiel")
-                quantite = int(request.POST.get("quantite")) ## peut etre chaine vide donc pas castable
-                
-            if b_simu:
-                if reste == 0:
-                    rep = "SIMULATION\\nTous les plants sont déplaçables sur la planche %s" % planche_dest.nom
+            reste_m2 = surfaceLibreSurPeriode(planche_dest, serie.evt_debut.date, serie.evt_fin.date) - implantation.surface_m2
+            if reste_m2 < 0: ## pas assez de place
+                quantite_manquante = quantitePourSurface(planche_dest.largeur_m, abs(reste_m2), nb_rangs, intra_rang_m)
+            print(serie)
+            if reste_m2 >= 0:
+                if b_simu:
+                    rep = "Résultat de simulation : tous les plants sont impantables sur la planche %s" % planche_dest.nom
                 else:
-                    rep = "SIMULATION\planche_dest\nReste %d plants non déplaçables. Déplacement incomplet."%reste            
-            elif reste == 0:
-                ## si on peut tout transférer sur une seule planche, la série change de planche
-                ## changement de planche
-                print("changement complet de planche via l'implantation")
-                implantation.planche_id = planche_dest.id
-                implantation.save()               
-                rep = "Tous les plants ont été déplacés sur la planche %s"%planche_dest.nom
-            else:
-                ## sinon, on cree une nouvelle serie de plants vers la planche partiellement accueillante et on garde le reste
-                ## Création nouvelle implantation de plants sur planche dest @todo
-                serie2 = cloneSerie(serie) ## creation d'une nouvelle série
-                ## maj quantités
-                serie2.quantite = serie.quantite - reste 
-                serie.quantite = reste
-                serie.save()
-                ## changement de planche
-                serie2.planche_id = planche_dest.id
-                serie2.nb_rangs = nb_rangs
-                serie2.intra_rang_m = intra_rang_m
-                serie2.save() 
-                rep = "série %d déplacé partiellement (reste %d) sur planche %s "%(serie.id, reste, planche_dest.nom)
+                    ## si on peut tout transférer sur une seule planche, la série change de planche
+                    ## changement de planche
+                    print("changement complet de planche via l'implantation")
+                    implantation.planche_id = planche_dest.id
+                    implantation.save()               
+                    rep = "Tous les plants ont été déplacés sur la planche %s"%planche_dest.nom
+
+            else: 
+                if b_simu:
+                    rep = "Résultat de simulation : pas assez de surface pour implantation totale, seulement %d pieds impantables sur planche %s."%(quantite -quantite_manquante, planche_dest.nom)
+                else:
+                    ## sinon, on cree une nouvelle implantation sur la planche de destination
+                    nelleImpl = Implantation()
+                    nelleImpl.planche_id = planche_dest.id
+                    ## maj surface ou quantité A FAAIRE
+                    nelleImpl.save()
+                    serie.implantations.add(nelleImpl)
+                    serie.save() 
+                    rep = "série %d déplacé partiellement sur planche %s (reste %d m2 à placer ailleurs)"%(serie.id, planche_dest.nom, reste_m2)
 
             s_json = '{"status":true, "msg":"%s"}'%rep
         except:

@@ -53,48 +53,46 @@ def creationPlanche(longueur_m, largeur_m, bSerre, s_nom=""):
 
 
 
-def essaiDeplacementSeries(idSerie, plancheDest, intraRangCm, nbRangs): 
-    """tentative de placement de series ref <idSerie> sur planche <idPlancheDest> en fonction du nb de rang et distance dans le rang
-    retourne le nombre de series restants à placer ailleurs si le nb de series est trop important pour la planche (déjà occupée ou trop courte par exemple)
-    0 si tout peut etre placé sur la planche @todo
+def surfaceLibreSurPeriode(planche, date_debut, date_fin): 
+    """retourne la surface dispo de telle date à telle date
+    est retenue la plus grande surface dispo sur TOUT l'intervale
     """
-    serie = Serie.objects.get(id = idSerie)
-    cumul_max_m2 = 0
     ## recherche de toutes les séries de cette planche présentes sur la même période
-    l_series_presentes = Serie.objects.activesSurPeriode(   serie.evt_debut.date, 
-                                                            serie.evt_fin.date, 
-                                                            plancheDest)
+    l_series_presentes = Serie.objects.activesSurPeriode(   date_debut,
+                                                            date_fin, 
+                                                            planche)
     
     ## recherche des dates de tous les changements potentiels de surface dispo
     ## on stocke les dates concernées
-    l_dates_planche = [serie.evt_debut.date, serie.evt_fin.date]
+    l_dates_planche = [date_debut, date_fin]
     for _serie in l_series_presentes:
-        l_dates_planche.add(_serie.evt_debut.date)
-        l_dates_planche.add(_serie.evt_fin.date)
+        l_dates_planche.append(_serie.evt_debut.date)
+        l_dates_planche.append(_serie.evt_fin.date)
     sorted(l_dates_planche)
     
     ## pour chaque période sur la planche, on calcule la surface de planche prise
+    
+    cumul_max_m2 = 0
     for jour in l_dates_planche:
         cumul_m2 = 0
        
         for serie in l_series_presentes:
             if serie.activeEnDatedu(jour):
-                cumul_m2 += serie.surfaceOccupee_m2(plancheDest)
+                cumul_m2 += serie.surfaceOccupee_m2(planche)
 
-        print (jour, cumul_m2, "m2 occupés sur ", plancheDest.surface_m2(), "m2 (cumul max =", cumul_max_m2, ")" )
+        print (jour, cumul_m2, "m2 occupés sur ", planche.surface_m2(), "m2 (cumul max =", cumul_max_m2, ")" )
     
         cumul_max_m2 = max((cumul_max_m2, cumul_m2))
         
-    libre_m2 = plancheDest.surface_m2() - cumul_max_m2
-    print ("libre=%dm2 besoin=%dm2"%(libre_m2, serie.longueurSurPlanche_m( intraRangCm, nbRangs)*plancheDest.largeur_m))
+    libre_m2 = planche.surface_m2() - cumul_max_m2
+    return libre_m2
 
-    reste_m = libre_m2 - serie.longueurSurPlanche_m(intraRangCm, nbRangs)
-    if reste_m >=0:
-        print ("assez de place, on peut placer toute la série %d"%serie.id)
-        return 0
-    else:
-        ## pas assez de place, on retourne le nb de series restant à placer apres remplissage du reste de la planche
-        return int(serie.nbSeriesPlacables(abs(reste_m), intraRangCm, nbRangs))
+
+    
+def quantitePourSurface(largeurPlanche, surfaceChoisie, nbRangs, intraRang_m):
+    """ estimation de la quantité de pieds implantables sur une planche
+    quantité  =  (surface / largeur) x nbRangs / intra """
+    return int(surfaceChoisie/largeurPlanche*nbRangs/intraRang_m)
 
 def cloneSerie(serie):
     """clonage d'une série"""
@@ -133,9 +131,11 @@ class Planche(models.Model):
     def __str__(self):
         if self.bSerre: s_lieu = "sous serre"
         else:           s_lieu = "plein champ"
-        return "%s (%d), %d m x %d m = %dm2; %s" % ( self.nom, self.id, 
-                                                     self.longueur_m, self.largeur_m, 
-                                                     self.surface_m2(), s_lieu)
+        return "%s (%d), %d m x %d m = %fm2; %s" % ( self.nom, self.id, 
+                                                     self.longueur_m, 
+                                                     self.largeur_m, 
+                                                     self.surface_m2(), 
+                                                     s_lieu)
 
 
 class Espece(models.Model):
@@ -278,16 +278,7 @@ class SerieManager(models.Manager):
         
         return l_series
     
-    def surfaceOccupee(self, planche=None): 
-        """renvoi la surface occupée, totale si pas de planche précisée"""
-        surface = 0
-        for impl in self.implantations.all():
-            if planche and impl.planche.id != impl.planche.id:
-                continue
-            surface += impl.surface_m2()
-        
-        return surface
-    
+
   
 
 class Evenement(models.Model):
@@ -345,7 +336,7 @@ class Serie(models.Model):
     
     def prodEstimee_kg(self):
         """Retourne le poids (kg) de production escomptée""" 
-        return self.variete.prod_kg_par_m2 * self.surfaceSurPlanche_m2()
+        return self.variete.prod_kg_par_m2 * self.surfaceOccupee_m2()
     
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
@@ -365,21 +356,17 @@ class Serie(models.Model):
             return 0                
         return self.quantite * intra_rang_m / nb_rangs
     
-    def surfaceSurPlanche_m2(self, intra_rang_m=None, nb_rangs=None):
-        """ retourne la surface occupée en fonction des distances inter-rang et dans le rang
-        de toutes les implantation A FAIRE@todo
-        intra_rang_m et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend ceux prédéfinis
-        POUR le moment on prend une planche standard de 1,2m """
-        return self.longueurSurPlanche_m() * 1.2
+    def surfaceOccupee_m2(self, planche=None):
+        """ retourne la surface occupée de toutes ou d'une implantation
+        si planche != None, retourne juste l'implantation sur cette planche """
+        surface = 0
+        for impl in self.implantations.all():
+            if planche and impl.planche.id != planche.id:
+                continue
+            surface += impl.surface_m2
+        
+        return surface
     
-    def nbSeriesPlacables(self, longueurDePlanche_m, intraRang_m=None, nbRangs=None):
-        if not intraRang_m:
-            intraRang_m = self.intra_rang_m
-        assert intraRang_m, Exception("intraRang_m non défini")
-        if not nbRangs:
-            nbRangs = self.nb_rangs
-        assert nbRangs, Exception("nbRangs non défini")
-        return longueurDePlanche_m * nbRangs / intraRang_m
      
     def fixeDates(self, dateDebut, dateFin=None):
         """Crée les evts de début et fin de vie des plants en terre"""
@@ -412,13 +399,15 @@ class Serie(models.Model):
         
          
     def __str__(self):       
-        return "%s %s (N°%d) x %d sur planche xxxx, intra-rang %d m x %d rangs (%s m2), du %s au %s" %(self.variete.espece.nom,
+        s_planches = str(self.implantations.all().values_list("id", flat=True))
+        return "%s %s (N°%d) x %d sur planche(s) %s, intra-rang %d m x %d rangs (%s m2), du %s au %s" %(self.variete.espece.nom,
                                                                                                     self.variete.nom,
                                                                                                     self.id, 
                                                                                                     self.quantite,
+                                                                                                    s_planches,
                                                                                                     self.intra_rang_m,
                                                                                                     self.nb_rangs,
-                                                                                                    self.surfaceSurPlanche_m2(), 
+                                                                                                    self.surfaceOccupee_m2(), 
                                                                                                     self.evt_debut.date,
                                                                                                     self.evt_fin.date)
 

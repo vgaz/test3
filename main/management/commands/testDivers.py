@@ -21,13 +21,12 @@ class Command(BaseCommand):
         # Create an instance of a POST request.
         request = self.factory.post('/chrono_planches/?nom_planches=', 
                                     data={  "cde":"deplacement_implantation",
-                                            "id_serie":53,
                                             "id_implantation":42,
-                                            "id_planche_dest":3,
+                                            "id_planche_dest":4,
                                             "nb_rangs":3,
+                                            "quantite":100,
                                             "intra_rang_cm":30,
                                             "partiel":"",
-                                            "nb_plants":"",
                                             "simulation":""                            
                                         }
                                     )        
