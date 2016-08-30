@@ -11,6 +11,8 @@ import sys, traceback
 import datetime
 from django.core import serializers
 
+logging.disable(logging.DEBUG)
+
 def serveRequest(request):
     """Received a request and return specific response"""
     cde = request.POST.get("cde","")
@@ -68,33 +70,24 @@ def serveRequest(request):
     
     if cde == 'supprime_serie':
         try:
-            id_serie = int(request.POST.get("id", 0))
-            if id_serie == 0:
-                print("return _")
-                raise(Exception, "série non supprimable")
-            
-            id_serie = int(id_serie)
-            serie = Serie.objects.get(id=id_serie)
-            
-            ## suppression de la production associée
-            try:
-                prod = None
-                prod = Production.objects.get(id = serie.production_id)
-                prod.delete()##@todo: erreur il faut retrancher de la seule production de ces series 
-            except:
-                pass    
-
+            serie = Serie.objects.get(id=int(request.POST.get("id")))
+            ##print("Demande de suppression série %s"%serie.__str__())
             ## supression des évenements associés
-            for obj in Evenement.objects.filter(serie_base_id = serie.id):
+            for obj in serie.evenements.all():
+                print ("Suppression ", obj)
+                obj.delete()
+            ## supression des implantations
+            for obj in serie.implantations.all():
                 print ("Suppression ", obj)
                 obj.delete()
              
+            print ("Série supprimée")
             serie.delete()                
-            print ("Supprime série", id_serie)
          
-            s_json = '{"status":"true","id_serie":%d}'%id_serie
+            s_json = '{"status":true}'
         except:
-            s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
+            traceback.print_tb(sys.exc_info())
+            s_json = '{"status":false,"err":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")
 
@@ -108,9 +101,7 @@ def serveRequest(request):
             ## @todo: suppression des series de plants associés
             ## suppression de la production associée
             ## supression des évenements associés à une serie de plants            
-            
             planche.delete()
-            
             s_json = '{"status":"true","id_planche":%d}'%id_pl
         except:
             s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
@@ -121,7 +112,7 @@ def serveRequest(request):
     ## --------------- request to update database 
     if cde == "sauve_evt": 
         try:
-            e_id = int(request.POST.get("id",0))
+            e_id = int(request.POST.get("id", 0))
             id_serie = int(request.POST.get("id_serie",0))
             assert(id_serie != 0, "bad id_serie in sauve_evt")
             date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))

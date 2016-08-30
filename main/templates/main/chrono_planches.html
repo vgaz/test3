@@ -247,16 +247,21 @@ function  balisageSeries()
 
 
 
-function supprimeSerie(id_serie)
+function supprime_serie(id_serie)
     {
-    s_request = "cde=supprime_serie&id=" + id_serie
-    alert(s_request)
-    rep = requestServer(s_request)  
-    jsonRep = JSON.parse(rep)   
-    if (jsonRep.status == 'true')
-        window.location.reload()    
-    else
-        alert(jsonRep.err)
+    if (confirm("Voules-vous vraiment supprimer la série " + id_serie))
+        {
+        s_request = "cde=supprime_serie&id=" + id_serie
+        rep = requestServer(s_request)  
+        jsonRep = JSON.parse(rep)   
+        if (jsonRep.status == true)
+            {
+            alert("Série supprimée")
+            window.location.reload()
+            }  
+        else        
+            alert(jsonRep.err)
+        }
     }
 
 
@@ -551,7 +556,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 	    </div
 	    
 	    <hr/>
-        <input type='button' value='Supprimer' name='supprime' onclick="supprimeSerie(document.getElementById('editSerie_id_serie').value)"/>
+        <input type='button' value='Supprimer' name='supprime' onclick="supprime_serie(document.getElementById('editSerie_id_serie').value)"/>
         <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return False"/>
 	    <input type='button' value='Sauver' onclick="sauveSerie();return False" /><br/>
 	</div>

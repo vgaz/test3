@@ -415,7 +415,7 @@ class Serie(models.Model):
          
     def __str__(self):       
         s_planches = str(self.implantations.all().values_list("id", flat=True))
-        return "%s %s (N°%d) x %d sur planche(s) %s, intra-rang %d m x %d rangs (%s m2), du %s au %s" %(self.variete.espece.nom,
+        return "%s %s (N°%d) sur planche(s) %s, quantité totale %d, intra-rang %d m x %d rangs (%s m2), du %s au %s" %(self.variete.espece.nom,
                                                                                                     self.variete.nom,
                                                                                                     self.id, 
                                                                                                     self.quantite,
