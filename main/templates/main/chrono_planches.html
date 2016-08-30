@@ -504,9 +504,9 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     style="border-color: {{serie.variete.couleur}}"
                                     draggable="true" ondragstart="dragStart(event)" >
 
-            <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="série {{serie.id}}, {{serie.implantationPlanche}}&#13;variete={{serie.variete}} x {{serie.quantite}} &#13; nb_rangs={{serie.nb_rangs}} intra_rang_cm={{serie.intraRang_cm}}&#13;longueur : {{serie.longueurSurPlanche_m|floatformat:'1'}}m surface : {{ serie.surfaceSurPlanche_m2|floatformat:'0' }} m2 &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
-            <div style="display: inline;z-index:3;  ">({{serie.id}}, impl : {{serie.implantationPlanche.id  }}) </div>
-            <div class="variete" style="display: inline;z-index:3; ">{{serie.variete}} x {{serie.quantite}}</div>
+            <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="série {{serie.id}}, {{serie.variete}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
+            <div style="display: inline;z-index:3;  ">(s {{serie.id}}, impl {{serie.implantationPlanche.id}}) </div>
+            <div class="variete" style="display: inline;z-index:3; ">{{serie.variete}} x {{serie.implantationPlanche.quantite}}</div>
             <br/><a href="#" onclick="javascript:prepareEditeSerie({{serie.id}});return(false)">EDITER</a>
             <a href="#" onclick="javascript:prepareDeplacementImplantation({{serie.id}});return(false)">DEPLACER</a><br/>
             <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>

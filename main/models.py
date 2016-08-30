@@ -256,9 +256,10 @@ class Implantation(models.Model):
                             serie.nb_rangs, 
                             serie.intra_rang_m)
     def __str__(self):
-        return "implantation N°%d, %d pieds (%d m2) sur planche %d"%(self.id, 
+        return "Implantation %d, %d pieds (%d m2) sur planche %s (%d)"%(  self.id, 
                                                                      self.quantite, 
                                                                      self.surface_m2(), 
+                                                                     self.planche.nom,
                                                                      self.planche.id)
 
 class SerieManager(models.Manager):
