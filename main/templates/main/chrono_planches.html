@@ -4,9 +4,7 @@
 
 <style>
 #editeSerie_evts
-{        checkagain=true        checkagain=true
-
-
+{
     text-align:left;
 
 }
@@ -290,12 +288,21 @@ function prepareEditeSerie(id_serie)
     hDiv.style.top = hDivSerie.offsetTop + 60 + "px" // 80 pour aller en dessous du div de serie
     document.getElementById("editSerie_id_serie").value = hDivSerie.getAttribute("id")
     document.getElementById("editSerie_id_serie").readOnly = true
-    document.getElementById("editSerie_id_planche").value =  hDivSerie.getAttribute("id_planche")
+    document.getElementById("editSerie_liste_planches").innerHTML =  hDivSerie.getAttribute("s_liste_planches")
     document.getElementById("editSerie_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
     document.getElementById("editSerie_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
     document.getElementById("editSerie_quantite").value = hDivSerie.getAttribute("quantite")
     document.getElementById("editSerie_date_debut").value = hDivSerie.getAttribute("date_debut_f")
     document.getElementById("editSerie_date_fin").value = hDivSerie.getAttribute("date_fin_f")
+    // maj espece
+    id_espece  = hDivSerie.getAttribute("id_espece")
+    list = document.getElementById("editSerie_id_espece").getElementsByTagName("option")
+    for(ii=0;ii<list.length;ii++)
+        if (list[ii].id == id_espece)
+            {
+            document.getElementById("editSerie_id_espece").options[ii].selected=true
+            break
+            }
     // maj variété
     id_variet  = hDivSerie.getAttribute("id_variete")
     list = document.getElementById("editSerie_id_variete").getElementsByTagName("option")
@@ -308,10 +315,30 @@ function prepareEditeSerie(id_serie)
     document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
 
     majListEvts(id_serie)
-
-    
     }
+    
+function sauveSerie()
+    {
+    // sauvegarde d'une serie
+    s_request = "cde=sauve_serie&id_serie=" + document.getElementById("editSerie_id_serie").value
+    s_request += "&id_variete=" + document.getElementById("editSerie_id_variete").value
+    s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
+    s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
+    s_request += "&quantite=" + document.getElementById("editSerie_quantite").value
+    s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
+    s_request += "&date_fin=" + document.getElementById("editSerie_date_fin").value
 
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == 'true')
+        {
+        alert(jsonRep.msg)
+        window.location.reload()
+        }
+    else
+        document.getElementById("divInfoDebug").innerHTML = jsonRep.err
+
+    }
 function prepareDeplacementImplantation(id_serie, id_implantation, id_plancheDest)
     {
     // boite de dialogue de confirmation de déplacement avant requete serveur
@@ -371,58 +398,9 @@ function  deplaceImplantation()
         }
     }
                                      
-function sauveSerie()
-    {
-    // sauvegarde d'une serie
-    s_request = "cde=sauve_serie&id_serie=" + document.getElementById("editSerie_id_serie").value
-    s_request += "&id_variete=" + document.getElementById("editSerie_id_variete").value
-    s_request += "&id_planche=" + document.getElementById("editSerie_id_planche").value
-    s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
-    s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
-    s_request += "&quantite=" + document.getElementById("editSerie_quantite").value
-    s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
-    s_request += "&date_fin=" + document.getElementById("editSerie_date_fin").value
 
-    rep = requestServer(s_request)  
-    jsonRep = JSON.parse(rep)
-    if (jsonRep.status == 'true')
-        {
-        alert(jsonRep.msg)
-        window.location.reload()
-        }
-    else
-        document.getElementById("divInfoDebug").innerHTML = jsonRep.err
-
-    }
            
            
-function editePlant(hPlant)
-    {
-    // recup evenements liés à cette série
-    id_serie = hPlant.getAttribute("id_serie")
-    
-    if (id_serie.search("_") != 1)
-        majListEvts(id_serie)
-        
-    // maj variété
-    id_variet  = hPlant.getAttribute("variete")
-    list = document.getElementById("editeSerie_select_var").getElementsByTagName("option")
-    for(ii=0;ii<list.length;ii++)
-        if (list[ii].value == id_variet)
-            {
-            document.getElementById("editeSerie_select_var").options[ii].selected=true
-            break
-           }
-
-    // maj attributs série               
-    document.getElementById("editeSerie_id_planche").innerHTML = {{planche.id}}
-    document.getElementById("editeSerie_plantId").innerHTML = id_serie
-    document.getElementById("editeSerie_quantite").value = hPlant.getAttribute("quantite")
-    document.getElementById("editeSerie_date_debut").value =  hPlant.getAttribute("date_debut")
-    document.getElementById("editeSerie_date_fin").value =  hPlant.getAttribute("date_fin")
-    document.getElementById("divEditSerie").style.display = "inline"
-    }
-
 function allowDrop(event) {
     event.preventDefault()
     event.target.style.background="green"
@@ -454,7 +432,7 @@ function unfocus(event)
 
 {% endblock %}
 
-{% block title %}Suivi temporel des series sur les planches{% endblock %}
+{% block title %}Suivi des implantations des series sur les planches{% endblock %}
 
 {% block content %}
 {{s_msg}}
@@ -498,6 +476,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     id_variete="{{serie.variete.id}}" 
                                     id_espece="{{serie.variete.espece.id}}" 
                                     quantite="{{serie.quantite}}"
+                                    s_liste_planches = "{{serie.s_listeNomsPlanches}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
                                     nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intraRang_cm}}"
@@ -522,14 +501,14 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 
 	<div id="divEditSerie" style="display:none" class="BlueFrame" >
 		<h2 id="editSerie_titre"> </h2>
-		<p>
-		Série <input style="width:40px" type="text" id="editSerie_id_serie"   name="editSerie_id_serie" value="" />
-		Planche(s) N° <input style="width: 40px" type="text" id="editSerie_id_planche" name="editSerie_id_planche" value="0" /></p>
+		<p>Série <input style="width:40px" type="text" id="editSerie_id_serie" name="editSerie_id_serie" value="" /></p>
+		sur planche(s) <div style="display: inline" id="editSerie_liste_planches"> </div>
+		
         <p>Espèce : <select id="editSerie_id_espece" name="editSerie_id_espece" >
-                    {% for var in l_vars %}
-                    <option value="{{var.espece.id}}" id="{{var.espece.id}}" name="{{var.espece.id}}">{{var.espece.nom|title}}</option>
+                    {% for esp in l_especes %}
+                    <option value="{{esp.id}}" id="{{esp.id}}" name="{{esp.id}}">{{esp.nom|title}}</option>
                     {% endfor %}
-                  </select>
+                    </select>
         </p>        
         <p>Variété : <select id="editSerie_id_variete" name="editSerie_id_variete" >
                     {% for var in l_vars %}
@@ -537,7 +516,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                     {% endfor %}
                   </select>
         </p>
-        <p>Quantité :               <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
+        <p>Quantité totale toutes planches <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
         <p>Nb rangs :               <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
            Dans le rang (cm) :      <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
 	    <p>Début (jj/mm/aa) :       <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>

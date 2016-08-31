@@ -130,6 +130,9 @@ class Planche(models.Model):
     largeur_m = models.FloatField()
     bSerre = models.BooleanField(default=False)
     
+    class Meta: 
+        ordering = ['nom']
+        
     def surface_m2(self):
         return self.longueur_m * self.largeur_m
 
@@ -186,7 +189,7 @@ class Variete(models.Model):
 
     def plantsPourProdHebdo(self, productionDemandee):
         """ A REFAIRE retourne nb de plants en fonction de la prod escomptée (en kg ou en unité
-        pour les plantes donnant sur plusieurs semaines, on prend le rendement de la première semaine"""
+        pour les plantes donnaPositiveIntegerFieldnt sur plusieurs semaines, on prend le rendement de la première semaine"""
         print ("productionDemandee_kg", productionDemandee)
         print ("self.prod_hebdo_moy_g", self.prod_hebdo_moy_g)  
         if self.prod_hebdo_moy_g == "0":
@@ -240,7 +243,7 @@ class Implantation(models.Model):
     planche = models.ForeignKey("Planche")
 #     debut_m = models.FloatField("Début de la culture (m)", default=0)
 #     fin_m = models.FloatField("Début de la culture (m)", default=0)
-    quantite = models.FloatField("nombre de pieds", default=0) ## en attendant le placement plus précis...@todo
+    quantite = models.IntegerField("nombre de pieds", default=0) ## en attendant le placement plus précis...@todo
 
     def longueur_m(self):
         return self.fin_m - self.debut_m
@@ -412,16 +415,18 @@ class Serie(models.Model):
             return True
         else:
             return False
-        
+    
+    def s_listeNomsPlanches(self):
+        """retourne la liste des planches de la série"""
+        return str(",".join(impl.planche.nom for impl in self.implantations.all()))
          
     def __str__(self):       
-        s_planches = str(self.implantations.all().values_list("id", flat=True))
         return "%s %s (N°%d) sur planche(s) %s, quantité totale %d, intra-rang %d m x %d rangs (%s m2), du %s au %s" %(self.variete.espece.nom,
                                                                                                     self.variete.nom,
                                                                                                     self.id, 
                                                                                                     self.quantite,
-                                                                                                    s_planches,
-                                                                                                    self.intra_rang_m,
+                                                                                                    self.s_listePlanches(),
+                                                                                                    self.s_listeNomsPlanches(),
                                                                                                     self.nb_rangs,
                                                                                                     self.surfaceOccupee_m2(), 
                                                                                                     self.evt_debut.date,

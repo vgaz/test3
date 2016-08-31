@@ -50,7 +50,6 @@ def serveRequest(request):
             # gestion de la création ou édition d'une série de plants
             serie = creationEditionSerie(
                                 int(request.POST.get("id_serie")),
-                                ##Planche.objects.get(num=int(request.POST.get("num_planche"))).id, 
                                 int(request.POST.get("id_variete")), 
                                 int(request.POST.get("quantite")), 
                                 request.POST.get("intra_rang_cm")/100, 

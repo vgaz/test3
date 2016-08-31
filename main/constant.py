@@ -14,7 +14,7 @@ D_NOM_UNITE_PROD = { UNITE_PROD_KG:"Kg", UNITE_PROD_PIECE:"Pièce"}
 
 FORMAT_DATE = "%d/%m/%Y"
 
-NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP = "Planche virtuelle plein champ"
-NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS = "Planche virtuelle sous abris"
+NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP = "Virtuelle plein champ"
+NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS = "Virtuelle sous abris"
 LARGEUR_PLANCHES_VIRTUELLES = 1.2
 

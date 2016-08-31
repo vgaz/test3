@@ -127,7 +127,6 @@ class Command(BaseCommand):
                 
                 try:
                     v = Variete.objects.get(nom = s_variet)
-
                 except:
                     self.stdout.write("Ajout " + s_variet)
                     v = Variete()
