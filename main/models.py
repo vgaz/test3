@@ -86,8 +86,6 @@ def surfaceLibreSurPeriode(planche, date_debut, date_fin):
         
     libre_m2 = planche.surface_m2() - cumul_max_m2
     return libre_m2
-
-
     
 def quantitePourSurface(largeurPlanche, surfaceChoisie, nbRangs, intraRang_m):
     """ estimation de la quantité de pieds implantables sur une planche
@@ -95,8 +93,7 @@ def quantitePourSurface(largeurPlanche, surfaceChoisie, nbRangs, intraRang_m):
     return int(surfaceChoisie/largeurPlanche*nbRangs/intraRang_m)
 
 def surfacePourQuantite(largeurPlanche, quantite, nbRangs, intraRang_m):
-    """ estimation de la surface pour n de pieds implantables sur une planche
-    surface  =  (quantité XXXXXXXXXXXXXXxxurface / largeur) x nbRangs / intra """
+    """ estimation de la surface pour n de pieds implantables sur une planche """
     return int(quantite * intraRang_m / nbRangs * largeurPlanche)
 
 def cloneSerie(serie):
@@ -139,7 +136,7 @@ class Planche(models.Model):
     def __str__(self):
         if self.bSerre: s_lieu = "sous serre"
         else:           s_lieu = "plein champ"
-        return "%s (%d), %d m x %d m = %fm2; %s" % ( self.nom, self.id, 
+        return "%s (%d), %d m x %d m = %d m2; %s" % ( self.nom, self.id, 
                                                      self.longueur_m, 
                                                      self.largeur_m, 
                                                      self.surface_m2(), 

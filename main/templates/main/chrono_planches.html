@@ -3,12 +3,38 @@
 {% block javascript %}
 
 <style>
+
 #editeSerie_evts
 {
     text-align:left;
 
 }
 
+#idivEditSerie
+    {
+    display:none;
+    position:fixed;
+    top:20px;
+    padding:10px;
+    }
+    
+#divDeplacementImplantation
+    {
+    display:none;
+    position:fixed;
+    top:20px;
+    text-align:left;
+    padding:10px;
+    width: 600px;
+    height: 25 0px;
+    background: white;
+    color: black;
+    border: 5px solid brown;
+    border-radius:15px;
+    margin 0 auto 0 auto;    
+    z-index:3;
+    }  
+      
 #date_du_jour
 {
     position:absolute;
@@ -17,10 +43,7 @@
     border: 2px solid blue;   
 }
 
-.nouveau_plant
-{
-display:none;
-}
+
 
 .chrono_serie
     {
@@ -36,28 +59,22 @@ display:none;
 {
     background: red;
     position:absolute;
-    height:15px;
-}
-.suppr_planche
-{
-display:inline;
+    height:15px; 
+    display:inline;    
+
 }
 
-#divDeplacementImplantation
-    {
-    text-align:left;
-    padding:10px;
-    width: 400px;
-    height: 25 0px;
-    background: white;
-    color: black;
-    border: 5px solid brown;
-    border-radius:10px;
-    position:absolute;
-    display:none;
-    draggable:"true";
-    }  
-      
+.planche
+{
+    width: 90%;
+    border: 5px solid #20D626;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 20px;
+    background:#F0FFF0;
+}
+
+
 </style>
 
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
@@ -79,14 +96,14 @@ function    init()
     changelePas(0) // juste pour affichage 1 ere fois
 
     // nb px par jour en fonction des bornes , on ajoute 1 pour inclure le dernier jour plein 
-    pxParH = window.getComputedStyle(document.getElementsByClassName("cadre_chrono")[0]).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours')
+    pxParH = window.getComputedStyle(document.getElementsByClassName("planche")[0]).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours')
 
     balisageSeries()
     
     // ajout ligne date du jour
     delta_h = moment(date_du_jour).diff(moment(date_debut_vue), 'hours')
     
-    l_planches = document.getElementsByClassName("cadre_chrono")
+    l_planches = document.getElementsByClassName("planche")
     for (ii=0;ii<l_planches.length;ii++)
     	{
     	hBarreJour = l_planches[ii].getElementsByClassName("barre_du_jour")[0]
@@ -283,7 +300,7 @@ function prepareEditeSerie(id_serie)
     document.getElementById("divEditEvenement").style.display = "none"
     hDiv.style.display = "block"
     hDiv.style.position = "absolute"
-    hDiv.style.left = "10px"
+    hDiv.style.top = "20px"
     hDivSerie = document.getElementById(id_serie)
     hDiv.style.top = hDivSerie.offsetTop + 60 + "px" // 80 pour aller en dessous du div de serie
     document.getElementById("editSerie_id_serie").value = hDivSerie.getAttribute("id")
@@ -345,8 +362,7 @@ function prepareDeplacementImplantation(id_serie, id_implantation, id_plancheDes
     hDiv = document.getElementById("divDeplacementImplantation")
     hDiv.style.display = "block"
     hDivSerie = document.getElementById(id_serie)
-    hDiv.style.top = document.getElementById("pl__"+id_plancheDest).style.offsetTop + "px" // décalage pour aller sur la planche
-
+    //hDiv.style.top = "20px"
     document.getElementById("deplacement_id_serie").value = id_serie
     document.getElementById("deplacement_id_implantation").value = id_implantation
     //document.getElementById("deplacement_id_planche_orig").value =  hDivSerie.getAttribute("id_planche")
@@ -403,7 +419,8 @@ function  deplaceImplantation()
            
 function allowDrop(event) {
     event.preventDefault()
-    event.target.style.background="green"
+    if (event.target.className == "planche")
+        event.target.style.background = "green"
 }
 
 function dragStart(event) {
@@ -425,7 +442,7 @@ function drop(event) {
 
 function unfocus(event)
     {
-    if ( event.target.className == "droptarget" )
+    if ( event.target.className == "planche" )
         event.target.style.background='white'
     }
 </script>
@@ -451,20 +468,22 @@ Pour les planches   <input style="width: 300px" type="text" name="id_planches" v
 <input type="submit" name="direction" value="avance" />
 Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
 <button onclick="changelePas(-1);return(false)">-</button><button onclick="changelePas(1);return(false)">+</button>
-
+</form>
 <br/><br/>
     {% for planche in l_planches %}
 	<br/>
-    <div     class="cadre_chrono">
+    <div    class="planche"
+            id="pl__{{planche.id}}"
+            ondragover="allowDrop(event)"
+            ondragleave="unfocus(event)"
+            ondrop="drop(event)">
+        
         <div class="barre_du_jour"> </div>
    
-        <h2     id="pl__{{planche.id}}"
-                class="droptarget"
-                ondragover="allowDrop(event)"
-                ondragleave="unfocus(event)"
-                ondrop="drop(event)">
-            {{planche.nom}} ({{planche.id}})
-            <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie(this, {{planche.id}});return false"> 
+        <h2>{{planche}} ({{planche.id}})
+            <img    src="{{STATIC_URL}}images/plus.png" 
+                    title="Ajouter une série" 
+                    onclick="prepareAjouteSerie(this, {{planche.id}});return false"> 
         </h2>
 
         {# séries existantes en base #}
@@ -484,10 +503,10 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     draggable="true" ondragstart="dragStart(event)" >
 
             <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="série {{serie.id}}, {{serie.variete}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
-            <div style="display: inline;z-index:3;  ">(s {{serie.id}}, impl {{serie.implantationPlanche.id}}) </div>
-            <div class="variete" style="display: inline;z-index:3; ">{{serie.variete}} x {{serie.implantationPlanche.quantite}}</div>
-            <br/><a href="#" onclick="javascript:prepareEditeSerie({{serie.id}});return(false)">EDITER</a>
-            <a href="#" onclick="javascript:prepareDeplacementImplantation({{serie.id}});return(false)">DEPLACER</a><br/>
+            <div class="variete" style="display: inline;z-index:3; ">
+            (s {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.variete}} x {{serie.implantationPlanche.quantite}}
+            <img src='{{STATIC_URL}}images/editor.png' title='Editer' onclick="prepareEditeSerie({{serie.id}});return(false)">
+            </div>
             <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
             <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
             {% for evt in serie.evenements.all%}
@@ -499,63 +518,63 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     </div>
     {% endfor %}
 
-	<div id="divEditSerie" style="display:none" class="BlueFrame" >
-		<h2 id="editSerie_titre"> </h2>
-		<p>Série <input style="width:40px" type="text" id="editSerie_id_serie" name="editSerie_id_serie" value="" /></p>
-		sur planche(s) <div style="display: inline" id="editSerie_liste_planches"> </div>
-		
-        <p>Espèce : <select id="editSerie_id_espece" name="editSerie_id_espece" >
-                    {% for esp in l_especes %}
-                    <option value="{{esp.id}}" id="{{esp.id}}" name="{{esp.id}}">{{esp.nom|title}}</option>
-                    {% endfor %}
-                    </select>
-        </p>        
-        <p>Variété : <select id="editSerie_id_variete" name="editSerie_id_variete" >
-                    {% for var in l_vars %}
-                    <option value="{{var.id}}" id="{{var.id}}" name="{{var.id}}">{{var.nom|title}}</option>
-                    {% endfor %}
-                  </select>
-        </p>
-        <p>Quantité totale toutes planches <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
-        <p>Nb rangs :               <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
-           Dans le rang (cm) :      <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
-	    <p>Début (jj/mm/aa) :       <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
-	    <p>Fin (jj/mm/aa) ou vide : <input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
-	    <br/><b>Evenements</b><input type='button' value='+' onclick="ajouteEvenement()"/><br/>
-	    <div id="editeSerie_evts"> </div>
-	    <div id="divEditEvenement">
-	            <table>
-	            <input type="hidden" id="edit_evt_id" value=""/>
-	            <tr><td>Nom : <input type="text" value="" id="edit_evt_nom"/></td></tr>
-	            <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
-	            <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
-                <tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
-                <input type="button" value="Sauver" onclick="sauveEvenement()" /></td></tr>	            
-                </table>
-	    </div
-	    
-	    <hr/>
-        <input type='button' value='Supprimer' name='supprime' onclick="supprime_serie(document.getElementById('editSerie_id_serie').value)"/>
-        <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return False"/>
-	    <input type='button' value='Sauver' onclick="sauveSerie();return False" /><br/>
-	</div>
-    </form>
-    
-    <div id="divDeplacementImplantation">
-        <h3>Déplacement de la série <input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" />
-         implantation <input id="deplacement_id_implantation" value="" type="text" readonly style="width: 30px" /><br/>
-        </h3>
-        Quantité :                  <input id="deplacement_quantite"           value="" type="text" readonly style="width: 30px" /><br/>
-        vers la planche N°          <input id="deplacement_id_planche_dest"   value="" type="text"          style="width: 30px;margin-left: 10px"/><br/>
-        dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
-        Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
-        Déplacement partiel         <input id="deplacement_partiel"                     type="checkbox" />
-        Simulation                  <input id="deplacement_simulation"                  type="checkbox" />
-        <input type="submit" value="Déplacement" onclick="deplaceImplantation()" style="margin-left: 30px" />
-        <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divDeplacementImplantation').style.display='none';return False"/>
-        
-    </div>
-
 </div>
 
+<div id="divEditSerie" draggable='true' class="BlueFrame" >
+	<h2 id="editSerie_titre"> </h2>
+	<p>Série <input style="width:40px" type="text" id="editSerie_id_serie" name="editSerie_id_serie" value="" /></p>
+	sur planche(s) <div style="display: inline" id="editSerie_liste_planches"> </div>
+	
+    <p>Espèce : <select id="editSerie_id_espece" name="editSerie_id_espece" >
+                {% for esp in l_especes %}
+                <option value="{{esp.id}}" id="{{esp.id}}" name="{{esp.id}}">{{esp.nom|title}}</option>
+                {% endfor %}
+                </select>
+    </p>        
+    <p>Variété : <select id="editSerie_id_variete" name="editSerie_id_variete" >
+                {% for var in l_vars %}
+                <option value="{{var.id}}" id="{{var.id}}" name="{{var.id}}">{{var.nom|title}}</option>
+                {% endfor %}
+              </select>
+    </p>
+    <p>Quantité totale sur toutes planches <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
+    <p>Nb rangs :               <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
+       Dans le rang (cm) :      <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
+    <p>Début (jj/mm/aa) :       <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
+    <p>Fin (jj/mm/aa) ou vide : <input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
+    <br/><b>Evenements</b><input type='button' value='+' onclick="ajouteEvenement()"/><br/>
+    <div id="editeSerie_evts"> </div>
+    <div id="divEditEvenement">
+            <table>
+            <input type="hidden" id="edit_evt_id" value=""/>
+            <tr><td>Nom : <input type="text" value="" id="edit_evt_nom"/></td></tr>
+            <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
+            <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
+            <tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
+            <input type="button" value="Sauver" onclick="sauveEvenement()" /></td></tr>	            
+            </table>
+    </div
+    
+    <br /><br />
+    <input type='button' value='Supprimer' name='supprime' onclick="supprime_serie(document.getElementById('editSerie_id_serie').value)"/>
+    <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return False"/>
+    <input type='button' value='Sauver' onclick="sauveSerie();return False" /><br/>
+</div>
+	
+<div id="divDeplacementImplantation" draggable="true">
+    <h3>Déplacement de l'implantation <input id="deplacement_id_implantation" value="" type="text" readonly style="width: 30px;display:inline" />
+    série <input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" />
+     <br/>
+    </h3>
+    Quantité :                  <input id="deplacement_quantite"           value="" type="text"  style="width:40px;background-color:grey" /><br/>
+    vers la planche N°          <input id="deplacement_id_planche_dest"    value="" type="text"   readonly       style="width: 30px;margin-left: 10px"/><br/>
+    dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
+    Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
+    Déplacement partiel         <input id="deplacement_partiel"                     type="checkbox" />
+    Simulation                  <input id="deplacement_simulation"                  type="checkbox" />
+    <br/><br/>
+    <input type="submit" value="Déplacement" onclick="deplaceImplantation()" style="margin-left: 30px" />
+    <input type='button' value='Annuler' onclick="document.getElementById('divDeplacementImplantation').style.display='none';return False"/>
+    
+</div>
 {% endblock %}

@@ -13,6 +13,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         
         
+        impl = Implantation.objects.get(id=13)
+        s = impl.surface_m2()
+        print (s)
+        return
+    
 
         
         self.factory = RequestFactory()

@@ -41,29 +41,7 @@ body
     }
     
 
-#matrice { 
-    margin:0; 
-    padding:0; 
-    width: 100px;
-    height:100px; 
-    border-color:#20D626;
-    border-top-style: solid;
-    border-bottom-style: solid;
-    border-left-style: solid;
-    border-right-style: dotted;
-    border-width:5px; 
-    float:left;
-    }
 
-.cadre_chrono { 
-    width: 90%;
-    height: 80%; 
-    border: 5px solid #20D626;
-    margin-left: auto;
-    margin-right: auto;
- 	background:#F0FFF0;
-
-    }
 
 h1
 {
@@ -145,17 +123,17 @@ margin:10px;
 	padding:5px;
 }
 
-.displayInLine
-{
-    display: inline;
-}
-    
+  
 .BlueFrame, .YellowFrame, .GreenFrame, .RedFrame
 {
     background: #FFFFFF;
     color:#3F3F3F;
     border-radius:10px;
-    margin:10px;
+    margin:10px;.displayInLine
+{
+    display: inline;
+}
+  
     padding:10px;
     float: left;
 }

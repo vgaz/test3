@@ -154,17 +154,14 @@ def serveRequest(request):
 
 
     if cde == "deplacement_implantation":
-        ## deplacement d'une serie de plants d'une planche vers une autre
+        ## déplacement d'une serie de plants d'une planche vers une autre
         try:
             implantation = Implantation.objects.get(id=int(request.POST.get("id_implantation")))
+            planche_dest = Planche.objects.get(id=int(request.POST.get("id_planche_dest")))
             serie = implantation.serie()
-            if request.POST.get("partiel", "") == "true":
-                # nb de plants à déplacer
-                print ("demande de déplacement partiel")
             quantite = int(request.POST.get("quantite"))             
             nb_rangs = int(request.POST.get("nb_rangs", serie.nb_rangs))
             intra_rang_m = float(request.POST.get("intra_rang_cm", serie.intra_rang_m*100))/100
-            planche_dest = Planche.objects.get(id=int(request.POST.get("id_planche_dest")))
             b_simu = request.POST.get("simulation") == "true"
             dispoApresPlacement_m2 = surfaceLibreSurPeriode(planche_dest, serie.evt_debut.date, serie.evt_fin.date) - surfacePourQuantite(planche_dest.largeur_m, implantation.quantite, nb_rangs, intra_rang_m)
             if dispoApresPlacement_m2 < 0: ## pas assez de place
@@ -181,7 +178,6 @@ def serveRequest(request):
                     implantation.planche_id = planche_dest.id
                     implantation.save()               
                     rep = "Tous les plants ont été déplacés sur la planche %s"%planche_dest.nom
-
             else: 
                 if b_simu:
                     rep = "Résultat de simulation : pas assez de surface pour implantation totale, seulement %d pieds impantables sur planche %s."%(quantiteImplantable, planche_dest.nom)
@@ -196,7 +192,7 @@ def serveRequest(request):
                     ## maj surface restante surr implantation d'origine
                     implantation.quantite = quantiteNonDeplacable
                     implantation.save()
-                    rep = "série %d déplacé partiellement sur planche %s (reste %d m2 à placer ailleurs)"%(serie.id, planche_dest.nom, dispoApresPlacement_m2)
+                    rep = "Implantation déplacée partiellement sur planche %s (reste %d m2 à placer ailleurs)"%(serie.id, planche_dest.nom, dispoApresPlacement_m2)
 
             s_json = '{"status":true, "msg":"%s"}'%rep
         except:

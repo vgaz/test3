@@ -183,13 +183,11 @@ class Command(BaseCommand):
                     else:
                         implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP).id
                     ## on place toute la série sur cette implantation par défaut
-                    
                     implantation.quantite = serie.quantite
                     implantation.save()
-                    print(">>>>>>>>>>>>>>>>> ajout impl de base", implantation)
-                    
                     serie.implantations.add(implantation)
                     serie.save()
+                    print(">>>>>>>>>>>>>>>>> ajout impl de base", implantation)
 
                 except:
                     print(sys.exc_info()[1]) 

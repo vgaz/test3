@@ -104,7 +104,7 @@ def chronoPlanches(request):
                        "message":s_msg}
                       )
     ## juste pour test wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    l_planches = Planche.objects.filter(id__in=[1,2,3,4])
+    l_planches = Planche.objects.filter(id__in=[1,3,5,6,7])
     
     ## ajout des séries présente pour chaque planche
     for laPlanche in l_planches:
