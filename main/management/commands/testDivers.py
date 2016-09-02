@@ -13,11 +13,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         
         
-        impl = Implantation.objects.get(id=13)
-        s = impl.surface_m2()
-        print (s)
-        return
-    
+#         impl = Implantation.objects.get(id=13)
+#         s = impl.surface_m2()
+#         print (s)
+#         return
+#     
 
         
         self.factory = RequestFactory()
@@ -26,12 +26,11 @@ class Command(BaseCommand):
         # Create an instance of a POST request.
         request = self.factory.post('/chrono_planches/?nom_planches=', 
                                     data={  "cde":"deplacement_implantation",
-                                            "id_implantation":42,
-                                            "id_planche_dest":4,
+                                            "id_implantation":1,
+                                            "id_planche_dest":5,
+                                            "quantite":95,
                                             "nb_rangs":3,
-                                            "quantite":100,
                                             "intra_rang_cm":30,
-                                            "partiel":"",
                                             "simulation":""                            
                                         }
                                     )        

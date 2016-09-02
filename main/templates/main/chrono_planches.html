@@ -372,20 +372,6 @@ function prepareDeplacementImplantation(id_serie, id_implantation, id_plancheDes
     document.getElementById("deplacement_quantite").value = hDivSerie.getAttribute("quantite")
     }
 
-function testeDeplacementImplantation(id_serie, plancheDestId)
-    {
-    // tout se fait en aveugle comme si on editait à la main
-    hDivSerie = document.getElementById(id_serie)
-    document.getElementById("deplacement_id_serie").value = hDivSerie.getAttribute("id")
-    //document.getElementById("deplacement_id_planche_orig").value =  hDivSerie.getAttribute("id_planche")
-    document.getElementById("deplacement_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
-    document.getElementById("deplacement_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
-    document.getElementById("deplacement_quantite").value = hDivSerie.getAttribute("quantite")
-    document.getElementById("deplacement_id_planche_dest").value = plancheDestId
-    document.getElementById("deplacement_simulation").value = true
-    deplaceImplantation()
-    }
-
 
 function  deplaceImplantation()
     {
@@ -396,7 +382,6 @@ function  deplaceImplantation()
     s_request += "&quantite=" + document.getElementById("deplacement_quantite").value
     s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
     s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
-    s_request += "&partiel=" + document.getElementById("deplacement_partiel").checked
     b_simu = document.getElementById("deplacement_simulation").checked
     s_request += "&simulation=" + b_simu
     rep = requestServer(s_request)
@@ -410,7 +395,7 @@ function  deplaceImplantation()
     else
         {
         document.getElementById("divInfoDebug").innerHTML = jsonRep.err
-        alert ("Erreur : " + jsonRep.err)
+        alert(jsonRep.err)
         }
     }
                                      
@@ -566,12 +551,11 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     série <input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" />
      <br/>
     </h3>
-    Quantité :                  <input id="deplacement_quantite"           value="" type="text"  style="width:40px;background-color:grey" /><br/>
-    vers la planche N°          <input id="deplacement_id_planche_dest"    value="" type="text"   readonly       style="width: 30px;margin-left: 10px"/><br/>
-    dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
-    Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text"          style="margin-left: 10px;width: 30px"/><br/>
-    Déplacement partiel         <input id="deplacement_partiel"                     type="checkbox" />
-    Simulation                  <input id="deplacement_simulation"                  type="checkbox" />
+    Quantité :                  <input id="deplacement_quantite"           value="" type="text" style="width:40px;border: 5px solid brown" /><br/>
+    vers la planche N°          <input id="deplacement_id_planche_dest"    value="" type="text" readonly       style="width: 30px;margin-left: 10px"/><br/>
+    dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text" style="margin-left: 10px;width: 30px"/><br/>
+    Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text" style="margin-left: 10px;width: 30px"/><br/>
+    <br/>Simulation <input id="deplacement_simulation"                  type="checkbox" />
     <br/><br/>
     <input type="submit" value="Déplacement" onclick="deplaceImplantation()" style="margin-left: 30px" />
     <input type='button' value='Annuler' onclick="document.getElementById('divDeplacementImplantation').style.display='none';return False"/>

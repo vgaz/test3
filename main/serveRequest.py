@@ -159,44 +159,57 @@ def serveRequest(request):
             implantation = Implantation.objects.get(id=int(request.POST.get("id_implantation")))
             planche_dest = Planche.objects.get(id=int(request.POST.get("id_planche_dest")))
             serie = implantation.serie()
-            quantite = int(request.POST.get("quantite"))             
+            quantite = int(request.POST.get("quantite"))
+            assert quantite <= implantation.quantite, "quantité saisie à déplacer plus importante que la quantité de l'implantation"
+            if  implantation.quantite != quantite:
+                aConserverSurPlace = implantation.quantite - quantite
+            else:
+                aConserverSurPlace=0
+            
             nb_rangs = int(request.POST.get("nb_rangs", serie.nb_rangs))
             intra_rang_m = float(request.POST.get("intra_rang_cm", serie.intra_rang_m*100))/100
             b_simu = request.POST.get("simulation") == "true"
-            dispoApresPlacement_m2 = surfaceLibreSurPeriode(planche_dest, serie.evt_debut.date, serie.evt_fin.date) - surfacePourQuantite(planche_dest.largeur_m, implantation.quantite, nb_rangs, intra_rang_m)
-            if dispoApresPlacement_m2 < 0: ## pas assez de place
-                quantiteNonDeplacable = quantitePourSurface(planche_dest.largeur_m, abs(dispoApresPlacement_m2), nb_rangs, intra_rang_m)
-                quantiteImplantable = quantite - quantiteNonDeplacable
 
-            if dispoApresPlacement_m2 >= 0:
-                if b_simu:
-                    rep = "Résultat de simulation : tous les plants sont impantables sur la planche %s" % planche_dest.nom
+            dispoApresPlacement_m2 = surfaceLibreSurPeriode(planche_dest, serie.evt_debut.date, serie.evt_fin.date) - surfacePourQuantite(planche_dest.largeur_m, quantite, nb_rangs, intra_rang_m)
+            if dispoApresPlacement_m2 >= 0: ##  assez de place
+                quantiteNonDeplacable = 0
+                quantiteDeplacable = quantite
+            else:
+                quantiteNonDeplacable = quantitePourSurface(planche_dest.largeur_m, abs(dispoApresPlacement_m2), nb_rangs, intra_rang_m)
+                quantiteDeplacable = quantite - quantiteNonDeplacable
+
+            if b_simu:
+                if dispoApresPlacement_m2 >= 0 : ## toute la quantité demandée est déplaçable
+                    rep = "Résultat de simulation : tous les plants (%d) sont déplaçable sur la planche %s" % (quantiteDeplacable, planche_dest.nom)
                 else:
-                    ## si on peut tout transférer sur une seule planche, la série change de planche
-                    ## changement de planche
-                    print("changement complet de planche via l'implantation")
+                    rep = "Résultat de simulation : pas assez de surface pour un déplacement total, seulement %d pieds possibles sur la planche %s"%(quantiteDeplacable, planche_dest.nom)
+
+            else:
+                if dispoApresPlacement_m2 >= 0 and aConserverSurPlace == 0 :
+                    ## si on peut tout transférer sur une seule planche, l'implantation change de planche
                     implantation.planche_id = planche_dest.id
-                    implantation.save()               
+                    implantation.save()
                     rep = "Tous les plants ont été déplacés sur la planche %s"%planche_dest.nom
-            else: 
-                if b_simu:
-                    rep = "Résultat de simulation : pas assez de surface pour implantation totale, seulement %d pieds impantables sur planche %s."%(quantiteImplantable, planche_dest.nom)
+
                 else:
-                    ## sinon, on cree une nouvelle implantation sur la planche de destination
+                    ## sinon, on crée une nouvelle implantation sur la planche de destination  => quantite
                     nelleImpl = Implantation()
                     nelleImpl.planche_id = planche_dest.id
-                    nelleImpl.quantite = quantiteImplantable
+                    nelleImpl.quantite = quantiteDeplacable
                     nelleImpl.save()
                     serie.implantations.add(nelleImpl)
                     serie.save() 
-                    ## maj surface restante surr implantation d'origine
-                    implantation.quantite = quantiteNonDeplacable
+                    ## mise à jour implantation d'origine
+                    implantation.quantite = quantiteNonDeplacable + aConserverSurPlace
                     implantation.save()
-                    rep = "Implantation déplacée partiellement sur planche %s (reste %d m2 à placer ailleurs)"%(serie.id, planche_dest.nom, dispoApresPlacement_m2)
+                    rep = "Implantation déplacée partiellement sur planche %s (reste %d pieds sur implantation initiale)"%(planche_dest.nom, 
+                                                                                                                           implantation.quantite)
 
             s_json = '{"status":true, "msg":"%s"}'%rep
         except:
-            s_json = '{"status":false,"err":"%s"}'%sys.exc_info()[1]
+            s_err = "Erreur : " + str(sys.exc_info()[1])
+            print (s_err)
+            s_json = '{"status":false,"err":"%s"}'%s_err
            
         return HttpResponse(s_json)
 
