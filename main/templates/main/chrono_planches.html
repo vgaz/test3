@@ -10,7 +10,7 @@
 
 }
 
-#idivEditSerie
+#divEditSerie
     {
     display:none;
     position:fixed;
@@ -204,13 +204,14 @@ function majListEvts(id_serie)
 
     if (jsonRep.status == true)
         {
-        s_debut = ""
-        s_fin = ""
+     
         s_evts = '<table border="1" width="100%">\n'
         // récuperation de tous les evenements
         for(ii=0;ii<jsonRep.l_evts.length;ii++)
             {
-            d_evt = jsonRep.l_evts[ii].fields   
+            d_evt = jsonRep.l_evts[ii].fields  
+            if (d_evt.type != {{codeEvtDivers}})
+                continue // que les evt divers
             d_evt["pk"] =jsonRep.l_evts[ii].pk //la clé pk n'est pas dans les fields, on la rajoute        
             t_date = d_evt.date.split("T")[0].split("-")
             date = new Date(t_date[0],t_date[1],t_date[2])
@@ -222,7 +223,7 @@ function majListEvts(id_serie)
             s_evts += "<img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td></tr>"
             }
           
-        s_evts += s_debut + s_fin + "</table>\n"
+        s_evts +=  "</table>\n"
         document.getElementById("editeSerie_evts").innerHTML = s_evts
         }
     else
@@ -356,7 +357,7 @@ function sauveSerie()
         document.getElementById("divInfoDebug").innerHTML = jsonRep.err
 
     }
-function prepareDeplacementImplantation(id_serie, id_implantation, id_plancheDest)
+function prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
     {
     // boite de dialogue de confirmation de déplacement avant requete serveur
     hDiv = document.getElementById("divDeplacementImplantation")
@@ -365,11 +366,10 @@ function prepareDeplacementImplantation(id_serie, id_implantation, id_plancheDes
     //hDiv.style.top = "20px"
     document.getElementById("deplacement_id_serie").value = id_serie
     document.getElementById("deplacement_id_implantation").value = id_implantation
-    //document.getElementById("deplacement_id_planche_orig").value =  hDivSerie.getAttribute("id_planche")
     document.getElementById("deplacement_id_planche_dest").value = id_plancheDest
     document.getElementById("deplacement_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
     document.getElementById("deplacement_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
-    document.getElementById("deplacement_quantite").value = hDivSerie.getAttribute("quantite")
+    document.getElementById("deplacement_quantite").value = quantite_implantation
     }
 
 
@@ -410,19 +410,19 @@ function allowDrop(event) {
 
 function dragStart(event) {
     event.dataTransfer.setData("id_serieDeplacee", event.target.id);
-    id_implantation = document.getElementById(event.target.id).getAttribute("id_implantation")
-    event.dataTransfer.setData("id_implantation", id_implantation);
-    //alert("id serie a deplacer="+ event.target.id)
+    id_implantation = 
+    event.dataTransfer.setData("id_implantation",  document.getElementById(event.target.id).getAttribute("id_implantation"))
+    event.dataTransfer.setData("quantite_implantation", document.getElementById(event.target.id).getAttribute("quantite_implantation"))
 }
 
 function drop(event) {
     event.preventDefault();
     id_serie = event.dataTransfer.getData("id_serieDeplacee")
     id_implantation = event.dataTransfer.getData("id_implantation");
+    quantite_implantation = event.dataTransfer.getData("quantite_implantation");
     id_plancheDest = event.target.id.split("__")[1]
     //alert("serie" + id_serie + " "+ id_implantation + "dde de déplacement vers planche " + id_plancheDest)
-    //event.target.appendChild(document.getElementById(data));
-    prepareDeplacementImplantation(id_serie, id_implantation, id_plancheDest)
+    prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
     }
 
 function unfocus(event)
@@ -476,6 +476,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 
         <div class="chrono_serie"   id="{{serie.id}}"
                                     id_implantation="{{serie.implantationPlanche.id}}"
+                                    quantite_implantation="{{serie.implantationPlanche.quantite}}"
                                     nom_variete="{{serie.variete}}" 
                                     id_variete="{{serie.variete.id}}" 
                                     id_espece="{{serie.variete.espece.id}}" 

@@ -28,7 +28,7 @@ class Command(BaseCommand):
                                     data={  "cde":"deplacement_implantation",
                                             "id_implantation":1,
                                             "id_planche_dest":5,
-                                            "quantite":95,
+                                            "quantite":5,
                                             "nb_rangs":3,
                                             "intra_rang_cm":30,
                                             "simulation":""                            

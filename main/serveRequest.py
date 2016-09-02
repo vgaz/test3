@@ -157,8 +157,19 @@ def serveRequest(request):
         ## déplacement d'une serie de plants d'une planche vers une autre
         try:
             implantation = Implantation.objects.get(id=int(request.POST.get("id_implantation")))
-            planche_dest = Planche.objects.get(id=int(request.POST.get("id_planche_dest")))
+            id_planche_dest = int(request.POST.get("id_planche_dest"))
+            planche_dest = Planche.objects.get(id=id_planche_dest)
             serie = implantation.serie()
+            ## vérification que la planche de destination ne contient pas déjà une implantation de cette série
+            ## dans ce cas, absorbsion dans l'implantation dejà en place
+            l_implantationDejaLa = serie.implantations.filter(planche_id = id_planche_dest)
+            assert len(l_implantationDejaLa) <= 1, "plus d'une implantation deja en place sur la planche %s !!! "%planche_dest.nom
+            if len(l_implantationDejaLa) == 1:
+                implantationDejaLa = l_implantationDejaLa[0]
+            else:
+                implantationDejaLa = None
+            
+            
             quantite = int(request.POST.get("quantite"))
             assert quantite <= implantation.quantite, "quantité saisie à déplacer plus importante que la quantité de l'implantation"
             if  implantation.quantite != quantite:
@@ -186,24 +197,49 @@ def serveRequest(request):
 
             else:
                 if dispoApresPlacement_m2 >= 0 and aConserverSurPlace == 0 :
-                    ## si on peut tout transférer sur une seule planche, l'implantation change de planche
-                    implantation.planche_id = planche_dest.id
-                    implantation.save()
-                    rep = "Tous les plants ont été déplacés sur la planche %s"%planche_dest.nom
+                    ## si on peut et veut tout transférer sur une seule planche,
+                    if implantationDejaLa:
+                        ## l'implantation initiale dejà là absorbe l'arrivante
+                        implantationDejaLa.quantite += quantiteDeplacable
+                        implantationDejaLa.save()
+                        ## puis l'arrivante est détruite 
+                        rep = "Implantation %d totalement déplacée et absorbée par la %d sur planche %s"%(implantation.id,
+                                                                                                          implantationDejaLa.id,
+                                                                                                          planche_dest.nom   )
+                        implantation.delete()
+                        
+                    else:
+                        ##  l'implantation arrivante change de planche
+                        implantation.planche_id = planche_dest.id
+                        implantation.save()
+                        rep = "Tous les plants ont été déplacés sur la planche %s"%planche_dest.nom
 
-                else:
-                    ## sinon, on crée une nouvelle implantation sur la planche de destination  => quantite
-                    nelleImpl = Implantation()
-                    nelleImpl.planche_id = planche_dest.id
-                    nelleImpl.quantite = quantiteDeplacable
-                    nelleImpl.save()
-                    serie.implantations.add(nelleImpl)
-                    serie.save() 
-                    ## mise à jour implantation d'origine
-                    implantation.quantite = quantiteNonDeplacable + aConserverSurPlace
-                    implantation.save()
-                    rep = "Implantation déplacée partiellement sur planche %s (reste %d pieds sur implantation initiale)"%(planche_dest.nom, 
-                                                                                                                           implantation.quantite)
+                else:## déplacement partiel subi ou choisi
+                    if implantationDejaLa:
+                        ## l'implantation initiale dejà là absorbe l'arrivante sans suppression de cette dernière
+                        implantationDejaLa.quantite += quantiteDeplacable
+                        implantationDejaLa.save()
+                        implantation.quantite -= quantiteDeplacable
+                        implantation.save()
+                        rep = "Implantation %d (x%d) partiellement déplacée et absorbée par la %d (x%d) sur planche %s"%(implantation.id,
+                                                                                                                         implantation.quantite,
+                                                                                                                         implantationDejaLa.id,
+                                                                                                                         implantationDejaLa.quantite,
+                                                                                                                         planche_dest.nom )
+                                    
+                    else:
+                        ## sinon, on crée une nouvelle implantation sur la planche de destination  => quantite
+                        nelleImpl = Implantation()
+                        nelleImpl.planche_id = planche_dest.id
+                        nelleImpl.quantite = quantiteDeplacable
+                        nelleImpl.save()
+                        serie.implantations.add(nelleImpl)
+                        serie.save() 
+                        ## mise à jour implantation d'origine
+                        implantation.quantite = quantiteNonDeplacable + aConserverSurPlace
+                        implantation.save()
+                        rep = "Implantation déplacée partiellement sur planche %s (reste %d pieds sur implantation initiale)"%(planche_dest.nom, 
+                                                                                                                               implantation.quantite)
 
             s_json = '{"status":true, "msg":"%s"}'%rep
         except:
