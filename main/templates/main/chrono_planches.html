@@ -455,8 +455,10 @@ function unfocus(event)
 
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
-<input hidden type="text" id="mode" value="echelle" />
-Pour les planches   <input style="width: 300px" type="text" name="id_planches" value="{% for planche in l_planches %}{{planche.id}},{% endfor %}" />
+<input name="serres" type="checkbox" {% if selection_serres %}checked{% endif %} /> Serres 
+<input name="champs" type="checkbox" {% if selection_champs %}checked{% endif %} /> Champs 
+&nbsp;&nbsp;
+ Pour les planches   <input style="width: 300px" type="text" name="id_planches" value="{% for planche in l_planches %}{{planche.id}},{% endfor %}" />
  Visionnage du      <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
                     <input style="margin-left: 20px" type="submit" value="Envoyer" />
                     <input style="margin-left: 20px" type="submit" name="direction" value="recul" />
@@ -501,8 +503,6 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             (S {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.variete}} x {{serie.implantationPlanche.quantite}}
             <img src='{{STATIC_URL}}images/editor.png' title='Editer' onclick="prepareEditeSerie({{serie.id}});return(false)">
             </div>
-            <!-- div class="evt" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/ -->
-            <!-- div class="evt" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/ -->
             {% for evt in serie.evenements.all%}
                 <div class='evt' date="{{evt.date|date:'Y-m-d'}}" duree_j="{{evt.duree_j}}" nom="{{evt.nom}}" 
                         texte ="{{evt.texte}}" title="{{evt.nom}} le {{evt.date|date:'d/m/Y'}}" > </div>            

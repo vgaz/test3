@@ -89,13 +89,27 @@ def chronoPlanches(request):
         if request.POST.get("direction", "") == "recul":
             date_debut_vue -= delta 
             date_fin_vue -= delta
-            
-        s_noms = request.POST.get("nom_planches", request.GET.get("nom_planches", ""))
-        if s_noms:
-            l_noms = [int(num.strip()) for num in s_noms.strip(',').split(",")]
-            l_planches = Planche.objects.filter(num__in = l_noms).order_by('nom')
+        
+        
+        if not request.POST.get("date_debut_vue",""):
+            bSerres = True
+            bChamps = True
         else:
-            l_planches = Planche.objects.all().order_by('nom')
+            bSerres = request.POST.get("serres", )=="on"
+            bChamps = request.POST.get("champs", )=="on"
+        
+        if not bSerres and not bChamps: l_planches = Planche.objects.filter(id=0)
+        elif bSerres and not bChamps: l_planches = Planche.objects.filter(bSerre = True)
+        elif not bSerres and bChamps: l_planches = Planche.objects.filter(bSerre = False)
+        else: l_planches = Planche.objects.all()
+        
+        l_planches = l_planches.order_by('nom')
+        
+        s_id_planches = request.POST.get("id_planches", request.GET.get("id_planches", ""))
+#         if s_noms:
+#             l_noms = [int(num.strip()) for num in s_noms.strip(',').split(",")]
+#             l_planches = Planche.objects.filter(num__in = l_noms).order_by('nom')
+
     except:
         s_msg += str(sys.exc_info())
         return render(request, 'main/erreur.html',  
@@ -117,18 +131,20 @@ def chronoPlanches(request):
     return render(request,
                  'main/chrono_planches.html',
                  {
-                  "appVersion": constant.APP_VERSION,
-                  "appName": constant.APP_NAME,
-                  "l_planches": l_planches,
-                  "d_evtTypes": Evenement.D_NOM_TYPES,
-                  "codeEvtDivers":Evenement.TYPE_DIVERS,
-                  "l_especes": Espece.objects.all(),
-                  "l_vars": Variete.objects.all(),                  
-                  "date_debut_vue": date_debut_vue,
-                  "date_fin_vue": date_fin_vue,
-                  "date_du_jour": date_du_jour,
-                  "decalage_j": decalage_j,
-                  "s_msg":s_msg
+                    "appVersion": constant.APP_VERSION,
+                    "appName": constant.APP_NAME,
+                    "l_planches": l_planches,
+                    "selection_serres":bSerres,
+                    "selection_champs":bChamps,
+                    "d_evtTypes": Evenement.D_NOM_TYPES,
+                    "codeEvtDivers":Evenement.TYPE_DIVERS,
+                    "l_especes": Espece.objects.all(),
+                    "l_vars": Variete.objects.all(),                  
+                    "date_debut_vue": date_debut_vue,
+                    "date_fin_vue": date_fin_vue,
+                    "date_du_jour": date_du_jour,
+                    "decalage_j": decalage_j,
+                    "s_msg":s_msg
                   })
         
 
