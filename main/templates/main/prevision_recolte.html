@@ -61,7 +61,7 @@ function init()
         
         {% for var in l_vars %}
         <tr>
-            <td>{{var.nom}} <small>({{var.nomUniteProd}})</small></td>
+            <td>{{var.espece.nom|title}} {{var.nom}} <small>({{var.espece.nomUniteProd}})</small></td>
             
             {% for semaine in l_semaines %}
             <td><input style="width:100px;font-weight:bold;text-align: center" type="text" name="p__{{semaine.1|date:'Y-m-d'}}__{{var.id}}" id="p__{{semaine.1|date:'Y-m-d'}}__{{var.id}}"/></td>

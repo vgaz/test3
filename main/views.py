@@ -69,16 +69,16 @@ def chronoPlanches(request):
     try:    
         print(request.POST)
         s_msg = ""
-        delta20h = datetime.timedelta(hours=20)
+        delta12h = datetime.timedelta(hours=12)
         date_du_jour = datetime.datetime.now()
     
         if request.POST.get("date_debut_vue",""):
             date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
-            date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
+            date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta12h
         else:
             delta = datetime.timedelta(days=60)
             date_debut_vue = date_du_jour - delta
-            date_fin_vue = date_du_jour + delta + delta20h
+            date_fin_vue = date_du_jour + delta + delta12h
             
         decalage_j = int(request.POST.get("decalage_j", 10))
         delta = datetime.timedelta(days = decalage_j)
@@ -274,16 +274,18 @@ def prevision_recolte(request):
                                                  prod.qte_prod)
     tab_previsions += "]" 
 
-    ## calcul des productions à partir des séries dont la prodution est dans la fenetre étudiée
+    ## calcul des productions à partir des séries dont la production est dans la fenetre étudiée
     l_series = Serie.objects.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue)
-    
+    ## recherche des productions regroupées par variété
+    for var in Variete.objects.all():
+        pass
     return render(request,
                  'main/prevision_recolte.html',
                  {
                   "appVersion":constant.APP_VERSION,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
-                  "l_vars":Variete.objects.all(),
+                  "l_vars":Variete.objects.all().order_by("espece"),
                   "l_semaines":l_semaines,
                   "tab_previsions":tab_previsions,
                   "info":""

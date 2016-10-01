@@ -87,14 +87,14 @@ def surfaceLibreSurPeriode(planche, date_debut, date_fin):
     libre_m2 = planche.surface_m2() - cumul_max_m2
     return libre_m2
     
-def quantitePourSurface(largeurPlanche, surfaceChoisie, nbRangs, intraRang_m):
+def quantitePourSurface(largeurPlanche_m, surface_m2, nbRangs, intraRang_m):
     """ estimation de la quantité de pieds implantables sur une planche
     quantité  =  (surface / largeur) x nbRangs / intra """
-    return int(surfaceChoisie/largeurPlanche*nbRangs/intraRang_m)
+    return int(surface_m2 / largeurPlanche_m *nbRangs / intraRang_m)
 
-def surfacePourQuantite(largeurPlanche, quantite, nbRangs, intraRang_m):
+def surfacePourQuantite(largeurPlanche_m, quantite, nbRangs, intraRang_m):
     """ estimation de la surface pour n de pieds implantables sur une planche """
-    return int(quantite * intraRang_m / nbRangs * largeurPlanche)
+    return int(quantite * intraRang_m / nbRangs * largeurPlanche_m)
 
 def cloneSerie(serie):
     """clonage d'une série"""
@@ -147,8 +147,8 @@ class Espece(models.Model):
     """Espèce de légume"""
     nom = models.CharField(max_length=100)
     famille = models.ForeignKey(Famille, null=True, blank=True)
-    avec = models.ManyToManyField("self", related_name="avec", null=True, blank=True)
-    sans = models.ManyToManyField("self", related_name="sans", null=True, blank=True)
+    avec = models.ManyToManyField("self", related_name="avec", blank=True)
+    sans = models.ManyToManyField("self", related_name="sans", blank=True)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     rendementGermination = models.FloatField("Rendement germination)", default=1)
     
@@ -234,7 +234,7 @@ class Production(models.Model):
                                                              self.variete.nom, 
                                                              self.qte_dde, 
                                                              self.qte_prod, 
-                                                             self.variete.nomUniteProd())
+                                                             self.variete.espece.nomUniteProd())
 
 class Implantation(models.Model):
     planche = models.ForeignKey("Planche")
@@ -281,16 +281,11 @@ class SerieManager(models.Manager):
         else:
             l_series = Serie.objects.all()
             
-        l_series = l_series.distinct()
-
-        l_series = l_series.exclude(evt_debut__date__lt = date_debut,
-                                    evt_debut__date__gt = date_fin)
-        
-        
+        l_series = l_series.distinct() ## évite les séries reprises plusieurs fois car présentes sur plusieurs planches  
+        l_series = l_series.exclude(evt_debut__date__gt = date_fin)
+        l_series = l_series.exclude(evt_fin__date__lt = date_debut)
         return l_series
-    
 
-  
 
 class Evenement(models.Model):
     
@@ -415,19 +410,17 @@ class Serie(models.Model):
     
     def s_listeNomsPlanches(self):
         """retourne la liste des planches de la série"""
-        return str(",".join(impl.planche.nom for impl in self.implantations.all()))
+        return ",".join(impl.planche.nom for impl in self.implantations.all())
          
     def __str__(self):       
-        return "%s %s (N°%d) sur planche(s) %s, quantité totale %d, intra-rang %d m x %d rangs (%s m2), du %s au %s" %(self.variete.espece.nom,
+        return "%s %s (N°%d), quantité %d, %d m2 sur planche(s) [%s], du %s au %s" %(self.variete.espece.nom,
                                                                                                     self.variete.nom,
                                                                                                     self.id, 
                                                                                                     self.quantite,
-                                                                                                    self.s_listePlanches(),
-                                                                                                    self.s_listeNomsPlanches(),
-                                                                                                    self.nb_rangs,
                                                                                                     self.surfaceOccupee_m2(), 
-                                                                                                    self.evt_debut.date,
-                                                                                                    self.evt_fin.date)
+                                                                                                    self.s_listeNomsPlanches(),
+                                                                                                    MyTools.getDMYFromDate(self.evt_debut.date),
+                                                                                                    MyTools.getDMYFromDate(self.evt_fin.date))
 
 
 

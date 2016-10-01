@@ -17,45 +17,54 @@ class Command(BaseCommand):
 #         s = impl.surface_m2()
 #         print (s)
 #         return
+#
+#         S = 140
+#         q = quantitePourSurface(1, S, 3, 0.2)
+#         print(q)
+#         s = surfacePourQuantite(1, q, 3, 0.2)
+#         print (s)
+#         return 0
+#         
+#         self.factory = RequestFactory()
+#         
+# 
+#         # Create an instance of a POST request.
+#         request = self.factory.post('/chrono_planches/?nom_planches=', 
+#                                     data={  "cde":"deplacement_implantation",
+#                                             "id_implantation":1,
+#                                             "id_planche_dest":5,
+#                                             "quantite":5,
+#                                             "nb_rangs":3,
+#                                             "intra_rang_cm":30,
+#                                             "simulation":""                            
+#                                         }
+#                                     )        
+#         serveRequest.serveRequest(request)
+#         
+#         
+#         
+#         return
 #     
-
-        
-        self.factory = RequestFactory()
-        
-
-        # Create an instance of a POST request.
-        request = self.factory.post('/chrono_planches/?nom_planches=', 
-                                    data={  "cde":"deplacement_implantation",
-                                            "id_implantation":1,
-                                            "id_planche_dest":5,
-                                            "quantite":5,
-                                            "nb_rangs":3,
-                                            "intra_rang_cm":30,
-                                            "simulation":""                            
-                                        }
-                                    )        
-        serveRequest.serveRequest(request)
-        
-        
-        
-        return
-    
-    
-        for e in  Evenement.objects.all():
-            print (e)
-        return
-        date_debut_vue = MyTools.getDateFrom_d_m_y("1/1/2016")
-        date_fin_vue = MyTools.getDateFrom_d_m_y("1/9/2016")
+#     
+#         for e in  Evenement.objects.all():
+#             print (e)
+#         return
+        date_debut_vue = MyTools.getDateFrom_d_m_y("1/7/2016")
+        date_fin_vue = MyTools.getDateFrom_d_m_y("31/7/2016")
         la_date = MyTools.getDateFrom_d_m_y("14/03/2016")
 #         l_implantations = Implantation.objects.filter(planche_id = 2)
         planche = Planche.objects.get(id=1)
+        l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)
+        print(len(l_series))
+        for pl in l_series:
+            print (pl)
         
+        return
         l_series = Serie.objects.activesEnDateDu(la_date, planche)
         print("séries actives en date du", la_date, l_series.values_list("id",flat=True))
         
         return 
     
-        l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)
         print(l_series.values_list("id",flat=True))
         
         

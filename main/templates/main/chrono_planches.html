@@ -4,10 +4,22 @@
 
 <style>
 
+.divTitreSerie
+{
+    display:inline-block;
+    font-weight:bold;
+    z-index:3;
+}
+.divTitrePlanche
+{
+    display:inline-block;
+    color: black;
+    font-style:italic;
+    text-align:center;
+}
 #editeSerie_evts
 {
     text-align:left;
-
 }
 
 #divEditSerie
@@ -66,11 +78,11 @@
 
 .planche
 {
-    width: 90%;
+    width: 95%;
     border: 5px solid #20D626;
     margin-left: auto;
     margin-right: auto;
-    padding-top: 20px;
+    padding-top: 10px;
     background:#F0FFF0;
 }
 
@@ -248,15 +260,13 @@ function  balisageSeries()
         deltaHF = moment(fin).diff(moment(debut), "hours")
         l_series[ii].style.width = deltaHF * pxParH  + "px"
         
-        // décalages des évenements "divers"
+        // décalages des évenements
         l_evts = l_series[ii].getElementsByClassName("evt")
         for (jj=0;jj<l_evts.length;jj++)
             {
             deltaH = moment(l_evts[jj].getAttribute("date")).diff(moment(debut), 'hours')
-            //deltaPx = moment(l_evts[jj].getAttribute("date")) * pxParH
             l_evts[jj].style.left = deltaH * pxParH +"px"
             l_evts[jj].style.width = l_evts[jj].getAttribute("duree_j") * 24 * pxParH + "px"
-            //alert("evt " + jj + " ; " + l_evts[jj].getAttribute("date") + " " + l_evts[jj].getAttribute("nom") + " " + l_evts[jj].style.left )
             }
         }
     }
@@ -465,11 +475,9 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         
         <div class="barre_du_jour"> </div>
    
-        <h2>{{planche}} ({{planche.id}})
-            <img    src="{{STATIC_URL}}images/plus.png" 
-                    title="Ajouter une série" 
-                    onclick="prepareAjouteSerie(this, {{planche.id}});return false"> 
-        </h2>
+        <div class="divTitrePlanche">{{planche}} ({{planche.id}})
+            <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie(this, {{planche.id}});return false"> 
+        </div>
 
         {# séries existantes en base #}
         {% for serie in planche.l_series %}
@@ -486,15 +494,15 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
                                     nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intraRang_cm}}"
                                     style="border-color: {{serie.variete.couleur}}"
-                                    draggable="true" ondragstart="dragStart(event)" >
-
-            <img width="20" heigth="20" src="{{STATIC_URL}}images/Help.png" title="série {{serie.id}}, {{serie.variete}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"  />
-            <div class="variete" style="display: inline;z-index:3; ">
-            (s {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.variete}} x {{serie.implantationPlanche.quantite}}
+                                    draggable="true" ondragstart="dragStart(event)" 
+                                    title="Série {{serie.id}}, {{serie.variete}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"
+                                    >
+            <div class="divTitreSerie">
+            (S {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.variete}} x {{serie.implantationPlanche.quantite}}
             <img src='{{STATIC_URL}}images/editor.png' title='Editer' onclick="prepareEditeSerie({{serie.id}});return(false)">
             </div>
-            <div class="debut" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/>
-            <div class="fin" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/>
+            <!-- div class="evt" style="display: inline;float:left">{{serie.evt_debut.date|date:'d/m/Y'}}</div><br/ -->
+            <!-- div class="evt" style="display:inline;float:right">{{serie.evt_fin.date|date:'d/m/Y'}}</div><br/ -->
             {% for evt in serie.evenements.all%}
                 <div class='evt' date="{{evt.date|date:'Y-m-d'}}" duree_j="{{evt.duree_j}}" nom="{{evt.nom}}" 
                         texte ="{{evt.texte}}" title="{{evt.nom}} le {{evt.date|date:'d/m/Y'}}" > </div>            
