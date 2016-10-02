@@ -2,7 +2,7 @@
 import datetime
 from main.models import Production, Planche, Serie, Variete
 import main.Tools.MyTools as MyTools
-from main import constant
+from main import models
 
 #################################################
 
@@ -52,14 +52,13 @@ def planif(dateDebut, dateFin):
             ## on rajoute une série de plants
             nb_plants_a_installer = var.plantsPourProdHebdo(abs(reste))
             print ("Besoin de %d nouveaux plants"%(nb_plants_a_installer))
-            serie = creationEditionSerie(None,
-#                                   Planche.objects.get(num = constant.PLANCHE_VIRTUELLE_NUM).id,
-                                  var.id, 
-                                  nb_plants_a_installer, 
-                                  var.intra_rang_m, 
-                                  0, 
-                                  dateSemaine, 
-                                  date_fin)
+            serie = models.creationEditionSerie(  0,
+                                                  var.id,
+                                                  None,
+                                                  nb_plants_a_installer, 
+                                                  var.intra_rang_m, 
+                                                  1, 
+                                                  dateSemaine)
 
             serie.production_id = prod.id
             serie.save()

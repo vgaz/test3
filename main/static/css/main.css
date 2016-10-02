@@ -12,6 +12,12 @@ body
     float:left;
 }
 
+.divTitreSerie
+{
+    display:block;
+    font-weight:bold;
+    z-index:3;
+}
 
 .plant
     {

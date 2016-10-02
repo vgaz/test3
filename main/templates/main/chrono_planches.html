@@ -4,12 +4,7 @@
 
 <style>
 
-.divTitreSerie
-{
-    display:inline-block;
-    font-weight:bold;
-    z-index:3;
-}
+
 .divTitrePlanche
 {
     display:inline-block;
@@ -319,7 +314,9 @@ function prepareEditeSerie(id_serie)
     document.getElementById("editSerie_liste_planches").innerHTML =  hDivSerie.getAttribute("s_liste_planches")
     document.getElementById("editSerie_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
     document.getElementById("editSerie_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
-    document.getElementById("editSerie_quantite").value = hDivSerie.getAttribute("quantite")
+    document.getElementById("editSerie_id_implantation").value = hDivSerie.getAttribute("id_implantation")
+    document.getElementById("editSerie_quantite_implantation").value = hDivSerie.getAttribute("quantite_implantation")
+    document.getElementById("editSerie_quantite").innerHTML = hDivSerie.getAttribute("quantite")
     document.getElementById("editSerie_date_debut").value = hDivSerie.getAttribute("date_debut_f")
     document.getElementById("editSerie_date_fin").value = hDivSerie.getAttribute("date_fin_f")
     // maj espece
@@ -352,19 +349,17 @@ function sauveSerie()
     s_request += "&id_variete=" + document.getElementById("editSerie_id_variete").value
     s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
     s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
-    s_request += "&quantite=" + document.getElementById("editSerie_quantite").value
     s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
     s_request += "&date_fin=" + document.getElementById("editSerie_date_fin").value
+    s_request += "&id_implantation=" + document.getElementById("editSerie_id_implantation").value
+    s_request += "&quantite_implantation=" + document.getElementById("editSerie_quantite_implantation").value
 
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)
-    if (jsonRep.status == 'true')
-        {
-        alert(jsonRep.msg)
+    if (jsonRep.status == true)
         window.location.reload()
-        }
     else
-        document.getElementById("divInfoDebug").innerHTML = jsonRep.err
+        alert(jsonRep.err)
 
     }
 function prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
@@ -407,10 +402,7 @@ function  deplaceImplantation()
         document.getElementById("divInfoDebug").innerHTML = jsonRep.err
         alert(jsonRep.err)
         }
-    }
-                                     
-
-           
+    }   
            
 function allowDrop(event) {
     event.preventDefault()
@@ -420,7 +412,6 @@ function allowDrop(event) {
 
 function dragStart(event) {
     event.dataTransfer.setData("id_serieDeplacee", event.target.id);
-    id_implantation = 
     event.dataTransfer.setData("id_implantation",  document.getElementById(event.target.id).getAttribute("id_implantation"))
     event.dataTransfer.setData("quantite_implantation", document.getElementById(event.target.id).getAttribute("quantite_implantation"))
 }
@@ -431,7 +422,6 @@ function drop(event) {
     id_implantation = event.dataTransfer.getData("id_implantation");
     quantite_implantation = event.dataTransfer.getData("quantite_implantation");
     id_plancheDest = event.target.id.split("__")[1]
-    //alert("serie" + id_serie + " "+ id_implantation + "dde de déplacement vers planche " + id_plancheDest)
     prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
     }
 
@@ -451,8 +441,6 @@ function unfocus(event)
 
 <p id="divInfoDebug"> </p>
 
-<div id="main" style="text-align: center" >
-
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
 <input name="serres" type="checkbox" {% if selection_serres %}checked{% endif %} /> Serres 
@@ -466,9 +454,13 @@ function unfocus(event)
 Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
 <button onclick="changelePas(-1);return(false)">-</button><button onclick="changelePas(1);return(false)">+</button>
 </form>
+
+<div id="main" style="text-align: center" >
+
+
 <br/><br/>
     {% for planche in l_planches %}
-	<br/>
+
     <div    class="planche"
             id="pl__{{planche.id}}"
             ondragover="allowDrop(event)"
@@ -477,7 +469,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         
         <div class="barre_du_jour"> </div>
    
-        <div class="divTitrePlanche">{{planche}} ({{planche.id}})
+        <div class="divTitrePlanche">{{planche}}
             <img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie(this, {{planche.id}});return false"> 
         </div>
 
@@ -490,7 +482,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     nom_variete="{{serie.variete}}" 
                                     id_variete="{{serie.variete.id}}" 
                                     id_espece="{{serie.variete.espece.id}}" 
-                                    quantite="{{serie.quantite}}"
+                                    quantite="{{serie.quantiteTotale}}"
                                     s_liste_planches = "{{serie.s_listeNomsPlanches}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
@@ -526,17 +518,20 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                 </select>
     </p>        
     <p>Variété : <select id="editSerie_id_variete" name="editSerie_id_variete" >
-                {% for var in l_vars %}
-                <option value="{{var.id}}" id="{{var.id}}" name="{{var.id}}">{{var.nom|title}}</option>
-                {% endfor %}
-              </select>
+                 {% for var in l_vars %}
+                 <option value="{{var.id}}" id="{{var.id}}" name="{{var.id}}">{{var.nom|title}}</option>
+                 {% endfor %}
+                 </select>
     </p>
-    <p>Quantité totale sur toutes planches <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" /></p>
+    <input type="hidden" value="" id="editSerie_id_implantation" name="editSerie_id_implantation" />
+    <div>Quantité pour cette implantation <input style="width: 40px" type="text" value="" id="editSerie_quantite_implantation" name="editSerie_quantite_implantation" />
+         (<div id="editSerie_quantite" style="display:inline;"> </div> en tout)
+    </div>
     <p>Nb rangs :               <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
        Dans le rang (cm) :      <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
     <p>Début (jj/mm/aa) :       <input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
     <p>Fin (jj/mm/aa) ou vide : <input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
-    <br/><b>Evenements</b><input type='button' value='+' onclick="ajouteEvenement()"/><br/>
+    <br/><b>Evenements</b><input type='button' value='+' onclick="ajouteEvenement()" /><br/>
     <div id="editeSerie_evts"> </div>
     <div id="divEditEvenement">
             <table>
@@ -547,13 +542,15 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             <tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
             <input type="button" value="Sauver" onclick="sauveEvenement()" /></td></tr>	            
             </table>
-    </div
-    
+    </div>
     <br /><br />
     <input type='button' value='Supprimer' name='supprime' onclick="supprime_serie(document.getElementById('editSerie_id_serie').value)"/>
     <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return False"/>
-    <input type='button' value='Sauver' onclick="sauveSerie();return False" /><br/>
+    <input type='button' value='Sauver' onclick="sauveSerie();return False" />
+    <br/>
 </div>
+	
+	
 	
 <div id="divDeplacementImplantation" draggable="true">
     <h3>Déplacement de l'implantation <input id="deplacement_id_implantation" value="" type="text" readonly style="width: 30px;display:inline" />

@@ -51,18 +51,19 @@ def serveRequest(request):
             serie = creationEditionSerie(
                                 int(request.POST.get("id_serie")),
                                 int(request.POST.get("id_variete")), 
-                                int(request.POST.get("quantite")), 
-                                request.POST.get("intra_rang_cm")/100, 
+                                int(request.POST.get("id_implantation")), 
+                                int(request.POST.get("quantite_implantation")), 
+                                float(request.POST.get("intra_rang_cm"))/100, 
                                 int(request.POST.get("nb_rangs")), 
                                 request.POST.get("date_debut"), 
                                 request.POST.get("date_fin"))
             print(serie)
-            s_json = '{"status":"true","msg":"%s"}'%serie
+            s_json = '{"status":true,"msg":"%s"}'%serie
         except:
             ex_type, ex, tb = sys.exc_info()
             print (ex_type, ex)
             traceback.print_tb(tb)
-            s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
+            s_json = '{"status":false,"msg":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")
 

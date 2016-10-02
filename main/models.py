@@ -21,7 +21,14 @@ def creationEvt(e_date, e_type, nom="", duree_j=1):
     return evt
 
 
-def creationEditionSerie(id_serie, id_var, quantite, intra_rang_m, nb_rangs, date_debut, date_fin=None):
+def creationEditionSerie(id_serie, 
+                         id_var, 
+                         id_implantation, 
+                         quantite_implantation, 
+                         intra_rang_m, 
+                         nb_rangs, 
+                         date_debut, 
+                         date_fin=None):
     """Création ou edition d'une série de plants"""
     print(__name__)
     if id_serie == 0:
@@ -31,7 +38,12 @@ def creationEditionSerie(id_serie, id_var, quantite, intra_rang_m, nb_rangs, dat
     serie.variete_id = id_var
     serie.intra_rang_m = intra_rang_m
     serie.nb_rangs = nb_rangs
-    serie.quantite = quantite
+    try:
+        impl = serie.implantations.get(id=id_implantation)
+    except:
+        impl = Implantation()
+    impl.quantite = quantite_implantation
+    impl.save()
     serie.save()
     serie.fixeDates(date_debut, date_fin)
     return serie
@@ -330,7 +342,6 @@ class Serie(models.Model):
     intra_rang_m = models.FloatField("distance dans le rang (m)", default=0)
     bSerre = models.BooleanField(default=False)
     implantations = models.ManyToManyField(Implantation)
-    quantite = models.PositiveIntegerField(default=1)
     evenements = models.ManyToManyField(Evenement)
     evt_debut = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
@@ -373,7 +384,11 @@ class Serie(models.Model):
         
         return surface
     
-     
+    def quantiteTotale(self):
+        """cumul de toutes les quantités des implantations"""
+        qte = sum(self.implantations.all().values_list("quantite",flat=True))
+        return qte
+    
     def fixeDates(self, dateDebut, dateFin=None):
         """Crée les evts de début et fin de vie des plants en terre"""
         if isinstance(dateDebut, str): 
@@ -416,7 +431,7 @@ class Serie(models.Model):
         return "%s %s (N°%d), quantité %d, %d m2 sur planche(s) [%s], du %s au %s" %(self.variete.espece.nom,
                                                                                                     self.variete.nom,
                                                                                                     self.id, 
-                                                                                                    self.quantite,
+                                                                                                    self.quantiteTotale(),
                                                                                                     self.surfaceOccupee_m2(), 
                                                                                                     self.s_listeNomsPlanches(),
                                                                                                     MyTools.getDMYFromDate(self.evt_debut.date),
