@@ -395,12 +395,11 @@ function  deplaceImplantation()
     if (jsonRep.status == true)
         {
         alert(jsonRep.msg)
-        window.location.reload()
         }
     else
         {
-        document.getElementById("divInfoDebug").innerHTML = jsonRep.err
-        alert(jsonRep.err)
+        document.getElementById("divInfoDebug").innerHTML = jsonRep.msg
+        alert(jsonRep.msg)
         }
     }   
            

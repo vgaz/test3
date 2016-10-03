@@ -172,7 +172,7 @@ def serveRequest(request):
             
             
             quantite = int(request.POST.get("quantite"))
-            assert quantite <= implantation.quantite, "quantité saisie à déplacer plus importante que la quantité de l'implantation"
+            assert quantite <= implantation.quantite, "Demande de quantité à déplacer (%d) plus importante que la quantité de l'implantation(%d)"%(quantite, implantation.quantite)
             if  implantation.quantite != quantite:
                 aConserverSurPlace = implantation.quantite - quantite
             else:
@@ -192,9 +192,11 @@ def serveRequest(request):
 
             if b_simu:
                 if dispoApresPlacement_m2 >= 0 : ## toute la quantité demandée est déplaçable
-                    rep = "Résultat de simulation : tous les plants (%d) sont déplaçable sur la planche %s" % (quantiteDeplacable, planche_dest.nom)
+                    rep = "Les %d plants sont tous déplaçables sur la planche %s" % (quantiteDeplacable, planche_dest.nom)
                 else:
-                    rep = "Résultat de simulation : pas assez de surface pour un déplacement total, seulement %d pieds possibles sur la planche %s"%(quantiteDeplacable, planche_dest.nom)
+                    rep = "Il n'y a pas assez de place pour un déplacement total, seulement %d plants sur %d sont déplaçables sur la planche %s"%(quantiteDeplacable, 
+                                                                                                                                                   quantite,
+                                                                                                                                                   planche_dest.nom)
 
             else:
                 if dispoApresPlacement_m2 >= 0 and aConserverSurPlace == 0 :
@@ -215,7 +217,7 @@ def serveRequest(request):
                         implantation.save()
                         rep = "Tous les plants ont été déplacés sur la planche %s"%planche_dest.nom
 
-                else:## déplacement partiel subi ou choisi
+                else:   ## déplacement partiel subi ou choisi
                     if implantationDejaLa:
                         ## l'implantation initiale dejà là absorbe l'arrivante sans suppression de cette dernière
                         implantationDejaLa.quantite += quantiteDeplacable
@@ -229,7 +231,7 @@ def serveRequest(request):
                                                                                                                          planche_dest.nom )
                                     
                     else:
-                        ## sinon, on crée une nouvelle implantation sur la planche de destination  => quantite
+                        ## Création d'une nouvelle implantation sur la planche de destination  => quantite
                         nelleImpl = Implantation()
                         nelleImpl.planche_id = planche_dest.id
                         nelleImpl.quantite = quantiteDeplacable
@@ -239,14 +241,14 @@ def serveRequest(request):
                         ## mise à jour implantation d'origine
                         implantation.quantite = quantiteNonDeplacable + aConserverSurPlace
                         implantation.save()
-                        rep = "Implantation déplacée partiellement sur planche %s (reste %d pieds sur implantation initiale)"%(planche_dest.nom, 
+                        rep = "Implantation déplacée partiellement sur planche %s (reste %d pieds sur l'implantation initiale)"%(planche_dest.nom, 
                                                                                                                                implantation.quantite)
 
             s_json = '{"status":true, "msg":"%s"}'%rep
         except:
             s_err = "Erreur : " + str(sys.exc_info()[1])
             print (s_err)
-            s_json = '{"status":false,"err":"%s"}'%s_err
+            s_json = '{"status":false,"msg":"%s"}'%s_err
            
         return HttpResponse(s_json)
 
