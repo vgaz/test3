@@ -23,21 +23,27 @@
     <tr><td></td><td><input type="submit" value="Sauver" /></td></tr>
     </table>
     </form>
-Les planches seront en PREFIXE_N° (numérotées en partant du numéro fourni)
+Les planches seront en X_PREFIXE_N°  C ou S (numérotées en partant du numéro fourni)
 </div>
 
 <div class="BlueFrame"> 
-<h2>Liste des numéros de planches déjà attribuées</h2>
+<h2>Planches déjà créées</h2>
     <table style="text-align: left; width: 100%;" border="1" cellpadding="2">
-    <tr><th>ID planche</th><th>info</th></tr>
+    <tr><th>Planche</th><th>Action</th></tr>
     {% for planche in l_planches %}
-        <tr><td><b>{{planche.id}}</b></td>
+        <tr>
             <td>{{planche}}</td>
-            <td><a href="#" onclick="javascript:supprime_planche({{planche.id}});return false;">
-                <img  src="{{STATIC_URL}}images/toDelete.jpeg" 
+            <td>
+                
+                <a href="#" onclick="edite_planche({{planche.id}});return false;"
+                ><img  src="{{STATIC_URL}}images/editor.png" 
+                          title="Editer la planche"
+                          style="online" ></a>
+                <a href="#" onclick="supprime_planche({{planche.id}});return false;"
+                ><img  src="{{STATIC_URL}}images/toDelete.jpeg" 
                           title="supprimer la planche et toutes les séries qu'elle accueille"
-                          style="online" >
-                </a>
+                          style="online" ></a>
+                
             </td>
         </tr/>
     {% endfor %}    

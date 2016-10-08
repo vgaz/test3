@@ -33,19 +33,20 @@ def creationPlanches(request):
     """gestion de la requete de post """
     s_msg = "Création planche "
     if request.POST:
+        
         quantite = int(request.POST.get("quantite", 0))        
         numPl = int(request.POST.get("num_prem"))           
         s_msg = ""
         for index in range(numPl, numPl + quantite):
             bSerre = request.POST.get("bSerre") == "on"
             if bSerre : 
-                prefixe = "S_"
+                champOuSerre = "S"
             else:
-                prefixe = "C_"
+                champOuSerre = "C"
             pl = creationPlanche(int(request.POST.get("longueur_m")), 
                                  int(request.POST.get("largeur_cm"))/100, 
                                  bSerre,
-                                 s_nom = "%s%s%s"%(prefixe,
+                                 s_nom = "%s_%s_%s"%(champOuSerre,
                                                    request.POST.get("prefixe", "PL"),
                                                    str(index) )
                                  )
