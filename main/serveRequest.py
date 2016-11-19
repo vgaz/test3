@@ -17,6 +17,23 @@ def serveRequest(request):
     """Received a request and return specific response"""
     cde = request.POST.get("cde","")
     print(request.POST)
+
+# 
+#     if cde == "checkUrl": 
+#         ## retour des évenements d'une série)
+#         try:
+#             url = request.POST.get("url")
+#             s_json = '{"status":true, "l_evts": %s}'%rep
+#             print(s_json)
+#         except:
+#             print(__name__ + ': ' + str(sys.exc_info()[1]) )
+#             traceback.print_tb(sys.exc_info())
+#             s_json = '{"status":false,"err":"%s"}'%(sys.exc_info()[1])
+#              
+#         return HttpResponse(s_json, content_type="application/json")
+
+
+
     
     if cde == "get_evts_serie": 
         ## retour des évenements d'une série)

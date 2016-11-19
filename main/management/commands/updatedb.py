@@ -5,8 +5,6 @@ import datetime
 from django.core.management.base import BaseCommand
 from main.models import *
 
-from main import constant
-
 import sys
    
 class Command(BaseCommand):
@@ -99,6 +97,9 @@ class Command(BaseCommand):
                         
                         ## maj famille de l'espèce
                         esp.famille_id = famille.id
+                        bStockable = d_line.get("stockable","")
+                        assert bStockable, "pas de valeur 'stockable' pour espèce : %s"%(nomEspece)
+                        esp.bStockable = bStockable
                         esp.save()
 
                     unite = d_line.get("Unité","").lower().strip()
@@ -120,6 +121,9 @@ class Command(BaseCommand):
                 s_espece = d_line.get("Légume", "").lower().strip()
                 s_variet = d_line.get("Variété", "").lower().strip()
                 s_dateEnTerre = d_line.get("Date en terre","")
+                if not s_dateEnTerre:
+                    logging.error("Pas de date en terre définie pour %s %s "%(s_espece, s_variet))
+                    continue
                 
                 if not s_espece or not s_variet:
                     print ("Ignore", d_line)
@@ -134,6 +138,7 @@ class Command(BaseCommand):
                 v.nom = s_variet
                 espece = Espece.objects.get(nom=s_espece) 
                 v.espece_id = espece.id
+                v.bStokable = bStockable
                 v.save()
                 print(v)
                 

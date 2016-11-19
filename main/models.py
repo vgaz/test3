@@ -29,7 +29,9 @@ def creationEditionSerie(id_serie,
                          nb_rangs, 
                          date_debut, 
                          date_fin=None):
-    """Création ou edition d'une série de plants"""
+    """Création ou edition d'une série de plants
+    si id_serie == 0, c'est une demande de création, sinon , d'édition/modification
+    """
     print(__name__)
     if id_serie == 0:
         serie = Serie() ## nelle serie
@@ -172,22 +174,25 @@ class Espece(models.Model):
  
     def nomUniteProd(self):
         return constant.D_NOM_UNITE_PROD[self.unite_prod]
+    
+
 
 
 class Variete(models.Model):
     """variété de légume"""
     nom = models.CharField(max_length=100)    
-    espece = models.ForeignKey(Espece, null=True, blank=True)
+    espece = models.ForeignKey(Espece, related_name="varietes", related_query_name="variete", null=True, blank=True)
     prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)
     rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
     intra_rang_m = models.FloatField("distance dans le rang (m)", default=10)
     couleur = models.CharField(max_length=16)
-    date_min_plantation_pc = models.CharField(verbose_name="date (jj/mm) de début de plantation en plein champ", max_length=10, default="0/0")
-    date_max_plantation_pc = models.CharField(verbose_name="date (jj/mm) de fin de plantation en plein champ", max_length=10, default="0/0")
-    date_min_plantation_sa = models.CharField(verbose_name="date (jj/mm) de début de plantation sous abris", max_length=10, default="0/0")
-    date_max_plantation_sa = models.CharField(verbose_name="date (jj/mm) de fin de plantation sous abris", max_length=10, default="0/0")
+#     date_min_plantation_pc = models.CharField(verbose_name="date (jj/mm) de début de plantation en plein champ", max_length=10, default="0/0")
+#     date_max_plantation_pc = models.CharField(verbose_name="date (jj/mm) de fin de plantation en plein champ", max_length=10, default="0/0")
+#     date_min_plantation_sa = models.CharField(verbose_name="date (jj/mm) de début de plantation sous abris", max_length=10, default="0/0")
+#     date_max_plantation_sa = models.CharField(verbose_name="date (jj/mm) de fin de plantation sous abris", max_length=10, default="0/0")
     duree_avant_recolte_pc_j = models.IntegerField("durée plein champ avant récolte (jours)", default=0)
     duree_avant_recolte_sa_j = models.IntegerField("durée en serre avant récolte (jours)", default=0)
+    bStokable = models.BooleanField(default=False)
     
     class Meta:
         ordering = ['nom']
@@ -230,23 +235,23 @@ class Variete(models.Model):
 
   
 
-class Production(models.Model):
-    """Prévision hebdomadaire des productions pour une variété"""
-    variete = models.ForeignKey(Variete)
-    date_semaine = models.DateField("date de début de semaine")
-    qte_dde = models.PositiveIntegerField("quantité demandée", default=0)
-    qte_prod = models.PositiveIntegerField("quantité produite", default=0)
-    
-
-    class Meta: 
-        ordering = ["date_semaine"]
-            
-    def __str__(self):
-        return "semaine du %s : %s : dde=%d prod=%d (%s)"%(  self.date_semaine, 
-                                                             self.variete.nom, 
-                                                             self.qte_dde, 
-                                                             self.qte_prod, 
-                                                             self.variete.espece.nomUniteProd())
+# class Production(models.Model):
+#     """Prévision hebdomadaire des productions pour une variété"""
+#     variete = models.ForeignKey(Variete)
+#     date_semaine = models.DateField("date de début de semaine")
+#     qte_dde = models.PositiveIntegerField("quantité demandée", default=0)
+#     qte_prod = models.PositiveIntegerField("quantité produite", default=0)
+#     
+# 
+#     class Meta: 
+#         ordering = ["date_semaine"]
+#             
+#     def __str__(self):
+#         return "semaine du %s : %s : dde=%d prod=%d (%s)"%(  self.date_semaine, 
+#                                                              self.variete.nom, 
+#                                                              self.qte_dde, 
+#                                                              self.qte_prod, 
+#                                                              self.variete.espece.nomUniteProd())
 
 class Implantation(models.Model):
     planche = models.ForeignKey("Planche")

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-from main.models import Production, Planche, Serie, Variete
+from main.models import Planche, Serie, Variete
 import main.Tools.MyTools as MyTools
 from main import models
 

@@ -109,3 +109,51 @@ function supprime_planche(plId)
     if (jsonRep.status != 'true')
         alert(jsonRep.err)
     }
+    
+function prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
+    {
+    // boite de dialogue de confirmation de déplacement avant requete serveur
+    hDiv = document.getElementById("divDeplacementImplantation")
+    //hDiv.style.display = "block"
+    hDivSerie = document.getElementById(id_serie)
+    document.getElementById("deplacement_id_serie").value = id_serie
+    document.getElementById("deplacement_id_implantation").value = id_implantation
+    document.getElementById("deplacement_id_planche_dest").value = id_plancheDest
+    document.getElementById("deplacement_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
+    document.getElementById("deplacement_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
+    document.getElementById("deplacement_quantite").value = quantite_implantation
+    deplaceImplantation()
+    }
+
+  
+  
+function  deplaceImplantation()
+    {
+    // déplacement d'une implantation vers une autre planche 
+    s_request = "cde=deplacement_implantation&id_serie=" + document.getElementById("deplacement_id_serie").value
+    s_request += "&id_implantation=" + document.getElementById("deplacement_id_implantation").value
+    s_request += "&id_planche_dest=" + document.getElementById("deplacement_id_planche_dest").value
+    s_request += "&quantite=" + document.getElementById("deplacement_quantite").value
+    s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
+    s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
+
+    rep = requestServer(s_request + "&simulation=true")
+    jsonRep = JSON.parse(rep)
+    document.getElementById("divDeplacementImplantation").style.display = "none"
+    
+    if (jsonRep.status == true)
+        {
+        if (confirm(jsonRep.msg +  "\n\nVoulez-vous continuer et effectuer l'opération ?"))
+            {
+            rep = requestServer(s_request + "&simulation=false")
+            jsonRep = JSON.parse(rep)
+            alert(jsonRep.msg)
+            window.location.reload()
+            }
+        }        
+    else
+        {
+        document.getElementById("divInfoDebug").innerHTML = jsonRep.msg
+        alert(jsonRep.msg)
+        }
+    }     
