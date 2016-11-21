@@ -160,45 +160,61 @@ class Planche(models.Model):
 class Espece(models.Model):
     """Espèce de légume"""
     nom = models.CharField(max_length=100)
+    varietes = models.ManyToManyField("Variete")
     famille = models.ForeignKey(Famille, null=True, blank=True)
     avec = models.ManyToManyField("self", related_name="avec", blank=True)
     sans = models.ManyToManyField("self", related_name="sans", blank=True)
-    unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
-    rendementGermination = models.FloatField("Rendement germination)", default=1)
+    bStokable = models.BooleanField(default=False)
     
     class Meta:
         ordering = ['nom']
-        
+          
+    def intra_rang_cm(self):
+        return int(self.intra_rang_m * 100)                    
+ 
+    def inter_rang_cm(self):
+        return int(self.inter_rang_m * 100)               
+ 
     def __str__(self):
         return self.nom                    
  
     def nomUniteProd(self):
         return constant.D_NOM_UNITE_PROD[self.unite_prod]
-    
-
 
 
 class Variete(models.Model):
-    """variété de légume"""
-    nom = models.CharField(max_length=100)    
-    espece = models.ForeignKey(Espece, related_name="varietes", related_query_name="variete", null=True, blank=True)
+    """Variété"""
+    nom = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.nom
+      
+class Legume(models.Model):
+    """légume"""
+    espece = models.ForeignKey(Espece)
+    variete = models.ForeignKey(Variete)
     prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)
+    unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
+    intra_rang_m = models.FloatField("distance conseillée dans le rang (m)", default=0)
+    inter_rang_m = models.FloatField("distance conseillée entre les rangs (m)", default=0)
     rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
-    intra_rang_m = models.FloatField("distance dans le rang (m)", default=10)
+    rendementProduction_kg_m2 = models.FloatField("Rendement de production kg/m2)", default=1)
+    rendementGermination = models.FloatField("Rendement germination", default=1)
+    poidsParPiece_kg = models.FloatField("Poids estimé par pièce (g)", default=0)  ## sera optionnel si unite_prod = kg
+    
+
     couleur = models.CharField(max_length=16)
-#     date_min_plantation_pc = models.CharField(verbose_name="date (jj/mm) de début de plantation en plein champ", max_length=10, default="0/0")
-#     date_max_plantation_pc = models.CharField(verbose_name="date (jj/mm) de fin de plantation en plein champ", max_length=10, default="0/0")
-#     date_min_plantation_sa = models.CharField(verbose_name="date (jj/mm) de début de plantation sous abris", max_length=10, default="0/0")
-#     date_max_plantation_sa = models.CharField(verbose_name="date (jj/mm) de fin de plantation sous abris", max_length=10, default="0/0")
     duree_avant_recolte_pc_j = models.IntegerField("durée plein champ avant récolte (jours)", default=0)
     duree_avant_recolte_sa_j = models.IntegerField("durée en serre avant récolte (jours)", default=0)
-    bStokable = models.BooleanField(default=False)
     
     class Meta:
-        ordering = ['nom']
+        ordering = ['espece', 'variete']
             
     def __str__(self):
         return "%s %s"%(self.espece.nom, self.nom) 
+
+    def nom(self):
+        return "%s %s"%(self.espece.nom, self.variete.nom) 
 
 
     def plantsPourProdHebdo(self, productionDemandee):
@@ -212,7 +228,8 @@ class Variete(models.Model):
         
 #         if self.unite_prod == constant.UNITE_PROD_PIECE:
 #             return productionDemandee
-#         
+#            d_line.get("bStockable", "
+ 
         ret =  int( (float(productionDemandee) * 1000) / float(self.prod_hebdo_moy_g.split(",")[0])  )
         print (ret)
         return (ret)
@@ -235,6 +252,7 @@ class Variete(models.Model):
 
   
 
+
 # class Production(models.Model):
 #     """Prévision hebdomadaire des productions pour une variété"""
 #     variete = models.ForeignKey(Variete)
@@ -242,7 +260,8 @@ class Variete(models.Model):
 #     qte_dde = models.PositiveIntegerField("quantité demandée", default=0)
 #     qte_prod = models.PositiveIntegerField("quantité produite", default=0)
 #     
-# 
+#     d_line.get("bStockable", "
+
 #     class Meta: 
 #         ordering = ["date_semaine"]
 #             
@@ -305,7 +324,6 @@ class SerieManager(models.Manager):
 
 
 class Evenement(models.Model):
-    
     TYPE_DEBUT = 1
     TYPE_FIN = 2
     TYPE_DIVERS = 3
@@ -339,7 +357,7 @@ class Serie(models.Model):
     class Meta:
         verbose_name = "Série de plants"
 
-    variete = models.ForeignKey(Variete)
+    legume = models.ForeignKey(Legume)
     dureeAvantDebutRecolte_j = models.IntegerField("durée min avant début de récolte (jours)", default=0)
     etalementRecolte_seriej = models.IntegerField("durée étalement possible de la récolte (jours)", default=0)
 

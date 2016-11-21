@@ -391,31 +391,32 @@ def prevision_recolte(request):
 
 def tab_varietes(request):
     s_info = ""
-    l_vars = []
     try:
-        l_vars = Variete.objects.all().order_by("espece")
+        l_legumes = Legume.objects.all()
         if request.POST:
-            for v in l_vars:
-                s_pk = "v_%s_"% str(v.pk)
+            for leg in l_legumes:
+                s_pk = "leg_%s_"% str(leg.pk)
                 print(s_pk)
-                v.prod_kg_par_m2 = float(request.POST.get(s_pk + "prod_kg_par_m2",0))
-                v.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent",100))
-                v.intra_rang_m = request.POST.get(s_pk + "intra_rang_cm",10)/100
-                v.save()
-      
-    
-#         for v in l_vars:
-#             v.nomUniteProd = constant.D_NOM_UNITE_PROD[v.unite_prod]
-#     
+                leg.prod_kg_par_m2 = float(request.POST.get(s_pk + "prod_kg_par_m2",0))
+                leg.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent",100))
+                leg.intra_rang_m = float(request.POST.get(s_pk + "intra_rang_cm", 0)/100)
+                leg.inter_rang_m = float(request.POST.get(s_pk + "inter_rang_cm", 0)/100)
+                leg.save()
+        
+        l_fams = Famille.objects.all()
+        for fam in l_fams:
+            l_esp = Espece.objects.filter(famille_id = fam.id)
+            fam.l_especes = l_esp
+
     except:
         s_info += str(sys.exc_info()[1])
         
     return render(request,
                  'main/tab_varietes.html',
                  {
-                  "l_vars":l_vars,
-                  "l_fams":Famille.objects.all(),
                   "appVersion":constant.APP_VERSION,
+                  "l_legumes":l_legumes,
+                  "l_fams":l_fams,
                   "info":s_info
                   })
     

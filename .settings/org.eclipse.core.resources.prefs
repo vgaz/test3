@@ -19,5 +19,4 @@ encoding//main/serveRequest.py=utf-8
 encoding//main/settings.py=utf-8
 encoding//main/views.py=utf-8
 encoding/fabfile.py=utf-8
-encoding/planning.csv=ISO-8859-1
 encoding/production.csv=ISO-8859-1

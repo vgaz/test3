@@ -66,14 +66,13 @@ class Command(BaseCommand):
         ## maj base de légumes
         l_fams = Famille.objects.all().values_list("nom", flat=True)
         print ("l_fams ", l_fams)
-        l_fams_sup = []
 
         ## maj espèces et familles
         ficname = "production.csv"
         with open(ficname, "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
             for d_line in reader:
-                nomEspece = d_line.get("Légume").lower().strip()
+                nomEspece = d_line.get("Espèce").lower().strip()
                 if nomEspece:
                     try:
                         ## déjà presente
@@ -97,56 +96,91 @@ class Command(BaseCommand):
                         
                         ## maj famille de l'espèce
                         esp.famille_id = famille.id
-                        bStockable = d_line.get("stockable","")
-                        assert bStockable, "pas de valeur 'stockable' pour espèce : %s"%(nomEspece)
-                        esp.bStockable = bStockable
-                        esp.save()
 
-                    unite = d_line.get("Unité","").lower().strip()
-                    if not unite:
-                        print("pas d'unité pour", esp.nom)
-                    if unite == "kg":
-                        esp.unite_prod = constant.UNITE_PROD_KG
-                    else:
-                        esp.unite_prod = constant.UNITE_PROD_PIECE
-                    esp.save()      
+                        esp.save()
+                    
+                    ## recup infos
+                    try: 
+                        s_stockable = d_line.get("stockable","")
+                        assert s_stockable, "pas de valeur 'stockable' pour espèce : %s"%(nomEspece)
+                        esp.bStockable = s_stockable == "oui"
+                        esp.save()
+                    except:
+                        logging.error(sys.exc_info()[1])
+                        continue                                
  
 
-        ## maj espèces, variétés et séries
+        ## maj variétés et séries
         ficname = "planning.csv"
         with open(ficname, "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
             for d_line in reader:
                 ## une ligne par série
-                s_espece = d_line.get("Légume", "").lower().strip()
+                s_espece = d_line.get("Espèce", "").lower().strip()
+                espece = Espece.objects.get(nom=s_espece) 
+
                 s_variet = d_line.get("Variété", "").lower().strip()
-                s_dateEnTerre = d_line.get("Date en terre","")
-                if not s_dateEnTerre:
-                    logging.error("Pas de date en terre définie pour %s %s "%(s_espece, s_variet))
-                    continue
                 
                 if not s_espece or not s_variet:
                     print ("Ignore", d_line)
                     continue
                 
+                ## mise à jour liste des variétés
                 try:
-                    v = Variete.objects.get(nom = s_variet)
+                    var = Variete.objects.get(nom = s_variet)
+                except:
+                    logging.info("Ajout " + s_variet)
+                    var = Variete()
+                    var.nom = s_variet
+                    var.save()
+                    espece.varietes.add(var)
+                    espece.save()
+                    continue    
+                        
+                ## mise à jour liste des légumes
+                try:
+                    leg = Legume.objects.get(espece_id = espece.id, variete_id = var.id)
                 except:
                     self.stdout.write("Ajout " + s_variet)
-                    v = Variete()
-                
-                v.nom = s_variet
-                espece = Espece.objects.get(nom=s_espece) 
-                v.espece_id = espece.id
-                v.bStokable = bStockable
-                v.save()
-                print(v)
+                    leg = Legume()
+                    leg.espece_id = espece.id
+                    leg.variete_id = var.id
+                    leg.save()
+            
+                ## recup infos
+                try: 
+                    s_dateEnTerre = d_line.get("Date en terre","")
+                    assert s_dateEnTerre, "Pas de date en terre définie pour %s %s "%(s_espece, s_variet)
+                    
+                    s_rendement = d_line.get("Rendement (kg/m²)","")  
+                    assert s_rendement, "'Rendement (kg/m²)' indéfini pour %s"%(nomEspece)            
+                    leg.rendementProduction_kg_m2 = float(s_rendement)
+                    
+                    s_poidsParPiece = d_line.get("Poids estimé par pièce (g)", "0")
+                    leg.poidsParPiece_kg = float(s_poidsParPiece)/1000
+                     
+                    s_intraRang = d_line.get("Intra rang (cm)","")
+                    assert s_intraRang, "Pas d'intra Rang défini pour %s"%(nomEspece)            
+                    leg.intra_rang_m = float(s_intraRang)/100
+                    
+                    s_interRang = d_line.get("Inter rang (cm)","")
+                    assert s_interRang, "Pas d'interRang défini pour %s"%(nomEspece)
+                    leg.inter_rang_m = float(s_interRang)/100
+                    
+                    s_unite = d_line.get("Unité","").lower().strip()
+                    assert s_unite, "Pas d'interRang défini pour %s"%(nomEspece)
+                    if s_unite == "kg":
+                        leg.unite_prod = constant.UNITE_PROD_KG
+                    else:
+                        leg.unite_prod = constant.UNITE_PROD_PIECE
+
+                    leg.save()
+                        
+                except:
+                    logging.error(sys.exc_info()[1])
+                    continue                    
                 
                 ## maj série
-                if not s_dateEnTerre:
-                    print ("Ignore ligne date en terre absente", d_line)
-                    continue
-
                 try:
                     dateEnTerre = datetime.datetime.strptime(s_dateEnTerre, constant.FORMAT_DATE)
                     serie = Serie.objects.get(evenements__type = Evenement.TYPE_DEBUT,
@@ -156,7 +190,7 @@ class Command(BaseCommand):
                 except:
                     ## nouvelle série
                     serie = Serie()
-                    serie.variete = v
+                    serie.legume = leg
                     serie.save()
                     
                 try:
@@ -192,101 +226,11 @@ class Command(BaseCommand):
                     implantation.save()
                     serie.implantations.add(implantation)
                     serie.save()
-                    print(">>>>>>>>>>>>>>>>> ajout impl de base", implantation)
+                    logging.info("ajout implantation de base %s", str(implantation))
 
                 except:
                     print(sys.exc_info()[1]) 
                     continue
-# 
-#         
-#         ficname = "Legumes.csv"
-#         with open(ficname, "r+t", encoding="utf-8") as hF:
-#             reader = csv.DictReader(hF)
-#             for d_line in reader:
-#                 variet = d_line.get("variete", "").lower()
-#                 try:
-#                     v = Variete.objects.get(nom = variet)
-#                 except:
-#                     self.stdout.write("Ajout " + variet)
-#                     v = Variete()
-#                     v.nom = variet
-# 
-#                 v.date_min_plantation_pc = d_line.get("date_min_plantation_pc")
-#                 v.date_max_plantation_pc = d_line.get("date_max_plantation_pc")
-#                 v.duree_avant_recolte_pc_j = int(d_line.get("duree_avant_recolte_pc_j") or 0 )
-#                 v.date_min_plantation_sa = d_line.get("date_min_plantation_sa")
-#                 v.date_max_plantation_sa = d_line.get("date_max_plantation_sa")
-#                 v.duree_avant_recolte_sa_j = int(d_line.get("duree_avant_recolte_sa_j") or 0 )
-#                 v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
-#                 v.prod_hebdo_moy_g = d_line.get("prod_hebdo_moy_g")
-#                 v.couleur = d_line.get("couleur","green")
-#                 
-#                 if d_line.get("unite_prod") == 'u': 
-#                     v.unite_prod = constant.UNITE_PROD_PIECE
-#                 else:
-#                     v.unite_prod = constant.UNITE_PROD_KG
-#                      
-#                 v.save()
-# 
-#                 try:
-#                     fam = d_line.get("famille","").lower().strip()
-#                     if fam and fam not in l_fams and fam not in l_fams_sup:
-#                         print("ajout famille %s"%fam)
-#                         hFam = Famille()
-#                         hFam.nom = fam
-#                         hFam.save()
-#                         l_fams_sup.append(fam)
-#                 
-#                     if not v.famille:
-#                         v.famille = Famille.objects.get(nom=fam)
-#                         v.save()
-#                         print("maj %s / %s"%(v.nom, v.famille.nom))
-#                         
-#                 except:
-#                     print("pb, pas de famille accessible pour %s dans le fichier %s" %(variet, ficname))
-#                 
-#         ## mise à jour associations
-#         l_variets = Variete.objects.all().values_list("nom", flat=True)
-#         l_variets_sup = []
-#         reader = csv.DictReader(open("associationsPlantes.csv", "r+t", encoding="utf-8"))
-#         for d_line in reader:
-#             
-#             variet = d_line.get("variete").lower()
-#             
-#             try:
-#                 s_tmp = d_line.get("avec","").lower()
-#                 l_varAvec = [va.strip() for va in s_tmp.split(",") if va]
-#             except:
-#                 l_varAvec = []
-#                 
-#             try:
-#                 s_tmp = d_line.get("sans","").lower()
-#                 l_varSans = [va.strip() for va in s_tmp.split(",") if va]
-#             except:
-#                 l_varSans = []
-# 
-#             l_ajoutSiBesoin = []
-#             l_ajoutSiBesoin.append(variet)
-#             l_ajoutSiBesoin.extend(l_varAvec)
-#             l_ajoutSiBesoin.extend(l_varSans)
-#             
-#             for _v in set(l_ajoutSiBesoin):
-#                 if _v and _v not in l_variets and _v not in l_variets_sup:
-#                     v = Variete()
-#                     v.nom = _v
-#                     v.save()
-#                     l_variets_sup.append(_v)
-#                     print("ajout variété" , v.nom)
-# 
-#             v = Variete.objects.get(nom = variet)
-#             v.b_choisi = False
-#             ## mise à jour des variétés qui peuvent ou pas aller avec celle-ci
-#             for var in l_varAvec:
-#                 v.avec.add(Variete.objects.get( nom = var ))
-#             for var in l_varSans:
-#                 v.sans.add(Variete.objects.get( nom = var ))
-# 
-#             v.save()
 
         print("end of command " + self.__doc__)  
         

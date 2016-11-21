@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Les variétés et familles{% endblock %}
+{% block title %}Légumes, espèces et variétés{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">function  init() {}</script>
+{% endblock %}
 
 {% block content %}
 
@@ -10,41 +14,45 @@
 {% csrf_token %}
 
 {{info}}
-<h2>Variétés</h2><hr />
-{% for var in l_vars %}
+<h2>Légumes</h2><hr />
+{% for leg in l_legumes %}
  
       <table>
           <tr>
           {% if var.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
-          <td><h2>{{var.espece.nom|title}} {{var.nom|title}}</h2>
-            <p>{{var.espece.famille.nom|title}}</p>
+          <td><h2>{{leg.espece.nom|title}} {{leg.variete.nom|title}}</h2>
+            <p>{{leg.espece.famille.nom|title}}</p>
+            
+            <!-- 
             Plantation possible du
-            <input style="width:40px" type="text" name="v_{{var.pk}}_date_min_plantation_pc" value="{{var.date_min_plantation_pc}}" />
+            <input style="width:40px" type="text" name="v_{{var.pk}}_date_min_plantation_pc" value="{{leg.variete.date_min_plantation_pc}}" />
             au
-            <input style="width:40px" type="text" name="v_{{var.pk}}_date_max_plantation_pc" value="{{var.date_min_plantation_pc}}" />
+            <input style="width:40px" type="text" name="v_{{leg.variete.pk}}_date_max_plantation_pc" value="{{leg.variete.date_min_plantation_pc}}" />
             en plein champ <br />
             Plantation possible du
-            <input style="width:40px" type="text" name="v_{{var.pk}}_date_min_plantation_sa" value="{{var.date_min_plantation_sa}}" />
+            <input style="width:40px" type="text" name="v_{{leg.variete.pk}}_date_min_plantation_sa" value="{{leg.variete.date_min_plantation_sa}}" />
             au
-            <input style="width:40px" type="text" name="v_{{var.pk}}_date_max_plantation_sa" value="{{var.date_max_plantation_sa}}" />
+            <input style="width:40px" type="text" name="v_{{leg.variete.pk}}_date_max_plantation_sa" value="{{leg.variete.date_max_plantation_sa}}" />
             sous abris<br />
-            Durée de pousse avant récolte plein champ (jours) : <input style="width: 40px" type="text" name="v_{{var.pk}}_duree_avant_recolte_pc_j" value="{{var.duree_avant_recolte_pc_j}}" /> <br/>
-            Durée de pousse avant récolte sous abris (jours) : <input style="width: 40px" type="text" name="v_{{var.pk}}_duree_avant_recolte_sa_j" value="{{var.duree_avant_recolte_sa_j}}" /> <br/>
-            Distance dans le rang (cm) : <input style="width:40px" type="text" name="v_{{var.pk}}_intra_rang_cm" value="{{var.espece.intra_rang_m}}" /> <br/>
-            Unité de comptage : <input style="width: 40px" type="text" name="v_{{var.pk}}_nomUniteProd" value="{{var.espece.nomUniteProd}}" /><br/>
-            Rendement plants/graines (%):  <input style="width:40px" type="text" name="v_{{var.pk}}_rendement_plants_graines_pourcent" value="{{var.rendement_plants_graines_pourcent}}" /> <br/>
-            Production kg/m2 <input style="width: 40px" type="text" name="v_{{var.pk}}_prod_kg_par_m2" value="{{var.prod_kg_par_m2}}" /> <br/>
+            Durée de pousse avant récolte plein champ (jours) : <input style="width: 40px" type="text" name="v_{{leg.pk}}_duree_avant_recolte_pc_j" value="{{leg.duree_avant_recolte_pc_j}}" /> <br/>
+            Durée de pousse avant récolte sous abris (jours) : <input style="width: 40px" type="text" name="v_{{leg.pk}}_duree_avant_recolte_sa_j" value="{{leg.duree_avant_recolte_sa_j}}" /> <br/>
+            -->
+            Distance conseillée dans le rang (cm) : <input style="width:40px" type="text" name="v_{{leg.pk}}_intra_rang_cm" value="{{leg.intra_rang_cm}}" /> <br/>
+            Distance conseillée entre les rangs (cm) : <input style="width:40px" type="text" name="v_{{leg.pk}}_inter_rang_cm" value="{{leg.inter_rang_cm}}" /> <br/>
+            Unité de comptage : <input style="width: 40px" type="text" name="v_{{leg.pk}}_nomUniteProd" value="{{leg.nomUniteProd}}" /><br/>
+            Rendement plants/graines (%):  <input style="width:40px" type="text" name="v_{{leg.pk}}_rendement_plants_graines_pourcent" value="{{leg.rendement_plants_graines_pourcent}}" /> <br/>
+            Rendement estimé (kg/m2) <input style="width: 40px" type="text" name="v_{{leg.pk}}_prod_kg_par_m2" value="{{leg.rendementProduction_kg_m2}}" /> <br/>
             </td>
           </tr>
           <tr>
               
           </tr>
       </table>
-      {% if var.avec.distinct %} <img src="{{ STATIC_URL }}images/smileyOK.jpg" width="32px" height="32px"  title="Avec"/> 
-      {% for varAvec in var.avec.distinct %}{{varAvec.nom|title}}, {% endfor %} <br/>
+      {% if leg.espece.avec.distinct %} <img src="{{ STATIC_URL }}images/smileyOK.jpg" width="32px" height="32px"  title="Avec"/> 
+      {% for varAvec in leg.espece.avec.distinct %}{{varAvec.nom|title}}, {% endfor %} <br/>
       {% endif %}
-      {% if var.sans.distinct %} <img src="{{ STATIC_URL }}images/smileyKO.jpg" width="32px" height="32px"  title="Sans"/>
-      {% for varSans in var.sans.distinct %}{{varSans.nom|title}}, {% endfor %} <br/>
+      {% if leg.espece.sans.distinct %} <img src="{{ STATIC_URL }}images/smileyKO.jpg" width="32px" height="32px"  title="Sans"/>
+      {% for varSans in leg.espece.sans.distinct %}{{varSans.nom|title}}, {% endfor %} <br/>
       {% endif %}
 	<input style="margin-left: 20px" type="submit" value="Sauver"/>
 	<hr />
@@ -58,10 +66,8 @@
 {% for f in l_fams %}
   <li><b>{{f.nom|title}}</b>
 	<ul>
-	{% for var in l_vars %}
-	   {% if var.espece.famille.pk == f.pk %} 
-	   <li>{{var.espece.nom|title}} {{var.nom}}</li> 
-	   {% endif %}
+	{% for esp in f.l_especes %}
+	   <li>{{esp.nom|title}}</li>
 	{% endfor %}
 	</ul>
   
