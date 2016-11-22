@@ -164,7 +164,12 @@ class Espece(models.Model):
     famille = models.ForeignKey(Famille, null=True, blank=True)
     avec = models.ManyToManyField("self", related_name="avec", blank=True)
     sans = models.ManyToManyField("self", related_name="sans", blank=True)
+    intra_rang_m = models.FloatField("distance conseillée dans le rang (m)", default=0)
+    inter_rang_m = models.FloatField("distance conseillée entre les rangs (m)", default=0)    
+    rendementProduction_kg_m2 = models.FloatField("Rendement de production kg/m2)", default=1)
+    unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     bStokable = models.BooleanField(default=False)
+    
     
     class Meta:
         ordering = ['nom']
@@ -194,18 +199,12 @@ class Legume(models.Model):
     espece = models.ForeignKey(Espece)
     variete = models.ForeignKey(Variete)
     prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)
-    unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
-    intra_rang_m = models.FloatField("distance conseillée dans le rang (m)", default=0)
-    inter_rang_m = models.FloatField("distance conseillée entre les rangs (m)", default=0)
     rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
-    rendementProduction_kg_m2 = models.FloatField("Rendement de production kg/m2)", default=1)
     rendementGermination = models.FloatField("Rendement germination", default=1)
     poidsParPiece_kg = models.FloatField("Poids estimé par pièce (g)", default=0)  ## sera optionnel si unite_prod = kg
-    
-
     couleur = models.CharField(max_length=16)
-    duree_avant_recolte_pc_j = models.IntegerField("durée plein champ avant récolte (jours)", default=0)
-    duree_avant_recolte_sa_j = models.IntegerField("durée en serre avant récolte (jours)", default=0)
+#     duree_avant_recolte_pc_j = models.IntegerField("durée plein champ avant récolte (jours)", default=0)
+#     duree_avant_recolte_sa_j = models.IntegerField("durée en serre avant récolte (jours)", default=0)
     
     class Meta:
         ordering = ['espece', 'variete']
@@ -228,7 +227,7 @@ class Legume(models.Model):
         
 #         if self.unite_prod == constant.UNITE_PROD_PIECE:
 #             return productionDemandee
-#            d_line.get("bStockable", "
+#            d_lines_espece.get("bStockable", "
  
         ret =  int( (float(productionDemandee) * 1000) / float(self.prod_hebdo_moy_g.split(",")[0])  )
         print (ret)
@@ -376,11 +375,11 @@ class Serie(models.Model):
     
     def prodEstimee_kg(self):
         """Retourne le poids (kg) de production escomptée""" 
-        return self.variete.prod_kg_par_m2 * self.surfaceOccupee_m2()
+        return self.legume.prod_kg_par_m2 * self.surfaceOccupee_m2()
     
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
-        return(self.quantite * self.variete.rendement_plants_graines_pourcent / 100)
+        return(self.quantite * self.legume.rendement_plants_graines_pourcent / 100)
 
     def longueurSurPlanche_m(self, intra_rang_m=None, nb_rangs=None):
         """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
@@ -417,8 +416,7 @@ class Serie(models.Model):
         if isinstance(dateDebut, str): 
             dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
             
-        evt_debut = creationEvt(dateDebut, Evenement.TYPE_DEBUT, "début %s %s"%(self.variete.espece.nom,
-                                                                                self.variete.nom))
+        evt_debut = creationEvt(dateDebut, Evenement.TYPE_DEBUT, "début de %s"%(self.legume.nom()))
         self.evenements.add(evt_debut)
         self.evt_debut_id = evt_debut.id
 
@@ -428,13 +426,13 @@ class Serie(models.Model):
         if isinstance(dateFin, str): 
             dateFin = MyTools.getDateFrom_d_m_y(dateFin)
             
-        evt_fin = creationEvt(dateFin, Evenement.TYPE_FIN, "fin %s %s"%(self.variete.espece.nom, self.variete.nom))       
+        evt_fin = creationEvt(dateFin, Evenement.TYPE_FIN, "fin %s"%(self.legume.nom()))       
         self.evt_fin_id = evt_fin.id
         self.evenements.add(evt_fin)
         
         ## ajout evt de début de récolte
         dateRecolte = evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j)
-        evt_recolte = creationEvt(dateRecolte, Evenement.TYPE_DIVERS, "Récolte %s %s"%(self.variete.espece.nom, self.variete.nom))       
+        evt_recolte = creationEvt(dateRecolte, Evenement.TYPE_DIVERS, "Récolte %s"%(self.legume.nom()))       
         self.evenements.add(evt_recolte)
         
         self.save()
@@ -451,14 +449,13 @@ class Serie(models.Model):
         return ",".join(impl.planche.nom for impl in self.implantations.all())
          
     def __str__(self):       
-        return "%s %s (N°%d), quantité %d, %d m2 sur planche(s) [%s], du %s au %s" %(self.variete.espece.nom,
-                                                                                                    self.variete.nom,
-                                                                                                    self.id, 
-                                                                                                    self.quantiteTotale(),
-                                                                                                    self.surfaceOccupee_m2(), 
-                                                                                                    self.s_listeNomsPlanches(),
-                                                                                                    MyTools.getDMYFromDate(self.evt_debut.date),
-                                                                                                    MyTools.getDMYFromDate(self.evt_fin.date))
+        return "%s %s (N°%d), quantité %d, %d m2 sur planche(s) [%s], du %s au %s" %(self.legume.nom(),
+                                                                                    self.id, 
+                                                                                    self.quantiteTotale(),
+                                                                                    self.surfaceOccupee_m2(), 
+                                                                                    self.s_listeNomsPlanches(),
+                                                                                    MyTools.getDMYFromDate(self.evt_debut.date),
+                                                                                    MyTools.getDMYFromDate(self.evt_fin.date))
 
 
 
