@@ -1,11 +1,5 @@
 eclipse.preferences.version=1
 encoding//inputs/production.csv=ISO-8859-1
-encoding//main/Tools/ChangeFileContent.py=utf-8
-encoding//main/Tools/HttpTools.py=utf-8
-encoding//main/Tools/IdAllocator.py=utf-8
-encoding//main/Tools/MySocket.py=utf-8
-encoding//main/Tools/MyTelnet.py=utf-8
-encoding//main/Tools/MyTools.py=utf-8
 encoding//main/admin.py=utf-8
 encoding//main/constant.py=utf-8
 encoding//main/filters.py=utf-8

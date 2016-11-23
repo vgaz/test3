@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 from main.models import Planche, Serie, Legume
-import main.Tools.MyTools as MyTools
+import MyTools
 from main import models
 
 #################################################

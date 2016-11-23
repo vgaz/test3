@@ -3,7 +3,20 @@
 {% block javascript %}
 
 <style>
+#divPlanchesVirtuelles
+{
+    border: 5px solid yellow;
+    width:20%;
+    display: inline-block;
 
+}
+#divPlanchesReelles
+{
+    border: 5px solid red;
+    display: inline-block;
+    width:70%;
+
+}
 
 .divTitrePlanche
 {
@@ -362,6 +375,7 @@ function sauveSerie()
         alert(jsonRep.err)
 
     }
+    
 
            
 function allowDrop(event) {
@@ -394,7 +408,7 @@ function unfocus(event)
 
 {% endblock %}
 
-{% block title %}Suivi des implantations des series sur les planches{% endblock %}
+{% block title %}Placement des series sur les planches{% endblock %}
 
 {% block content %}
 {{s_msg}}
@@ -449,10 +463,10 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intraRang_cm}}"
                                     style="border-color: {{serie.variete.couleur}}"
                                     draggable="true" ondragstart="dragStart(event)" 
-                                    title="Série {{serie.id}}, {{serie.variete}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"
+                                    title="Série {{serie.id}}, {{serie.legume.nom}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"
                                     >
             <div class="divTitreSerie">
-            (S {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.variete}} x {{serie.implantationPlanche.quantite}}
+            (S {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.legume.nom}} x {{serie.implantationPlanche.quantite}}
             <img src='{{STATIC_URL}}images/editor.png' title='Editer' onclick="prepareEditeSerie({{serie.id}});return(false)">
             </div>
             {% for evt in serie.evenements.all%}
@@ -467,6 +481,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 </div>
 
 <div id="divEditSerie" draggable='true' class="BlueFrame" >
+
 	<h2 id="editSerie_titre"> </h2>
 	<p>Série <input style="width:40px" type="text" id="editSerie_id_serie" name="editSerie_id_serie" value="" /></p>
 	sur planche(s) <div style="display: inline" id="editSerie_liste_planches"> </div>
@@ -485,7 +500,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     </p>
     <input type="hidden" value="" id="editSerie_id_implantation" name="editSerie_id_implantation" />
     <div>Quantité pour cette implantation <input style="width: 40px" type="text" value="" id="editSerie_quantite_implantation" name="editSerie_quantite_implantation" />
-         (<div id="editSerie_quantite" style="display:inline;"> </div> en tout)
+         (<div id="editSerie_quantite" style="display:inline;"> </div> pour toute la série)
     </div>
     <p>Nb rangs :               <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
        Dans le rang (cm) :      <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>

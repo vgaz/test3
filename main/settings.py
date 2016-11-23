@@ -10,6 +10,7 @@ TEMPLATE_DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(-1, PROJECT_PATH)
+sys.path.insert(-1, "/home/vincent/Documents/donnees/DIVERS/DeveloppementLogiciel/python/MyPyTools")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'bvmnzxbf8*l*m@5k7+f$71n@_*%8_u3)rj3j7rkac^ei@z6iy8'

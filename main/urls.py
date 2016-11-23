@@ -14,9 +14,9 @@ urlpatterns = patterns('',
     url(r'^request/', 'main.serveRequest.serveRequest'),
     url(r'^quizFamilles/', 'main.views.quizFamilles', name='quizFamilles'),
     
-    url(r'^edition_planche/', 'main.views.editionPlanche', name='edition_planche'),
+#     url(r'^edition_planche/', 'main.views.editionPlanche', name='edition_planche'),
     url(r'^chrono_planches/', 'main.views.chronoPlanches', name='chrono_planches'),    
-    url(r'^placement_series/', 'main.views.placementSeries', name='placement_series'),
+#     url(r'^placement_series/', 'main.views.placementSeries', name='placement_series'),
     
     url(r'^prevision_recolte/', 'main.views.prevision_recolte', name='prevision_recolte'),
     url(r'^evenements/', 'main.views.evenementsPlanches', name='evenements'),

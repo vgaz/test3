@@ -3,7 +3,7 @@ from django.db import models
 import datetime, logging
 
 from main import constant  
-from main.Tools import MyTools
+import MyTools
 
 ## fabrique d'éléments et enregistrement dans la base
 
@@ -449,7 +449,7 @@ class Serie(models.Model):
         return ",".join(impl.planche.nom for impl in self.implantations.all())
          
     def __str__(self):       
-        return "%s %s (N°%d), quantité %d, %d m2 sur planche(s) [%s], du %s au %s" %(self.legume.nom(),
+        return "%s (N°%d), quantité %d, %d m2 sur planche(s) [%s], du %s au %s" %(self.legume.nom(),
                                                                                     self.id, 
                                                                                     self.quantiteTotale(),
                                                                                     self.surfaceOccupee_m2(), 

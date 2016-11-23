@@ -5,7 +5,6 @@ from main import serveRequest, views, constant
 from django.test import RequestFactory
 
 from main.models import *
-from main.Tools import MyTools
 
 class Command(BaseCommand):
     help = "test divers"
