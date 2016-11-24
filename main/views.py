@@ -346,8 +346,8 @@ def prevision_recolte(request):
     ## sauvegarde des prévisions des récoltes
     planification.enregistrePrevisions(request)
         
-    if request.POST.get("option_planif", ""):
-        planification.planif(date_debut_sem_vue, date_fin_sem_vue)
+#     if request.POST.get("option_planif", ""):
+#         planification.planif(date_debut_sem_vue, date_fin_sem_vue)
     
     ## création de la liste des semaines     
     # on recadre sur le lundi pour démarrer en debut de semaine
@@ -359,21 +359,15 @@ def prevision_recolte(request):
         if date_fin_sem >= date_fin_vue: 
             break
         date_debut_sem = date_fin_sem + datetime.timedelta(days=1)
-    
-    tab_previsions = "[" 
-    for prod in Production.objects.filter(date_semaine__gte = date_debut_sem_vue, date_semaine__lte = date_fin_sem_vue):
-        print (prod)
-        tab_previsions += "['%s', %d, %d, %d],"%(MyTools.getYMDFromDate(prod.date_semaine), 
-                                                 prod.variete_id, 
-                                                 prod.qte_dde, 
-                                                 prod.qte_prod)
-    tab_previsions += "]" 
 
-    ## calcul des productions à partir des séries dont la production est dans la fenetre étudiée
-    l_series = Serie.objects.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue)
-    ## recherche des productions regroupées par variété
-    for var in Variete.objects.all():
-        pass
+    ## recherche des productions par semeine regroupées par légume
+    l_legumes = []
+    for leg in Legume.objects.all():
+        ## calcul des productions de légumes
+        l_series = Serie.objects.filter(legume_id = leg.id) ## on ne garde que les series du legume concerné
+        l_series = l_series.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue) ## on ne garde que la fenetre de temps étudiée
+        ## on   
+        
     return render(request,
                  'main/prevision_recolte.html',
                  {

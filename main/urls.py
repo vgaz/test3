@@ -32,7 +32,7 @@ urlpatterns = patterns('',
     url(r'^$', RedirectView.as_view(url=reverse_lazy('home'))),
 )
 
-## ajout special pour prise en compte des fichiers image media
+## ajout special pour prise en compte des fichiers images et media
 if settings.DEBUG:
     # static files (images, css, javascript, etc.)
     urlpatterns += patterns('',

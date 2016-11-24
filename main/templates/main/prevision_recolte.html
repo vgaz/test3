@@ -46,10 +46,23 @@ function init()
 {% block content %}
 
 <div class="BlueFrame" >
-    {{info}}
-    <form action="" method="POST">
-    <p>Visionnage du <input style="width:100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" /></p>
-    {% csrf_token %}
+<p id="divInfoDebug"> </p>
+
+
+<form action="" method="POST" accept-charset="utf-8">
+{% csrf_token %}
+<input name="serres" type="checkbox" {% if selection_serres %}checked{% endif %} /> Serres 
+<input name="champs" type="checkbox" {% if selection_champs %}checked{% endif %} /> Champs 
+&nbsp;&nbsp;
+ Pour les planches   <input style="width: 300px" type="text" name="id_planches" value="{% for planche in l_planches %}{{planche.id}},{% endfor %}" />
+ Visionnage du      <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
+                    <input style="margin-left: 20px" type="submit" value="Envoyer" />
+                    <input style="margin-left: 20px" type="submit" name="direction" value="recul" />
+<input type="submit" name="direction" value="avance" />
+Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
+<button onclick="changelePas(-1);return(false)">-</button><button onclick="changelePas(1);return(false)">+</button>
+
+</form>
 
     <table>
         <tr><th>Produits/Semaines</th>

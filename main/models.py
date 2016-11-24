@@ -91,7 +91,7 @@ def surfaceLibreSurPeriode(planche, date_debut, date_fin):
         cumul_m2 = 0
        
         for serie in l_series_presentes:
-            if serie.activeEnDatedu(jour):
+            if serie.enPlaceEnDatedu(jour):
                 cumul_m2 += serie.surfaceOccupee_m2(planche)
 
         print (jour, cumul_m2, "m2 occupés sur ", planche.surface_m2(), "m2 (cumul max =", cumul_max_m2, ")" )
@@ -104,7 +104,7 @@ def surfaceLibreSurPeriode(planche, date_debut, date_fin):
 def quantitePourSurface(largeurPlanche_m, surface_m2, nbRangs, intraRang_m):
     """ estimation de la quantité de pieds implantables sur une planche
     quantité  =  (surface / largeur) x nbRangs / intra """
-    return int(surface_m2 / largeurPlanche_m *nbRangs / intraRang_m)
+    return int(surface_m2 / largeurPlanche_m * nbRangs / intraRang_m)
 
 def surfacePourQuantite(largeurPlanche_m, quantite, nbRangs, intraRang_m):
     """ estimation de la surface pour n de pieds implantables sur une planche """
@@ -169,7 +169,7 @@ class Espece(models.Model):
     rendementProduction_kg_m2 = models.FloatField("Rendement de production kg/m2)", default=1)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     bStokable = models.BooleanField(default=False)
-    
+    rendementConservation = models.FloatField("Rendement de conservation", default=0.9)
     
     class Meta:
         ordering = ['nom']
@@ -202,6 +202,8 @@ class Legume(models.Model):
     rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
     rendementGermination = models.FloatField("Rendement germination", default=1)
     poidsParPiece_kg = models.FloatField("Poids estimé par pièce (g)", default=0)  ## sera optionnel si unite_prod = kg
+    nbGrainesParPied = models.PositiveIntegerField("Nb graines par pied", default=1)
+    
     couleur = models.CharField(max_length=16)
 #     duree_avant_recolte_pc_j = models.IntegerField("durée plein champ avant récolte (jours)", default=0)
 #     duree_avant_recolte_sa_j = models.IntegerField("durée en serre avant récolte (jours)", default=0)
@@ -252,24 +254,22 @@ class Legume(models.Model):
   
 
 
-# class Production(models.Model):
-#     """Prévision hebdomadaire des productions pour une variété"""
-#     variete = models.ForeignKey(Variete)
-#     date_semaine = models.DateField("date de début de semaine")
-#     qte_dde = models.PositiveIntegerField("quantité demandée", default=0)
-#     qte_prod = models.PositiveIntegerField("quantité produite", default=0)
-#     
-#     d_line.get("bStockable", "
-
-#     class Meta: 
-#         ordering = ["date_semaine"]
-#             
-#     def __str__(self):
-#         return "semaine du %s : %s : dde=%d prod=%d (%s)"%(  self.date_semaine, 
-#                                                              self.variete.nom, 
-#                                                              self.qte_dde, 
-#                                                              self.qte_prod, 
-#                                                              self.variete.espece.nomUniteProd())
+class Production(models.Model):
+    """Prévision hebdomadaire des productions pour un légume"""
+    legume = models.ForeignKey(Legume)
+    date_semaine = models.DateField("date de début de semaine")
+    qte_dde = models.PositiveIntegerField("quantité demandée", default=0)
+    qte_prod = models.PositiveIntegerField("quantité produite", default=0)
+     
+    class Meta: 
+        ordering = ["date_semaine"]
+             
+    def __str__(self):
+        return "semaine du %s : %s : dde=%d prod=%d (%s)"%(  self.date_semaine, 
+                                                             self.variete.nom, 
+                                                             self.qte_dde, 
+                                                             self.qte_prod, 
+                                                             self.variete.espece.nomUniteProd())
 
 class Implantation(models.Model):
     planche = models.ForeignKey("Planche")
@@ -354,12 +354,11 @@ class Evenement(models.Model):
 class Serie(models.Model):
     
     class Meta:
-        verbose_name = "Série de plants"
+        verbose_name = "Série de plants d'un même légume"
 
     legume = models.ForeignKey(Legume)
-    dureeAvantDebutRecolte_j = models.IntegerField("durée min avant début de récolte (jours)", default=0)
+    dureeAvantRecolte_j = models.IntegerField("durée min avant début de récolte (jours)", default=0)
     etalementRecolte_seriej = models.IntegerField("durée étalement possible de la récolte (jours)", default=0)
-
     nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
     intra_rang_m = models.FloatField("distance dans le rang (m)", default=0)
     bSerre = models.BooleanField(default=False)
@@ -367,16 +366,18 @@ class Serie(models.Model):
     evenements = models.ManyToManyField(Evenement)
     evt_debut = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
-    l_prelevement = []
     objects = SerieManager()
     
     def intraRang_cm(self):
         return int(self.intra_rang_m *100)
     
-    def prodEstimee_kg(self):
+    def prodEstimee_kg_ou_piece(self):
         """Retourne le poids (kg) de production escomptée""" 
-        return self.legume.prod_kg_par_m2 * self.surfaceOccupee_m2()
-    
+        if self.legume.espece.unite_prod == constant.UNITE_PROD_KG:
+            return self.legume.prod_kg_par_m2 * self.surfaceOccupee_m2()
+        else:
+            return self.quantiteTotale()
+
     def nbGraines(self):
         """ retourne le nb de graines à planter en fonction du nb de plants installés"""
         return(self.quantite * self.legume.rendement_plants_graines_pourcent / 100)
@@ -421,7 +422,7 @@ class Serie(models.Model):
         self.evt_debut_id = evt_debut.id
 
         if not dateFin:
-            dateFin = evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j) + datetime.timedelta(days = self.etalementRecolte_seriej)
+            dateFin = evt_debut.date + datetime.timedelta(days = self.dureeAvantRecolte_j) + datetime.timedelta(days = self.etalementRecolte_seriej)
         
         if isinstance(dateFin, str): 
             dateFin = MyTools.getDateFrom_d_m_y(dateFin)
@@ -431,14 +432,14 @@ class Serie(models.Model):
         self.evenements.add(evt_fin)
         
         ## ajout evt de début de récolte
-        dateRecolte = evt_debut.date + datetime.timedelta(days = self.dureeAvantDebutRecolte_j)
+        dateRecolte = evt_debut.date + datetime.timedelta(days = self.dureeAvantRecolte_j)
         evt_recolte = creationEvt(dateRecolte, Evenement.TYPE_DIVERS, "Récolte %s"%(self.legume.nom()))       
         self.evenements.add(evt_recolte)
         
         self.save()
                 
-    def activeEnDatedu(self, date):  
-        """retourneTrue ou False si série encore en terre à telle date"""
+    def enPlaceEnDatedu(self, date):  
+        """retourne True ou False si série encore en terre à telle date"""
         if date >= self.evt_debut.date and date <= self.evt_fin.date:
             return True
         else:

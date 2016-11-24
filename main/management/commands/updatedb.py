@@ -114,7 +114,11 @@ class Command(BaseCommand):
 
                         s_stockable = d_line.get("stockable","")
                         assert s_stockable, "pas de valeur 'stockable' pour espèce : %s"%(esp.nom)
-                        esp.bStockable = s_stockable == "oui"                        
+                        esp.bStockable = s_stockable == "oui"     
+                        
+                        s_rendementC = d_line.get("Rendement conservation","").replace(",",".") 
+                        assert s_rendementC, "'Rendement conservation' indéfini pour %s"%(esp.nom)            
+                        esp.rendementConservation = float(s_rendementC)                                           
                                                                                 
                         esp.save()
                     
@@ -175,6 +179,9 @@ class Command(BaseCommand):
                     s_poidsParPiece = d_line.get("Poids estimé par pièce (g)", "0").replace(",",".") 
                     leg.poidsParPiece_kg = float(s_poidsParPiece)/1000
 
+                    s_nbGrainesParPied = d_line.get("Nb graines par pied", "1") 
+                    leg.nbGrainesParPied = int(s_nbGrainesParPied)
+
                     leg.save()
                         
 
@@ -191,7 +198,7 @@ class Command(BaseCommand):
                         serie.save()
 
                     ## recup infos 
-                    serie.dureeAvantDebutRecolte_j = int(d_line.get("Durée avant récolte (j)", "0"))
+                    serie.dureeAvantRecolte_j = int(d_line.get("Durée avant récolte (j)", "0"))
                     serie.etalementRecolte_seriej = int(d_line.get("Étalement récolte (j)", "0"))
                     serie.save()
                     serie.fixeDates(dateEnTerre)
