@@ -344,7 +344,7 @@ def prevision_recolte(request):
     date_fin_sem_vue = date_fin_vue + datetime.timedelta(days = 6 - date_fin_vue.weekday()) 
             
     ## sauvegarde des prévisions des récoltes
-    planification.enregistrePrevisions(request)
+ ##   planification.enregistrePrevisions(request)
         
 #     if request.POST.get("option_planif", ""):
 #         planification.planif(date_debut_sem_vue, date_fin_sem_vue)
@@ -353,20 +353,35 @@ def prevision_recolte(request):
     # on recadre sur le lundi pour démarrer en debut de semaine
     l_semaines = []
     date_debut_sem = date_debut_sem_vue
+        
     while True:
+        sem = MyTools.MyEmptyObj()
         date_fin_sem = date_debut_sem + datetime.timedelta(days=6)
-        l_semaines.append((date_debut_sem.isocalendar(), date_debut_sem, date_fin_sem))
+        sem.date_debut_iso = date_debut_sem.isocalendar()
+        sem.date_debut = date_debut_sem
+        sem.date_fin = date_fin_sem
+        l_semaines.append(sem)
         if date_fin_sem >= date_fin_vue: 
             break
         date_debut_sem = date_fin_sem + datetime.timedelta(days=1)
 
-    ## recherche des productions par semeine regroupées par légume
-    l_legumes = []
-    for leg in Legume.objects.all():
+    ## recherche des productions par semaine regroupées par légume
+    l_legumes = Legume.objects.all()
+    for leg in l_legumes:
         ## calcul des productions de légumes
-        l_series = Serie.objects.filter(legume_id = leg.id) ## on ne garde que les series du legume concerné
-        l_series = l_series.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue) ## on ne garde que la fenetre de temps étudiée
-        ## on   
+        l_series = Serie.objects.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue) ## on ne garde que la fenetre de temps étudiée
+        l_series = l_series.filter(legume_id = leg.id) ## on ne garde que les series du legume concerné
+        ## Pour chaque semaine étudiée, on calcule le stock cumulé de chaque série 
+        ## le stock est lissé 
+        ## sur la conso hebdo pour les légumes stockables
+        ## ou sur la durée de récolte pour les légumes non stockables
+        leg.l_prod = []
+        for sem in l_semaines:
+            prodHebdo = 0
+            for serie in l_series:
+                prodHebdo += serie.prodHebdo(date_debut_sem)
+            leg.l_prod.append((sem.date_debut, prodHebdo))
+        
         
     return render(request,
                  'main/prevision_recolte.html',
@@ -376,7 +391,7 @@ def prevision_recolte(request):
                   "date_fin_vue": date_fin_vue,
                   "l_vars":Variete.objects.all().order_by("espece"),
                   "l_semaines":l_semaines,
-                  "tab_previsions":tab_previsions,
+                  "l_legumes":l_legumes,
                   "info":""
                   })
     

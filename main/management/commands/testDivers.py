@@ -11,6 +11,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
+        class mySem(object):
+            pass
+    
+        sem = mySem()
+        sem.toto = 3
+        
+        print(sem.toto)
+        return
+    
         
 #         impl = Implantation.objects.get(id=13)
 #         s = impl.surface_m2()

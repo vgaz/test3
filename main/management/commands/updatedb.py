@@ -119,12 +119,22 @@ class Command(BaseCommand):
                         s_rendementC = d_line.get("Rendement conservation","").replace(",",".") 
                         assert s_rendementC, "'Rendement conservation' indéfini pour %s"%(esp.nom)            
                         esp.rendementConservation = float(s_rendementC)                                           
+
+                        ## maj conso
+                        s_field = d_line.get("Nombre de paniers", "0")
+                        assert s_field, "'Nombre de paniers' indéfini pour %s"%(esp.nom)  
+                        esp.nbParts = int(s_field)
+                 
+                        s_field = d_line.get("Conso hebdo par pannier", "0").replace(",",".")
+                        assert s_field, "'Conso hebdo par pannier' indéfini pour %s"%(esp.nom)  
+                        esp.consoHebdoParPart = float(s_field)
                                                                                 
                         esp.save()
                     
                     except:
                         log.error(sys.exc_info()[1])
-                        continue                                
+                        continue
+                    
  
 
         ## maj variétés et séries
@@ -183,7 +193,7 @@ class Command(BaseCommand):
                     leg.nbGrainesParPied = int(s_nbGrainesParPied)
 
                     leg.save()
-                        
+                    
 
                     ## maj série
                     try:
@@ -199,7 +209,7 @@ class Command(BaseCommand):
 
                     ## recup infos 
                     serie.dureeAvantRecolte_j = int(d_line.get("Durée avant récolte (j)", "0"))
-                    serie.etalementRecolte_seriej = int(d_line.get("Étalement récolte (j)", "0"))
+                    serie.etalementRecolte_j = int(d_line.get("Étalement récolte (j)", "0"))
                     serie.save()
                     serie.fixeDates(dateEnTerre)
                     serie.nb_rangs = int(float(d_line.get("Nombre de rangs retenus", "0").replace(",",".")))

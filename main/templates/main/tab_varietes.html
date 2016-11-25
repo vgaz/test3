@@ -19,7 +19,7 @@
  
       <table>
           <tr>
-          {% if var.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
+          {% if leg.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
           <td><h2>{{leg.espece.nom|title}} {{leg.variete.nom|title}}</h2>
             <p>{{leg.espece.famille.nom|title}}</p>
             

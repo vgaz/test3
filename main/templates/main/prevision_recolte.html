@@ -8,12 +8,12 @@
 tab_previsions = {{tab_previsions|safe}} // liste de semaine, var, masse
 d_cumul_hebdo = 	{
 				{% for semaine in l_semaines %}
-			  	"{{semaine.1|date:'Y-m-d'}}":0,
+			  	"{{semaine.date_debut|date:'Y-m-d'}}":0,
 			  	{% endfor %}
 			  	}
 d_cumul_var = 	  {
-	              {% for var in l_vars %}
-	              "{{var.id}}":0,
+	              {% for leg in l_legumes %}
+	              "{{leg.id}}":0,
 	              {% endfor %}
 	              }
 
@@ -61,33 +61,35 @@ function init()
 <input type="submit" name="direction" value="avance" />
 Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
 <button onclick="changelePas(-1);return(false)">-</button><button onclick="changelePas(1);return(false)">+</button>
+</div>
 
-</form>
 
     <table>
         <tr><th>Produits/Semaines</th>
             {% for semaine in l_semaines %}
-                <td align="center">Semaine {{semaine.0.1}}<br/>du {{semaine.1|date:'d/m/Y'}}<br/>au {{semaine.2|date:'d/m/Y'}}</td>
+                <td align="center">Semaine {{semaine.date_debut_sem_iso}}<br/>du {{semaine.date_debut|date:'d/m/Y'}}<br/>au {{semaine.date_fin|date:'d/m/Y'}}</td>
             {% endfor %}
             <th align="center">Total</th>
         </tr>
         
-        {% for var in l_vars %}
+        {% for leg in l_legumes %}
         <tr>
-            <td>{{var.espece.nom|title}} {{var.nom}} <small>({{var.espece.nomUniteProd}})</small></td>
+            <td>{{leg.nom|title}}<br/><small> ({{leg.espece.nomUniteProd}})</small></td>
             
-            {% for semaine in l_semaines %}
-            <td><input style="width:100px;font-weight:bold;text-align: center" type="text" name="p__{{semaine.1|date:'Y-m-d'}}__{{var.id}}" id="p__{{semaine.1|date:'Y-m-d'}}__{{var.id}}"/></td>
+            {% for t_prod in leg.l_prod %}
+            <td>Estimé : {{t_prod.1}}<br/>{{t_prod.0|date:'Y-m-d'}} <br/>
+            Réel : <input style="width:100px;font-weight:bold;text-align: center" type="text" name="p__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}" id="p__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}"/>
+            </td>
             {% endfor %}
 
-            <td><div style="font-weight:bold;text-align: center" id="tv__{{var.id}}"> </div></td>
+            <td><div style="font-weight:bold;text-align: center" id="t__{{leg.id}}"> </div></td>
         </tr>
         {% endfor %}
         
 
         <tr><th>Total</th>{# ligne de total des qte de legumes par semaine #}
         {% for semaine in l_semaines %}
-        <td><div style="font-weight:bold;text-align:center" id="ts__{{semaine.1|date:'Y-m-d'}}"> </div></td>
+        <td><div style="font-weight:bold;text-align:center" id="ts__{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
         {% endfor %}
         </tr>
         
@@ -97,5 +99,4 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     Planifier les plantations<input type="checkbox" name="option_planif" />
 
     </form>
-</div>
 {% endblock %}
