@@ -397,7 +397,7 @@ def prevision_recolte(request):
     
 #################################################
 
-def tab_varietes(request):
+def tab_legumes(request):
     s_info = ""
     try:
         l_legumes = Legume.objects.all()
@@ -405,7 +405,7 @@ def tab_varietes(request):
             for leg in l_legumes:
                 s_pk = "leg_%s_"% str(leg.pk)
                 print(s_pk)
-                leg.prod_kg_par_m2 = float(request.POST.get(s_pk + "prod_kg_par_m2",0))
+                leg.rendementProduction_kg_m2 = float(request.POST.get(s_pk + "rendementProduction_kg_m2", 0))
                 leg.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent",100))
                 leg.intra_rang_m = float(request.POST.get(s_pk + "intra_rang_cm", 0)/100)
                 leg.inter_rang_m = float(request.POST.get(s_pk + "inter_rang_cm", 0)/100)
@@ -420,7 +420,7 @@ def tab_varietes(request):
         s_info += str(sys.exc_info()[1])
         
     return render(request,
-                 'main/tab_varietes.html',
+                 'main/tab_legumes.html',
                  {
                   "appVersion":constant.APP_VERSION,
                   "l_legumes":l_legumes,

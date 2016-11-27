@@ -10,7 +10,7 @@ from main import constant, settings
 
 urlpatterns = patterns('',
 
-    url(r'^tab_varietes/', 'main.views.tab_varietes', name='tab_varietes'),
+    url(r'^tab_legumes/', 'main.views.tab_legumes', name='tab_legumes'),
     url(r'^request/', 'main.serveRequest.serveRequest'),
     url(r'^quizFamilles/', 'main.views.quizFamilles', name='quizFamilles'),
     

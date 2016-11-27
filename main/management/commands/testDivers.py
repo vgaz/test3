@@ -11,14 +11,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
-        class mySem(object):
-            pass
-    
-        sem = mySem()
-        sem.toto = 3
+        serie = Serie.objects.get(id=16)
+        date_debut_sem = MyTools.getDateFrom_d_m_y("21/11/2016")
+
+        serie.prodHebdo(date_debut_sem)
         
-        print(sem.toto)
-        return
     
         
 #         impl = Implantation.objects.get(id=13)

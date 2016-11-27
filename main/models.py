@@ -163,10 +163,10 @@ class Espece(models.Model):
     sans = models.ManyToManyField("self", related_name="sans", blank=True)
     intra_rang_m = models.FloatField("distance conseillée dans le rang (m)", default=0)
     inter_rang_m = models.FloatField("distance conseillée entre les rangs (m)", default=0)    
-    rendementProduction_kg_m2 = models.FloatField("Rendement de production kg/m2)", default=1)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     bStokable = models.BooleanField(default=False)
     rendementConservation = models.FloatField("Rendement de conservation", default=0.9)
+    rendementGermination = models.FloatField("Rendement germination", default=1)
     consoHebdoParPart = models.FloatField("quantité consommée par semaine par part", default=0)
     nbParts = models.PositiveIntegerField("Nb de parts à servir", default=0)
    
@@ -200,20 +200,16 @@ class Legume(models.Model):
     """légume"""
     espece = models.ForeignKey(Espece)
     variete = models.ForeignKey(Variete)
-    prod_kg_par_m2 = models.FloatField("Production (kg/m2)", default=0)
-    rendement_plants_graines_pourcent = models.IntegerField('Pourcentage plants / graine', default=90)
-    rendementGermination = models.FloatField("Rendement germination", default=1)
+    rendementProduction_kg_m2 = models.FloatField("Rendement de production kg/m2)", default=1)
     poidsParPiece_kg = models.FloatField("Poids estimé par pièce (g)", default=0)  ## sera optionnel si unite_prod = kg
     nbGrainesParPied = models.PositiveIntegerField("Nb graines par pied", default=1)
-    couleur = models.CharField(max_length=16)
-#     duree_avant_recolte_pc_j = models.IntegerField("durée plein champ avant récolte (jours)", default=0)
-#     duree_avant_recolte_sa_j = models.IntegerField("durée en serre avant récolte (jours)", default=0)
+    couleur = models.CharField(max_length=16, default="green")
     
     class Meta:
         ordering = ['espece', 'variete']
             
     def __str__(self):
-        return "%s %s"%(self.espece.nom, self.nom) 
+        return "%s"%(self.nom()) 
 
     def nom(self):
         return "%s %s"%(self.espece.nom, self.variete.nom) 
@@ -347,7 +343,7 @@ class Serie(models.Model):
         self.evt_debut_id = evt_debut.id
 
         if not dateFin:
-            dateFin = evt_debut.date + datetime.timedelta(days = self.dureeAvantRecolte_j) + datetime.timedelta(days = self.etalementRecolte_seriej)
+            dateFin = evt_debut.date + datetime.timedelta(days = self.dureeAvantRecolte_j) + datetime.timedelta(days = self.etalementRecolte_j)
         
         if isinstance(dateFin, str): 
             dateFin = MyTools.getDateFrom_d_m_y(dateFin)
@@ -364,8 +360,8 @@ class Serie(models.Model):
         self.save()
  
     def nbGraines(self):
-        """ retourne le nb de graines à planter en fonction du nb de plants installés"""
-        return(self.quantite * self.legume.rendement_plants_graines_pourcent / 100)
+        """ retourne le nb de graines nécesaires en fonction du nb de pieds souhaité"""
+        return int(self.quantite / self.legume.rendementGermination)
 
     def longueurSurPlanche_m(self, intra_rang_m=None, nb_rangs=None):
         """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
@@ -395,18 +391,29 @@ class Serie(models.Model):
     def prodEstimee_kg_ou_piece(self):
             """Retourne la production totale escomptée (kg ou  pieces)""" 
             if self.legume.espece.unite_prod == constant.UNITE_PROD_KG:
-                return self.legume.prod_kg_par_m2 * self.surfaceOccupee_m2()
+                return self.legume.rendementProduction_kg_m2 * self.surfaceOccupee_m2()
             else:
                 return self.quantiteTotale()
     
-    def prodHebdo(self, date_debut_sem):
+    def prodHebdo(self, dateDebutSem):
         """ renvoi la production estimée de cette semaine
         soit le stock lissé sur le nombre de semaines de consommation pour les legumes de garde
         soit le stock lissé sur la durée de la récolte pour les légumes en terre"""
-        if self.legume.espece.bStokable:
-            return self.prodEstimee_kg_ou_piece() / int(self.legume.consoHebdoParPart*self.legume.nbParts)
+        if self.legume.espece.bStokable: 
+            print (self.legume)
+            nbSemEcoulementStock = int(self.prodEstimee_kg_ou_piece() / (self.legume.consoHebdoTotale()))
+            dateFinStock = dateDebutSem + datetime.timedelta(weeks = nbSemEcoulementStock)
+            if dateDebutSem > self.evt_fin.date and dateDebutSem < dateFinStock :
+                return self.prodEstimee_kg_ou_piece()/nbSemEcoulementStock
+            else:
+                return 0
         else:
-            return self.prodEstimee_kg_ou_piece() / self.etalementRecolte_j * 7
+            ## legume frais 
+            if self.enPlaceEnDatedu(dateDebutSem):
+                return self.prodEstimee_kg_ou_piece() / (self.etalementRecolte_j / 7)
+            else:
+                return 0
+            
     
     
     def quantiteTotale(self):
@@ -414,7 +421,7 @@ class Serie(models.Model):
         qte = sum(self.implantations.all().values_list("quantite",flat=True))
         return qte
                
-   def s_listeNomsPlanches(self):
+    def s_listeNomsPlanches(self):
         """retourne la liste des planches de la série"""
         return ",".join(impl.planche.nom for impl in self.implantations.all())
          

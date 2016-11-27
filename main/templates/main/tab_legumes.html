@@ -20,7 +20,7 @@
       <table>
           <tr>
           {% if leg.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
-          <td><h2>{{leg.espece.nom|title}} {{leg.variete.nom|title}}</h2>
+          <td><h2>{{leg.nom|title}}</h2>
             <p>{{leg.espece.famille.nom|title}}</p>
             
             <!-- 
@@ -37,24 +37,28 @@
             Durée de pousse avant récolte plein champ (jours) : <input style="width: 40px" type="text" name="v_{{leg.pk}}_duree_avant_recolte_pc_j" value="{{leg.duree_avant_recolte_pc_j}}" /> <br/>
             Durée de pousse avant récolte sous abris (jours) : <input style="width: 40px" type="text" name="v_{{leg.pk}}_duree_avant_recolte_sa_j" value="{{leg.duree_avant_recolte_sa_j}}" /> <br/>
             -->
-            Distance conseillée dans le rang (cm) : <input style="width:40px" type="text" name="v_{{leg.pk}}_intra_rang_cm" value="{{leg.intra_rang_cm}}" /> <br/>
-            Distance conseillée entre les rangs (cm) : <input style="width:40px" type="text" name="v_{{leg.pk}}_inter_rang_cm" value="{{leg.inter_rang_cm}}" /> <br/>
-            Unité de comptage : <input style="width: 40px" type="text" name="v_{{leg.pk}}_nomUniteProd" value="{{leg.nomUniteProd}}" /><br/>
-            Rendement plants/graines (%):  <input style="width:40px" type="text" name="v_{{leg.pk}}_rendement_plants_graines_pourcent" value="{{leg.rendement_plants_graines_pourcent}}" /> <br/>
-            Rendement estimé (kg/m2) <input style="width: 40px" type="text" name="v_{{leg.pk}}_prod_kg_par_m2" value="{{leg.rendementProduction_kg_m2}}" /> <br/>
+            Distance conseillée dans le rang (m) : <input style="width:40px" type="text" name="v_{{leg.pk}}_intra_rang_cm" value="{{leg.espece.intra_rang_m}}" /> <br/>
+            Distance conseillée entre les rangs (m) : <input style="width:40px" type="text" name="v_{{leg.pk}}_inter_rang_m" value="{{leg.espece.inter_rang_m}}" /> <br/>
+            Unité de comptage : <input style="width: 40px" type="text" name="v_{{leg.pk}}_nomUniteProd" value="{{leg.espece.nomUniteProd}}" /><br/>
+            Rendement germination (%):  <input style="width:40px" type="text" name="v_{{leg.pk}}_rendementGermination" value="{{leg.espece.rendementGermination}}" /> <br/>
+            Rendement estimé (kg/m2) <input style="width: 40px" type="text" name="v_{{leg.pk}}_rendementProduction_kg_m2" value="{{leg.rendementProduction_kg_m2}}" /> <br/>
+         
+            {% if leg.espece.avec.distinct %} <img src="{{ STATIC_URL }}images/smileyOK.jpg" width="32px" height="32px"  title="Avec"/> 
+            {% for varAvec in leg.espece.avec.distinct %}{{varAvec.nom|title}}, {% endfor %} <br/>
+            {% endif %}
+          
+            {% if leg.espece.sans.distinct %} <img src="{{ STATIC_URL }}images/smileyKO.jpg" width="32px" height="32px"  title="Sans"/>
+            {% for varSans in leg.espece.sans.distinct %}{{varSans.nom|title}}, {% endfor %} <br/>
+            {% endif %}
+            
+            <input style="margin-left: 20px" type="submit" value="Sauver"/>
             </td>
           </tr>
-          <tr>
-              
-          </tr>
+
       </table>
-      {% if leg.espece.avec.distinct %} <img src="{{ STATIC_URL }}images/smileyOK.jpg" width="32px" height="32px"  title="Avec"/> 
-      {% for varAvec in leg.espece.avec.distinct %}{{varAvec.nom|title}}, {% endfor %} <br/>
-      {% endif %}
-      {% if leg.espece.sans.distinct %} <img src="{{ STATIC_URL }}images/smileyKO.jpg" width="32px" height="32px"  title="Sans"/>
-      {% for varSans in leg.espece.sans.distinct %}{{varSans.nom|title}}, {% endfor %} <br/>
-      {% endif %}
-	<input style="margin-left: 20px" type="submit" value="Sauver"/>
+      
+      
+
 	<hr />
 {% endfor %}
 </form>
