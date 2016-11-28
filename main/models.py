@@ -332,6 +332,9 @@ class Serie(models.Model):
             return True
         else:
             return False
+        
+    def intraRang_cm(self):
+        return int(self.intra_rang_m *100)
     
     def fixeDates(self, dateDebut, dateFin=None):
         """Crée les evts de début et fin de vie des plants en terre"""

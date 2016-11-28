@@ -122,11 +122,11 @@ def chronoPlanches(request):
 #     l_planches = Planche.objects.filter(id__in=[1,3,5,6,7])
     
     ## ajout des séries présentes pour chaque planche
-    for laPlanche in l_planches:
-        laPlanche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, laPlanche)
+    for planche in l_planches:
+        planche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)
         ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de serie par planche)
-        for serie in laPlanche.l_series:
-            serie.implantationPlanche = serie.implantations.get(planche_id=laPlanche.id)
+        for serie in planche.l_series:
+            serie.implantationPlanche = serie.implantations.get(planche_id=planche.id)
             
             
     return render(request,
@@ -380,8 +380,7 @@ def prevision_recolte(request):
             prodHebdo = 0
             for serie in l_series:
                 prodHebdo += serie.prodHebdo(date_debut_sem)
-            leg.l_prod.append((sem.date_debut, prodHebdo))
-        
+            leg.l_prod.append((sem.date_debut, int(prodHebdo), leg.espece.nomUniteProd()))
         
     return render(request,
                  'main/prevision_recolte.html',
@@ -389,7 +388,7 @@ def prevision_recolte(request):
                   "appVersion":constant.APP_VERSION,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
-                  "l_vars":Variete.objects.all().order_by("espece"),
+                  "l_vars": Variete.objects.all().order_by("espece"),
                   "l_semaines":l_semaines,
                   "l_legumes":l_legumes,
                   "info":""

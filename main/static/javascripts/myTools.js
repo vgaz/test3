@@ -147,7 +147,8 @@ function  deplaceImplantation()
             {
             rep = requestServer(s_request + "&simulation=false")
             jsonRep = JSON.parse(rep)
-            alert(jsonRep.msg)
+            if (jsonRep.status == false)
+                alert(jsonRep.msg)
             window.location.reload()
             }
         }        

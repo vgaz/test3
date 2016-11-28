@@ -64,7 +64,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 </div>
 
 
-    <table>
+    <table border="1">
         <tr><th>Produits/Semaines</th>
             {% for semaine in l_semaines %}
                 <td align="center">Semaine {{semaine.date_debut_sem_iso}}<br/>du {{semaine.date_debut|date:'d/m/Y'}}<br/>au {{semaine.date_fin|date:'d/m/Y'}}</td>
@@ -77,7 +77,8 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             <td>{{leg.nom|title}}<br/><small> ({{leg.espece.nomUniteProd}})</small></td>
             
             {% for t_prod in leg.l_prod %}
-            <td>Estimé : {{t_prod.1}}<br/>{{t_prod.0|date:'Y-m-d'}} <br/>
+            <td>Sem du {{t_prod.0|date:'d-m-Y'}}<br/>
+            Estimé : {{t_prod.1}}<br/>
             Réel : <input style="width:100px;font-weight:bold;text-align: center" type="text" name="p__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}" id="p__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}"/>
             </td>
             {% endfor %}

@@ -7,6 +7,10 @@ from main.models import *
 from main.settings import PROJECT_PATH
 import sys
    
+
+
+
+
 class Command(BaseCommand):
     """updatedb : mise à jour de la base à partir des tableaux CSV"""
     help = "Tapper python manage.py updatedb"
@@ -60,8 +64,24 @@ class Command(BaseCommand):
 
         log = logging.getLogger('utils')
         log.setLevel(logging.INFO)
+        
+        
         log = logging.getLogger('updatedb')
+        ## Create traces logger
+        s_format = '[%(asctime)s %(name)s_%(levelname)-8s] %(module)-15s.%(funcName)s: %(message)s'
+        ## add file handler
+        logFile = os.path.abspath("./updatedb.log")
+
+        hdlr = logging.FileHandler(logFile)
+        hdlr.setFormatter(logging.Formatter(s_format))
+        log.addHandler(hdlr)
+        ## add stdout handler
+        hdlr = logging.StreamHandler()
+        hdlr.setFormatter(logging.Formatter(s_format))
+        log.addHandler(hdlr)    
         log.setLevel(logging.INFO)
+        
+
         
         l_err  = []
 
@@ -136,8 +156,6 @@ class Command(BaseCommand):
                         log.error(sys.exc_info()[1])
                         l_err.append(str(sys.exc_info()[1]))
                         continue
-                    
- 
 
         ## maj variétés, légumes et séries
         with open(os.path.join(PROJECT_PATH, "inputs", "planning.csv"), "r+t", encoding="ISO-8859-1") as hF:
@@ -146,17 +164,13 @@ class Command(BaseCommand):
                 ## une ligne par série
                 s_espece = d_line.get("Espèce", "").lower().strip()
                 espece = Espece.objects.get(nom=s_espece) 
-                s_variet = d_line.get("Variété", "").lower().strip()
-                
-                if not s_espece or not s_variet:
-                    print ("Ignore", d_line)
-                    continue
                 
                 ## mise à jour liste des variétés
+                s_variet = d_line.get("Variété", "").lower().strip()                
                 try:
                     var = Variete.objects.get(nom = s_variet)
                 except:
-                    logging.info("Ajout " + s_variet)
+                    log.info("Ajout " + s_variet)
                     var = Variete()
                     var.nom = s_variet
                     var.save()
@@ -171,6 +185,9 @@ class Command(BaseCommand):
                     leg = Legume()
                     leg.espece_id = espece.id
                     leg.variete_id = var.id
+                    if 'omme de ' in espece.nom:
+                        pass
+                    log.info("Ajout légume %s %s" % (espece.nom, var.nom))
                        
                 ## recup infos légumes
                 try: 
@@ -195,7 +212,7 @@ class Command(BaseCommand):
                     leg.rendementProduction_kg_m2 = float(s_rendement)
 
                     leg.save()
-                    log.info("Ajout légume %s" % leg.nom())
+                    
                     
                     ## maj série
                     s_dateEnTerre = d_line.get("Date en terre","")
@@ -205,6 +222,7 @@ class Command(BaseCommand):
                         serie = Serie.objects.get(evt_debut__type = Evenement.TYPE_DEBUT,
                                                   evt_debut__date = dateEnTerre,
                                                   legume_id = leg.id)
+                        continue ## dejà présente
                     except:
                         ## nouvelle série
                         serie = Serie()
@@ -226,7 +244,7 @@ class Command(BaseCommand):
                     
                     val = d_line.get("lieu", "")
                     assert val, "Champ 'lieu' indéfini pour %s "%(leg.nom())                    
-                    serie.bSerre = val == "SERRE"
+                    serie.bSerre = (val == "SERRE")
                     
                     serie.save()
                     serie.fixeDates(dateEnTerre)
@@ -244,22 +262,25 @@ class Command(BaseCommand):
                         serie.evenements.add(evt)
                     serie.save()
                                             
-                    ## implantation par defaut sur planche virtuelles serre ou plein champ
+                    ## implantation de la série par defaut sur planche virtuelles serre ou plein champ
                     implantation = Implantation()
                     if serie.bSerre:    
                         implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS).id
                     else:
                         implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP).id
+                        
                     ## on place toute la série sur cette implantation par défaut
                     implantation.quantite = serie.quantite
                     implantation.save()
                     serie.implantations.add(implantation)
                     serie.save()
-                    logging.info("ajout implantation de base %s", str(implantation))
+                    log.info("Ajout implantation de base %s", str(implantation))
 
                 except:
-                    logging.error(sys.exc_info()[1])
+                    log.error(sys.exc_info()[1])
                     l_err.append(str(sys.exc_info()[1]))
                     continue
 
-        print("end of command ", self.__doc__, "\n nombre d'erreurs = %d\n"%len(l_err), "\n".join(l_err))  
+        log.info("Fin de comande %s\n nombre d'erreurs = %d\n%s"%(self.__doc__,
+                                                                len(l_err), 
+                                                                "\n".join(l_err)))  
