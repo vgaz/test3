@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Prévision de récoltes par semaine{% endblock %}
+{% block title %}Prévision de récoltes et livraisons par semaine{% endblock %}
 
 {% block javascript %}
 
 <script type="text/javascript">
 tab_previsions = {{tab_previsions|safe}} // liste de semaine, var, masse
-d_cumul_hebdo = 	{
+d_cumul_hebdo = {
 				{% for semaine in l_semaines %}
 			  	"{{semaine.date_debut|date:'Y-m-d'}}":0,
 			  	{% endfor %}
@@ -79,7 +79,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             {% for t_prod in leg.l_prod %}
             <td>Sem du {{t_prod.0|date:'d-m-Y'}}<br/>
             Estimé : {{t_prod.1}}<br/>
-            Réel : <input style="width:100px;font-weight:bold;text-align: center" type="text" name="p__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}" id="p__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}"/>
+            Réel : <input style="width:50px;font-weight:bold;text-align: center" type="text" name="p__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}" id="p__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}"/>
             </td>
             {% endfor %}
 

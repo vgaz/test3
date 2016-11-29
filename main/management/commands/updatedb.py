@@ -131,7 +131,7 @@ class Command(BaseCommand):
 
                         s_stockable = d_line.get("stockable","")
                         assert s_stockable, "pas de valeur 'stockable' pour espèce : %s"%(esp.nom)
-                        esp.bStockable = s_stockable == "oui"     
+                        esp.bStockable = (s_stockable == "oui")     
                         
                         val = d_line.get("Rendement germination", "1").replace(",",".")
                         assert val, "'Rendement germination' indéfini pour %s"%(esp.nom)            
@@ -191,13 +191,13 @@ class Command(BaseCommand):
                        
                 ## recup infos légumes
                 try: 
-                    s_intraRang = d_line.get("Intra rang (cm)","").replace(",",".") 
-                    assert s_intraRang, "Pas d'intra Rang défini pour %s"%(esp.nom)            
-                    leg.intra_rang_m = float(s_intraRang)/100
+                    val = d_line.get("Intra rang (cm)","").replace(",",".") 
+                    assert val, "Pas d'intra Rang défini pour %s"%(esp.nom)            
+                    leg.intra_rang_m = float(val)/100
                     
-                    s_interRang = d_line.get("Inter rang (cm)","").replace(",",".") 
-                    assert s_interRang, "Pas d'inter rang défini pour %s"%(esp.nom)
-                    leg.inter_rang_m = float(s_interRang)/100
+                    val = d_line.get("Inter rang (cm)","").replace(",",".") 
+                    assert val, "Pas d'inter rang défini pour %s"%(esp.nom)
+                    leg.inter_rang_m = float(val)/100
                       
                     ## pas de controle car inutile si unité  = kg    
                     s_poidsParPiece = d_line.get("Poids estimé par pièce (g)").replace(",",".") or "0" 
@@ -226,10 +226,10 @@ class Command(BaseCommand):
                     except:
                         ## nouvelle série
                         serie = Serie()
-                        serie.legume_id = leg.id
+                        serie.legume = leg
 
 
-                    ## recup infos 
+                    ## recup infos série
                     val = int(d_line.get("Durée avant récolte (j)", "0"))
                     assert val, "Champ 'Durée avant récolte (j)' indéfini pour %s "%(leg.nom())                    
                     serie.dureeAvantRecolte_j = val
@@ -242,14 +242,19 @@ class Command(BaseCommand):
                     assert val, "Champ 'Nombre de pieds' indéfini pour %s "%(leg.nom())
                     serie.quantite = val
                     
+                    val = int(float(d_line.get("Nombre de rangs retenus", "0").replace(",",".")))
+                    assert val, "Champ 'Nombre de rangs retenus' indéfini pour %s "%(leg.nom())
+                    serie.nb_rangs = val
+                    
                     val = d_line.get("lieu", "")
                     assert val, "Champ 'lieu' indéfini pour %s "%(leg.nom())                    
                     serie.bSerre = (val == "SERRE")
                     
-                    serie.save()
-                    serie.fixeDates(dateEnTerre)
-                    serie.nb_rangs = int(float(d_line.get("Nombre de rangs retenus", "0").replace(",",".")))
                     serie.intra_rang_m = leg.intra_rang_m
+
+                    serie.save()
+                    
+                    serie.fixeDates(dateEnTerre)
                     
                     delaiCroissancePlants_j = int(d_line.get("Délai croissance plants (j)", "0"))
                     if delaiCroissancePlants_j != 0:
@@ -262,7 +267,7 @@ class Command(BaseCommand):
                         serie.evenements.add(evt)
                     serie.save()
                                             
-                    ## implantation de la série par defaut sur planche virtuelles serre ou plein champ
+                    ## implantation int(de la série par defaut sur planche virtuelles serre ou plein champ
                     implantation = Implantation()
                     if serie.bSerre:    
                         implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS).id
@@ -277,8 +282,8 @@ class Command(BaseCommand):
                     log.info("Ajout implantation de base %s", str(implantation))
 
                 except:
-                    log.error(sys.exc_info()[1])
-                    l_err.append(str(sys.exc_info()[1]))
+                    s_err = str(sys.exc_info()[1])
+                    l_err.append(s_err)
                     continue
 
         log.info("Fin de comande %s\n nombre d'erreurs = %d\n%s"%(self.__doc__,

@@ -161,23 +161,15 @@ class Espece(models.Model):
     famille = models.ForeignKey(Famille, null=True, blank=True)
     avec = models.ManyToManyField("self", related_name="avec", blank=True)
     sans = models.ManyToManyField("self", related_name="sans", blank=True)
-    intra_rang_m = models.FloatField("distance conseillée dans le rang (m)", default=0)
-    inter_rang_m = models.FloatField("distance conseillée entre les rangs (m)", default=0)    
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
-    bStokable = models.BooleanField(default=False)
+    bStockable = models.BooleanField(default=False)
     rendementConservation = models.FloatField("Rendement de conservation", default=0.9)
     rendementGermination = models.FloatField("Rendement germination", default=1)
     consoHebdoParPart = models.FloatField("quantité consommée par semaine par part", default=0)
     nbParts = models.PositiveIntegerField("Nb de parts à servir", default=0)
    
     class Meta:
-        ordering = ['nom']
-          
-    def intra_rang_cm(self):
-        return int(self.intra_rang_m * 100)                    
- 
-    def inter_rang_cm(self):
-        return int(self.inter_rang_m * 100)               
+        ordering = ['nom']              
  
     def __str__(self):
         return self.nom                    
@@ -204,13 +196,21 @@ class Legume(models.Model):
     poidsParPiece_kg = models.FloatField("Poids estimé par pièce (g)", default=0)  ## sera optionnel si unite_prod = kg
     nbGrainesParPied = models.PositiveIntegerField("Nb graines par pied", default=1)
     couleur = models.CharField(max_length=16, default="green")
+    intra_rang_m = models.FloatField("distance dans le rang (m)", default=0)
+    inter_rang_m = models.FloatField("distance entre les rangs (m)", default=0)    
     
     class Meta:
         ordering = ['espece', 'variete']
             
     def __str__(self):
-        return "%s"%(self.nom()) 
+        return "%s"%(self.nom())
 
+    def intraRang_cm(self):
+        return int(self.intra_rang_m * 100)                    
+ 
+    def interRang_cm(self):
+        return int(self.inter_rang_m * 100) 
+    
     def nom(self):
         return "%s %s"%(self.espece.nom, self.variete.nom) 
 
@@ -402,10 +402,9 @@ class Serie(models.Model):
         """ renvoi la production estimée de cette semaine
         soit le stock lissé sur le nombre de semaines de consommation pour les legumes de garde
         soit le stock lissé sur la durée de la récolte pour les légumes en terre"""
-        if self.legume.espece.bStokable: 
-            print (self.legume)
-            nbSemEcoulementStock = int(self.prodEstimee_kg_ou_piece() / (self.legume.consoHebdoTotale()))
-            dateFinStock = dateDebutSem + datetime.timedelta(weeks = nbSemEcoulementStock)
+        if self.legume.espece.bStockable: 
+            nbSemEcoulementStock = int(self.prodEstimee_kg_ou_piece() / (self.legume.espece.consoHebdoTotale()))
+            dateFinStock = self.evt_fin.date + datetime.timedelta(weeks = nbSemEcoulementStock)
             if dateDebutSem > self.evt_fin.date and dateDebutSem < dateFinStock :
                 return self.prodEstimee_kg_ou_piece()/nbSemEcoulementStock
             else:

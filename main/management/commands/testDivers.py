@@ -11,12 +11,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
-        serie = Serie.objects.get(id=16)
-        date_debut_sem = MyTools.getDateFrom_d_m_y("21/11/2016")
+        serie = Serie.objects.get(id=37)
+        date_debut_sem = MyTools.getDateFrom_d_m_y("2/10/2016")
 
         serie.prodHebdo(date_debut_sem)
         
-    
+        return
         
 #         impl = Implantation.objects.get(id=13)
 #         s = impl.surface_m2()

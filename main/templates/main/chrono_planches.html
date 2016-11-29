@@ -394,7 +394,7 @@ function drop(event) {
     event.preventDefault();
     id_serie = event.dataTransfer.getData("id_serieDeplacee")
     id_implantation = event.dataTransfer.getData("id_implantation");
-    quantite_implantation = event.dataTransfer.getData("quantite_implantation");
+    quantite_= event.dataTransfer.getData("quantite_implantation");
     id_plancheDest = event.target.id.split("__")[1]
     prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
     }
@@ -466,10 +466,10 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intraRang_cm}}"
                                     style="border-color: {{serie.variete.couleur}}"
                                     draggable="true" ondragstart="dragStart(event)" 
-                                    title="Série {{serie.id}}, {{serie.legume.nom}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"
+                                    title="Série {{serie.id}}, impl {{serie.implantationPlanche.id}} ({{serie.implantationPlanche.quantite}}/{{serie.quantiteTotale}}), {{serie.legume.nom}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"
                                     >
             <div class="divTitreSerie">
-            (S {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.legume.nom}} x {{serie.implantationPlanche.quantite}}
+            (S {{serie.id}} impl {{serie.implantationPlanche.id}}) {{serie.legume.nom}} x {{serie.implantationPlanche.quantite}} / {{serie.quantiteTotale}}
             <img src='{{STATIC_URL}}images/editor.png' title='Editer' onclick="prepareEditeSerie({{serie.id}});return(false)">
             </div>
             {% for evt in serie.evenements.all%}

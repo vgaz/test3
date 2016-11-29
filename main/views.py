@@ -379,7 +379,7 @@ def prevision_recolte(request):
         for sem in l_semaines:
             prodHebdo = 0
             for serie in l_series:
-                prodHebdo += serie.prodHebdo(date_debut_sem)
+                prodHebdo += serie.prodHebdo(sem.date_debut)
             leg.l_prod.append((sem.date_debut, int(prodHebdo), leg.espece.nomUniteProd()))
         
     return render(request,
