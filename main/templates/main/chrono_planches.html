@@ -394,7 +394,7 @@ function drop(event) {
     event.preventDefault();
     id_serie = event.dataTransfer.getData("id_serieDeplacee")
     id_implantation = event.dataTransfer.getData("id_implantation");
-    quantite_= event.dataTransfer.getData("quantite_implantation");
+    quantite_implantation = event.dataTransfer.getData("quantite_implantation");
     id_plancheDest = event.target.id.split("__")[1]
     prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
     }
