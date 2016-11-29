@@ -8,9 +8,6 @@ from main.settings import PROJECT_PATH
 import sys
    
 
-
-
-
 class Command(BaseCommand):
     """updatedb : mise à jour de la base à partir des tableaux CSV"""
     help = "Tapper python manage.py updatedb"
@@ -116,12 +113,10 @@ class Command(BaseCommand):
                         
                         ## maj famille de l'espèce
                         esp.famille_id = famille.id
-
                         esp.save()
                     
                     ## recup infos
-                    try: 
-                        
+                    try:
                         s_unite = d_line.get("Unité","").lower().strip()
                         assert s_unite, "Pas d'interRang défini pour %s"%(esp.nom)
                         if s_unite == "kg":
@@ -161,13 +156,21 @@ class Command(BaseCommand):
         with open(os.path.join(PROJECT_PATH, "inputs", "planning.csv"), "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
             for d_line in reader:
-                ## une ligne par série
-                s_espece = d_line.get("Espèce", "").lower().strip()
-                espece = Espece.objects.get(nom=s_espece) 
                 
-                ## mise à jour liste des variétés
-                s_variet = d_line.get("Variété", "").lower().strip()                
                 try:
+                    s_espece = d_line.get("Espèce", "").lower().strip()
+                    assert s_espece, "Espèce indéfinie"           
+                    s_variet = d_line.get("Variété", "").lower().strip() 
+                    assert s_variet, "Variété indéfinie pour %s"%(s_espece)
+                    espece = Espece.objects.get(nom=s_espece) 
+                    assert espece, "objet Espèce non trouvé pour %s"%(s_espece)
+                except:
+                    s_err = str(sys.exc_info()[1])
+                    l_err.append(s_err)
+                    continue
+                
+                try:
+                    ## mise à jour des variétés
                     var = Variete.objects.get(nom = s_variet)
                 except:
                     log.info("Ajout " + s_variet)
@@ -176,7 +179,6 @@ class Command(BaseCommand):
                     var.save()
                     espece.varietes.add(var)
                     espece.save()
-                    continue    
                         
                 ## mise à jour liste des légumes et planning de séries
                 try:

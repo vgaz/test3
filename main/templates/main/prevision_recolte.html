@@ -51,8 +51,8 @@ function init()
 
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
-<input name="serres" type="checkbox" {% if selection_serres %}checked{% endif %} /> Serres 
-<input name="champs" type="checkbox" {% if selection_champs %}checked{% endif %} /> Champs 
+<input name="serres" type="checkbox" {% if selection_serres %} checked {% endif %} /> Serres 
+<input name="champs" type="checkbox" {% if selection_champs %} checked {% endif %} /> Champs 
 &nbsp;&nbsp;
  Pour les planches   <input style="width: 300px" type="text" name="id_planches" value="{% for planche in l_planches %}{{planche.id}},{% endfor %}" />
  Visionnage du      <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
@@ -77,7 +77,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
             
             {% for t_prod in leg.l_prod %}
             <td>Sem du {{t_prod.0|date:'d-m-Y'}}<br/>
-            Estimé : {{t_prod.1}}<br/>
+            <div style="background:{{t_prod.3}}">Estimé : {{t_prod.1}}</div>
             Réel : <input style="width:40px;font-weight:bold;text-align: center" type="text" name="p__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}" id="p__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}"/>
             </td>
             {% endfor %}

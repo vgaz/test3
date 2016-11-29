@@ -380,7 +380,14 @@ def prevision_recolte(request):
             prodHebdo = 0
             for serie in l_series:
                 prodHebdo += serie.prodHebdo(sem.date_debut)
-            leg.l_prod.append((sem.date_debut, int(prodHebdo), leg.espece.nomUniteProd()))
+            if prodHebdo == 0:
+                color = "white"
+            else:
+                color = "yellow"
+            leg.l_prod.append((sem.date_debut, 
+                               int(prodHebdo), 
+                               leg.espece.nomUniteProd(),
+                               color))
         
     return render(request,
                  'main/prevision_recolte.html',
