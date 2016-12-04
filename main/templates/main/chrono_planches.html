@@ -421,13 +421,14 @@ function unfocus(event)
 <input name="serres" type="checkbox" {% if selection_serres %}checked{% endif %} /> Serres 
 <input name="champs" type="checkbox" {% if selection_champs %}checked{% endif %} /> Champs 
 &nbsp;&nbsp;
- Pour les planches   <input style="width: 300px" type="text" name="id_planches" value="{% for planche in l_planches %}{{planche.id}},{% endfor %}" />
+Filtre   <input style="width:50px" type="text" name="s_filtre_planches" value="{{s_filtre_planches}}" />
  Visionnage du      <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
                     <input style="margin-left: 20px" type="submit" value="Envoyer" />
                     <input style="margin-left: 20px" type="submit" name="direction" value="recul" />
 <input type="submit" name="direction" value="avance" />
 Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
 <button onclick="changelePas(-1);return(false)">-</button><button onclick="changelePas(1);return(false)">+</button>
+<input type="button"  value="Documentation" onclick="document.getElementById('doc').style.display="block'";return(false)">
 </form>
 
 
@@ -544,5 +545,8 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     <input type="submit" value="Déplacement" onclick="deplaceImplantation()" style="margin-left: 30px" />
     <input type='button' value='Annuler' onclick="document.getElementById('divDeplacementImplantation').style.display='none';return False"/>
     
+</div>
+<div id="doc" style="display:hide">
+Voila la doc
 </div>
 {% endblock %}

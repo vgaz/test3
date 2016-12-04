@@ -106,10 +106,12 @@ def chronoPlanches(request):
         
         l_planches = l_planches.order_by('nom')
         
-        s_id_planches = request.POST.get("id_planches", request.GET.get("id_planches", ""))
-#         if s_noms:
-#             l_noms = [int(num.strip()) for num in s_noms.strip(',').split(",")]
-#             l_planches = Planche.objects.filter(num__in = l_noms).order_by('nom')
+        s_filtre_planches = request.POST.get("s_filtre_planches", request.GET.get("s_filtre_planches", ""))     
+        planchesAExclure = []
+        for planche in l_planches:
+            if s_filtre_planches not in planche.nom:
+                planchesAExclure.append(planche.id)
+        l_planches = l_planches.exclude(pk__in=planchesAExclure)         
 
     except:
         s_msg += str(sys.exc_info())
@@ -134,6 +136,7 @@ def chronoPlanches(request):
                  {
                     "appVersion": constant.APP_VERSION,
                     "appName": constant.APP_NAME,
+                    "s_filtre_planches":s_filtre_planches,
                     "l_planches": l_planches,
                     "selection_serres":bSerres,
                     "selection_champs":bChamps,
@@ -256,7 +259,7 @@ def evenementsPlanches(request):
     l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
                                       date__lte = date_fin_vue)
     for evt in l_evts:
-        ## on ajoute les numeros de planche
+        ## on ajoute les numerosdatetime de planche
         serie = evt.serie_set.all()[0]
         evt.l_planches = [imp.planche for imp in serie.implantations.all()]
         for pl in evt.l_planches:
@@ -355,6 +358,7 @@ def prevision_recolte(request):
     date_debut_sem = date_debut_sem_vue
         
     while True:
+        
         sem = MyTools.MyEmptyObj()
         date_fin_sem = date_debut_sem + datetime.timedelta(days=6)
         sem.date_debut_iso = date_debut_sem.isocalendar()
@@ -367,6 +371,7 @@ def prevision_recolte(request):
 
     ## recherche des productions par semaine regroupées par légume
     l_legumes = Legume.objects.all()
+    
     for leg in l_legumes:
         ## calcul des productions de légumes
         l_series = Serie.objects.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue) ## on ne garde que la fenetre de temps étudiée
@@ -377,27 +382,30 @@ def prevision_recolte(request):
         ## ou sur la durée de récolte pour les légumes non stockables
         leg.l_prod = []
         for sem in l_semaines:
-            prodHebdo = 0
+            qteHebdo = 0
             for serie in l_series:
-                prodHebdo += serie.prodHebdo(sem.date_debut)
-            if prodHebdo == 0:
-                color = "white"
+                qteHebdo += serie.prodHebdo(sem.date_debut)
+            
+            if qteHebdo == 0:
+                couleur = "white"
             else:
-                color = "yellow"
+                couleur = leg.espece.couleur
+                
             leg.l_prod.append((sem.date_debut, 
-                               int(prodHebdo), 
+                               int(qteHebdo), 
+                               int(leg.poids_kg(qteHebdo)),
                                leg.espece.nomUniteProd(),
-                               color))
-        
+                               couleur))
+
     return render(request,
                  'main/prevision_recolte.html',
                  {
                   "appVersion":constant.APP_VERSION,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
-                  "l_vars": Variete.objects.all().order_by("espece"),
                   "l_semaines":l_semaines,
                   "l_legumes":l_legumes,
+                  
                   "info":""
                   })
     

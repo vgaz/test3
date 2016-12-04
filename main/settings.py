@@ -4,6 +4,9 @@
 import os, sys
 from django.utils.translation import gettext_lazy as _
 
+from main import constant
+import logging
+
 DEBUG = True
 TEMPLATE_DEBUG = True
 
@@ -65,4 +68,19 @@ USE_I18N = False
 USE_L10N = False
 
 USE_TZ = False
+
+log = logging.getLogger(constant.APP_NAME)
+## Create traces logger
+s_format = '[%(asctime)s %(name)s_%(levelname)-8s] %(module)-15s.%(funcName)s: %(message)s'
+## add file handler
+logFile = os.path.abspath(os.path.join(PROJECT_PATH, constant.APP_NAME + ".log"))
+
+hdlr = logging.FileHandler(logFile)
+hdlr.setFormatter(logging.Formatter(s_format))
+log.addHandler(hdlr)
+## add stdout handler
+hdlr = logging.StreamHandler()
+hdlr.setFormatter(logging.Formatter(s_format))
+log.addHandler(hdlr)    
+log.setLevel(logging.INFO)
 

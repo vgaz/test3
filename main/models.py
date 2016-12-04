@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 import datetime, logging
-
+import sys
 from main import constant  
 import MyTools
 
@@ -61,9 +61,6 @@ def creationPlanche(longueur_m, largeur_m, bSerre, s_nom=""):
     planche.save()
     return planche
            
-
-
-
 def surfaceLibreSurPeriode(planche, date_debut, date_fin): 
     """retourne la surface dispo de telle date à telle date
     est retenue la plus grande surface dispo sur TOUT l'intervale
@@ -120,15 +117,48 @@ def cloneSerie(serie):
         evt2.save()
     return serie2
 
+def supprimeSerie(id):
+    """ supression de la série et de ses champs liés"""
+    try:
+        serie = Serie.objects.get(id=id)
+        ##print("Demande de suppression série %s"%serie.__str__())
+        ## supression des évenements associés
+        for obj in serie.evenements.all():
+            print ("Suppression ", obj)
+            obj.delete()
+        ## supression des implantations
+        for obj in serie.implantations.all():
+            print ("Suppression ", obj)
+            obj.delete()
+         
+        serie.delete()      
+        print ("Série supprimée")
+        return True
+    except:
+        print(str(sys.exc_info()))
+        return False
+    
+    
+def nombreDePanniersEnDateDu(in_date):
+    l_qtes = QtePanniers.objets.filter(dateDebut__lte = in_date)
+    ## on renvoie le dernier
+    return l_qtes[-1].val
+
+
+#################################################################################
+
 class Famille(models.Model):
     """famille associée à la varieté"""
-    nom = models.CharField(max_length=100)
+    nom = models.CharField("Nom de la famille", max_length=100)
     
     class Meta: 
         ordering = ['nom']
         
     def __unicode__(self):
         return self.nom
+
+    def __str__(self):
+        return self.__unicode__()
 
 
 class Planche(models.Model):
@@ -167,6 +197,7 @@ class Espece(models.Model):
     rendementGermination = models.FloatField("Rendement germination", default=1)
     consoHebdoParPart = models.FloatField("quantité consommée par semaine par part", default=0)
     nbParts = models.PositiveIntegerField("Nb de parts à servir", default=0)
+    couleur = models.CharField(max_length=16, default="yellow")
    
     class Meta:
         ordering = ['nom']              
@@ -181,6 +212,18 @@ class Espece(models.Model):
         return self.nbParts * self.consoHebdoParPart
 
 
+class QtePanniers(models.Model):
+    """Variété"""
+    val = models.PositiveIntegerField("Nb de parts ou panniers à servir par semaine", default=0)
+    dateDebut = models.DateTimeField("date d'engagement de cette quantité de panniers")
+    
+    class Meta: 
+        ordering = ['dateDebut'] ## pour lister du plus ancien au plus recent 
+
+    def __str__(self):
+        return "%d panniers à partir du %s"%(self.val, dateDebut)
+
+      
 class Variete(models.Model):
     """Variété"""
     nom = models.CharField(max_length=100)
@@ -192,10 +235,9 @@ class Legume(models.Model):
     """légume"""
     espece = models.ForeignKey(Espece)
     variete = models.ForeignKey(Variete)
-    rendementProduction_kg_m2 = models.FloatField("Rendement de production kg/m2)", default=1)
-    poidsParPiece_kg = models.FloatField("Poids estimé par pièce (g)", default=0)  ## sera optionnel si unite_prod = kg
+    rendementProduction_kg_m2 = models.FloatField("Rendement de production (kg/m2)", default=1)
+    poidsParPiece_kg = models.FloatField("Poids estimé par pièce (Kg)", default=0)  ## sera optionnel si unite_prod = kg
     nbGrainesParPied = models.PositiveIntegerField("Nb graines par pied", default=1)
-    couleur = models.CharField(max_length=16, default="green")
     intra_rang_m = models.FloatField("distance dans le rang (m)", default=0)
     inter_rang_m = models.FloatField("distance entre les rangs (m)", default=0)    
     
@@ -214,20 +256,26 @@ class Legume(models.Model):
     def nom(self):
         return "%s %s"%(self.espece.nom, self.variete.nom) 
 
-
-    def plantsPourProdHebdo(self, productionDemandee):
-        """ A REFAIRE retourne nb de plants en fonction de la prod escomptée (en kg ou en unité
-        pour les plantes donnaPositiveIntegerFieldnt sur plusieurs semaines, on prend le rendement de la première semaine"""
-        print ("productionDemandee_kg", productionDemandee)
-        print ("self.prod_hebdo_moy_g", self.prod_hebdo_moy_g)  
-        if self.prod_hebdo_moy_g == "0":
-            print ("attention , réponse bidon dans  plantsPourProdHebdo %s"%self.nom)
-            return productionDemandee
-        
-        ret =  int( (float(productionDemandee) * 1000) / float(self.prod_hebdo_moy_g.split(",")[0])  )
-        print (ret)
-        return (ret)
-
+    def poids_kg(self, qte):
+        """Retourne la quantité en kg avec conversion éventuelle pièce > Kg
+            pour les légumes vendus à la pièce"""
+        if self.espece.unite_prod == constant.UNITE_PROD_PIECE:
+            return (qte * self.poidsParPiece_kg)
+        else:
+            return (qte)
+# 
+#     def plantsPourProdHebdo(self, productionDemandee):
+#         """ A REFAIRE retourne nb de plants en fonction de la prod escomptée (en kg ou en unité
+#         pour les plantes donnaPositiveIntegerFieldnt sur plusieurs semaines, on prend le rendement de la première semaine"""
+#         print ("productionDemandee_kg", productionDemandee)
+#         print ("self.prod_hebdo_moy_g", self.prod_hebdo_moy_g)  
+#         if self.prod_hebdo_moy_g == "0":
+#             print ("attention , réponse bidon dans  plantsPourProdHebdo %s"%self.nom)
+#             return productionDemandee
+#         
+#         ret =  int( (float(productionDemandee) * 1000) / float(self.prod_hebdo_moy_g.split(",")[0])  )
+#         print (ret)
+#         return (ret)
 
 class Implantation(models.Model):
     planche = models.ForeignKey("Planche")
@@ -249,11 +297,11 @@ class Implantation(models.Model):
                             serie.nb_rangs, 
                             serie.intra_rang_m)
     def __str__(self):
-        return "Implantation %d, %d pieds (%d m2) sur planche %s (%d)"%(  self.id, 
-                                                                     self.quantite, 
-                                                                     self.surface_m2(), 
-                                                                     self.planche.nom,
-                                                                     self.planche.id)
+        return "Implantation %d, %d pieds (%d m2) sur planche %s (%d)"%( self.id, 
+                                                                         self.quantite, 
+                                                                         self.surface_m2(), 
+                                                                         self.planche.nom,
+                                                                         self.planche.id)
 
 class SerieManager(models.Manager):
     
@@ -287,7 +335,7 @@ class Evenement(models.Model):
     D_NOM_TYPES = {TYPE_DEBUT:"Début", TYPE_FIN:"Fin", TYPE_DIVERS:"Divers"}
 
     type =  models.PositiveIntegerField()
-    date = models.DateTimeField()
+    date = models.DateTimeField("date de l'évenement")
     date_creation = models.DateTimeField(default=datetime.datetime.now())
     duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)
     nom = models.CharField(max_length=100, default="")
@@ -354,7 +402,7 @@ class Serie(models.Model):
         evt_fin = creationEvt(dateFin, Evenement.TYPE_FIN, "fin %s"%(self.legume.nom()))       
         self.evt_fin_id = evt_fin.id
         self.evenements.add(evt_fin)
-        
+
         ## ajout evt de début de récolte
         dateRecolte = evt_debut.date + datetime.timedelta(days = self.dureeAvantRecolte_j)
         evt_recolte = creationEvt(dateRecolte, Evenement.TYPE_DIVERS, "Récolte %s"%(self.legume.nom()))       
@@ -391,28 +439,29 @@ class Serie(models.Model):
         
         return surface
 
-    def prodEstimee_kg_ou_piece(self):
-            """Retourne la production totale escomptée (kg ou  pieces)""" 
+    def quantiteEstimee_kg_ou_piece(self):
+            """Retourne la quantité totale escomptée (kg ou  pièces)""" 
             if self.legume.espece.unite_prod == constant.UNITE_PROD_KG:
                 return self.legume.rendementProduction_kg_m2 * self.surfaceOccupee_m2()
             else:
                 return self.quantiteTotale()
+    
     
     def prodHebdo(self, dateDebutSem):
         """ renvoi la production estimée de cette semaine
         soit le stock lissé sur le nombre de semaines de consommation pour les legumes de garde
         soit le stock lissé sur la durée de la récolte pour les légumes en terre"""
         if self.legume.espece.bStockable: 
-            nbSemEcoulementStock = int(self.prodEstimee_kg_ou_piece() / (self.legume.espece.consoHebdoTotale()))
+            nbSemEcoulementStock = int(self.quantiteEstimee_kg_ou_piece() / (self.legume.espece.consoHebdoTotale()))
             dateFinStock = self.evt_fin.date + datetime.timedelta(weeks = nbSemEcoulementStock)
             if dateDebutSem > self.evt_fin.date and dateDebutSem < dateFinStock :
-                return self.prodEstimee_kg_ou_piece()/nbSemEcoulementStock
+                return self.quantiteEstimee_kg_ou_piece()/nbSemEcoulementStock
             else:
                 return 0
         else:
             ## legume frais 
             if self.enPlaceEnDatedu(dateDebutSem):
-                return self.prodEstimee_kg_ou_piece() / (self.etalementRecolte_j / 7)
+                return self.quantiteEstimee_kg_ou_piece() / (self.etalementRecolte_j / 7)
             else:
                 return 0
             

@@ -10,13 +10,13 @@ from main.models import *
 import sys, traceback
 import datetime
 from django.core import serializers
+from main.settings import log
 
-logging.disable(logging.DEBUG)
 
 def serveRequest(request):
     """Received a request and return specific response"""
     cde = request.POST.get("cde","")
-    print(request.POST)
+    log.info(str(request.POST))
 
 # 
 #     if cde == "checkUrl": 
@@ -24,10 +24,10 @@ def serveRequest(request):
 #         try:
 #             url = request.POST.get("url")
 #             s_json = '{"status":true, "l_evts": %s}'%rep
-#             print(s_json)
+#             log.info(s_json)
 #         except:
-#             print(__name__ + ': ' + str(sys.exc_info()[1]) )
-#             traceback.print_tb(sys.exc_info())
+#             log.info(__name__ + ': ' + str(sys.exc_info()[1]) )
+#             traceback.log.info_tb(sys.exc_info())
 #             s_json = '{"status":false,"err":"%s"}'%(sys.exc_info()[1])
 #              
 #         return HttpResponse(s_json, content_type="application/json")
@@ -41,10 +41,10 @@ def serveRequest(request):
             l_evts = Serie.objects.get(id = int(request.POST.get("id", 0))).evenements.all()
             rep = serializers.serialize("json", l_evts)      
             s_json = '{"status":true, "l_evts": %s}'%rep
-            print(s_json)
+            log.info(s_json)
         except:
-            print(__name__ + ': ' + str(sys.exc_info()[1]) )
-            traceback.print_tb(sys.exc_info())
+            log.info(__name__ + ': ' + str(sys.exc_info()[1]) )
+            traceback.log.info_tb(sys.exc_info())
             s_json = '{"status":false,"err":"%s"}'%(sys.exc_info()[1])
              
         return HttpResponse(s_json, content_type="application/json")
@@ -56,7 +56,7 @@ def serveRequest(request):
             s_ = serializers.serialize("json", evt)       
             s_json = '{"status":true,"evt":%s}'% s_
         except:
-            traceback.print_tb(sys.exc_info())
+            traceback.log.info_tb(sys.exc_info())
             s_json = '{"status":false,"err":"%s"}'%sys.exc_info()[1]
              
         return HttpResponse( s_json, content_type="application/json")
@@ -74,12 +74,12 @@ def serveRequest(request):
                                 int(request.POST.get("nb_rangs")), 
                                 request.POST.get("date_debut"), 
                                 request.POST.get("date_fin"))
-            print(serie)
+            log.info(serie)
             s_json = '{"status":true,"msg":"%s"}'%serie
         except:
             ex_type, ex, tb = sys.exc_info()
-            print (ex_type, ex)
-            traceback.print_tb(tb)
+            log.info (ex_type, ex)
+            traceback.log.info_tb(tb)
             s_json = '{"status":false,"msg":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")
@@ -87,23 +87,10 @@ def serveRequest(request):
     
     if cde == 'supprime_serie':
         try:
-            serie = Serie.objects.get(id=int(request.POST.get("id")))
-            ##print("Demande de suppression série %s"%serie.__str__())
-            ## supression des évenements associés
-            for obj in serie.evenements.all():
-                print ("Suppression ", obj)
-                obj.delete()
-            ## supression des implantations
-            for obj in serie.implantations.all():
-                print ("Suppression ", obj)
-                obj.delete()
-             
-            print ("Série supprimée")
-            serie.delete()                
-         
+            models.supprimeSerie(int(request.POST.get("id")))
             s_json = '{"status":true}'
         except:
-            traceback.print_tb(sys.exc_info())
+            traceback.log.info_tb(sys.exc_info())
             s_json = '{"status":false,"err":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")
@@ -119,9 +106,9 @@ def serveRequest(request):
             ## suppression de la production associée
             ## supression des évenements associés à une serie de plants            
             planche.delete()
-            s_json = '{"status":"true","id_planche":%d}'%id_pl
+            s_json = '{"status":true,"id_planche":%d}'%id_pl
         except:
-            s_json = '{"status":"false","err":"%s"}'%sys.exc_info()[1]
+            s_json = '{"status":false,"err":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")
 
@@ -133,7 +120,7 @@ def serveRequest(request):
             id_serie = int(request.POST.get("id_serie",0))
             assert(id_serie != 0, "bad id_serie in sauve_evt")
             date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))
-            print (date)
+            log.info (date)
             duree_j = int(request.POST.get("duree_j", 1))
             nom = request.POST.get("nom","")
 
@@ -150,11 +137,11 @@ def serveRequest(request):
             evt.nom = nom
             evt.save()
             Serie.objects.get(id=id_serie).evenements.add(evt)
-            print(evt)
+            log.info(evt)
                 
             s_json = '{"status":true}'
         except:
-            traceback.print_tb(sys.exc_info())            
+            traceback.log.info_tb(sys.exc_info())            
             s_json = '{"status":false,"err":"%s %s"}'%(__name__, sys.exc_info()[1])
            
         return HttpResponse(s_json)
@@ -162,7 +149,7 @@ def serveRequest(request):
     if cde == "supprime_evt":
         try:
             evt = Evenement.objects.get(id=int(request.POST.get("id", 0)))
-            print("will delete", evt)
+            log.info("will delete", evt)
             evt.delete()
             s_json = '{"status":true}'
         except:
@@ -264,13 +251,13 @@ def serveRequest(request):
             s_json = '{"status":true, "msg":"%s"}'%rep
         except:
             s_err = "Erreur : " + str(sys.exc_info()[1])
-            print (s_err)
+            log.error (s_err)
             s_json = '{"status":false,"msg":"%s"}'%s_err
            
         return HttpResponse(s_json)
 
 
-    print("No action engaged for", request.POST)
+    log.info("No action engaged for", request.POST)
 
     return HttpResponse("No request treated inside serveRequest")
 

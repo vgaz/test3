@@ -5,6 +5,7 @@ import datetime, os
 from django.core.management.base import BaseCommand
 from main.models import *
 from main.settings import PROJECT_PATH
+from main.settings import log
 import sys
    
 
@@ -59,27 +60,7 @@ class Command(BaseCommand):
             
     def handle(self, *args, **options):
 
-        log = logging.getLogger('utils')
-        log.setLevel(logging.INFO)
-        
-        
-        log = logging.getLogger('updatedb')
-        ## Create traces logger
-        s_format = '[%(asctime)s %(name)s_%(levelname)-8s] %(module)-15s.%(funcName)s: %(message)s'
-        ## add file handler
-        logFile = os.path.abspath("./updatedb.log")
-
-        hdlr = logging.FileHandler(logFile)
-        hdlr.setFormatter(logging.Formatter(s_format))
-        log.addHandler(hdlr)
-        ## add stdout handler
-        hdlr = logging.StreamHandler()
-        hdlr.setFormatter(logging.Formatter(s_format))
-        log.addHandler(hdlr)    
-        log.setLevel(logging.INFO)
-        
-
-        
+       
         l_err  = []
 
         ## maj planches
