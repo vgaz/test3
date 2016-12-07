@@ -369,13 +369,14 @@ def prevision_recolte(request):
             break
         date_debut_sem = date_fin_sem + datetime.timedelta(days=1)
 
-    ## recherche des productions par semaine regroupées par légume
+    l_seriesActives = Serie.objects.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue) ## on ne garde que la fenetre de temps étudiée
+    ## recherche des productions par semaine regroupées par légume ou par espèce
     l_legumes = Legume.objects.all()
-    
+        
     for leg in l_legumes:
         ## calcul des productions de légumes
-        l_series = Serie.objects.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue) ## on ne garde que la fenetre de temps étudiée
-        l_series = l_series.filter(legume_id = leg.id) ## on ne garde que les series du legume concerné
+        l_series = l_seriesActives.filter(legume_id = leg.id)
+        
         ## Pour chaque semaine étudiée, on calcule le stock cumulé de chaque série 
         ## le stock est lissé 
         ## sur la conso hebdo pour les légumes stockables
@@ -397,6 +398,11 @@ def prevision_recolte(request):
                                leg.espece.nomUniteProd(),
                                couleur))
 
+    bDetailVar = request.POST.get("detail_variete", "") != ""
+#     if bDetailVar:
+
+
+
     return render(request,
                  'main/prevision_recolte.html',
                  {
@@ -405,7 +411,8 @@ def prevision_recolte(request):
                   "date_fin_vue": date_fin_vue,
                   "l_semaines":l_semaines,
                   "l_legumes":l_legumes,
-                  
+                  "l_especes" : Espece.objects.all(),
+                  "bDetailVar":bDetailVar,
                   "info":""
                   })
     
