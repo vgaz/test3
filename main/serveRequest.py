@@ -66,19 +66,20 @@ def serveRequest(request):
         try:
             # gestion de la création ou édition d'une série de plants
             serie = creationEditionSerie(
-                                int(request.POST.get("id_serie")),
-                                int(request.POST.get("id_variete")), 
-                                int(request.POST.get("id_implantation")), 
+                                int(request.POST.get("id_serie","0")),
+                                int(request.POST.get("id_legume")), 
+                                request.POST.get("id_b_serre","off")=="on",
+                                int(request.POST.get("id_implantation","0")), 
                                 int(request.POST.get("quantite_implantation")), 
-                                float(request.POST.get("intra_rang_cm"))/100, 
-                                int(request.POST.get("nb_rangs")), 
+                                float(request.POST.get("intra_rang_cm","0"))/100, 
+                                int(request.POST.get("nb_rangs","0")), 
                                 request.POST.get("date_debut"), 
-                                request.POST.get("date_fin"))
+                                request.POST.get("date_fin",""))
             log.info(serie)
             s_json = '{"status":true,"msg":"%s"}'%serie
         except:
             ex_type, ex, tb = sys.exc_info()
-            log.info (ex_type, ex)
+            log.error (str(ex_type) + str(ex))
             traceback.log.info_tb(tb)
             s_json = '{"status":false,"msg":"%s"}'%sys.exc_info()[1]
 

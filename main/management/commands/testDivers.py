@@ -11,11 +11,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
-        serie = Serie.objects.get(id=37)
-        date_debut_sem = MyTools.getDateFrom_d_m_y("2/10/2016")
-
-        serie.prodHebdo(date_debut_sem)
         
+#         serie = Serie.objects.get(id=37)
+#         date_debut_sem = MyTools.getDateFrom_d_m_y("2/10/2016")
+# 
+#         serie.prodHebdo(date_debut_sem)
+#         
         return
         
 #         impl = Implantation.objects.get(id=13)
@@ -33,22 +34,24 @@ class Command(BaseCommand):
 #         self.factory = RequestFactory()
 #         
 # 
-#         # Create an instance of a POST request.
-#         request = self.factory.post('/chrono_planches/?nom_planches=', 
-#                                     data={  "cde":"deplacement_implantation",
-#                                             "id_implantation":1,
-#                                             "id_planche_dest":5,
-#                                             "quantite":5,
-#                                             "nb_rangs":3,
-#                                             "intra_rang_cm":30,
-#                                             "simulation":""                            
-#                                         }
-#                                     )        
-#         serveRequest.serveRequest(request)
-#         
-#         
-#         
-#         return
+        # Create an instance of a POST request.
+        
+    
+        request = self.factory.post('/chrono_planches/?nom_planches=', 
+                                    data={  "cde":"sauve_serie",
+                                            "id_serie":0,
+                                            "id_variete":1,
+                                            "quantite":5,
+                                            "nb_rangs":3,
+                                            "intra_rang_cm":30,
+                                            "simulation":""                            
+                                        }
+                                    )        
+        serveRequest.serveRequest(request)
+         
+         
+         
+        return
 #     
 #     
 #         for e in  Evenement.objects.all():

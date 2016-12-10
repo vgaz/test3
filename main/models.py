@@ -19,7 +19,8 @@ def creationEvt(e_date, e_type, nom="", duree_j=1):
 
 
 def creationEditionSerie(id_serie, 
-                         id_var, 
+                         id_leg, 
+                         bSerre,
                          id_implantation, 
                          quantite_implantation, 
                          intra_rang_m, 
@@ -29,14 +30,25 @@ def creationEditionSerie(id_serie,
     """Création ou edition d'une série de plants
     si id_serie == 0, c'est une demande de création, sinon , d'édition/modification
     """
-    print(__name__)
+    assert id_leg, '%s pas de valeur pour var'%__name__
+    leg = Legume.objects.get(id=id_leg)
     if id_serie == 0:
         serie = Serie() ## nelle serie
     else:
         serie = Serie.objects.get(id=id_serie)
-    serie.variete_id = id_var
-    serie.intra_rang_m = intra_rang_m
-    serie.nb_rangs = nb_rangs
+    serie.legume_id = leg.id
+    if intra_rang_m:
+        serie.intra_rang_m = intra_rang_m
+    else:
+        serie.intra_rang_m = leg.intra_rang_m
+    serie.bSerre = bSerre
+    
+    if nb_rangs:
+        serie.nb_rangs = nb_rangs
+    else:
+        ## selon la planche sur laquelle on atterira, on fixera le nb de rangs en fonction 
+        ## de l'inter rang du legume et de la largeur de planche
+        serie.nb_rangs = 0 
     try:
         impl = serie.implantations.get(id=id_implantation)
     except:
@@ -115,6 +127,7 @@ def cloneSerie(serie):
         evt2.id = None
         evt2.serie_id = serie2.id
         evt2.save()
+    ## pas d'imlantation 
     return serie2
 
 def supprimeSerie(id):

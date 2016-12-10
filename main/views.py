@@ -67,20 +67,42 @@ def creationPlanches(request):
     
 def chronoPlanches(request):
 
-    try:    
+    try:   
+        s_filtre_planches = ""
+        l_planches= []
+        bSerres = True
+        bChamps = True
+        decalage_j = 0
+        delta15j = datetime.timedelta(days=15)
+        date_aujourdhui = datetime.datetime.now()
+        delta12h = datetime.timedelta(hours=12)
+        
         print(request.POST)
         s_msg = ""
-        delta12h = datetime.timedelta(hours=12)
-        date_du_jour = datetime.datetime.now()
-    
-        if request.POST.get("date_debut_vue",""):
+        
+        periode = request.POST.get("periode","annee")
+        if periode == "specifique":
             date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
-            date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta12h
+            date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", ""))
+        elif periode == "annee":
+            date_premierJour = MyTools.getDateFrom_d_m_y("1/1/%s"%date_aujourdhui.year)
+            delta = datetime.timedelta(days=365)
+            date_debut_vue = date_premierJour
+            date_fin_vue = date_premierJour + delta
+        elif periode == "mois":
+            print ("mois", str(date_aujourdhui.month), " year", date_aujourdhui.year)
+            date_premierJour = MyTools.getDateFrom_d_m_y("1/%s/%s"%(date_aujourdhui.month, date_aujourdhui.year))
+            delta = datetime.timedelta(days=30)
+            date_debut_vue = date_premierJour
+            date_fin_vue = date_premierJour + delta
+        elif periode == "semaine":
+            delta = datetime.timedelta(days=6)
+            date_debut_vue =  date_aujourdhui - datetime.timedelta(days=date_aujourdhui.weekday())
+            date_fin_vue = date_debut_vue + delta
         else:
-            delta = datetime.timedelta(days=60)
-            date_debut_vue = date_du_jour - delta
-            date_fin_vue = date_du_jour + delta + delta12h
-            
+            assert False, "pas de periode trouvee"
+        
+        
         decalage_j = int(request.POST.get("decalage_j", 10))
         delta = datetime.timedelta(days = decalage_j)
         if request.POST.get("direction", "") == "avance":
@@ -92,7 +114,7 @@ def chronoPlanches(request):
             date_fin_vue -= delta
         
         
-        if not request.POST.get("date_debut_vue",""):
+        if not request.POST.get("periode",""):
             bSerres = True
             bChamps = True
         else:
@@ -113,24 +135,20 @@ def chronoPlanches(request):
                 planchesAExclure.append(planche.id)
         l_planches = l_planches.exclude(pk__in=planchesAExclure)         
 
+        for planche in l_planches:
+            planche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)
+            ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de serie par planche)
+            for serie in planche.l_series:
+                serie.implantationPlanche = serie.implantations.get(planche_id=planche.id)
+                
     except:
         s_msg += str(sys.exc_info())
-        return render(request, 'main/erreur.html',  
-                      {"appVersion":constant.APP_VERSION, 
-                       "appName":constant.APP_NAME, 
-                       "message":s_msg}
-                      )
-    ## juste pour test wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-#     l_planches = Planche.objects.filter(id__in=[1,3,5,6,7])
-    
-    ## ajout des séries présentes pour chaque planche
-    for planche in l_planches:
-        planche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)
-        ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de serie par planche)
-        for serie in planche.l_series:
-            serie.implantationPlanche = serie.implantations.get(planche_id=planche.id)
-            
-            
+#         return render(request, 'main/erreur.html',  
+#                       {"appVersion":constant.APP_VERSION, 
+#                        "appName":constant.APP_NAME, 
+#                        "message":s_msg}
+#                       )
+  
     return render(request,
                  'main/chrono_planches.html',
                  {
@@ -142,13 +160,14 @@ def chronoPlanches(request):
                     "selection_champs":bChamps,
                     "d_evtTypes": Evenement.D_NOM_TYPES,
                     "codeEvtDivers":Evenement.TYPE_DIVERS,
-                    "l_especes": Espece.objects.all(),
-                    "l_vars": Variete.objects.all(),                  
+                    "l_legumes": Legume.objects.all(),
                     "date_debut_vue": date_debut_vue,
                     "date_fin_vue": date_fin_vue,
-                    "date_du_jour": date_du_jour,
+                    "date_du_jour": date_aujourdhui,
                     "decalage_j": decalage_j,
-                    "s_msg":s_msg
+                    "periode":periode,
+                    "s_msg":s_msg,
+                    "doc":constant.DOC_CHRONOVIEW
                   })
         
 #########################################################"
