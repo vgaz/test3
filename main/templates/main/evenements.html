@@ -57,13 +57,12 @@ function    init()
 
 <input style="margin-left: 20px" type="submit" value="Envoyer"/>
 
-</form>
 <div id="main" style="text-align: center" >
 
 <br/><br/>
         {# séries existantes en base #}
         <table>
-        <tr><th>Date</th><th>Planche</th><th>Titre</th></tr>
+        <tr><th>Date</th><th>Planche</th><th>Titre</th><th>Terminé</th></tr>
         {% for evt in l_evts %}
             {% for planche in evt.l_planches %}
                 <tr id="{{evt.id}}">
@@ -77,10 +76,14 @@ function    init()
                     <td class="tdEvt">{{planche.nom}}</td>
                     <td class="tdEvt">{{evt.nom|title}}</td>
                 {% endif %}
+
+                    <td class="tdEvt"><input  type="checkbox" name="evt_fin_{{evt.pk}}" {% if evt.b_fini %}checked{%endif%} /></td>
+
                 </tr>
             {% endfor %}
         {% endfor %}
         </table>
 </div>
+</form>
 
 {% endblock %}

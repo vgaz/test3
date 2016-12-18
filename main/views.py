@@ -280,6 +280,15 @@ def evenementsPlanches(request):
         date_debut_vue -= delta 
         date_fin_vue -= delta        
 
+    ##recup des evenements
+    for k, v in request.POST.items():
+        print(k,v)
+        if "evt_fin_" in k:
+            pk_evt = int(k.split("evt_fin_")[1])
+            evt = Evenement.objects.get(pk = pk_evt)
+            evt.b_fini = True
+            evt.save()
+            
     ## on prend tous les evts de l'encadrement
     l_evts = Evenement.objects.filter(date__gte = date_debut_vue, date__lte = date_fin_vue)
     if bEncours:
