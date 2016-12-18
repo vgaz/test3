@@ -252,19 +252,25 @@ def chronoPlanches(request):
 def evenementsPlanches(request):
 
     delta20h = datetime.timedelta(hours=20)
-    date_du_jour = datetime.datetime.now()
-    if request.POST.get("aujourdhui","off") == "on":
-        date_debut_vue = date_du_jour
-        date_fin_vue = date_du_jour
+    date_aujourdhui = datetime.datetime.now()
+    periode = request.POST.get("periode","cette_semaine")
+    bEncours = request.POST.get("bEncours", "on")=="on"
+    if periode == "aujourdhui":
+        date_debut_vue = date_aujourdhui
+        date_fin_vue = date_aujourdhui
         print(date_debut_vue, date_fin_vue)
-    elif request.POST.get("date_debut_vue",""):
+    if periode == "cette_semaine":
+        delta = datetime.timedelta(days=6)
+        date_debut_vue =  date_aujourdhui - datetime.timedelta(days=date_aujourdhui.weekday())
+        date_fin_vue = date_debut_vue + delta
+    elif periode == "specifique":
         date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
         date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
     else:
         delta = datetime.timedelta(days=60)
-        date_debut_vue = date_du_jour - delta
-        date_fin_vue = date_du_jour + delta + delta20h
-    
+        date_debut_vue = date_aujourdhui - delta
+        date_fin_vue = date_aujourdhui + delta + delta20h
+
     decalage_j = int(request.POST.get("decalage_j", 10))
     delta = datetime.timedelta(days = decalage_j)
     if request.POST.get("direction", "") == "avance":
@@ -273,12 +279,14 @@ def evenementsPlanches(request):
     if request.POST.get("direction", "") == "recul":
         date_debut_vue -= delta 
         date_fin_vue -= delta        
-    
+
     ## on prend tous les evts de l'encadrement
-    l_evts = Evenement.objects.filter(date__gte = date_debut_vue, 
-                                      date__lte = date_fin_vue)
+    l_evts = Evenement.objects.filter(date__gte = date_debut_vue, date__lte = date_fin_vue)
+    if bEncours:
+        l_evts = l_evts.exclude(b_fini = True)
+    
     for evt in l_evts:
-        ## on ajoute les numerosdatetime de planche
+        ## on ajoute les numeros de planche
         serie = evt.serie_set.all()[0]
         evt.l_planches = [imp.planche for imp in serie.implantations.all()]
         for pl in evt.l_planches:
@@ -292,8 +300,10 @@ def evenementsPlanches(request):
                   "l_evts": l_evts,
                   "date_debut_vue": date_debut_vue,
                   "date_fin_vue": date_fin_vue,
-                  "date_du_jour": date_du_jour,
-                  "decalage_j": decalage_j
+                  "date_aujourdhui": date_aujourdhui,
+                  "decalage_j": decalage_j,
+                  "periode":periode,
+                  "bEncours":bEncours
                   })
     
 #################################################

@@ -422,7 +422,7 @@ Pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" 
 <button onclick="changelePas(1);return(false)">+</button>
 <br/>
  <input type="radio" name="periode" value="annee" {% if periode == "annee" %}checked{% endif %}>Cette année
- <input type="radio" name="periode" value="mois" {% if periode = 'mois' %}checked{% endif %}>Ce mois
+ <input type="radio" name="periode" value="mois" {% if periode == 'mois' %}checked{% endif %}>Ce mois
  <input type="radio" name="periode" value="semaine" {% if periode == 'semaine' %}checked{% endif %}>Cette semaine
  <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
  
