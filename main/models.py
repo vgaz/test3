@@ -161,7 +161,7 @@ def nombreDePanniersEnDateDu(in_date):
 #################################################################################
 
 class Famille(models.Model):
-    """famille associée à la varieté"""
+    """famille associée à une ou plusieurs espèces"""
     nom = models.CharField("Nom de la famille", max_length=100)
     
     class Meta: 
@@ -172,6 +172,10 @@ class Famille(models.Model):
 
     def __str__(self):
         return self.__unicode__()
+    
+    def especes(self):
+        """retourne la liste des espèces concernées par cette famille"""
+        return self.espece_set.all()
 
 
 class Planche(models.Model):
@@ -240,7 +244,6 @@ class QtePanniers(models.Model):
 class Variete(models.Model):
     """Variété"""
     nom = models.CharField(max_length=100)
-    
     def __str__(self):
         return self.nom
       
@@ -249,7 +252,7 @@ class Legume(models.Model):
     espece = models.ForeignKey(Espece)
     variete = models.ForeignKey(Variete)
     rendementProduction_kg_m2 = models.FloatField("Rendement de production (kg/m2)", default=1)
-    poidsParPiece_kg = models.FloatField("Poids estimé par pièce (Kg)", default=0)  ## sera optionnel si unite_prod = kg
+    poidsParPiece_kg = models.FloatField("Poids estimé par pièce (Kg)", default=0)  ## optionnel si unite_prod = kg
     nbGrainesParPied = models.PositiveIntegerField("Nb graines par pied", default=1)
     intra_rang_m = models.FloatField("distance dans le rang (m)", default=0)
     inter_rang_m = models.FloatField("distance entre les rangs (m)", default=0)    

@@ -443,18 +443,18 @@ def tab_legumes(request):
         l_legumes = Legume.objects.all()
         if request.POST:
             for leg in l_legumes:
-                s_pk = "leg_%s_"% str(leg.pk)
-                print(s_pk)
-                leg.rendementProduction_kg_m2 = float(request.POST.get(s_pk + "rendementProduction_kg_m2", 0))
-                leg.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent",100))
-                leg.intra_rang_m = float(request.POST.get(s_pk + "intra_rang_cm", 0)/100)
-                leg.inter_rang_m = float(request.POST.get(s_pk + "inter_rang_cm", 0)/100)
+                s_pk = "leg_%d_"%leg.pk
+                
+                ## lié à l'espece
+                ## leg.espece =
+      
+                leg.nbGrainesParPied = int(request.POST.get(s_pk + "nbGrainesParPied", "1"))
+                leg.poidsParPiece_kg = float(request.POST.get(s_pk + "poidsParPiece_kg", "0").replace(",","."))
+                leg.rendementProduction_kg_m2 = float(request.POST.get(s_pk + "rendementProduction_kg_m2", "0").replace(",","."))
+                leg.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent", "100"))
+                leg.intra_rang_m = float(request.POST.get(s_pk + "intra_rang_cm", "0").replace(",","."))/100
+                leg.inter_rang_m = float(request.POST.get(s_pk + "inter_rang_cm", "0").replace(",","."))/100
                 leg.save()
-        
-        l_fams = Famille.objects.all()
-        for fam in l_fams:
-            l_esp = Espece.objects.filter(famille_id = fam.id)
-            fam.l_especes = l_esp
 
     except:
         s_info += str(sys.exc_info()[1])
@@ -464,7 +464,8 @@ def tab_legumes(request):
                  {
                   "appVersion":constant.APP_VERSION,
                   "l_legumes":l_legumes,
-                  "l_fams":l_fams,
+                  "l_fams":Famille.objects.all(),
+                  "d_up":constant.D_NOM_UNITE_PROD,
                   "info":s_info
                   })
     
