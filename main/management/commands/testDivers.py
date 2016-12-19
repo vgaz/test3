@@ -6,12 +6,13 @@ from django.test import RequestFactory
 
 from main.models import *
 
+
 class Command(BaseCommand):
     help = "test divers"
 
     def handle(self, *args, **options):
         
-        
+        dernierPassageFamilleSurPlanche(1, 1)
 #         serie = Serie.objects.get(id=37)
 #         date_debut_sem = MyTools.getDateFrom_d_m_y("2/10/2016")
 # 

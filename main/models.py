@@ -2,8 +2,12 @@
 from django.db import models
 import datetime, logging
 import sys
-from main import constant  
+from main import constant
+from main.gestionModels import creationEvt, surfacePourQuantite
 import MyTools
+
+################################################################
+#### controle des models
 
 def creationEvt(e_date, e_type, nom="", duree_j=1):
     """création d'une evenement en base
@@ -152,14 +156,23 @@ def supprimeSerie(id):
         return False
     
     
-def nombreDePanniersEnDateDu(in_date):
-    l_qtes = QtePanniers.objets.filter(dateDebut__lte = in_date)
-    ## on renvoie le dernier
-    return l_qtes[-1].val
+def dernierPassageFamilleSurPlanche(id_famille, id_planche):
+    """retourne la date de la dernière implantation d'un légume d'une faimlle donnée sur une planche donnée"""
+    ## récup des implantations sur cette planche
+    l_implantations = Implantation.objects.filter(planche_id=id_planche)
+    ## récup des séries associées à ces implantations et à cette famille
+    l_series = Serie.objects.filter(implantations__in = l_implantations, legume__espece__famille_id=id_famille).order_by('evt_fin')
+    ## on prend la plus recente des dates de fin
+    qte = len(l_series)
+    if not qte:
+        date =  MyTools.getDateFrom_d_m_y("1/1/2000")## une vielle date
+    else:
+        date = l_series[qte-1].evt_fin.date
+    return date
 
 
-#################################################################################
 
+#################################################################
 class Famille(models.Model):
     """famille associée à une ou plusieurs espèces"""
     nom = models.CharField("Nom de la famille", max_length=100)
@@ -229,8 +242,8 @@ class Espece(models.Model):
         return self.nbParts * self.consoHebdoParPart
 
 
-class QtePanniers(models.Model):
-    """Variété"""
+class Panniers(models.Model):
+    """Quantité de panniers au fil du temps"""
     val = models.PositiveIntegerField("Nb de parts ou panniers à servir par semaine", default=0)
     dateDebut = models.DateTimeField("date d'engagement de cette quantité de panniers")
     
@@ -238,7 +251,12 @@ class QtePanniers(models.Model):
         ordering = ['dateDebut'] ## pour lister du plus ancien au plus recent 
 
     def __str__(self):
-        return "%d panniers à partir du %s"%(self.val, dateDebut)
+        return "%d panniers à partir du %s"%(self.val, self.dateDebut)
+    
+    def quantiteEnDateDu(self, in_date):
+        l_qtes = Panniers.objets.filter(dateDebut__lte = in_date)
+        ## on renvoie le dernier
+        return l_qtes[-1].val
 
       
 class Variete(models.Model):

@@ -4,6 +4,7 @@ encoding//main/admin.py=utf-8
 encoding//main/constant.py=utf-8
 encoding//main/filters.py=utf-8
 encoding//main/forms.py=utf-8
+encoding//main/gestionModels.py=utf-8
 encoding//main/management/commands/controleEvenements.py=utf-8
 encoding//main/management/commands/testDivers.py=utf-8
 encoding//main/management/commands/testEvt.py=utf-8
