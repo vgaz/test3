@@ -12,7 +12,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
-        dernierPassageFamilleSurPlanche(1, 1)
+        date_debut = MyTools.getDateFrom_d_m_y("2/10/2016")
+
+        b1 = respecteRotation(date_debut, 1, 1)
+        
 #         serie = Serie.objects.get(id=37)
 #         date_debut_sem = MyTools.getDateFrom_d_m_y("2/10/2016")
 # 

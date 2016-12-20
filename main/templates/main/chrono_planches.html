@@ -64,7 +64,7 @@
 
 
 
-.chrono_serie
+.divImplantation
     {
     width: 30%;
     padding-bottom:15px;
@@ -117,7 +117,7 @@ function    init()
     // nb px par jour en fonction des bornes , on ajoute 1 pour inclure le dernier jour plein 
     pxParH = window.getComputedStyle(document.getElementsByClassName("planche")[0]).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours')
 
-    balisageSeries()
+    balisage()
     
     // ajout ligne date du jour
     delta_h = moment(date_du_jour).diff(moment(date_debut_vue), 'hours')
@@ -253,9 +253,9 @@ function majListEvts(id_serie)
 
 
     
-function  balisageSeries()
+function  balisage()
     {
-    l_series = document.getElementsByClassName("chrono_serie")
+    l_series = document.getElementsByClassName("divImplantation")
     for (ii=0; ii<l_series.length; ii++)
         {
         // decalage debut
@@ -314,7 +314,7 @@ function prepareAjouteSerie(hCaller, id_planche)
     document.getElementById("editSerie_titre").innerHTML = "Ajout d'une nouvelle série"
     }
     
-function prepareEditeSerie(id_serie)
+function prepareEditeSerie(id_impl)
     {
     document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
     document.getElementById("divEditEvenement").style.display = "none"
@@ -322,19 +322,20 @@ function prepareEditeSerie(id_serie)
     hDiv.style.display = "block"
     hDiv.style.position = "absolute"
     hDiv.style.top = "20px"
-    hDivSerie = document.getElementById(id_serie)
-    hDiv.style.top = hDivSerie.offsetTop + 60 + "px" // 80 pour aller en dessous du div de serie
-    document.getElementById("editSerie_id_serie").value = hDivSerie.getAttribute("id")
-    document.getElementById("editSerie_id_serie").innerHTML = "Série " +  hDivSerie.getAttribute("id") + " sur planche(s) " + hDivSerie.getAttribute("s_liste_planches")
-    document.getElementById("editSerie_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
-    document.getElementById("editSerie_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
-    document.getElementById("editSerie_id_implantation").value = hDivSerie.getAttribute("id_implantation")
-    document.getElementById("editSerie_quantite_implantation").value = hDivSerie.getAttribute("quantite_implantation")
-    document.getElementById("editSerie_quantite").innerHTML = hDivSerie.getAttribute("quantite")
-    document.getElementById("editSerie_date_debut").value = hDivSerie.getAttribute("date_debut_f")
-    document.getElementById("editSerie_date_fin").value = hDivSerie.getAttribute("date_fin_f")
+    hImpl = document.getElementById(id_impl)
+    hDiv.style.top = hImpl.offsetTop + 60 + "px" // 80 pour aller en dessous du div de serie
+    id_serie = hImpl.getAttribute("id_serie")
+    document.getElementById("editSerie_id_serie").value = id_serie
+    document.getElementById("editSerie_id_serie").innerHTML = "Série " +  hImpl.getAttribute("id") + " sur la/les planche/s " + hImpl.getAttribute("s_liste_planches")
+    document.getElementById("editSerie_nb_rangs").value = hImpl.getAttribute("nb_rangs")
+    document.getElementById("editSerie_intra_rang_cm").value = hImpl.getAttribute("intra_rang_cm")
+    document.getElementById("editSerie_id_implantation").value = hImpl.getAttribute("id")
+    document.getElementById("editSerie_quantite_implantation").value = hImpl.getAttribute("quantite_implantation")
+    document.getElementById("editSerie_quantite").innerHTML = hImpl.getAttribute("quantite_serie")
+    document.getElementById("editSerie_date_debut").value = hImpl.getAttribute("date_debut_f")
+    document.getElementById("editSerie_date_fin").value = hImpl.getAttribute("date_fin_f")
     // maj legume dans la liste box
-    id_legume  = hDivSerie.getAttribute("id_legume")
+    id_legume  = hImpl.getAttribute("id_legume")
     list = document.getElementById("editSerie_id_legume").getElementsByTagName("option")
     for(ii=0;ii<list.length;ii++)
         if (list[ii].id == id_legume)
@@ -378,7 +379,7 @@ function allowDrop(event) {
 
 function dragStart(event) {
     event.dataTransfer.setData("id_serieDeplacee", event.target.id);
-    event.dataTransfer.setData("id_implantation",  document.getElementById(event.target.id).getAttribute("id_implantation"))
+    event.dataTransfer.setData("id_implantation",  document.getElementById(event.target.id).getAttribute("id"))
     event.dataTransfer.setData("quantite_implantation", document.getElementById(event.target.id).getAttribute("quantite_implantation"))
 }
 
@@ -400,7 +401,7 @@ function unfocus(event)
 
 {% endblock %}
 
-{% block title %}Placement des series sur les planches{% endblock %}
+{% block title %}Implantation des séries sur les planches{% endblock %}
 
 {% block content %}
 {{s_msg}}
@@ -450,28 +451,27 @@ Pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" 
         <div class="suiviConso"> </div>
 
         {# séries existantes en base #}
-        {% for serie in planche.l_series %}
+        {% for impl in planche.l_implantations %}
 
-        <div class="chrono_serie"   id="{{serie.id}}"
-                                    id_legume="{{serie.legume.id}}" 
-                                    couleur="{{serie.legume.espece.couleur}}" 
-                                    id_implantation="{{serie.implantationPlanche.id}}"
-                                    quantite_implantation="{{serie.implantationPlanche.quantite}}"
-                                    surface_implantation="{{serie.implantationPlanche.surface_m2}}"
-                                    quantite="{{serie.quantiteTotale}}"
-                                    s_liste_planches = "{{serie.s_listeNomsPlanches}}"
-                                    date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
-                                    date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
-                                    nb_rangs="{{serie.nb_rangs}}" intra_rang_cm="{{serie.intraRang_cm}}"
-                                    style="border-color: {{serie.variete.couleur}}"
-                                    draggable="true" ondragstart="dragStart(event)" 
-                                    title="Série {{serie.id}}, impl {{serie.implantationPlanche.id}} ({{serie.implantationPlanche.quantite}}/{{serie.quantiteTotale}}), {{serie.legume.nom}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"
+        <div class="divImplantation"    id="{{impl.id}}"
+                                        id_legume="{{impl.serie.legume.id}}" 
+                                        couleur="{{impl.serie.legume.espece.couleur}}" 
+                                        quantite_implantation="{{impl.quantite}}"
+                                        surface_implantation="{{impl.surface_m2}}"
+                                        id_serie="{{impl.serie.id}}"
+                                        quantite_serie="{{impl.serie.quantiteTotale}}"
+                                        s_liste_planches = "{{impl.serie.s_listeNomsPlanches}}"
+                                        date_debut="{{impl.serie.evt_debut.date|safe}}" date_fin="{{impl.serie.evt_fin.date|safe}}"
+                                        date_debut_f="{{impl.serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{impl.serie.evt_fin.date|date:'d/m/Y'}}"
+                                        nb_rangs="{{impl.serie.nb_rangs}}" intra_rang_cm="{{impl.serie.intraRang_cm}}"
+                                        draggable="true" ondragstart="dragStart(event)" 
+                                        title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.quantite}}/{{impl.serie.quantiteTotale}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}"
                                     >
             <div class="divTitreSerie">
-            (S {{serie.id}} impl {{serie.implantationPlanche.id}}) {{serie.legume.nom}} x {{serie.implantationPlanche.quantite}} / {{serie.quantiteTotale}}
-            <img src='{{STATIC_URL}}images/editor.png' title='Editer' onclick="prepareEditeSerie({{serie.id}});return(false)">
+            Imp {{impl.id}} - S {{impl.serie.id}} ; {{impl.serie.legume.nom}} x {{impl.quantite}} / {{impl.serie.quantiteTotale}}
+            <img src='{{STATIC_URL}}images/editor.png' title='Editer la série' onclick="prepareEditeSerie({{impl.serie.id}});return(false)">
             </div>
-            {% for evt in serie.evenements.all%}
+            {% for evt in impl.serie.evenements.all%}
                 <div class='evt' date="{{evt.date|date:'Y-m-d'}}" duree_j="{{evt.duree_j}}" nom="{{evt.nom}}" 
                         texte ="{{evt.texte}}" title="{{evt.nom}} le {{evt.date|date:'d/m/Y'}}" > </div>            
             {% endfor %}

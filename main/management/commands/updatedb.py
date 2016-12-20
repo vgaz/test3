@@ -109,7 +109,7 @@ class Command(BaseCommand):
                         assert s_stockable, "pas de valeur 'stockable' pour espèce : %s"%(esp.nom)
                         esp.bStockable = (s_stockable == "oui")     
                         
-                        val = d_line.get("Rendement germination", "1").replace(",",".")
+                        val = d_line.get("Rendement germination", "").replace(",",".")
                         assert val, "'Rendement germination' indéfini pour %s"%(esp.nom)            
                         esp.rendementGermination = float(val)                                           
 
@@ -118,14 +118,22 @@ class Command(BaseCommand):
                         esp.rendementConservation = float(val)                                           
 
                         ## maj conso
-                        s_field = d_line.get("Nombre de paniers", "0")
+                        s_field = d_line.get("Nombre de paniers", "")
                         assert s_field, "'Nombre de paniers' indéfini pour %s"%(esp.nom)  
                         esp.nbParts = int(s_field)
                  
-                        s_field = d_line.get("Conso hebdo par pannier", "0").replace(",",".")
+                        s_field = d_line.get("Conso hebdo par pannier", "").replace(",",".")
                         assert s_field, "'Conso hebdo par pannier' indéfini pour %s"%(esp.nom)  
                         esp.consoHebdoParPart = float(s_field)
-                                                                                
+                        
+                        s_field = d_line.get("Délai avant retour (an)", "")
+                        assert s_field, "'Délai avant retour (an)' indéfini pour %s"%(esp.nom)  
+                        esp.delai_avant_retour_an = int(s_field)
+                                                                 
+                        s_field = d_line.get("Couleur", "brown")
+                        assert s_field, "'Couleur' indéfini pour %s"%(esp.nom)  
+                        esp.couleur = s_field
+                                                                 
                         esp.save()
                     
                     except:

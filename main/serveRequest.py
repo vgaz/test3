@@ -166,6 +166,7 @@ def serveRequest(request):
             id_planche_dest = int(request.POST.get("id_planche_dest"))
             planche_dest = Planche.objects.get(id=id_planche_dest)
             serie = implantation.serie()
+            assert planche_dest.bSerre == serie.bSerre, "Attention, incompatibilité plein champ /sous serre entre série déplacée et planche de destination"
             ## vérification que la planche de destination ne contient pas déjà une implantation de cette série
             ## dans ce cas, absorbsion dans l'implantation dejà en place
             l_implantationDejaLa = serie.implantations.filter(planche_id = id_planche_dest)

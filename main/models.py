@@ -2,8 +2,8 @@
 from django.db import models
 import datetime, logging
 import sys
+
 from main import constant
-from main.gestionModels import creationEvt, surfacePourQuantite
 import MyTools
 
 ################################################################
@@ -156,21 +156,27 @@ def supprimeSerie(id):
         return False
     
     
-def dernierPassageFamilleSurPlanche(id_famille, id_planche):
+def derniereDateFamilleSurPlanche(idFamille, idPlanche):
     """retourne la date de la dernière implantation d'un légume d'une faimlle donnée sur une planche donnée"""
     ## récup des implantations sur cette planche
-    l_implantations = Implantation.objects.filter(planche_id=id_planche)
+    l_implantations = Implantation.objects.filter(planche_id=idPlanche)
     ## récup des séries associées à ces implantations et à cette famille
-    l_series = Serie.objects.filter(implantations__in = l_implantations, legume__espece__famille_id=id_famille).order_by('evt_fin')
+    l_series = Serie.objects.filter(implantations__in = l_implantations, legume__espece__famille_id=idFamille).order_by('evt_fin')
     ## on prend la plus recente des dates de fin
     qte = len(l_series)
     if not qte:
-        date =  MyTools.getDateFrom_d_m_y("1/1/2000")## une vielle date
+        date =  MyTools.getDateFrom_d_m_y("1/1/2000")   ## une vielle date
     else:
         date = l_series[qte-1].evt_fin.date
     return date
 
-
+def respecteRotation(dateDebutImplantation, espece, planche):
+    """retourne vrai ou faux selon que le temps de rotation souhaitable est respecté"""
+    if derniereDateFamilleSurPlanche(espece.famille.id, planche.id) + datetime.timedelta(years=espece.delai_avant_retour_an) < dateDebutImplantation:
+        return True
+    return False
+    
+    
 
 #################################################################
 class Famille(models.Model):
@@ -228,6 +234,7 @@ class Espece(models.Model):
     consoHebdoParPart = models.FloatField("quantité consommée par semaine par part", default=0)
     nbParts = models.PositiveIntegerField("Nb de parts à servir", default=0)
     couleur = models.CharField(max_length=16, default="yellow")
+    delai_avant_retour_an = models.PositiveIntegerField("Délai avant retour de la même culture", default=3)
    
     class Meta:
         ordering = ['nom']              

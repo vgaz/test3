@@ -136,28 +136,25 @@ def chronoPlanches(request):
         l_planches = l_planches.exclude(pk__in=planchesAExclure)         
 
         for planche in l_planches:
-            planche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)
+            planche.l_implantations = []
+            l_series =  Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)  
             ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de serie par planche)
-            for serie in planche.l_series:
-                serie.implantationPlanche = serie.implantations.get(planche_id=planche.id)
+            for serie in l_series:
+                planche.l_implantations.append(serie.implantations.get(planche_id=planche.id))
                 
     except:
         s_msg += str(sys.exc_info())
-#         return render(request, 'main/erreur.html',  
-#                       {"appVersion":constant.APP_VERSION, 
-#                        "appName":constant.APP_NAME, 
-#                        "message":s_msg}
-#                       )
   
     return render(request,
                  'main/chrono_planches.html',
                  {
                     "appVersion": constant.APP_VERSION,
                     "appName": constant.APP_NAME,
-                    "s_filtre_planches":s_filtre_planches,
-                    "l_planches": l_planches,
+                    "periode":periode,
                     "selection_serres":bSerres,
                     "selection_champs":bChamps,
+                    "s_filtre_planches":s_filtre_planches,
+                    "l_planches": l_planches,
                     "d_evtTypes": Evenement.D_NOM_TYPES,
                     "codeEvtDivers":Evenement.TYPE_DIVERS,
                     "l_legumes": Legume.objects.all(),
@@ -165,7 +162,6 @@ def chronoPlanches(request):
                     "date_fin_vue": date_fin_vue,
                     "date_du_jour": date_aujourdhui,
                     "decalage_j": decalage_j,
-                    "periode":periode,
                     "s_msg":s_msg,
                     "doc":constant.DOC_CHRONOVIEW
                   })
