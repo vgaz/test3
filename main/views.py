@@ -7,13 +7,39 @@ from django.template.defaultfilters import random
 
 import sys
 
-from main import forms, constant, planification
+from main import forms, constant
 import MyTools
 
 import datetime
 
 from main.models import *
 from main.forms import PlancheForm
+
+def donnePeriodeVue(reqPost):
+    
+    date_aujourdhui = datetime.datetime.now()
+    periode = reqPost.get("periode","annee")
+    if periode == "specifique":
+        date_debut_vue = MyTools.getDateFrom_d_m_y(reqPost.get("date_debut_vue", ""))
+        date_fin_vue = MyTools.getDateFrom_d_m_y(reqPost.get("date_fin_vue", ""))
+    elif periode == "annee":
+        date_premierJour = MyTools.getDateFrom_d_m_y("1/1/%s"%date_aujourdhui.year)
+        delta = datetime.timedelta(days=365)
+        date_debut_vue = date_premierJour
+        date_fin_vue = date_premierJour + delta
+    elif periode == "mois":
+        print ("mois", str(date_aujourdhui.month), " year", date_aujourdhui.year)
+        date_premierJour = MyTools.getDateFrom_d_m_y("1/%s/%s"%(date_aujourdhui.month, date_aujourdhui.year))
+        delta = datetime.timedelta(days=30)
+        date_debut_vue = date_premierJour
+        date_fin_vue = date_premierJour + delta
+    elif periode == "semaine":
+        delta = datetime.timedelta(days=6)
+        date_debut_vue =  date_aujourdhui - datetime.timedelta(days=date_aujourdhui.weekday())
+        date_fin_vue = date_debut_vue + delta
+    else:
+        assert False, "pas de periode trouvee"
+    return(periode, date_debut_vue, date_fin_vue)
 
 #################################################
 
@@ -73,9 +99,7 @@ def chronoPlanches(request):
         bSerres = True
         bChamps = True
         decalage_j = 0
-        delta15j = datetime.timedelta(days=15)
         date_aujourdhui = datetime.datetime.now()
-        delta12h = datetime.timedelta(hours=12)
         
         print(request.POST)
         s_msg = ""
@@ -134,14 +158,14 @@ def chronoPlanches(request):
             if s_filtre_planches not in planche.nom:
                 planchesAExclure.append(planche.id)
         l_planches = l_planches.exclude(pk__in=planchesAExclure)         
-
+ 
         for planche in l_planches:
             planche.l_implantations = []
             l_series =  Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)  
-            ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de serie par planche)
+            ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de série par planche)
             for serie in l_series:
                 planche.l_implantations.append(serie.implantations.get(planche_id=planche.id))
-                
+
     except:
         s_msg += str(sys.exc_info())
   
@@ -365,34 +389,19 @@ class CreationPlanche(CreateView):
 
 #################################################
 
-def prevision_recolte(request):
-    
+def recolte(request):
+    """affiche les previsions et récoltes réelles hebdo"""
     ## récup de la fenetre de temps
-    delta20h = datetime.timedelta(hours=20)
-    date_du_jour = datetime.datetime.now()
-    if request.POST.get("date_debut_vue",""):
-        date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
-        date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta20h
-    else:        
-        delta = datetime.timedelta(days=30)
-        date_debut_vue = date_du_jour - delta
-        date_fin_vue = date_du_jour + delta + delta20h
+    periode, date_debut_vue, date_fin_vue = donnePeriodeVue(request.POST) 
     date_debut_sem_vue = date_debut_vue - datetime.timedelta(days=date_debut_vue.weekday()) 
     date_fin_sem_vue = date_fin_vue + datetime.timedelta(days = 6 - date_fin_vue.weekday()) 
-            
-    ## sauvegarde des prévisions des récoltes
- ##   planification.enregistrePrevisions(request)
-        
-#     if request.POST.get("option_planif", ""):
-#         planification.planif(date_debut_sem_vue, date_fin_sem_vue)
-    
+
     ## création de la liste des semaines     
     # on recadre sur le lundi pour démarrer en debut de semaine
     l_semaines = []
     date_debut_sem = date_debut_sem_vue
-        
+
     while True:
-        
         sem = MyTools.MyEmptyObj()
         date_fin_sem = date_debut_sem + datetime.timedelta(days=6)
         sem.date_debut_iso = date_debut_sem.isocalendar()
@@ -425,30 +434,37 @@ def prevision_recolte(request):
                 couleur = "white"
             else:
                 couleur = leg.espece.couleur
+            
+            try : 
+                print(sem.date_debut)
+                prodReelle = Production.objects.get(legume_id=leg.id, dateDebutSemaine = sem.date_debut).qte
+            except:
+                prodReelle = 0
                 
             leg.l_prod.append((sem.date_debut, 
                                int(qteHebdo), 
                                int(leg.poids_kg(qteHebdo)),
                                leg.espece.nomUniteProd(),
-                               couleur))
+                               couleur,
+                               prodReelle))
 
     bDetailVar = request.POST.get("detail_variete", "") != ""
 #     if bDetailVar:
 
 
 
-    return render(request,
-                 'main/prevision_recolte.html',
-                 {
-                  "appVersion":constant.APP_VERSION,
-                  "date_debut_vue": date_debut_vue,
-                  "date_fin_vue": date_fin_vue,
-                  "l_semaines":l_semaines,
-                  "l_legumes":l_legumes,
-                  "l_especes" : Espece.objects.all(),
-                  "bDetailVar":bDetailVar,
-                  "info":""
-                  })
+    return render(request,'main/recolte.html',
+                    {
+                    "appVersion":constant.APP_VERSION,
+                    "periode":periode,
+                    "date_debut_vue": date_debut_vue,
+                    "date_fin_vue": date_fin_vue,
+                    "l_semaines":l_semaines,
+                    "l_legumes":l_legumes,
+                    "l_especes" : Espece.objects.all(),
+                    "bDetailVar":bDetailVar,
+                    "info":""
+                    })
     
 #################################################
 

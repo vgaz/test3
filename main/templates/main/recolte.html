@@ -3,13 +3,21 @@
 {% block title %}Prévision de récoltes et livraisons par semaine{% endblock %}
 
 {% block javascript %}
-
+<script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
 <script type="text/javascript">
+
 
 l_sems = [{% for sem in l_semaines %}"{{sem.date_debut|date:'Y-m-d'}}"{% if not forloop.last %},{% endif %}{% endfor %}]
 l_legs = [{% for leg in l_legumes %}{{leg.id}}{% if not forloop.last %},{% endif %}{% endfor %}]
 l_especes = [{% for esp in l_especes %}{{esp.id}}{% if not forloop.last %},{% endif %}{% endfor %}]
 l_couleur_esp = { {% for esp in l_especes %}{{esp.id}}:"{{esp.couleur}}"{% if not forloop.last %},{% endif %}{% endfor %}}
+
+function enregistreRecolte(ptDiv)
+    {
+    divRecLeg = document.getElementById("r__sem_" + ptDiv.getAttribute("date") + "__leg_" + ptDiv.getAttribute("leg"))
+    rep = requestServer("cde=enregistre_recolte&date_sem=" + ptDiv.getAttribute("date") + "&id_leg=" + ptDiv.getAttribute("leg") + "&qte=" + divRecLeg.value)
+    }
+
 function init()
     {
     // maj légumes total par semaine (kg)
@@ -58,8 +66,11 @@ function init()
 
             id =  document.getElementById("sem_" + l_sems[ss] + "__esp_" + l_especes[ee])
             id.innerHTML = cumulEPS
-            if (cumulEPS >0) 
+            if (cumulEPS >0)
+                { 
                 id.style.border = "5px solid " + l_couleur_esp[l_especes[ee]]
+                id.style.textAlign="center"
+                }
             else
                 id.style.display = "none"    
             }
@@ -109,20 +120,31 @@ function init()
     
     <form action="" method="POST" accept-charset="utf-8">
     {% csrf_token %}
-    <div class="BlueFrame" >
+    <div class="BlueFrame" style="width:100%">
 
-    Visionnage du       <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
-                        <input style="margin-left: 20px" type="submit" value="Envoyer" />
-                        <input style="margin-left: 20px" type="submit" name="direction" value="recul" />
-    <input type="submit" name="direction" value="avance" />
-    Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
+    <input type="submit" name="direction" value="avance" /> 
+    <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
+    
+    Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
     <button onclick="changelePas(-1);return(false)">-</button>
     <button onclick="changelePas(1);return(false)">+</button>
-    <input type="checkbox" name="detail_variete" /> Détail par variété<br/>>
-    </div>
+    <br/>
+     <input type="radio" name="periode" value="annee" {% if periode == "annee" %}checked{% endif %}>Cette année
+     <input type="radio" name="periode" value="mois" {% if periode == 'mois' %}checked{% endif %}>Ce mois
+     <input type="radio" name="periode" value="semaine" {% if periode == 'semaine' %}checked{% endif %}>Cette semaine
+     <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
+     du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
+     au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
 
+    <input type="radio" name="detail" value="espece">Regroupé par espèce
+    <input type="radio" name="detail" value="variete" >Détaillé par variété
 
-    <table border="1">
+    <input style="margin-left: 20px" type="submit" value="Envoyer" />
+
+    </div>    
+    </form>
+    <p>
+    <table border="1" >
         <tr><th>Produits/Semaines</th>
             {% for semaine in l_semaines %}
                 <td align="center">Semaine {{semaine.date_debut_sem_iso}}<br/>du {{semaine.date_debut|date:'d/m/Y'}}<br/>au {{semaine.date_fin|date:'d/m/Y'}}</td>
@@ -135,14 +157,22 @@ function init()
             <td>{{leg.nom|title}}<br/><small> ({{leg.espece.nomUniteProd}})</small></td>
             
             {% for t_prod in leg.l_prod %}
-            <td>Sem du {{t_prod.0|date:'d/m/Y'}}<br/>
-            <div    id="sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
+            <td>{{t_prod.0|date:'d/m/Y'}}<br/>
+                    <div    id="sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
                     esp_id="{{leg.espece.id}}"
                     qte="{{t_prod.1}}" 
                     poids="{{t_prod.2}}" 
                     style="border:5px solid {{t_prod.4}}">Estimé : {{t_prod.1}}</div>
-            Réel : <input style="width:40px;font-weight:bold;text-align: center" type="text" 
-                    name="r__{{t_prod.0|date:'Y-m-d'}}__{{leg.id}}" id="r__s_{{t_prod.0|date:'Y-m-d'}}__l_{{leg.id}}"/>
+            Réel<input      type="text" name="reel"
+                            style="width:30px;font-weight:bold;text-align: center" 
+                            id="r__sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
+                            value="{{t_prod.5}}" />
+                    <input  type="button" 
+                            style="width:20px;font-weight:bold;text-align: center"
+                            value="v" 
+                            date="{{t_prod.0|date:'Y-m-d'}}"
+                            leg="{{leg.id}}"
+                            onclick="enregistreRecolte(this);return(false)" />  
             </td>
             {% endfor %}
             <td><div style="font-weight:bold;text-align: center" id="tl_{{leg.id}}"> </div></td>
@@ -166,10 +196,10 @@ function init()
         <td><div id="totalTotal" style="font-weight:bold;text-align:center"> </div></td>
         </tr>        
     </table>
-    <br/>
+    </p>
     
     <input type="submit" name="commande" value="Enregistrer">
-    </form>
+
     
     <hr/>
     
@@ -188,7 +218,7 @@ function init()
             <td>{{esp.nom|title}}<br/><small> ({{esp.nomUniteProd}})</small></td>
             
             {% for semaine in l_semaines %}            
-            <td>Sem {{semaine.date_debut|date:'d/m/Y'}}<br/>
+            <td>{{semaine.date_debut|date:'d/m/Y'}}<br/>
             <div id="sem_{{semaine.date_debut|date:'Y-m-d'}}__esp_{{esp.id}}"> xx </div>    
             </td>
             {% endfor %}

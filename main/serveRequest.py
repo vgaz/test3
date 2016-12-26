@@ -18,21 +18,25 @@ def serveRequest(request):
     cde = request.POST.get("cde","")
     log.info(str(request.POST))
 
-# 
-#     if cde == "checkUrl": 
-#         ## retour des évenements d'une série)
-#         try:
-#             url = request.POST.get("url")
-#             s_json = '{"status":true, "l_evts": %s}'%rep
-#             log.info(s_json)
-#         except:
-#             log.info(__name__ + ': ' + str(sys.exc_info()[1]) )
-#             traceback.log.info_tb(sys.exc_info())
-#             s_json = '{"status":false,"err":"%s"}'%(sys.exc_info()[1])
-#              
-#         return HttpResponse(s_json, content_type="application/json")
-
-
+    if cde == "enregistre_recolte": 
+        try:
+            qte = int(request.POST.get("qte"))
+            dateSem = MyTools.getDateFrom_y_m_d(request.POST.get("date_sem"))
+            idLeg = int(request.POST.get("id_leg"))
+            try:
+                prod = Production.objects.get(dateDebutSemaine=dateSem, legume_id=idLeg)
+            except:
+                prod = Production(dateDebutSemaine=dateSem, legume_id=idLeg)
+            prod.qte = qte
+            prod.save()
+            s_json = '{"status":true}'
+            log.info(s_json)
+        except:
+            log.error(__name__ + ': ' + str(sys.exc_info()[1]) )
+            traceback.log.info_tb(sys.exc_info())
+            s_json = '{"status":false,"err":"%s"}'%(sys.exc_info()[1])
+              
+        return HttpResponse(s_json, content_type="application/json")
 
     
     if cde == "get_evts_serie": 
@@ -119,7 +123,7 @@ def serveRequest(request):
         try:
             e_id = int(request.POST.get("id", 0))
             id_serie = int(request.POST.get("id_serie",0))
-            assert(id_serie != 0, "bad id_serie in sauve_evt")
+            assert id_serie != 0, "bad id_serie in sauve_evt"
             date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))
             log.info (date)
             duree_j = int(request.POST.get("duree_j", 1))

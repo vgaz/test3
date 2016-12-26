@@ -531,7 +531,7 @@ class Serie(models.Model):
 class Production(models.Model):
     """Enregisrement des productions réelles"""
     dateDebutSemaine = models.DateTimeField("date de début de semaine")
-    prod = models.PositiveIntegerField("quantité produite", default=0)
+    qte = models.PositiveIntegerField("quantité produite", default=0)
     legume = models.ForeignKey(Legume)
     
     class Meta: 
@@ -540,5 +540,5 @@ class Production(models.Model):
     def __unicode__(self):
         return "Production de %s, semaine du %s, %d %s"%(self.dateDebutSemaine, 
                                                          self.legume.nom(),
-                                                         self.prod, 
+                                                         self.qte, 
                                                          self.legume.espece.nomUniteProd())

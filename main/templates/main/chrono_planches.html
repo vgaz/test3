@@ -217,7 +217,7 @@ function sauveEvenement()
 
 function majListEvts(id_serie)
     {
-    // recup et afichage des evts de la série
+    // recup et affichage des evts de la série
     rep = requestServer("cde=get_evts_serie&id=" + id_serie)  
     jsonRep = JSON.parse(rep)
 
@@ -418,7 +418,7 @@ Filtre   <input style="width:50px" type="text" name="s_filtre_planches" value="{
 <input type="submit" name="direction" value="avance" /> 
 <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
 
-Pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
+Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
 <button onclick="changelePas(-1);return(false)">-</button>
 <button onclick="changelePas(1);return(false)">+</button>
 <br/>
@@ -426,7 +426,6 @@ Pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" 
  <input type="radio" name="periode" value="mois" {% if periode == 'mois' %}checked{% endif %}>Ce mois
  <input type="radio" name="periode" value="semaine" {% if periode == 'semaine' %}checked{% endif %}>Cette semaine
  <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
- 
  du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
  au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
 
@@ -467,8 +466,8 @@ Pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" 
                                         draggable="true" ondragstart="dragStart(event)" 
                                         title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.quantite}}/{{impl.serie.quantiteTotale}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}"
                                     >
-            <div class="divTitreSerie">
-            Imp {{impl.id}} - S {{impl.serie.id}} ; {{impl.serie.legume.nom}} x {{impl.quantite}} / {{impl.serie.quantiteTotale}}
+            <div class="divTitreImplantation">
+            Imp {{impl.id}} - S {{impl.serie.id}}. {{impl.surface_m2}}m2. {{impl.serie.legume.nom}} x {{impl.quantite}} / {{impl.serie.quantiteTotale}}
             <img src='{{STATIC_URL}}images/editor.png' title='Editer la série' onclick="prepareEditeSerie({{impl.serie.id}});return(false)">
             </div>
             {% for evt in impl.serie.evenements.all%}
