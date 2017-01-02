@@ -91,7 +91,7 @@ def creationPlanches(request):
     
 #########################################################"
     
-def chronoPlanches(request):
+def suiviImplantations(request):
 
     try:   
         s_filtre_planches = ""
@@ -170,7 +170,7 @@ def chronoPlanches(request):
         s_msg += str(sys.exc_info())
   
     return render(request,
-                 'main/chrono_planches.html',
+                 'main/suivi_implantations.html',
                  {
                     "appVersion": constant.APP_VERSION,
                     "appName": constant.APP_NAME,
@@ -278,8 +278,8 @@ def evenementsPlanches(request):
     if periode == "aujourdhui":
         date_debut_vue = date_aujourdhui
         date_fin_vue = date_aujourdhui
-        print(date_debut_vue, date_fin_vue)
-    if periode == "cette_semaine":
+        print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+    elif periode == "cette_semaine":
         delta = datetime.timedelta(days=6)
         date_debut_vue =  date_aujourdhui - datetime.timedelta(days=date_aujourdhui.weekday())
         date_fin_vue = date_debut_vue + delta
@@ -300,7 +300,7 @@ def evenementsPlanches(request):
         date_debut_vue -= delta 
         date_fin_vue -= delta        
 
-    ##recup des evenements
+    ## recup des evenements
     for k, v in request.POST.items():
         print(k,v)
         if "evt_fin_" in k:

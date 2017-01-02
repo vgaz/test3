@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django import forms
 import datetime, logging
 import sys
 
@@ -213,12 +214,8 @@ class Planche(models.Model):
     def __str__(self):
         if self.bSerre: s_lieu = "sous serre"
         else:           s_lieu = "plein champ"
-        return "%s (%d), %d m x %d m = %d m2; %s" % ( self.nom, self.id, 
-                                                     self.longueur_m, 
-                                                     self.largeur_m, 
-                                                     self.surface_m2(), 
-                                                     s_lieu)
-
+        return "%s (%d), %d m x %.1f m = %d m2; %s" % ( self.nom, self.id, self.longueur_m, self.largeur_m,
+                                                     self.surface_m2(), s_lieu)
 
 class Espece(models.Model):
     """Espèce de légume"""

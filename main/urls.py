@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     url(r'^quizFamilles/', 'main.views.quizFamilles', name='quizFamilles'),
     
 #     url(r'^edition_planche/', 'main.views.editionPlanche', name='edition_planche'),
-    url(r'^chrono_planches/', 'main.views.chronoPlanches', name='chrono_planches'),    
+    url(r'^suivi_implantations/', 'main.views.suiviImplantations', name='suivi_implantations'),    
 #     url(r'^placement_series/', 'main.views.placementSeries', name='placement_series'),
     
     url(r'^recolte/', 'main.views.recolte', name='recolte'),
