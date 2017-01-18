@@ -69,17 +69,25 @@ def serveRequest(request):
     if cde =="sauve_serie":
         try:
             # gestion de la création ou édition d'une série de plants
+            intra_rang_cm = request.POST.get("intra_rang_cm","")
+            if not intra_rang_cm: intra_rang_m = 0
+            else:  intra_rang_m = float(intra_rang_cm)/100
+            nb_rangs = request.POST.get("nb_rangs","")
+            if not nb_rangs: nb_rangs = 0
+            else: nb_rangs = int(nb_rangs) 
+
             serie = creationEditionSerie(
                                 int(request.POST.get("id_serie","0")),
                                 int(request.POST.get("id_legume")), 
                                 request.POST.get("id_b_serre","off")=="on",
                                 int(request.POST.get("id_implantation","0")), 
                                 int(request.POST.get("quantite_implantation")), 
-                                float(request.POST.get("intra_rang_cm","0"))/100, 
-                                int(request.POST.get("nb_rangs","0")), 
+                                intra_rang_m, 
+                                nb_rangs,
                                 request.POST.get("date_debut"), 
-                                request.POST.get("date_fin",""))
-            log.info(serie)
+                                request.POST.get("duree_avant_recolte_j",""),
+                                request.POST.get("delai_recolte_j", ""))
+            log.info("Nouvelle série créée" + serie.__str__())
             s_json = '{"status":true,"msg":"%s"}'%serie
         except:
             ex_type, ex, tb = sys.exc_info()

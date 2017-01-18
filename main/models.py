@@ -31,8 +31,9 @@ def creationEditionSerie(id_serie,
                          intra_rang_m, 
                          nb_rangs, 
                          date_debut, 
-                         date_fin=None):
-    """Création ou edition d'une série de plants
+                         duree_avant_recolte_j,
+                         delai_recolte_j):
+    """Création ou edition d'une série de plants sur planche virtuelle
     si id_serie == 0, c'est une demande de création, sinon , d'édition/modification
     """
     assert id_leg, '%s pas de valeur pour var'%__name__
@@ -41,11 +42,14 @@ def creationEditionSerie(id_serie,
         serie = Serie() ## nelle serie
     else:
         serie = Serie.objects.get(id=id_serie)
+    
     serie.legume_id = leg.id
+    
     if intra_rang_m:
         serie.intra_rang_m = intra_rang_m
     else:
         serie.intra_rang_m = leg.intra_rang_m
+    
     serie.bSerre = bSerre
     
     if nb_rangs:
@@ -53,15 +57,29 @@ def creationEditionSerie(id_serie,
     else:
         ## selon la planche sur laquelle on atterira, on fixera le nb de rangs en fonction 
         ## de l'inter rang du legume et de la largeur de planche
-        serie.nb_rangs = 0 
-    try:
-        impl = serie.implantations.get(id=id_implantation)
-    except:
+        serie.nb_rangs = 0
+    serie.dureeAvantRecolte_j = duree_avant_recolte_j
+    serie.etalementRecolte_j = delai_recolte_j 
+    serie.save()
+    serie.fixeDates(date_debut)
+    serie.save()
+    
+    ## implantation 
+    if id_implantation == 0:
+        ## nouvelle
         impl = Implantation()
+        if bSerre:
+            impl.planche = Planche.objects.get(nom=constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS)
+        else:
+            impl.planche = Planche.objects.get(nom=constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
+        impl.save()
+        serie.implantations.add(impl)
+        serie.save() 
+    else:
+        impl = serie.implantations.get(id=id_implantation)        
+            
     impl.quantite = quantite_implantation
     impl.save()
-    serie.save()
-    serie.fixeDates(date_debut, date_fin)
     return serie
 
 def creationPlanche(longueur_m, largeur_m, bSerre, s_nom=""): 
@@ -177,9 +195,8 @@ def respecteRotation(dateDebutImplantation, espece, planche):
         return True
     return False
     
-    
-
 #################################################################
+
 class Famille(models.Model):
     """famille associée à une ou plusieurs espèces"""
     nom = models.CharField("Nom de la famille", max_length=100)
@@ -329,11 +346,12 @@ class Implantation(models.Model):
         return self.serie_set.all()[0]
     
     def surface_m2(self):
+        
         serie = self.serie()
         return surfacePourQuantite(self.planche.largeur_m, 
-                            self.quantite, 
-                            serie.nb_rangs, 
-                            serie.intra_rang_m)
+                                   self.quantite, 
+                                   serie.nb_rangs, 
+                                   serie.intra_rang_m)
     def __str__(self):
         return "Implantation %d, %d pieds (%d m2) sur planche %s (%d)"%( self.id, 
                                                                          self.quantite, 
@@ -427,13 +445,13 @@ class Serie(models.Model):
         if isinstance(dateDebut, str): 
             dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
             
-        evt_debut = creationEvt(dateDebut, Evenement.TYPE_DEBUT, "début de %s"%(self.legume.nom()))
+        evt_debut = creationEvt(dateDebut, Evenement.TYPE_DEBUT, "début %s"%(self.legume.nom()))
         self.evenements.add(evt_debut)
         self.evt_debut_id = evt_debut.id
 
         if not dateFin:
             dateFin = evt_debut.date + datetime.timedelta(days = self.dureeAvantRecolte_j) + datetime.timedelta(days = self.etalementRecolte_j)
-        
+            
         if isinstance(dateFin, str): 
             dateFin = MyTools.getDateFrom_d_m_y(dateFin)
             
@@ -469,13 +487,13 @@ class Serie(models.Model):
     def surfaceOccupee_m2(self, planche=None):
         """ retourne la surface occupée de toutes ou d'une implantation
         si planche != None, retourne juste l'implantation sur cette planche """
-        surface = 0
+        surface_m2 = 0
         for impl in self.implantations.all():
             if planche and impl.planche.id != planche.id:
                 continue
-            surface += impl.surface_m2()
+            surface_m2 += impl.surface_m2()
         
-        return surface
+        return surface_m2
 
     def quantiteEstimee_kg_ou_piece(self):
             """Retourne la quantité totale escomptée (kg ou  pièces)""" 
@@ -523,7 +541,8 @@ class Serie(models.Model):
                                                                                     MyTools.getDMYFromDate(self.evt_debut.date),
                                                                                     MyTools.getDMYFromDate(self.evt_fin.date))
 
-
+    def __unicode__(self):
+        return(self.__str__())
 
 class Production(models.Model):
     """Enregisrement des productions réelles"""

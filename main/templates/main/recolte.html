@@ -158,21 +158,25 @@ function init()
             
             {% for t_prod in leg.l_prod %}
             <td>{{t_prod.0|date:'d/m/Y'}}<br/>
-                    <div    id="sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
-                    esp_id="{{leg.espece.id}}"
-                    qte="{{t_prod.1}}" 
-                    poids="{{t_prod.2}}" 
-                    style="border:5px solid {{t_prod.4}}">Estimé : {{t_prod.1}}</div>
-            Réel<input      type="text" name="reel"
-                            style="width:30px;font-weight:bold;text-align: center" 
-                            id="r__sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
-                            value="{{t_prod.5}}" />
-                    <input  type="button" 
-                            style="width:20px;font-weight:bold;text-align: center"
-                            value="v" 
-                            date="{{t_prod.0|date:'Y-m-d'}}"
-                            leg="{{leg.id}}"
-                            onclick="enregistreRecolte(this);return(false)" />  
+                <div id="sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
+                        esp_id="{{leg.espece.id}}"
+                        qte="{{t_prod.1}}" 
+                        poids="{{t_prod.2}}" 
+                        style="border:5px solid {{t_prod.4}}">Estimé : {{t_prod.1}}</div>
+            Réel<input  type="text"
+                        name="reel"
+                        style="width:30px;font-weight:bold;text-align: center" 
+                        id="r__sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
+                        value="{{t_prod.5}}" />
+    
+                <img    src="{{ STATIC_URL }}images/ok.png" 
+                        style="width:15px;heigth:15px;cursor:pointer"
+                        date="{{t_prod.0|date:'Y-m-d'}}"
+                        leg="{{leg.id}}"
+                        title="Valider"
+                        onmouseover=""
+                        onclick="enregistreRecolte(this);return(false)"
+                        />
             </td>
             {% endfor %}
             <td><div style="font-weight:bold;text-align: center" id="tl_{{leg.id}}"> </div></td>
@@ -180,9 +184,10 @@ function init()
         {% endfor %}
         
 
-        <tr><th>Total (kg)</th>{# ligne de total des qte de legumes par semaine #}
+        <tr>
+            <th>Total estimé (kg)</th>{# ligne de total des qte de legumes par semaine #}
         {% for semaine in l_semaines %}
-        <td><div style="font-weight:bold;text-align:center" id="ts_{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
+            <td><div style="font-weight:bold;text-align:center" id="ts_{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
         {% endfor %}
 
         <td><div id="totalTotal" style="font-weight:bold;text-align:center"> </div></td>
@@ -231,15 +236,15 @@ function init()
         {% for semaine in l_semaines %}
         <td><div style="font-weight:bold;text-align:center" id="tets_{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
         {% endfor %}
-        <td><div id="total_etets" style="font-weight:bold;text-align:center"> aaa </div></td>
+        <td id="total_etets" style="font-weight:bold;text-align:center"> </td>
         </tr>
         
         <tr><th>Total (kg) par pannier</th>{# ligne de total des qte par pannier, par espece et par semaine #}
         {% for semaine in l_semaines %}
-        <td><div style="font-weight:bold;text-align:center" id="tepspp_{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
+        <td style="font-weight:bold;text-align:center" id="tepspp_{{semaine.date_debut|date:'Y-m-d'}}" > </td>
         {% endfor %}
 
-        <td><div id="total_etspp" style="font-weight:bold;text-align:center"> </div></td>
+        <td id="total_etspp" style="font-weight:bold;text-align:center"> </td>
         </tr>        
     </table>
     

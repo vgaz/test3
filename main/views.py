@@ -278,7 +278,6 @@ def evenementsPlanches(request):
     if periode == "aujourdhui":
         date_debut_vue = date_aujourdhui
         date_fin_vue = date_aujourdhui
-        print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
     elif periode == "cette_semaine":
         delta = datetime.timedelta(days=6)
         date_debut_vue =  date_aujourdhui - datetime.timedelta(days=date_aujourdhui.weekday())

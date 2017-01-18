@@ -32,9 +32,10 @@
 #divEditSerie
     {
     display:none;
-    position:fixed;
+    //position:fixed;
     top:20px;
     padding:10px;
+    draggable:"true";
     }
     
 #divDeplacementImplantation
@@ -301,17 +302,31 @@ function supprime_serie(id_serie)
 
 
 
-function prepareAjouteSerie(hCaller, id_planche)
+function prepareAjouteSerie()
     {
+    document.getElementById("editSerie_titre").innerHTML = "Création d'une nouvelle série" 
+    document.getElementById("divEditEvenement").style.display="none"
     hDiv = document.getElementById("divEditSerie")
-    hDiv.style.display = "block"
+    hDiv.style.left = "50px"
+    hDiv.style.top = "50px"
+    hDiv.style.zIndex = 10
+    hDiv.style.draggable=true
     hDiv.style.position = "absolute"
-    hDiv.style.left = "10px"
-    hDiv.style.top = hCaller.offsetTop + "px" // decale à la hauteur de la planche à garnir
-    document.getElementById("editSerie_liste_planches").style.display = "none"
     document.getElementById("editSerie_id_serie").value = 0
-    document.getElementById("editSerie_quantite").value = 0
+    document.getElementById("editSerie_id_serie").style.display="none"
+    document.getElementById("editSerie_id_implantation").value = 0
+    document.getElementById("editSerie_id_implantation").style.display="none"
+    document.getElementById("editSerie_quantite_implantation").value = ""
+    document.getElementById("editSerie_date_debut").value = ""
+    document.getElementById("editSerie_date_fin").value = ""  
+    document.getElementById("editSerie_nb_rangs").value = ""
+    document.getElementById("editSerie_delai_avant_recolte").value = ""
+    document.getElementById("editSerie_duree_recolte").value = ""
+    document.getElementById("editSerie_intra_rang_cm").value = ""
     document.getElementById("editSerie_titre").innerHTML = "Ajout d'une nouvelle série"
+    document.getElementById("editeSerie_evts").innerHTML = ""
+    document.getElementById("editSerie_date_fin").style.display="none"
+    hDiv.style.display = "block"
     }
     
 function prepareEditeSerie(id_impl)
@@ -334,6 +349,8 @@ function prepareEditeSerie(id_impl)
     document.getElementById("editSerie_quantite").innerHTML = hImpl.getAttribute("quantite_serie")
     document.getElementById("editSerie_date_debut").value = hImpl.getAttribute("date_debut_f")
     document.getElementById("editSerie_date_fin").value = hImpl.getAttribute("date_fin_f")
+    document.getElementById("editSerie_b_serre").checked = (hImpl.getAttribute("b_serre") == "True")
+
     // maj legume dans la liste box
     id_legume  = hImpl.getAttribute("id_legume")
     list = document.getElementById("editSerie_id_legume").getElementsByTagName("option")
@@ -343,7 +360,6 @@ function prepareEditeSerie(id_impl)
             document.getElementById("editSerie_id_legume").options[ii].selected=true
             break
             }
-
     majListEvts(id_serie)
     }
     
@@ -352,13 +368,15 @@ function sauveSerie()
     // sauvegarde d'une serie
     s_request = "cde=sauve_serie&id_serie=" + document.getElementById("editSerie_id_serie").value
     s_request += "&id_legume=" + document.getElementById("editSerie_id_legume").value
-    s_request += "&id_b_serre=" + document.getElementById("editSerie_bSerre").value
+    s_request += "&id_b_serre=" + document.getElementById("editSerie_b_serre").value
     s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
     s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
     s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
-    s_request += "&date_fin=" + document.getElementById("editSerie_date_fin").value
+    //s_request += "&date_fin=" + document.getElementById("editSerie_date_fin").value
     s_request += "&id_implantation=" + document.getElementById("editSerie_id_implantation").value
     s_request += "&quantite_implantation=" + document.getElementById("editSerie_quantite_implantation").value
+    s_request += "&editSerie_duree_recolte=" + document.getElementById("editSerie_duree_recolte").value
+    s_request += "&editSerie_delai_avant_recolte=" + document.getElementById("editSerie_delai_avant_recolte").value
 
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)
@@ -366,7 +384,6 @@ function sauveSerie()
         window.location.reload()
     else
         alert(jsonRep.err)
-
     }
     
 
@@ -430,7 +447,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
  au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
 
 <input style="margin-left: 20px" type="submit" value="Envoyer" />
-<img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie(this, {{planche.id}});return false"> 
+<img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie();return false"> 
 <img src="{{STATIC_URL}}images/Help.png" title="Documentation" onclick="document.getElementById('doc').style.display='block';return(false)" style="width:30px;heigth:30px" > 
 </form>
 
@@ -458,6 +475,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
                                         quantite_implantation="{{impl.quantite}}"
                                         surface_implantation="{{impl.surface_m2}}"
                                         id_serie="{{impl.serie.id}}"
+                                        b_serre = "{{planche.bSerre}}"
                                         quantite_serie="{{impl.serie.quantiteTotale}}"
                                         s_liste_planches = "{{impl.serie.s_listeNomsPlanches}}"
                                         date_debut="{{impl.serie.evt_debut.date|safe}}" date_fin="{{impl.serie.evt_fin.date|safe}}"
@@ -485,14 +503,13 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
 
 	<h2 id="editSerie_titre"> </h2>
 	<p id="editSerie_id_serie" value=""> </p>
-	<input type="checkbox" id="editSerie_bSerre" />sous Serre<br/>
+	<input type="checkbox" id="editSerie_b_serre" />sous Serre<br/>
     <p>Légume : <select id="editSerie_id_legume" name="editSerie_id_legume" >
                 {% for leg in l_legumes %}
                     <option value="{{leg.id}}" id="{{leg.id}}" name="{{leg.id}}">{{leg.nom|title}}</option>
                 {% endfor %}
                 </select>
-    </p>        
-   
+    </p>
     <input type="hidden" value="" id="editSerie_id_implantation" name="editSerie_id_implantation" />
     <div>Quantité pour cette implantation <input style="width: 50px" type="text" value="" id="editSerie_quantite_implantation" name="editSerie_quantite_implantation" />
          (<div id="editSerie_quantite" style="display:inline;"> </div> pour toute la série)
@@ -502,18 +519,21 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
            Rien si valeurs par défaut
        </p>
     <p>Début (jj/mm/aa)<input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
+    <p>Délais avant récolte (j) <input style="width:100px;width: 40px" type="text" value="" id="editSerie_delai_avant_recolte" name="editSerie_delai_avant_recolte"/>
+       Durée maxi de récolte (j)<input style="width:100px;width: 40px" type="text" value="" id="editSerie_duree_recolte" name="editSerie_duree_recolte"/>
+    </p>
     <p>Fin (jj/mm/aa)<input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
     <br/><b>Evenements </b> <input type='button' value='+' onclick="ajouteEvenement()" /><br/>
     <div id="editeSerie_evts"> </div>
     <div id="divEditEvenement">
-            <table>
-            <input type="hidden" id="edit_evt_id" value=""/>
-            <tr><td>Nom : <input type="text" value="" id="edit_evt_nom"/></td></tr>
-            <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
-            <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
-            <tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
-            <input type="button" value="Sauver" onclick="sauveEvenement()" /></td></tr>	            
-            </table>
+        <table>
+        <input type="hidden" id="edit_evt_id" value=""/>
+        <tr><td>Nom : <input type="text" value="" id="edit_evt_nom"/></td></tr>
+        <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
+        <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
+        <tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
+        <input type="button" value="Sauver" onclick="sauveEvenement()" /></td></tr>	            
+        </table>
     </div>
     <br /><br />
     <input type='button' value='Supprimer' name='supprime' onclick="supprime_serie(document.getElementById('editSerie_id_serie').value)"/>
