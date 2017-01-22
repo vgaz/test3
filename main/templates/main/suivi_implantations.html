@@ -318,14 +318,14 @@ function prepareAjouteSerie()
     document.getElementById("editSerie_id_implantation").style.display="none"
     document.getElementById("editSerie_quantite_implantation").value = ""
     document.getElementById("editSerie_date_debut").value = ""
-    document.getElementById("editSerie_date_fin").value = ""  
+    document.getElementById("editSerie_date_fin").innerHTML = ""  
+    document.getElementById("editSerie_date_fin").style.display="none"
     document.getElementById("editSerie_nb_rangs").value = ""
-    document.getElementById("editSerie_delai_avant_recolte").value = ""
-    document.getElementById("editSerie_duree_recolte").value = ""
+    document.getElementById("editSerie_duree_avant_recolte_j").value = ""
+    document.getElementById("editSerie_etalement_recolte_j").value = ""
     document.getElementById("editSerie_intra_rang_cm").value = ""
     document.getElementById("editSerie_titre").innerHTML = "Ajout d'une nouvelle série"
     document.getElementById("editeSerie_evts").innerHTML = ""
-    document.getElementById("editSerie_date_fin").style.display="none"
     hDiv.style.display = "block"
     }
     
@@ -348,7 +348,9 @@ function prepareEditeSerie(id_impl)
     document.getElementById("editSerie_quantite_implantation").value = hImpl.getAttribute("quantite_implantation")
     document.getElementById("editSerie_quantite").innerHTML = hImpl.getAttribute("quantite_serie")
     document.getElementById("editSerie_date_debut").value = hImpl.getAttribute("date_debut_f")
-    document.getElementById("editSerie_date_fin").value = hImpl.getAttribute("date_fin_f")
+    document.getElementById("editSerie_duree_avant_recolte_j").value = hImpl.getAttribute("duree_avant_recolte_j")
+    document.getElementById("editSerie_etalement_recolte_j").value = hImpl.getAttribute("etalement_recolte_j")   
+    document.getElementById("editSerie_date_fin").innerHTML = hImpl.getAttribute("date_fin_f")
     document.getElementById("editSerie_b_serre").checked = (hImpl.getAttribute("b_serre") == "True")
 
     // maj legume dans la liste box
@@ -372,11 +374,10 @@ function sauveSerie()
     s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
     s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
     s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
-    //s_request += "&date_fin=" + document.getElementById("editSerie_date_fin").value
+    s_request += "&duree_avant_recolte_j=" + document.getElementById("editSerie_duree_avant_recolte_j").value
+    s_request += "&etalement_recolte_j=" + document.getElementById("editSerie_etalement_recolte_j").value
     s_request += "&id_implantation=" + document.getElementById("editSerie_id_implantation").value
     s_request += "&quantite_implantation=" + document.getElementById("editSerie_quantite_implantation").value
-    s_request += "&editSerie_duree_recolte=" + document.getElementById("editSerie_duree_recolte").value
-    s_request += "&editSerie_delai_avant_recolte=" + document.getElementById("editSerie_delai_avant_recolte").value
 
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)
@@ -478,9 +479,14 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
                                         b_serre = "{{planche.bSerre}}"
                                         quantite_serie="{{impl.serie.quantiteTotale}}"
                                         s_liste_planches = "{{impl.serie.s_listeNomsPlanches}}"
-                                        date_debut="{{impl.serie.evt_debut.date|safe}}" date_fin="{{impl.serie.evt_fin.date|safe}}"
-                                        date_debut_f="{{impl.serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{impl.serie.evt_fin.date|date:'d/m/Y'}}"
-                                        nb_rangs="{{impl.serie.nb_rangs}}" intra_rang_cm="{{impl.serie.intraRang_cm}}"
+                                        date_debut="{{impl.serie.evt_debut.date|safe}}" 
+                                        date_debut_f="{{impl.serie.evt_debut.date|date:'d/m/Y'}}" 
+                                        duree_avant_recolte_j="{{impl.serie.dureeAvantRecolte_j}}"
+                                        etalement_recolte_j="{{impl.serie.etalementRecolte_j}}"
+                                        date_fin="{{impl.serie.evt_fin.date|safe}}"
+                                        date_fin_f="{{impl.serie.evt_fin.date|date:'d/m/Y'}}"
+                                        nb_rangs="{{impl.serie.nb_rangs}}" 
+                                        intra_rang_cm="{{impl.serie.intraRang_cm}}"
                                         draggable="true" ondragstart="dragStart(event)" 
                                         title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.quantite}}/{{impl.serie.quantiteTotale}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}"
                                     >
@@ -519,10 +525,10 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
            Rien si valeurs par défaut
        </p>
     <p>Début (jj/mm/aa)<input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
-    <p>Délais avant récolte (j) <input style="width:100px;width: 40px" type="text" value="" id="editSerie_delai_avant_recolte" name="editSerie_delai_avant_recolte"/>
-       Durée maxi de récolte (j)<input style="width:100px;width: 40px" type="text" value="" id="editSerie_duree_recolte" name="editSerie_duree_recolte"/>
+    <p>Durée avant récolte (j) <input style="width:100px;width: 40px" type="text" value="" id="editSerie_duree_avant_recolte_j" name="editSerie_duree_avant_recolte_j"/>
+       Durée maxi de récolte (j)<input style="width:100px;width: 40px" type="text" value="" id="editSerie_etalement_recolte_j" name="editSerie_etalement_recolte_j"/>
     </p>
-    <p>Fin (jj/mm/aa)<input style="width:100px" type="text" value="" id="editSerie_date_fin"  name="editSerie_date_fin" /></p>
+    Fin <div id="editSerie_date_fin" style="display:inline;"> </div>
     <br/><b>Evenements </b> <input type='button' value='+' onclick="ajouteEvenement()" /><br/>
     <div id="editeSerie_evts"> </div>
     <div id="divEditEvenement">

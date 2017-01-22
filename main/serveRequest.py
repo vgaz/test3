@@ -77,16 +77,16 @@ def serveRequest(request):
             else: nb_rangs = int(nb_rangs) 
 
             serie = creationEditionSerie(
-                                int(request.POST.get("id_serie","0")),
-                                int(request.POST.get("id_legume")), 
-                                request.POST.get("id_b_serre","off")=="on",
-                                int(request.POST.get("id_implantation","0")), 
-                                int(request.POST.get("quantite_implantation")), 
-                                intra_rang_m, 
-                                nb_rangs,
-                                request.POST.get("date_debut"), 
-                                request.POST.get("duree_avant_recolte_j",""),
-                                request.POST.get("delai_recolte_j", ""))
+                                        int(request.POST.get("id_serie","0")),
+                                        int(request.POST.get("id_legume")), 
+                                        request.POST.get("id_b_serre","off")=="on",
+                                        int(request.POST.get("id_implantation","0")), 
+                                        int(request.POST.get("quantite_implantation")), 
+                                        intra_rang_m, 
+                                        nb_rangs,
+                                        request.POST.get("date_debut"), 
+                                        int(request.POST.get("duree_avant_recolte_j","0")),
+                                        int(request.POST.get("etalement_recolte_j", "0")))
             log.info("Nouvelle série créée" + serie.__str__())
             s_json = '{"status":true,"msg":"%s"}'%serie
         except:

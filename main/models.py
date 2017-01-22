@@ -8,7 +8,7 @@ from main import constant
 import MyTools
 
 ################################################################
-#### controle des models
+#### contrôle des models
 
 def creationEvt(e_date, e_type, nom="", duree_j=1):
     """création d'une evenement en base
@@ -32,11 +32,14 @@ def creationEditionSerie(id_serie,
                          nb_rangs, 
                          date_debut, 
                          duree_avant_recolte_j,
-                         delai_recolte_j):
+                         etalement_recolte_j):
     """Création ou edition d'une série de plants sur planche virtuelle
     si id_serie == 0, c'est une demande de création, sinon , d'édition/modification
     """
     assert id_leg, '%s pas de valeur pour var'%__name__
+    assert duree_avant_recolte_j != 0, 'duree avant recolte = 0'
+    assert etalement_recolte_j != 0, 'étalement recolte = 0'
+    
     leg = Legume.objects.get(id=id_leg)
     if id_serie == 0:
         serie = Serie() ## nelle serie
@@ -59,7 +62,7 @@ def creationEditionSerie(id_serie,
         ## de l'inter rang du legume et de la largeur de planche
         serie.nb_rangs = 0
     serie.dureeAvantRecolte_j = duree_avant_recolte_j
-    serie.etalementRecolte_j = delai_recolte_j 
+    serie.etalementRecolte_j = etalement_recolte_j 
     serie.save()
     serie.fixeDates(date_debut)
     serie.save()
@@ -81,6 +84,8 @@ def creationEditionSerie(id_serie,
     impl.quantite = quantite_implantation
     impl.save()
     return serie
+
+
 
 def creationPlanche(longueur_m, largeur_m, bSerre, s_nom=""): 
     """Création d'une planche"""
@@ -143,20 +148,26 @@ def cloneSerie(serie):
     """clonage d'une série"""
     serie2 = Serie.objects.get(id=serie.id)
     serie2.id = None
-    serie2.save() ## mode de création d'une nouvelle serie
-    ## duplication des évenements
-    for evt in Evenement.objects.filter(serie_id=serie.id):
-        evt2 = Evenement.objects.get(id=evt.id)
-        evt2.id = None
-        evt2.serie_id = serie2.id
-        evt2.save()
-    ## pas d'imlantation 
+    serie2.save() ## mode de création d'une nouvelle serie, tous les champs non relatifs sont copiés
+    
+    for evt in serie.evenements.all():
+        evt.id = None   ## crée un clone
+        evt.save()      ## """"""""""""
+        serie2.evenements.add(evt)
+        if evt.type == Evenement.TYPE_DEBUT: serie2.evt_debut = evt
+        if evt.type == Evenement.TYPE_FIN: serie2.evt_fin = evt
+        
+    ## duplication des implantations au même endroit
+    for imp in serie.implantations.all():
+        imp.id = None   ## crée un clone
+        imp.save()      ## """"""""""
+        serie2.implantations.add(imp)
     return serie2
 
-def supprimeSerie(id):
+def supprimeSerie(_id):
     """ supression de la série et de ses champs liés"""
     try:
-        serie = Serie.objects.get(id=id)
+        serie = Serie.objects.get(id=_id)
         ##print("Demande de suppression série %s"%serie.__str__())
         ## supression des évenements associés
         for obj in serie.evenements.all():
@@ -346,7 +357,6 @@ class Implantation(models.Model):
         return self.serie_set.all()[0]
     
     def surface_m2(self):
-        
         serie = self.serie()
         return surfacePourQuantite(self.planche.largeur_m, 
                                    self.quantite, 
@@ -384,6 +394,21 @@ class SerieManager(models.Manager):
         return l_series
 
 
+    def engageeSurPeriode(self, date_debut, date_fin, planche=None):
+        """Filtrage des séries présentes, au moins partiellement, dans un encadrement de dates
+        on ne renvoie que les implantations de cette planche"""
+        if planche:
+            l_series = Serie.objects.filter(implantations__planche_id = planche.id)
+        else:
+            l_series = Serie.objects.all()
+            
+        l_series = l_series.distinct() ## évite les séries reprises plusieurs fois car présentes sur plusieurs planches  
+        l_series = l_series.exclude(evt_debut__date__gt = date_fin)
+        l_series = l_series.exclude(evt_debut__date__lt = date_debut)
+        return l_series
+
+
+        
 class Evenement(models.Model):
     TYPE_DEBUT = 1
     TYPE_FIN = 2

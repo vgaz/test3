@@ -84,3 +84,4 @@ hdlr.setFormatter(logging.Formatter(s_format))
 log.addHandler(hdlr)    
 log.setLevel(logging.INFO)
 
+logging.getLogger('utils')  .setLevel(logging.INFO)
