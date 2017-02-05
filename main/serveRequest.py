@@ -16,6 +16,7 @@ from main.settings import log
 def serveRequest(request):
     """Received a request and return specific response"""
     cde = request.POST.get("cde","")
+    log.info("CDE..........." + cde)
     log.info(str(request.POST))
 
     if cde == "enregistre_recolte": 
@@ -149,7 +150,10 @@ def serveRequest(request):
             evt.duree_j = duree_j
             evt.nom = nom
             evt.save()
-            Serie.objects.get(id=id_serie).evenements.add(evt)
+            
+            if e_id == 0:
+                Serie.objects.get(id=id_serie).evenements.add(evt)
+            
             log.info(evt)
                 
             s_json = '{"status":true}'

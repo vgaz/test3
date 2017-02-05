@@ -61,11 +61,14 @@ def creationEditionSerie(id_serie,
         ## selon la planche sur laquelle on atterira, on fixera le nb de rangs en fonction 
         ## de l'inter rang du legume et de la largeur de planche
         serie.nb_rangs = 0
+    
     serie.dureeAvantRecolte_j = duree_avant_recolte_j
     serie.etalementRecolte_j = etalement_recolte_j 
     serie.save()
-    serie.fixeDates(date_debut)
-    serie.save()
+    
+    if id_serie == 0:
+        serie.fixeDates(date_debut)
+        serie.save()
     
     ## implantation 
     if id_implantation == 0:
@@ -565,7 +568,12 @@ class Serie(models.Model):
                                                                                     self.s_listeNomsPlanches(),
                                                                                     MyTools.getDMYFromDate(self.evt_debut.date),
                                                                                     MyTools.getDMYFromDate(self.evt_fin.date))
-
+    def descriptif(self):
+        """retourrne une desctriptioin complete de la série"""
+        
+        pass
+    
+        
     def __unicode__(self):
         return(self.__str__())
 

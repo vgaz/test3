@@ -27,12 +27,21 @@
 #editeSerie_evts
 {
     text-align:left;
+
 }
+#divEditEvenement
+{
+    text-align:left;
+    border: 1px solid blue;
+
+}
+
+
 
 #divEditSerie
     {
     display:none;
-    //position:fixed;
+    position:fixed;
     top:20px;
     padding:10px;
     draggable:"true";
@@ -163,13 +172,17 @@ function ajouteEvenement() // un nouveau
     {
     document.getElementById("edit_evt_id").value = 0
     document.getElementById("divEditEvenement").style.display = "block"
+    document.getElementById("edit_evt_nom").value = ""
+    document.getElementById("edit_evt_date").value = ""
+    document.getElementById("edit_evt_duree_j").value = ""
     }
     
 function editeEvenement(oEvent)
     {
     document.getElementById("edit_evt_id").value = oEvent.pk
     document.getElementById("edit_evt_nom").value = oEvent.nom   
-    document.getElementById("edit_evt_date").value = new Date(t_date[0],t_date[1],t_date[2]).toLocaleDateString()
+    document.getElementById("edit_evt_date").value = getSdateFromTdate(oEvent.date)
+    document.getElementById("edit_evt_duree_j").value = oEvent.duree_j
     document.getElementById("divEditEvenement").style.display = "block"
     }
 
@@ -187,6 +200,8 @@ function supprimeEvenement(oEvent)
     // maj fenetre d'edition de la série
     id_serie = document.getElementById("editSerie_id_serie").value
     majListEvts(id_serie)
+    document.getElementById("divEditEvenement").style.display = "none"
+
     }
 
 function sauveEvenement()
@@ -203,19 +218,21 @@ function sauveEvenement()
     rep = requestServer(s_request)
     jsonRep = JSON.parse(rep)
     if (jsonRep.status == false)
-        document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>"+ jsonRep.err + "</div>"
+        document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>" + jsonRep.err + "</div>"
 
-    // maj fenetre d'edition de la série
-    majListEvts(id_serie)
-    
-    // nettoyage nom et date de l'evt
-    document.getElementById("edit_evt_nom").value = ""
-    document.getElementById("edit_evt_date").value = ""
     //masquage de la fenetre d'édition de l'evt
     document.getElementById("divEditEvenement").style.display = "none"
+    
+    // maj fenetre d'édition de la série
+    majListEvts(id_serie)
     }
 
-
+function getSdateFromTdate(tdate)
+    {
+    t_date = tdate.split("T")[0].split("-")
+    return t_date[2] + "/"+ t_date[1] + "/" + t_date[0]
+    }
+    
 function majListEvts(id_serie)
     {
     // recup et affichage des evts de la série
@@ -233,10 +250,8 @@ function majListEvts(id_serie)
             if (d_evt.type != {{codeEvtDivers}})
                 continue // que les evt divers
             d_evt["pk"] =jsonRep.l_evts[ii].pk //la clé pk n'est pas dans les fields, on la rajoute        
-            t_date = d_evt.date.split("T")[0].split("-")
-            date = new Date(t_date[0],t_date[1],t_date[2])
             sj_evt = JSON.stringify(d_evt)
-            s_evts += "<tr><td> " + date.toLocaleDateString() + " </td><td> " + d_evt.duree_j + "j </td><td> "  + d_evt.nom + " </td>"
+            s_evts += "<tr><td> " + getSdateFromTdate(d_evt.date) + " </td><td> " + d_evt.duree_j + "j </td><td> "  + d_evt.nom + " </td>"
             s_evts += "<td><a href='javascript:editeEvenement(" + sj_evt + ")'>"
             s_evts += "<img align='right' src='{{STATIC_URL}}images/editor.png' title='Editer'></a></td>"
             s_evts += "<td><a href='javascript:supprimeEvenement(" + sj_evt + ")'>"
@@ -329,19 +344,18 @@ function prepareAjouteSerie()
     hDiv.style.display = "block"
     }
     
-function prepareEditeSerie(id_impl)
+function prepareEditeImplantation(id_impl)
     {
     document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
     document.getElementById("divEditEvenement").style.display = "none"
     hDiv = document.getElementById("divEditSerie")
     hDiv.style.display = "block"
-    hDiv.style.position = "absolute"
-    hDiv.style.top = "20px"
+    hDiv.style.draggable=true
+
     hImpl = document.getElementById(id_impl)
-    hDiv.style.top = hImpl.offsetTop + 60 + "px" // 80 pour aller en dessous du div de serie
     id_serie = hImpl.getAttribute("id_serie")
     document.getElementById("editSerie_id_serie").value = id_serie
-    document.getElementById("editSerie_id_serie").innerHTML = "Série " +  hImpl.getAttribute("id") + " sur la/les planche/s " + hImpl.getAttribute("s_liste_planches")
+    document.getElementById("editSerie_id_serie").innerHTML = "Série " +  id_serie + ", impl:" + id_impl + " sur la/les planche/s " + hImpl.getAttribute("s_liste_planches")
     document.getElementById("editSerie_nb_rangs").value = hImpl.getAttribute("nb_rangs")
     document.getElementById("editSerie_intra_rang_cm").value = hImpl.getAttribute("intra_rang_cm")
     document.getElementById("editSerie_id_implantation").value = hImpl.getAttribute("id")
@@ -367,7 +381,7 @@ function prepareEditeSerie(id_impl)
     
 function sauveSerie()
     {
-    // sauvegarde d'une serie
+    // sauvegardedes paramètres d'une serie
     s_request = "cde=sauve_serie&id_serie=" + document.getElementById("editSerie_id_serie").value
     s_request += "&id_legume=" + document.getElementById("editSerie_id_legume").value
     s_request += "&id_b_serre=" + document.getElementById("editSerie_b_serre").value
@@ -492,7 +506,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
                                     >
             <div class="divTitreImplantation">
             Imp {{impl.id}} - S {{impl.serie.id}}. {{impl.surface_m2}}m2. {{impl.serie.legume.nom}} x {{impl.quantite}} / {{impl.serie.quantiteTotale}}
-            <img src='{{STATIC_URL}}images/editor.png' title='Editer la série' onclick="prepareEditeSerie({{impl.serie.id}});return(false)">
+            <img src='{{STATIC_URL}}images/editor.png' title='Editer la série' onclick="prepareEditeImplantation({{impl.id}});return(false)">
             </div>
             {% for evt in impl.serie.evenements.all%}
                 <div class='evt' date="{{evt.date|date:'Y-m-d'}}" duree_j="{{evt.duree_j}}" nom="{{evt.nom}}" 
@@ -529,23 +543,25 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
        Durée maxi de récolte (j)<input style="width:100px;width: 40px" type="text" value="" id="editSerie_etalement_recolte_j" name="editSerie_etalement_recolte_j"/>
     </p>
     Fin <div id="editSerie_date_fin" style="display:inline;"> </div>
-    <br/><b>Evenements </b> <input type='button' value='+' onclick="ajouteEvenement()" /><br/>
+    <p>
+    <input type='button' value='Supprimer' name='supprime' onclick="supprime_serie(document.getElementById('editSerie_id_serie').value)" />
+    <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return false" />
+    <input type='button' value='Sauver' onclick="sauveSerie();return False" />
+    </p>    
+    <hr/>
+    <p><b>Evenements </b> <input type='button' value='+' onclick="ajouteEvenement()" title="Ajouter un évènement"/></p>
     <div id="editeSerie_evts"> </div>
     <div id="divEditEvenement">
         <table>
         <input type="hidden" id="edit_evt_id" value=""/>
         <tr><td>Nom : <input type="text" value="" id="edit_evt_nom"/></td></tr>
-        <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
+        <tr><td>Date (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
         <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
         <tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
         <input type="button" value="Sauver" onclick="sauveEvenement()" /></td></tr>	            
         </table>
     </div>
-    <br /><br />
-    <input type='button' value='Supprimer' name='supprime' onclick="supprime_serie(document.getElementById('editSerie_id_serie').value)"/>
-    <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return false"/>
-    <input type='button' value='Sauver' onclick="sauveSerie();return False" />
-    <br/>
+
 </div>
 	
 	
