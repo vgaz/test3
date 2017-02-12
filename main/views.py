@@ -400,6 +400,7 @@ def recolte(request):
     l_semaines = []
     date_debut_sem = date_debut_sem_vue
 
+    nbPanniers = constant.NB_PANNIERS
     while True:
         sem = MyTools.MyEmptyObj()
         date_fin_sem = date_debut_sem + datetime.timedelta(days=6)
@@ -462,6 +463,7 @@ def recolte(request):
                     "l_legumes":l_legumes,
                     "l_especes" : Espece.objects.all(),
                     "bDetailVar":bDetailVar,
+                    "nbPanniers":nbPanniers,
                     "info":""
                     })
     

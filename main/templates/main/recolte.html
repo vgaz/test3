@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}Prévision de récoltes et livraisons par semaine{% endblock %}
 
 {% block javascript %}
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
@@ -11,6 +10,7 @@ l_sems = [{% for sem in l_semaines %}"{{sem.date_debut|date:'Y-m-d'}}"{% if not 
 l_legs = [{% for leg in l_legumes %}{{leg.id}}{% if not forloop.last %},{% endif %}{% endfor %}]
 l_especes = [{% for esp in l_especes %}{{esp.id}}{% if not forloop.last %},{% endif %}{% endfor %}]
 l_couleur_esp = { {% for esp in l_especes %}{{esp.id}}:"{{esp.couleur}}"{% if not forloop.last %},{% endif %}{% endfor %}}
+nbPanniers = {{nbPanniers}}
 
 function enregistreRecolte(ptDiv)
     {
@@ -32,7 +32,7 @@ function init()
             //alert("sem:" + l_sems[ii] + " leg:" + l_legs[jj] + " poidsL:" + poidsL +" cumul:" + cumul)
             }
         document.getElementById("ts_" + l_sems[ii]).innerHTML = cumul
-        document.getElementById("tlpp_" + l_sems[ii]).innerHTML = cumul/25
+        document.getElementById("tlpp_" + l_sems[ii]).innerHTML = cumul/nbPanniers
         cumulTotal += cumul
         }   
     document.getElementById("totalTotal").innerHTML = cumulTotal
@@ -97,21 +97,19 @@ function init()
                
             }
         document.getElementById("tets_" + l_sems[ss]).innerHTML = cumul_eps
-        document.getElementById("tepspp_" + l_sems[ss]).innerHTML = cumul_eps /25
+        document.getElementById("tepspp_" + l_sems[ss]).innerHTML = cumul_eps /nbPanniers
         total_etets += cumul_eps
         }           
         total_etets
         document.getElementById("total_etets").innerHTML = total_etets
 
     }
-    
-    
-    
 
 </script>
 
 {% endblock %}
 
+{% block title %}Prévision de récoltes et livraisons par semaine{% endblock %}
 
 {% block content %}
 

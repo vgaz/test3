@@ -40,7 +40,7 @@ def serveRequest(request):
         return HttpResponse(s_json, content_type="application/json")
 
     
-    if cde == "get_evts_serie": 
+    elif cde == "get_evts_serie": 
         ## retour des évenements d'une série)
         try:
             l_evts = Serie.objects.get(id = int(request.POST.get("id", 0))).evenements.all()
@@ -54,8 +54,39 @@ def serveRequest(request):
              
         return HttpResponse(s_json, content_type="application/json")
 
+    
+    elif cde == "get_impls_serie": 
+        ## retour des implantations d'une série)
+        try:
+            l_impls = Serie.objects.get(id = int(request.POST.get("id", 0))).implantations.all()
+            rep = serializers.serialize("json", l_impls)      
+            s_json = '{"status":true, "l_impls": %s}'%rep
+            log.info(s_json)
+        except:
+            log.info(__name__ + ': ' + str(sys.exc_info()[1]) )
+            traceback.log.info_tb(sys.exc_info())
+            s_json = '{"status":false,"err":"%s"}'%(sys.exc_info()[1])
+             
+        return HttpResponse(s_json, content_type="application/json")
+    
+    elif cde == "sauve_qte_impantation":
+        ## sauvegarde suite à modif de qté
+        try:
+            impl = Implantation.objects.get(id = int(request.POST.get("id")))
+            impl.quantite = int(request.POST.get("qte"))
+            impl.save()                            
+            s_json = '{"status":true}'
+        except:
+            log.info(__name__ + ': ' + str(sys.exc_info()[1]) )
+            traceback.log.info_tb(sys.exc_info())
+            s_json = '{"status":false,"err":"%s"}'%(sys.exc_info()[1])
+             
+        return HttpResponse(s_json, content_type="application/json")
+            
+        
+        
     ## --------------- renvoi d'un evt à partir de son identifiant
-    if cde == "get_evt": 
+    elif cde == "get_evt": 
         try:
             evt = Evenement.objects.get(id = int(request.POST.get("id", 0)))
             s_ = serializers.serialize("json", evt)       
@@ -67,7 +98,7 @@ def serveRequest(request):
         return HttpResponse( s_json, content_type="application/json")
 
     ## --------------- creation ou maj serie de plants 
-    if cde =="sauve_serie":
+    elif cde =="sauve_serie":
         try:
             # gestion de la création ou édition d'une série de plants
             intra_rang_cm = request.POST.get("intra_rang_cm","")
@@ -81,8 +112,6 @@ def serveRequest(request):
                                         int(request.POST.get("id_serie","0")),
                                         int(request.POST.get("id_legume")), 
                                         request.POST.get("id_b_serre","off")=="on",
-                                        int(request.POST.get("id_implantation","0")), 
-                                        int(request.POST.get("quantite_implantation")), 
                                         intra_rang_m, 
                                         nb_rangs,
                                         request.POST.get("date_debut"), 
@@ -97,9 +126,8 @@ def serveRequest(request):
             s_json = '{"status":false,"msg":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")
-
     
-    if cde == 'supprime_serie':
+    elif cde == 'supprime_serie':
         try:
             models.supprimeSerie(int(request.POST.get("id")))
             s_json = '{"status":true}'
@@ -110,7 +138,7 @@ def serveRequest(request):
         return HttpResponse( s_json, content_type="application/json")
 
 
-    if cde == 'supprime_planche':
+    elif cde == 'supprime_planche':
         try:
             id_pl = int(request.POST.get("id"))
             planche = Planche.objects.get(id=id_pl)
@@ -126,9 +154,32 @@ def serveRequest(request):
 
         return HttpResponse( s_json, content_type="application/json")
 
+
+    elif cde == "sauve_impl": 
+        try:
+            impl = Implantation.objects.get(id=int(request.POST.get("id")))                
+            impl.quantite = int(request.POST.get("quantite"))
+            impl.save()
+            s_json = '{"status":true}'
+        except:
+            traceback.log.info_tb(sys.exc_info())            
+            s_json = '{"status":false,"err":"%s %s"}'%(__name__, sys.exc_info()[1])
+           
+        return HttpResponse(s_json)
+    
+    elif cde == 'supprime_impl':
+        try:
+            Implantation.objects.get(id=int(request.POST.get("id"))).delete()
+            s_json = '{"status":true}'
+        except:
+            traceback.log.info_tb(sys.exc_info())
+            s_json = '{"status":false,"err":"%s"}'%sys.exc_info()[1]
+
+        return HttpResponse( s_json, content_type="application/json")
+        
     
     ## --------------- request to update database 
-    if cde == "sauve_evt": 
+    elif cde == "sauve_evt": 
         try:
             e_id = int(request.POST.get("id", 0))
             id_serie = int(request.POST.get("id_serie",0))
@@ -163,10 +214,10 @@ def serveRequest(request):
            
         return HttpResponse(s_json)
 
-    if cde == "supprime_evt":
+    elif cde == "supprime_evt":
         try:
             evt = Evenement.objects.get(id=int(request.POST.get("id", 0)))
-            log.info("will delete", evt)
+            log.info("destruction de", evt)
             evt.delete()
             s_json = '{"status":true}'
         except:
@@ -175,7 +226,7 @@ def serveRequest(request):
         return HttpResponse(s_json)
 
 
-    if cde == "deplacement_implantation":
+    elif cde == "deplacement_implantation":
         ## déplacement d'une serie de plants d'une planche vers une autre
         try:
             implantation = Implantation.objects.get(id=int(request.POST.get("id_implantation")))

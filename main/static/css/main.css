@@ -46,6 +46,8 @@ body
 
 h1
 {
+    color: #5beeb2;
+
 	font-size:20pt;
 	font-weight:bold;
 	margin-top:5px; 
@@ -130,11 +132,8 @@ margin:10px;
     background: #FFFFFF;
     color:#3F3F3F;
     border-radius:10px;
-    margin:10px;.displayInLine
-{
+    margin:10px;
     display: inline;
-}
-  
     padding:10px;
     float: left;
 }

@@ -26,8 +26,6 @@ def creationEvt(e_date, e_type, nom="", duree_j=1):
 def creationEditionSerie(id_serie, 
                          id_leg, 
                          bSerre,
-                         id_implantation, 
-                         quantite_implantation, 
                          intra_rang_m, 
                          nb_rangs, 
                          date_debut, 
@@ -70,8 +68,7 @@ def creationEditionSerie(id_serie,
         serie.fixeDates(date_debut)
         serie.save()
     
-    ## implantation 
-    if id_implantation == 0:
+        ## implantation 
         ## nouvelle
         impl = Implantation()
         if bSerre:
@@ -81,11 +78,7 @@ def creationEditionSerie(id_serie,
         impl.save()
         serie.implantations.add(impl)
         serie.save() 
-    else:
-        impl = serie.implantations.get(id=id_implantation)        
-            
-    impl.quantite = quantite_implantation
-    impl.save()
+
     return serie
 
 
@@ -458,9 +451,22 @@ class Serie(models.Model):
     evt_fin = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     objects = SerieManager()
     
+    
     def enPlaceEnDatedu(self, date):  
         """retourne True ou False si série encore en terre à telle date"""
         if date >= self.evt_debut.date and date <= self.evt_fin.date:
+            return True
+        else:
+            return False
+
+    
+    def dateDebutRecolte(self):  
+        """retourne la date min de récolte"""
+        return self.evt_debut.date  + datetime.timedelta(days = self.dureeAvantRecolte_j)
+        
+    def recoltePossibleEnDatedu(self, date):  
+        """retourne True ou False si série encore en terre à telle date"""
+        if date >= self.dateDebutRecolte() and date <= self.evt_fin.date:
             return True
         else:
             return False
@@ -524,7 +530,7 @@ class Serie(models.Model):
         return surface_m2
 
     def quantiteEstimee_kg_ou_piece(self):
-            """Retourne la quantité totale escomptée (kg ou  pièces)""" 
+            """Retourne la quantité totale escomptée ( en kg ou pièces)""" 
             if self.legume.espece.unite_prod == constant.UNITE_PROD_KG:
                 return self.legume.rendementProduction_kg_m2 * self.surfaceOccupee_m2()
             else:
@@ -544,7 +550,7 @@ class Serie(models.Model):
                 return 0
         else:
             ## legume frais 
-            if self.enPlaceEnDatedu(dateDebutSem):
+            if self.recoltePossibleEnDatedu(dateDebutSem):
                 return self.quantiteEstimee_kg_ou_piece() / (self.etalementRecolte_j / 7)
             else:
                 return 0
@@ -570,8 +576,20 @@ class Serie(models.Model):
                                                                                     MyTools.getDMYFromDate(self.evt_fin.date))
     def descriptif(self):
         """retourrne une desctriptioin complete de la série"""
+        l_rep = []
+        l_rep.append(self.__str__())
+        for field_name in self._meta.get_all_field_names():
+            value = getattr(self, field_name, None)
+            l_rep.append("%s : %s"%(field_name, str(value)))
+        for evt in self.evenements.all():
+            l_rep.append(evt.__str__())
+        for impl in self.implantations.all():
+            l_rep.append(impl.__str__())
+            
         
-        pass
+        l_rep.append("surface Occupée : %s m2"%(self.surfaceOccupee_m2()))
+        l_rep.append("quantité estimée : %d"%(self.quantiteEstimee_kg_ou_piece()))
+        return "\n".join(l_rep)
     
         
     def __unicode__(self):
