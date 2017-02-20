@@ -130,7 +130,7 @@ class Command(BaseCommand):
                         assert s_field, "'Délai avant retour (an)' indéfini pour %s"%(esp.nom)  
                         esp.delai_avant_retour_an = int(s_field)
                                                                  
-                        s_field = d_line.get("Couleur", "brown")
+                        s_field = d_line.get("Couleur", "brown").strip()
                         assert s_field, "'Couleur' indéfini pour %s"%(esp.nom)  
                         esp.couleur = s_field
                                                                  
@@ -176,8 +176,6 @@ class Command(BaseCommand):
                     leg = Legume()
                     leg.espece_id = espece.id
                     leg.variete_id = var.id
-                    if 'omme de ' in espece.nom:
-                        pass
                     log.info("Ajout légume %s %s" % (espece.nom, var.nom))
                        
                 ## recup infos légumes
@@ -204,7 +202,6 @@ class Command(BaseCommand):
 
                     leg.save()
                     
-                    
                     ## maj série
                     s_dateEnTerre = d_line.get("Date en terre","")
                     assert s_dateEnTerre, "Champ 'Date en terre' indéfini pour %s"%(leg.nom())
@@ -221,13 +218,6 @@ class Command(BaseCommand):
 
 
                     ## recup infos série
-                    val = int(d_line.get("Durée avant récolte (j)", "0"))
-                    assert val, "Champ 'Durée avant récolte (j)' indéfini pour %s "%(leg.nom())                    
-                    serie.dureeAvantRecolte_j = val
-                    
-                    val = int(d_line.get("Étalement récolte (j)", "0"))
-                    assert val, "Champ 'Étalement récolte (j)' indéfini pour %s "%(leg.nom())                    
-                    serie.etalementRecolte_j = val
                     
                     val = int(float(d_line.get("Nombre de pieds", "0").replace(",",".")))
                     assert val, "Champ 'Nombre de pieds' indéfini pour %s "%(leg.nom())
@@ -240,25 +230,18 @@ class Command(BaseCommand):
                     val = d_line.get("lieu", "")
                     assert val, "Champ 'lieu' indéfini pour %s "%(leg.nom())                    
                     serie.bSerre = (val == "SERRE")
-                    
                     serie.intra_rang_m = leg.intra_rang_m
-
                     serie.save()
-                    
-                    serie.fixeDates(dateEnTerre)
-                    
+                    dureeAvantRecolte_j = int(d_line.get("Durée avant récolte (j)", "0"))
+                    assert dureeAvantRecolte_j, "Champ 'Durée avant récolte (j)' indéfini pour %s "%(leg.nom())                        
+                    etalementRecolte_j = int(d_line.get("Étalement récolte (j)", "0"))
+                    assert etalementRecolte_j, "Champ 'Étalement récolte (j)' indéfini pour %s "%(leg.nom())                    
                     delaiCroissancePlants_j = int(d_line.get("Délai croissance plants (j)", "0"))
-                    if delaiCroissancePlants_j != 0:
-                        ## on ajoute un évenement de fabrication des plants
-                        evt = creationEvt(serie.evt_debut.date - datetime.timedelta(days=delaiCroissancePlants_j), 
-                                    Evenement.TYPE_DIVERS,
-                                    "fabrication plants de %s x %d"%(serie.legume.nom(), 
-                                                                     serie.quantite * serie.legume.espece.rendementGermination),
-                                    1)
-                        serie.evenements.add(evt)
-                    serie.save()
-                                            
-                    ## implantation int(de la série par defaut sur planche virtuelles serre ou plein champ
+                    print("aa")
+                    serie.fixeDates(dateEnTerre, dureeAvantRecolte_j, etalementRecolte_j, delaiCroissancePlants_j)
+                    print ("bb")
+
+                    ## implantation de la série par defaut sur planche virtuelles serre ou plein champ
                     implantation = Implantation()
                     if serie.bSerre:    
                         implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS).id

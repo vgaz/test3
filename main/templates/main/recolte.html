@@ -20,7 +20,10 @@ function enregistreRecolte(ptDiv)
 
 function init()
     {
-    // maj légumes total par semaine (kg)
+    montre_especes()
+    // maj tableau légumes 
+    
+    // total par semaine (kg)
     cumulTotal = 0       
     for (ii=0;ii<l_sems.length;ii++)
         {
@@ -37,7 +40,7 @@ function init()
         }   
     document.getElementById("totalTotal").innerHTML = cumulTotal
     
-    // maj total par légume (kg)
+    // total par légume (kg)
     for (ii=0; ii<l_legs.length; ii++)
         {
         cumul = 0
@@ -46,10 +49,12 @@ function init()
         document.getElementById("tl_" + l_legs[ii]).innerHTML = cumul
         }
     
-    // maj total par espèce pour toutes les semaines
+    // maj tableau espèces
+    
+    // total par espece pour chaque semaine   
     for (ee=0; ee<l_especes.length; ee++)
         {
-        cumulTETS = 0 // total especes toutes les semaines   
+        cumulTETS = 0 // 
         for (ss=0;ss<l_sems.length;ss++)
             {
             cumulEPS = 0
@@ -77,34 +82,51 @@ function init()
         document.getElementById("tets_" + l_especes[ee]).innerHTML = cumulTETS
         }   
         
-    // maj total par semaine pour toutes les especes  en Kg
+    // total par semaine pour chaque espece (en Kg) et liste des espèces dont le poids est non nul
     total_etets = 0
     for (ss=0;ss<l_sems.length;ss++)
         {
-        cumul_eps = 0 // totalde chaque semaine pour ttes les especes
+        s_listeEsp = ""
+        poids_SPE = 0 // total de chaque semaine
         for (ee=0; ee<l_especes.length; ee++)
             {
-            cumulEPS = 0
+            poidsLegs = 0
             for (ll=0;ll<l_legs.length;ll++)
                 {
                 divLeg = document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll])
                 esp_id = parseInt(divLeg.getAttribute("esp_id"))
                 if( esp_id != l_especes[ee])
                     continue
-                pds = parseInt(divLeg.getAttribute("poids"))
-                cumul_eps += pds
-                }        
-               
+                poidsLeg = parseInt(divLeg.getAttribute("poids"))
+                poidsLegs += poidsLeg
+                if (poidsLeg != 0)
+                    s_listeEsp += "<br/>" + divLeg.getAttribute("esp_nom")
+               }        
+            poids_SPE += poidsLegs
+
             }
-        document.getElementById("tets_" + l_sems[ss]).innerHTML = cumul_eps
-        document.getElementById("tepspp_" + l_sems[ss]).innerHTML = cumul_eps /nbPanniers
-        total_etets += cumul_eps
+        document.getElementById("tets_" + l_sems[ss]).innerHTML = poids_SPE
+        document.getElementById("tepspp_" + l_sems[ss]).innerHTML = poids_SPE   /nbPanniers + " kg"
+        document.getElementById("cont_pspp_" + l_sems[ss]).innerHTML = s_listeEsp
+    
+        total_etets += poids_SPE
         }           
-        total_etets
-        document.getElementById("total_etets").innerHTML = total_etets
+    
+    document.getElementById("total_etets").innerHTML = total_etets
 
     }
-
+function montre_legumes()
+    {
+    document.getElementById('tab_legumes').style.display='block'
+    document.getElementById('tab_especes').style.display='none'
+       
+    }
+function montre_especes()
+    {
+    document.getElementById('tab_legumes').style.display='none'
+    document.getElementById('tab_especes').style.display='block'
+    }
+    
 </script>
 
 {% endblock %}
@@ -120,30 +142,31 @@ function init()
     {% csrf_token %}
     <div class="BlueFrame" style="width:100%">
 
-    <input type="submit" name="direction" value="avance" /> 
-    <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
+        <input type="submit" name="direction" value="avance" /> 
+        <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
+        
+        Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
+        <button onclick="changelePas(-1);return(false)">-</button>
+        <button onclick="changelePas(1);return(false)">+</button>
+        <br/>
+         <input type="radio" name="periode" value="annee" {% if periode == "annee" %}checked{% endif %}>Cette année
+         <input type="radio" name="periode" value="mois" {% if periode == 'mois' %}checked{% endif %}>Ce mois
+         <input type="radio" name="periode" value="semaine" {% if periode == 'semaine' %}checked{% endif %}>Cette semaine
+         <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
+         du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
+         au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
     
-    Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
-    <button onclick="changelePas(-1);return(false)">-</button>
-    <button onclick="changelePas(1);return(false)">+</button>
-    <br/>
-     <input type="radio" name="periode" value="annee" {% if periode == "annee" %}checked{% endif %}>Cette année
-     <input type="radio" name="periode" value="mois" {% if periode == 'mois' %}checked{% endif %}>Ce mois
-     <input type="radio" name="periode" value="semaine" {% if periode == 'semaine' %}checked{% endif %}>Cette semaine
-     <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
-     du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
-     au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
-
-    <input type="radio" name="detail" value="espece">Regroupé par espèce
-    <input type="radio" name="detail" value="variete" >Détaillé par variété
-
-    <input style="margin-left: 20px" type="submit" value="Envoyer" />
+        <input type="radio" name="detail" value="espece" onclick="montre_especes()" checked >Regroupé par espèce
+        <input type="radio" name="detail" value="legume" onclick="montre_legumes()" >Détaillé par légume
+    
+        <input style="margin-left: 20px" type="submit" value="Envoyer" />
 
     </div>    
     </form>
     <p>
-    <table border="1" >
-        <tr><th>Produits/Semaines</th>
+    
+    <table border="1" id="tab_legumes" >
+        <tr><th>Légumes/Semaines</th>
             {% for semaine in l_semaines %}
                 <td align="center">Semaine {{semaine.date_debut_sem_iso}}<br/>du {{semaine.date_debut|date:'d/m/Y'}}<br/>au {{semaine.date_fin|date:'d/m/Y'}}</td>
             {% endfor %}
@@ -158,6 +181,7 @@ function init()
             <td>{{t_prod.0|date:'d/m/Y'}}<br/>
                 <div id="sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
                         esp_id="{{leg.espece.id}}"
+                        esp_nom="{{leg.espece.nom}}"
                         qte="{{t_prod.1}}" 
                         poids="{{t_prod.2}}" 
                         style="border:5px solid {{t_prod.4}}">Estimé : {{t_prod.1}}</div>
@@ -208,8 +232,8 @@ function init()
     
     <!------------------- tableau par especes -------------------------->
     
-    <table border="1">
-        <tr><th>Produits/Semaines</th>
+    <table border="1" id="tab_especes">
+        <tr><th>Espèces/Semaines</th>
             {% for semaine in l_semaines %}
                 <td align="center">Semaine {{semaine.date_debut_sem_iso}}<br/>du {{semaine.date_debut|date:'d/m/Y'}}<br/>au {{semaine.date_fin|date:'d/m/Y'}}</td>
             {% endfor %}
@@ -241,9 +265,15 @@ function init()
         {% for semaine in l_semaines %}
         <td style="font-weight:bold;text-align:center" id="tepspp_{{semaine.date_debut|date:'Y-m-d'}}" > </td>
         {% endfor %}
-
         <td id="total_etspp" style="font-weight:bold;text-align:center"> </td>
-        </tr>        
+        </tr>   
+        
+        <tr><th>Contenu des panniers</th>
+        {% for semaine in l_semaines %}
+        <td style="font-weight:bold;text-align:left" id="cont_pspp_{{semaine.date_debut|date:'Y-m-d'}}" > </td>
+        {% endfor %}
+        <td> </td>
+        </tr>  
     </table>
     
         

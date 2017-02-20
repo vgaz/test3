@@ -10,15 +10,24 @@ import MyTools
 ################################################################
 #### contrôle des models
 
-def creationEvt(e_date, e_type, nom="", duree_j=1):
-    """création d'une evenement en base
-    retourne l'instance de l'évènement"""
-    if isinstance(e_date, str): e_date = MyTools.getDateFrom_d_m_y(e_date)
+def creationEvt(e_ref, e_date_ou_delta_j, e_type, nom="", duree_j=1):
+    """création d'un evenement 
+    retourne l'instance de l'évènement""" 
+    
     evt = Evenement()
+    if not e_ref:
+        if isinstance(e_date_ou_delta_j, str): 
+            e_date_ou_delta_j = MyTools.getDateFrom_d_m_y(e_date_ou_delta_j)
+        evt.date = e_date_ou_delta_j
+    else:
+        ## evt de date relative à un autre evt
+        evt.eRef_id = e_ref.id
+        evt.delta_j = e_date_ou_delta_j
+        evt.date = e_ref.date + datetime.timedelta(days = e_date_ou_delta_j)  
+         
     evt.type = e_type
-    evt.date = e_date
     evt.duree_j = duree_j
-    evt.nom = nom
+    if nom : evt.nom = nom
     evt.save()
     return evt
 
@@ -28,7 +37,8 @@ def creationEditionSerie(id_serie,
                          bSerre,
                          intra_rang_m, 
                          nb_rangs, 
-                         date_debut, 
+                         s_dateEnTerre, 
+                         duree_fab_plants_j,
                          duree_avant_recolte_j,
                          etalement_recolte_j):
     """Création ou edition d'une série de plants sur planche virtuelle
@@ -52,22 +62,16 @@ def creationEditionSerie(id_serie,
         serie.intra_rang_m = leg.intra_rang_m
     
     serie.bSerre = bSerre
-    
     if nb_rangs:
         serie.nb_rangs = nb_rangs
     else:
         ## selon la planche sur laquelle on atterira, on fixera le nb de rangs en fonction 
         ## de l'inter rang du legume et de la largeur de planche
         serie.nb_rangs = 0
-    
-    serie.dureeAvantRecolte_j = duree_avant_recolte_j
-    serie.etalementRecolte_j = etalement_recolte_j 
-    serie.save()
+
+    serie.fixeDates(s_dateEnTerre, duree_avant_recolte_j, etalement_recolte_j, duree_fab_plants_j)
     
     if id_serie == 0:
-        serie.fixeDates(date_debut)
-        serie.save()
-    
         ## implantation 
         ## nouvelle
         impl = Implantation()
@@ -77,7 +81,10 @@ def creationEditionSerie(id_serie,
             impl.planche = Planche.objects.get(nom=constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
         impl.save()
         serie.implantations.add(impl)
-        serie.save() 
+        
+    serie.save() 
+ 
+    print (serie.descriptif())
 
     return serie
 
@@ -406,11 +413,20 @@ class SerieManager(models.Manager):
 
         
 class Evenement(models.Model):
+    """Evenement ayant une date relative ou absolue"""
     TYPE_DEBUT = 1
     TYPE_FIN = 2
     TYPE_DIVERS = 3
-    D_NOM_TYPES = {TYPE_DEBUT:"Début", TYPE_FIN:"Fin", TYPE_DIVERS:"Divers"}
-
+    TYPE_PREPA_PLANTS = 4
+    TYPE_RECOLTE = 5
+    D_NOM_TYPES = {TYPE_DEBUT:"Début", 
+                   TYPE_FIN:"Fin", 
+                   TYPE_DIVERS:"Divers",
+                   TYPE_PREPA_PLANTS:"Prépa plants en mottes",
+                   TYPE_RECOLTE:"Début Récolte"
+                   }
+    eRef = models.ForeignKey("Evenement", default=0) 
+    delta_j =  models.PositiveIntegerField("nb jours de decalage", default=0)
     type =  models.PositiveIntegerField()
     date = models.DateTimeField("date de l'évenement")
     date_creation = models.DateTimeField(default=datetime.datetime.now())
@@ -425,7 +441,12 @@ class Evenement(models.Model):
     def nomType(self):
         return self.D_NOM_TYPES[self.type]  
 
-                    
+    def majDelta_j(self, delta_j):
+        assert self.eRef != 0, "pas de mise a jour delta_j possible pour un évenement non relatif"
+        self.delta_j = delta_j
+        self.date = self.eRef.date + datetime.timedelta(days = delta_j) 
+        self.save()
+        
     def __str__(self):
         return "Evt %s (%s) %s pour %d j"%(self.nomType(), 
                                            self.id or "?", 
@@ -437,20 +458,19 @@ class Evenement(models.Model):
 class Serie(models.Model):
     
     class Meta:
-        verbose_name = "Série de plants d'un même légume"
+        verbose_name = "Série de plants d'un même légume installée sur une ou plusieurs implantations"
 
     legume = models.ForeignKey(Legume)
     dureeAvantRecolte_j = models.IntegerField("durée min avant début de récolte (jours)", default=0)
     etalementRecolte_j = models.IntegerField("durée étalement possible de la récolte (jours)", default=0)
     nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
     intra_rang_m = models.FloatField("distance dans le rang (m)", default=0)
-    bSerre = models.BooleanField(default=False)
+    bSerre = models.BooleanField("sous serre", default=False)
     implantations = models.ManyToManyField(Implantation)
     evenements = models.ManyToManyField(Evenement)
     evt_debut = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     objects = SerieManager()
-    
     
     def enPlaceEnDatedu(self, date):  
         """retourne True ou False si série encore en terre à telle date"""
@@ -459,7 +479,6 @@ class Serie(models.Model):
         else:
             return False
 
-    
     def dateDebutRecolte(self):  
         """retourne la date min de récolte"""
         return self.evt_debut.date  + datetime.timedelta(days = self.dureeAvantRecolte_j)
@@ -474,30 +493,41 @@ class Serie(models.Model):
     def intraRang_cm(self):
         return int(self.intra_rang_m *100)
     
-    def fixeDates(self, dateDebut, dateFin=None):
+    def fixeDates(self, dateDebut, dureeAvantRecolte_j, etalementRecolte_j, delaiCroissancePlants_j=0):
         """Crée les evts de début et fin de vie des plants en terre"""
         if isinstance(dateDebut, str): 
             dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
-            
-        evt_debut = creationEvt(dateDebut, Evenement.TYPE_DEBUT, "début %s"%(self.legume.nom()))
-        self.evenements.add(evt_debut)
-        self.evt_debut_id = evt_debut.id
-
-        if not dateFin:
-            dateFin = evt_debut.date + datetime.timedelta(days = self.dureeAvantRecolte_j) + datetime.timedelta(days = self.etalementRecolte_j)
-            
-        if isinstance(dateFin, str): 
-            dateFin = MyTools.getDateFrom_d_m_y(dateFin)
-            
-        evt_fin = creationEvt(dateFin, Evenement.TYPE_FIN, "fin %s"%(self.legume.nom()))       
-        self.evt_fin_id = evt_fin.id
-        self.evenements.add(evt_fin)
-
-        ## ajout evt de début de récolte
-        dateRecolte = evt_debut.date + datetime.timedelta(days = self.dureeAvantRecolte_j)
-        evt_recolte = creationEvt(dateRecolte, Evenement.TYPE_DIVERS, "Récolte %s"%(self.legume.nom()))       
-        self.evenements.add(evt_recolte)
         
+        if  self.evt_debut_id == 0: 
+            """création des evts de série seul l'evt de début est absolu, les autres sont calés sur evt_debut"""
+            evt_debut = creationEvt(None, dateDebut, Evenement.TYPE_DEBUT, "début %s"%(self.legume.nom()))
+
+            self.evenements.add(evt_debut)
+            self.evt_debut_id = evt_debut.id
+            
+            evt_fin = creationEvt(evt_debut, dureeAvantRecolte_j + etalementRecolte_j, Evenement.TYPE_FIN, "fin %s"%(self.legume.nom()))
+            self.evt_fin_id = evt_fin.id
+            self.evenements.add(evt_fin)   
+            
+            evt_recolte = creationEvt(evt_debut, dureeAvantRecolte_j, Evenement.TYPE_RECOLTE, "début récolte %s"%(self.legume.nom()))
+            self.evenements.add(evt_recolte)
+            
+            if delaiCroissancePlants_j:     
+                evt_semisMotte = creationEvt(evt_debut, -1 * delaiCroissancePlants_j, Evenement.TYPE_PREPA_PLANTS, "semi motte %s"%(self.legume.nom()))
+                self.evenements.add(evt_semisMotte)                
+        else:
+            ## mise à jour des evts
+            self.evt_debut.date = dateDebut
+            self.evt_debut.save()
+            self.evenements.get(type=Evenement.TYPE_FIN).majDelta_j(dureeAvantRecolte_j + etalementRecolte_j)
+            self.evenements.get(type=Evenement.TYPE_RECOLTE).majDelta_j(dureeAvantRecolte_j)
+            try:
+                self.evenements.get(type=Evenement.TYPE_PREPA_PLANTS).majDelta_j( -1 * delaiCroissancePlants_j)
+            except: pass ## pas forcement de plants 
+            
+        self.dureeAvantRecolte_j = dureeAvantRecolte_j
+        self.etalementRecolte_j = etalementRecolte_j
+                        
         self.save()
  
     def nbGraines(self):
@@ -597,8 +627,8 @@ class Serie(models.Model):
 
 class Production(models.Model):
     """Enregisrement des productions réelles"""
-    dateDebutSemaine = models.DateTimeField("date de début de semaine")
-    qte = models.PositiveIntegerField("quantité produite", default=0)
+    dateDebutSemaine = models.DateTimeField("Date de début de semaine")
+    qte = models.PositiveIntegerField("Quantité produite", default=0)
     legume = models.ForeignKey(Legume)
     
     class Meta: 

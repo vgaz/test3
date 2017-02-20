@@ -12,12 +12,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
-#         date_debut = MyTools.getDateFrom_d_m_y("2/10/2016")
+        date_debut = MyTools.getDateFrom_d_m_y("05/09/2016")
 
 #         b1 = respecteRotation(date_debut, 1, 1)
         
-        serie = Serie.objects.get(id=99)
+        serie = Serie.objects.get(id=79)
         print (serie.descriptif())
+        print (serie.prodHebdo(date_debut))
 #         date_debut_sem = MyTools.getDateFrom_d_m_y("2/10/2016")
 # 
 #         serie.prodHebdo(date_debut_sem)
@@ -57,11 +58,7 @@ class Command(BaseCommand):
          
          
         return
-#     
-#     
-#         for e in  Evenement.objects.all():
-#             print (e)
-#         return
+
         date_debut_vue = MyTools.getDateFrom_d_m_y("1/7/2016")
         date_fin_vue = MyTools.getDateFrom_d_m_y("31/7/2016")
         la_date = MyTools.getDateFrom_d_m_y("14/03/2016")
@@ -122,13 +119,8 @@ class Command(BaseCommand):
                                           "editSerie_intra_rang_cm":"20", 
                                           "editSerie_nb_rangs":"5", 
                                           "editSerie_date_debut":"3/2/2016", 
-                                          "editSerie_date_fin":"12/6/2016",
-                                          "evt_date[]":"12/4/2016",
-                                          "evt_type[]":Evenement.TYPE_DIVERS,
-                                          "evt_nom[]":"taille",
-                                          "evt_date[]":"15/4/2016",
-                                          "evt_type[]":Evenement.TYPE_DIVERS,
-                                          "evt_nom[]":"action2"
+                                          "editSerie_date_fin":"12/6/2016"
+                                         
                                         }
                                     )
         views.chronoPlanches(request)

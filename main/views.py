@@ -161,7 +161,10 @@ def suiviImplantations(request):
  
         for planche in l_planches:
             planche.l_implantations = []
-            l_series =  Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)  
+            l_series = Serie.objects.activesSurPeriode(date_debut_vue, 
+                                                        date_fin_vue, 
+                                                        planche)
+            
             ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de série par planche)
             for serie in l_series:
                 planche.l_implantations.append(serie.implantations.get(planche_id=planche.id))

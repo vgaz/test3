@@ -454,7 +454,7 @@ function sauveSerie()
     // sauvegardedes paramètres d'une serie
     s_request = "cde=sauve_serie&id_serie=" + document.getElementById("editSerie_id_serie").value
     s_request += "&id_legume=" + document.getElementById("editSerie_id_legume").value
-    s_request += "&id_b_serre=" + document.getElementById("editSerie_b_serre").value
+    s_request += "&b_serre=" + document.getElementById("editSerie_b_serre").value
     s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
     s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
     s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
@@ -462,7 +462,7 @@ function sauveSerie()
     s_request += "&etalement_recolte_j=" + document.getElementById("editSerie_etalement_recolte_j").value
     //s_request += "&id_implantation=" + document.getElementById("editSerie_id_implantation").value
     //s_request += "&quantite_implantation=" + document.getElementById("editSerie_quantite_implantation").value
-
+    alert(s_request)
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)
     if (jsonRep.status == true)
