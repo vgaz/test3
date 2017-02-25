@@ -257,7 +257,7 @@ class Espece(models.Model):
     sans = models.ManyToManyField("self", related_name="sans", blank=True)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     bStockable = models.BooleanField(default=False)
-    rendementConservation = models.FloatField("Rendement de conservation", default=0.9)
+    rendementConservation = models.FloatField("Rendement de conservation", default=1)
     rendementGermination = models.FloatField("Rendement germination", default=1)
     consoHebdoParPart = models.FloatField("quantité consommée par semaine par part", default=0)
     nbParts = models.PositiveIntegerField("Nb de parts à servir", default=0)
@@ -470,6 +470,7 @@ class Serie(models.Model):
     evenements = models.ManyToManyField(Evenement)
     evt_debut = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
     evt_fin = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
+    remarque = models.TextField(default="")
     objects = SerieManager()
     
     def enPlaceEnDatedu(self, date):  
@@ -481,7 +482,7 @@ class Serie(models.Model):
 
     def dateDebutRecolte(self):  
         """retourne la date min de récolte"""
-        return self.evt_debut.date  + datetime.timedelta(days = self.dureeAvantRecolte_j)
+        return self.evt_debut.date + datetime.timedelta(days = self.dureeAvantRecolte_j)
         
     def recoltePossibleEnDatedu(self, date):  
         """retourne True ou False si série encore en terre à telle date"""
@@ -532,8 +533,15 @@ class Serie(models.Model):
  
     def nbGraines(self):
         """ retourne le nb de graines nécesaires en fonction du nb de pieds souhaité"""
-        return int(self.quantite / self.legume.rendementGermination)
+        return int(self.quantiteTotale() * self.legume.nbGrainesParPied / self.legume.espece.rendementGermination)
 
+    def longueurRangTotal(self, intra_rang_m=None):
+        """ retourne la longueur totale de tous les rangs en fonction de l'intra rang"""
+        if not intra_rang_m:
+            intra_rang_m = self.intra_rang_m
+        assert intra_rang_m, Exception("intra_rang_m non défini")              
+        return self.quantiteTotale() * intra_rang_m
+    
     def longueurSurPlanche_m(self, intra_rang_m=None, nb_rangs=None):
         """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
         intra_rang_m et nb_rangs peuvent etre forcés si pas encore définis, autrement on prend les parametres prédéfinis"""
@@ -545,8 +553,9 @@ class Serie(models.Model):
         assert nb_rangs, Exception("nb_rangs non défini")
         
         if nb_rangs == 0:
-            return 0                
-        return self.quantite * intra_rang_m / nb_rangs
+            return 0  
+                      
+        return self.longueurRangTotal(intra_rang_m) / nb_rangs
     
     def surfaceOccupee_m2(self, planche=None):
         """ retourne la surface occupée de toutes ou d'une implantation
@@ -584,11 +593,9 @@ class Serie(models.Model):
                 return self.quantiteEstimee_kg_ou_piece() / (self.etalementRecolte_j / 7)
             else:
                 return 0
-            
-    
-    
+
     def quantiteTotale(self):
-        """cumul de toutes les quantités des implantations"""
+        """cumul de tous les pieds sur toutes des implantations"""
         qte = sum(self.implantations.all().values_list("quantite",flat=True))
         return qte
                
@@ -597,13 +604,15 @@ class Serie(models.Model):
         return ",".join(impl.planche.nom for impl in self.implantations.all())
          
     def __str__(self):       
-        return "%s (N°%d), quantité %d, %d m2 sur planche(s) [%s], du %s au %s" %(self.legume.nom(),
-                                                                                    self.id, 
-                                                                                    self.quantiteTotale(),
-                                                                                    self.surfaceOccupee_m2(), 
-                                                                                    self.s_listeNomsPlanches(),
-                                                                                    MyTools.getDMYFromDate(self.evt_debut.date),
-                                                                                    MyTools.getDMYFromDate(self.evt_fin.date))
+        return "(s%d), %s, %d pieds, %d graines, %d m, %d m2 de planche(s) [%s], du %s au %s" %( self.id,
+                                                                                        self.legume.nom(),
+                                                                                        self.quantiteTotale(),
+                                                                                        self.nbGraines(),
+                                                                                        self.longueurRangTotal(), 
+                                                                                        self.surfaceOccupee_m2(), 
+                                                                                        self.s_listeNomsPlanches(),
+                                                                                        MyTools.getDMYFromDate(self.evt_debut.date),
+                                                                                        MyTools.getDMYFromDate(self.evt_fin.date))
     def descriptif(self):
         """retourrne une desctriptioin complete de la série"""
         l_rep = []

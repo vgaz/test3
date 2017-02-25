@@ -12,5 +12,6 @@
 
 <pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
 <path>/home/vincent/Documents/donnees/DIVERS/DeveloppementLogiciel/python/MyPyTools</path>
+<path>/home/vincent/workspace/py3/lib/python3.4/site-packages</path>
 </pydev_pathproperty>
 </pydev_project>

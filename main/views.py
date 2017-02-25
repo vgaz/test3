@@ -8,12 +8,14 @@ from django.template.defaultfilters import random
 import sys
 
 from main import forms, constant
+from main.settings import log
 import MyTools
 
 import datetime
 
 from main.models import *
 from main.forms import PlancheForm
+
 
 def donnePeriodeVue(reqPost):
     
@@ -316,13 +318,21 @@ def evenementsPlanches(request):
     if bEncours:
         l_evts = l_evts.exclude(b_fini = True)
     
+    ics_txt = constant.ICS_HEAD
+    
     for evt in l_evts:
-        ## on ajoute les numeros de planche
+        ## on ajoute le commentaire sur la série
         serie = evt.serie_set.all()[0]
-        evt.l_planches = [imp.planche for imp in serie.implantations.all()]
-        for pl in evt.l_planches:
-            print (evt, pl.nom)
-
+        evt.txt = serie.__str__()
+        ics_txt += constant.ICS_ITEM%(evt.nom,
+                                      evt.txt, 
+                                      str(evt.date).split(" ")[0].replace("-","")+"T080000",
+                                      str(evt.date).split(" ")[0].replace("-","")+"T090000")
+        
+    ics_txt += constant.ICS_QUEUE
+    
+    print(ics_txt)
+    
     return render(request,
                  'main/evenements.html',
                  {
@@ -335,7 +345,7 @@ def evenementsPlanches(request):
                   "decalage_j": decalage_j,
                   "periode":periode,
                   "bEncours":bEncours
-                  })
+                      })
     
 #################################################
 
@@ -393,69 +403,74 @@ class CreationPlanche(CreateView):
 
 def recolte(request):
     """affiche les previsions et récoltes réelles hebdo"""
-    ## récup de la fenetre de temps
-    periode, date_debut_vue, date_fin_vue = donnePeriodeVue(request.POST) 
-    date_debut_sem_vue = date_debut_vue - datetime.timedelta(days=date_debut_vue.weekday()) 
-    date_fin_sem_vue = date_fin_vue + datetime.timedelta(days = 6 - date_fin_vue.weekday()) 
-
-    ## création de la liste des semaines     
-    # on recadre sur le lundi pour démarrer en debut de semaine
-    l_semaines = []
-    date_debut_sem = date_debut_sem_vue
-
-    nbPanniers = constant.NB_PANNIERS
-    while True:
-        sem = MyTools.MyEmptyObj()
-        date_fin_sem = date_debut_sem + datetime.timedelta(days=6)
-        sem.date_debut_iso = date_debut_sem.isocalendar()
-        sem.date_debut = date_debut_sem
-        sem.date_fin = date_fin_sem
-        l_semaines.append(sem)
-        if date_fin_sem >= date_fin_vue: 
-            break
-        date_debut_sem = date_fin_sem + datetime.timedelta(days=1)
-
-    l_seriesActives = Serie.objects.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue) ## on ne garde que la fenetre de temps étudiée
-    ## recherche des productions par semaine regroupées par légume ou par espèce
-    l_legumes = Legume.objects.all()
-        
-    for leg in l_legumes:
-        ## calcul des productions de légumes
-        l_series = l_seriesActives.filter(legume_id = leg.id)
-        
-        ## Pour chaque semaine étudiée, on calcule le stock cumulé de chaque série 
-        ## le stock est lissé 
-        ## sur la conso hebdo pour les légumes stockables
-        ## ou sur la durée de récolte pour les légumes non stockables
-        leg.l_prod = []
-        for sem in l_semaines:
-            qteHebdo = 0
-            for serie in l_series:
-                qteHebdo += serie.prodHebdo(sem.date_debut)
+    try:
+        s_info = ""
+        ## récup de la fenetre de temps
+        periode, date_debut_vue, date_fin_vue = donnePeriodeVue(request.POST) 
+        date_debut_sem_vue = date_debut_vue - datetime.timedelta(days=date_debut_vue.weekday()) 
+        date_fin_sem_vue = date_fin_vue + datetime.timedelta(days = 6 - date_fin_vue.weekday()) 
+    
+        ## création de la liste des semaines     
+        # on recadre sur le lundi pour démarrer en debut de semaine
+        l_semaines = []
+        date_debut_sem = date_debut_sem_vue
+    
+        nbPanniers = constant.NB_PANNIERS
+        while True:
+            sem = MyTools.MyEmptyObj()
+            date_fin_sem = date_debut_sem + datetime.timedelta(days=6)
+            sem.date_debut_iso = date_debut_sem.isocalendar()
+            sem.date_debut = date_debut_sem
+            sem.date_fin = date_fin_sem
+            l_semaines.append(sem)
+            if date_fin_sem >= date_fin_vue: 
+                break
+            date_debut_sem = date_fin_sem + datetime.timedelta(days=1)
+    
+        l_seriesActives = Serie.objects.activesSurPeriode(date_debut_sem_vue, date_fin_sem_vue) ## on ne garde que la fenetre de temps étudiée
+        ## recherche des productions par semaine regroupées par légume ou par espèce
+        l_legumes = Legume.objects.all()
             
-            if qteHebdo == 0:
-                couleur = "white"
-            else:
-                couleur = leg.espece.couleur
+        for leg in l_legumes:
+            ## calcul des productions de légumes
+            l_series = l_seriesActives.filter(legume_id = leg.id)
             
-            try : 
-                print(sem.date_debut)
-                prodReelle = Production.objects.get(legume_id=leg.id, dateDebutSemaine = sem.date_debut).qte
-            except:
-                prodReelle = 0
+            ## Pour chaque semaine étudiée, on calcule le stock cumulé de chaque série 
+            ## le stock est lissé 
+            ## sur la conso hebdo pour les légumes stockables
+            ## ou sur la durée de récolte pour les légumes non stockables
+            leg.l_prod = []
+            print("LEG xxxxxxxxxxxxxxxx", leg.__str__())
+            for sem in l_semaines:
+                qteHebdo = 0
+                for serie in l_series:
+                    print('sem.............', sem.date_debut, '.... serie ', serie.__str__())
+                    qteHebdo += serie.prodHebdo(sem.date_debut)
+                    
+                if qteHebdo == 0:
+                    couleur = "white"
+                else:
+                    couleur = leg.espece.couleur
                 
-            leg.l_prod.append((sem.date_debut, 
-                               int(qteHebdo), 
-                               int(leg.poids_kg(qteHebdo)),
-                               leg.espece.nomUniteProd(),
-                               couleur,
-                               prodReelle))
+                try : 
+                    print(sem.date_debut)
+                    prodReelle = Production.objects.get(legume_id=leg.id, dateDebutSemaine = sem.date_debut).qte
+                except:
+                    prodReelle = 0
+                    
+                leg.l_prod.append((sem.date_debut, 
+                                   int(qteHebdo), 
+                                   int(leg.poids_kg(qteHebdo)),
+                                   leg.espece.nomUniteProd(),
+                                   couleur,
+                                   prodReelle))
+    
+        bDetailVar = request.POST.get("detail_variete", "") != ""
 
-    bDetailVar = request.POST.get("detail_variete", "") != ""
-#     if bDetailVar:
-
-
-
+    except:
+        log.error(s_info)
+        s_info += str(sys.exc_info()[1])
+        
     return render(request,'main/recolte.html',
                     {
                     "appVersion":constant.APP_VERSION,
@@ -467,7 +482,7 @@ def recolte(request):
                     "l_especes" : Espece.objects.all(),
                     "bDetailVar":bDetailVar,
                     "nbPanniers":nbPanniers,
-                    "info":""
+                    "info":"s_info"
                     })
     
 #################################################
@@ -536,7 +551,7 @@ def quizFamilles(request):
 
     form.esp = random(Espece.objects.filter(famille__isnull=False).values("nom", "id"))
 
-    return render(request, 'main/quizFamilles.html',
+    return render(request, 'main/quiz_familles.html',
             {
              "color":color,
              "message" : message,

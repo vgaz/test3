@@ -187,7 +187,7 @@ class Command(BaseCommand):
                     val = d_line.get("Inter rang (cm)","").replace(",",".") 
                     assert val, "Pas d'inter rang défini pour %s"%(esp.nom)
                     leg.inter_rang_m = float(val)/100
-                      
+                    
                     ## pas de controle car inutile si unité  = kg    
                     s_poidsParPiece = d_line.get("Poids estimé par pièce (g)").replace(",",".") or "0" 
                     leg.poidsParPiece_kg = float(s_poidsParPiece)/1000
@@ -216,9 +216,7 @@ class Command(BaseCommand):
                         serie = Serie()
                         serie.legume = leg
 
-
-                    ## recup infos série
-                    
+                    ## recup infos série                    
                     val = int(float(d_line.get("Nombre de pieds", "0").replace(",",".")))
                     assert val, "Champ 'Nombre de pieds' indéfini pour %s "%(leg.nom())
                     serie.quantite = val
@@ -231,15 +229,14 @@ class Command(BaseCommand):
                     assert val, "Champ 'lieu' indéfini pour %s "%(leg.nom())                    
                     serie.bSerre = (val == "SERRE")
                     serie.intra_rang_m = leg.intra_rang_m
+                    serie.remarque = d_line.get("Remarque", "")       
                     serie.save()
                     dureeAvantRecolte_j = int(d_line.get("Durée avant récolte (j)", "0"))
                     assert dureeAvantRecolte_j, "Champ 'Durée avant récolte (j)' indéfini pour %s "%(leg.nom())                        
                     etalementRecolte_j = int(d_line.get("Étalement récolte (j)", "0"))
                     assert etalementRecolte_j, "Champ 'Étalement récolte (j)' indéfini pour %s "%(leg.nom())                    
                     delaiCroissancePlants_j = int(d_line.get("Délai croissance plants (j)", "0"))
-                    print("aa")
                     serie.fixeDates(dateEnTerre, dureeAvantRecolte_j, etalementRecolte_j, delaiCroissancePlants_j)
-                    print ("bb")
 
                     ## implantation de la série par defaut sur planche virtuelles serre ou plein champ
                     implantation = Implantation()

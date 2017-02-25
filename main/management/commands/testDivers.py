@@ -6,24 +6,25 @@ from django.test import RequestFactory
 
 from main.models import *
 
-
 class Command(BaseCommand):
     help = "test divers"
 
     def handle(self, *args, **options):
         
-        date_debut = MyTools.getDateFrom_d_m_y("05/09/2016")
-
+#         date_debut = MyTools.getDateFrom_d_m_y("26/12/2016")
+#         serie = Serie.objects.get(id=79)
+#         print (serie.descriptif())
+#         print (serie.prodHebdo(date_debut))
+#         return
+    
 #         b1 = respecteRotation(date_debut, 1, 1)
         
-        serie = Serie.objects.get(id=79)
-        print (serie.descriptif())
-        print (serie.prodHebdo(date_debut))
+
 #         date_debut_sem = MyTools.getDateFrom_d_m_y("2/10/2016")
 # 
 #         serie.prodHebdo(date_debut_sem)
 #         
-        return
+
         
 #         impl = Implantation.objects.get(id=13)
 #         s = impl.surface_m2()
@@ -37,27 +38,24 @@ class Command(BaseCommand):
 #         print (s)
 #         return 0
 #         
-#         self.factory = RequestFactory()
-#         
-# 
-        # Create an instance of a POST request.
+        self.factory = RequestFactory()
         
-    
-        request = self.factory.post('/chrono_planches/?nom_planches=', 
-                                    data={  "cde":"sauve_serie",
-                                            "id_serie":0,
-                                            "id_variete":1,
-                                            "quantite":5,
-                                            "nb_rangs":3,
-                                            "intra_rang_cm":30,
-                                            "simulation":""                            
-                                        }
+        # Create an instance of a POST request.   
+        request = self.factory.post('/recolte/', 
+                                        data={  "periode":"specifique",
+                                                "date_debut_vue":"22/01/2017",
+                                                "date_fin_vue":"3/4/2017"                            
+                                                }
                                     )        
+        views.recolte(request)
+        
+        return
+
+        
         serveRequest.serveRequest(request)
          
          
          
-        return
 
         date_debut_vue = MyTools.getDateFrom_d_m_y("1/7/2016")
         date_fin_vue = MyTools.getDateFrom_d_m_y("31/7/2016")

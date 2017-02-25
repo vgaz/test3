@@ -8,7 +8,6 @@ from main import constant
 import logging
 
 DEBUG = True
-TEMPLATE_DEBUG = True
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -56,8 +55,21 @@ DATABASES = {
     }
 }
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.6/topics/i18n/
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['main','templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+                    'context_processors': [
+                         'django.template.context_processors.debug',
+                         'django.template.context_processors.request',
+                         'django.contrib.auth.context_processors.auth',
+                         'django.contrib.messages.context_processors.messages',
+                                            ],
+                    },
+    },
+]
 
 LANGUAGE_CODE = 'fr_fr'
 

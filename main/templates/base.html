@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+{% load static %}
+
 <link rel="shortcut icon" href="{{ STATIC_URL }}images/shadok_green.gif" />
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css" /> 
+<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" /> 
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-<script>imageMainURL = "{{ STATIC_URL }}images" </script>
+<script>imageMainURL =  {% static "images"%} </script>
 
 {% block javascript %}{% endblock %}
 
@@ -13,7 +15,7 @@
 <body onload="init()">
 <div id="banner">
 	<div id="home"><h2>
-        <a href="{% url 'home' %}"><img src="{{ STATIC_URL }}images/home.png" title="Home"/></a>
+        <a href="{% url 'home' %}"><img src="{% static "images/home.png" %}" title="Home"/></a>
         <a href="{% url 'evenements' %}">Evenements</a>...
         <a href="{% url 'suivi_implantations' %}"> Suivi des séries</a></h2>
 	    <h1>{% block title %}{% endblock %}</h1>
