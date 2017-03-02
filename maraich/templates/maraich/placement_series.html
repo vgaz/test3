@@ -101,12 +101,12 @@
 
 </style>
 
-    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/moment-with-locales.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/planif.js"></script>
+    <script type="text/javascript" src="{% static 'javascripts/myTools.js' %}"> </script>
+    <script type="text/javascript" src="{% static 'javascripts/moment-with-locales.min.js'%}"> </script>
+    <script type="text/javascript" src="{% static 'javascripts/planif.js' %}"> </script>
 
     <script type="text/javascript">
-    
+    toto='EEE'
     s_info = ""
     date_debut_vue = "{{date_debut_vue|safe}}"
     date_fin_vue = "{{date_fin_vue|safe}}"

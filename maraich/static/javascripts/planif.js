@@ -3,12 +3,7 @@
 //
 	
    
-function changelePas(delta)
-{
-    decalage_j += delta
-    if (decalage_j < 1) decalage_j = 1
-    document.getElementById("decalage_j").value = decalage_j
-}
+
 
 
 function getTicket()

@@ -16,11 +16,10 @@ import datetime
 from maraich.models import *
 from maraich.forms import PlancheForm
 
-
 def donnePeriodeVue(reqPost):
     
     date_aujourdhui = datetime.datetime.now()
-    periode = reqPost.get("periode","annee")
+    periode = reqPost.get("periode","mois")
     if periode == "specifique":
         date_debut_vue = MyTools.getDateFrom_d_m_y(reqPost.get("date_debut_vue", ""))
         date_fin_vue = MyTools.getDateFrom_d_m_y(reqPost.get("date_fin_vue", ""))
@@ -105,28 +104,30 @@ def suiviImplantations(request):
         
         print(request.POST)
         s_msg = ""
-        
-        periode = request.POST.get("periode","annee")
-        if periode == "specifique":
-            date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
-            date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", ""))
-        elif periode == "annee":
-            date_premierJour = MyTools.getDateFrom_d_m_y("1/1/%s"%date_aujourdhui.year)
-            delta = datetime.timedelta(days=365)
-            date_debut_vue = date_premierJour
-            date_fin_vue = date_premierJour + delta
-        elif periode == "mois":
-            print ("mois", str(date_aujourdhui.month), " year", date_aujourdhui.year)
-            date_premierJour = MyTools.getDateFrom_d_m_y("1/%s/%s"%(date_aujourdhui.month, date_aujourdhui.year))
-            delta = datetime.timedelta(days=30)
-            date_debut_vue = date_premierJour
-            date_fin_vue = date_premierJour + delta
-        elif periode == "semaine":
-            delta = datetime.timedelta(days=6)
-            date_debut_vue =  date_aujourdhui - datetime.timedelta(days=date_aujourdhui.weekday())
-            date_fin_vue = date_debut_vue + delta
-        else:
-            assert False, "pas de periode trouvee"
+
+        periode, date_debut_vue, date_fin_vue = donnePeriodeVue(request.POST) 
+          
+#         periode = request.POST.get("periode","annee")
+#         if periode == "specifique":
+#             date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
+#             date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", ""))
+#         elif periode == "annee":
+#             date_premierJour = MyTools.getDateFrom_d_m_y("1/1/%s"%date_aujourdhui.year)
+#             delta = datetime.timedelta(days=365)
+#             date_debut_vue = date_premierJour
+#             date_fin_vue = date_premierJour + delta
+#         elif periode == "mois":
+#             print ("mois", str(date_aujourdhui.month), " year", date_aujourdhui.year)
+#             date_premierJour = MyTools.getDateFrom_d_m_y("1/%s/%s"%(date_aujourdhui.month, date_aujourdhui.year))
+#             delta = datetime.timedelta(days=30)
+#             date_debut_vue = date_premierJour
+#             date_fin_vue = date_premierJour + delta
+#         elif periode == "semaine":
+#             delta = datetime.timedelta(days=6)
+#             date_debut_vue =  date_aujourdhui - datetime.timedelta(days=date_aujourdhui.weekday())
+#             date_fin_vue = date_debut_vue + delta
+#         else:
+#             assert False, "pas de periode trouvee"
         
         
         decalage_j = int(request.POST.get("decalage_j", 10))
@@ -405,6 +406,7 @@ def recolte(request):
     """affiche les previsions et récoltes réelles hebdo"""
     try:
         s_info = ""
+        bDetailVar = request.POST.get("detail_variete", "") != ""
         ## récup de la fenetre de temps
         periode, date_debut_vue, date_fin_vue = donnePeriodeVue(request.POST) 
         date_debut_sem_vue = date_debut_vue - datetime.timedelta(days=date_debut_vue.weekday()) 
@@ -432,22 +434,18 @@ def recolte(request):
         l_legumes = Legume.objects.all()
             
         for leg in l_legumes:
-            if leg.id ==52:
-                pass
             
             ## calcul des productions de légumes
             l_series = l_seriesActives.filter(legume_id = leg.id)
             
             ## Pour chaque semaine étudiée, on calcule le stock cumulé de chaque série 
             ## le stock est lissé 
-            ## sur la conso hebdo pour les légumes stockables
+            ## soit sur la conso hebdo pour les légumes stockables
             ## ou sur la durée de récolte pour les légumes non stockables
             leg.l_prod = []
-            print("LEG xxxxxxxxxxxxxxxx", leg.__str__())
             for sem in l_semaines:
                 qteHebdo = 0
                 for serie in l_series:
-                    print('sem.............', sem.date_debut, '.... serie ', serie.__str__())
                     qteHebdo += serie.prodHebdo(sem.date_debut)
                     
                 if qteHebdo == 0:
@@ -468,7 +466,6 @@ def recolte(request):
                                    couleur,
                                    prodReelle))
     
-        bDetailVar = request.POST.get("detail_variete", "") != ""
 
     except:
         log.error(s_info)
@@ -499,9 +496,8 @@ def tab_legumes(request):
                 s_pk = "leg_%d_"%leg.pk
                 
                 ## lié à l'espece
-                ## leg.espece =
+                leg.espece.nbGrainesParPied = int(request.POST.get(s_pk + "nbGrainesParPied", "1"))
       
-                leg.nbGrainesParPied = int(request.POST.get(s_pk + "nbGrainesParPied", "1"))
                 leg.poidsParPiece_kg = float(request.POST.get(s_pk + "poidsParPiece_kg", "0").replace(",","."))
                 leg.rendementProduction_kg_m2 = float(request.POST.get(s_pk + "rendementProduction_kg_m2", "0").replace(",","."))
                 leg.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent", "100"))

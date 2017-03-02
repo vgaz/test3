@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block javascript %}
 
@@ -104,9 +105,9 @@
 
 </style>
 
-    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/moment-with-locales.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/planif.js"></script>
+    <script type="text/javascript" src="{% static "javascripts/myTools.js" %}"></script>
+    <script type="text/javascript" src="{% static "javascripts/moment-with-locales.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "javascripts/planif.js" %}"></script>
 
     <script type="text/javascript">
     
@@ -267,9 +268,9 @@ function majListEvts(id_serie)
             sj_evt = JSON.stringify(d_evt)
             s_evts += "<tr><td> " + getSdateFromTdate(d_evt.date) + " </td><td> " + d_evt.duree_j + "j </td><td> "  + d_evt.nom + " </td>"
             s_evts += "<td><a href='javascript:editeEvenement(" + sj_evt + ")'>"
-            s_evts += "<img align='right' src='{{STATIC_URL}}images/editor.png' title='Editer'></a></td>"
+            s_evts += "<img align='right' src='{% static 'images/editor.png' %}' title='Editer'></a></td>"
             s_evts += "<td><a href='javascript:supprimeEvenement(" + sj_evt + ")'>"
-            s_evts += "<img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td></tr>"
+            s_evts += "<img align='right'src='{% static 'images/toDelete.jpeg'%}' title='Supprimer'></a></td></tr>"
             }
           
         s_evts +=  "</table>\n"
@@ -302,10 +303,10 @@ function majListImpls(id_serie, id_impl)
             if (jsonRep.l_impls[ii].pk != id_impl)
                 s_impl += "readonly />"
             else
-                s_impl += " /><img align='right' src='{{STATIC_URL}}images/ok.png' style='width:15px;heigth:15px;cursor:pointer' title='OK' onclick='javascript:sauveQteImplantation("+s_json+")'>"           
+                s_impl += " /><img align='right' src='{% static 'images/ok.png'%}' style='width:15px;heigth:15px;cursor:pointer' title='OK' onclick='javascript:sauveQteImplantation("+s_json+")'>"           
             
             s_impl += "</td></tr>"
-                //s_impl += "<td><a href='javascript:supprimeImplantation(" + s_json + ")'><img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td>"
+                //s_impl += "<td><a href='javascript:supprimeImplantation(" + s_json + ")'><img align='right'src='{% static 'images/toDelete.jpeg'%}' title='Supprimer'></a></td>"
             }
         s_impl +=  "</table>\n"
         document.getElementById("editeSerie_impls").innerHTML = s_impl
@@ -532,8 +533,8 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
  au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
 
 <input style="margin-left: 20px" type="submit" value="Envoyer" />
-<img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie();return false"> 
-<img src="{{STATIC_URL}}images/Help.png" title="Documentation" onclick="document.getElementById('doc').style.display='block';return(false)" style="width:30px;heigth:30px" > 
+<img src="{% static 'images/plus.png' %}" title="Ajouter une série" onclick="prepareAjouteSerie();return false"> 
+<img src="{% static 'images/Help.png' %}" title="Documentation" onclick="document.getElementById('doc').style.display='block';return(false)" style="width:30px;heigth:30px" > 
 </form>
 
 <div id="main" style="text-align:center" >
@@ -576,7 +577,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
                                     >
             <div class="divTitreImplantation">
             Imp {{impl.id}} - S {{impl.serie.id}}. {{impl.surface_m2}}m2. {{impl.serie.legume.nom}} x {{impl.quantite}} / {{impl.serie.quantiteTotale}}
-            <img src='{{STATIC_URL}}images/editor.png' title='Editer la série' onclick="prepareEditeSerie({{impl.id}});return(false)">
+            <img src='{% static 'images/editor.png'%}' title='Editer la série' onclick="prepareEditeSerie({{impl.id}});return(false)">
             </div>
             {% for evt in impl.serie.evenements.all%}
                 <div class='evt' date="{{evt.date|date:'Y-m-d'}}" duree_j="{{evt.duree_j}}" nom="{{evt.nom}}" 

@@ -79,13 +79,13 @@ class Command(BaseCommand):
                 if nomEspece:
                     try:
                         ## déjà presente
-                        esp = Espece.objects.get(nom = nomEspece)
+                        espece = Espece.objects.get(nom = nomEspece)
                     except: 
                         ## absente : création
                         log.info("Ajout %s"%nomEspece)
-                        esp = Espece()
-                        esp.nom = nomEspece
-                        esp.save()
+                        espece = Espece()
+                        espece.nom = nomEspece
+                        espece.save()
                     
                     nomFam = d_line.get("Famille","").lower().strip()
                     if nomFam:
@@ -98,46 +98,49 @@ class Command(BaseCommand):
                             famille.save()
                         
                         ## maj famille de l'espèce
-                        esp.famille_id = famille.id
-                        esp.save()
+                        espece.famille_id = famille.id
+                        espece.save()
                     
                     ## recup infos
                     try:
                         s_unite = d_line.get("Unité","").lower().strip()
-                        assert s_unite, "Pas d'interRang défini pour %s"%(esp.nom)
+                        assert s_unite, "Pas d'interRang défini pour %s"%(espece.nom)
                         if s_unite == "kg":
-                            esp.unite_prod = constant.UNITE_PROD_KG
+                            espece.unite_prod = constant.UNITE_PROD_KG
                         else:
-                            esp.unite_prod = constant.UNITE_PROD_PIECE
+                            espece.unite_prod = constant.UNITE_PROD_PIECE
 
                         s_stockable = d_line.get("stockable","")
-                        assert s_stockable, "pas de valeur 'stockable' pour espèce : %s"%(esp.nom)
-                        esp.bStockable = (s_stockable == "oui")     
-                        
-                        esp.rendementGermination = getFloat(d_line, "Rendement germination", "0")
-                        assert esp.rendementGermination != 0, "'Rendement germination' indéfini pour %s"%(esp.nom)            
+                        assert s_stockable, "pas de valeur 'stockable' pour espèce : %s"%(espece.nom)
+                        espece.bStockable = (s_stockable == "oui")     
 
-                        esp.rendementConservation = getFloat(d_line, "Rendement conservation", "0") 
-                        assert esp.rendementConservation !=0, "'Rendement conservation' indéfini pour %s"%(esp.nom)            
+                        espece.nbGrainesParPied = getInt(d_line,"Nb graines par pied") 
+                        assert espece.nbGrainesParPied, "'Nb graines par pied' indéfini pour %s"%(espece.nom)
+
+                        espece.rendementGermination = getFloat(d_line, "Rendement germination", "0")
+                        assert espece.rendementGermination != 0, "'Rendement germination' indéfini pour %s"%(espece.nom)            
+
+                        espece.rendementConservation = getFloat(d_line, "Rendement conservation", "0") 
+                        assert espece.rendementConservation !=0, "'Rendement conservation' indéfini pour %s"%(esp.nom)            
 
                         ## maj conso
                         s_field = d_line.get("Nombre de paniers", "")
-                        assert s_field, "'Nombre de paniers' indéfini pour %s"%(esp.nom)  
-                        esp.nbParts = int(s_field)
+                        assert s_field, "'Nombre de paniers' indéfini pour %s"%(espece.nom)  
+                        espece.nbParts = int(s_field)
                  
                         s_field = d_line.get("Conso hebdo par pannier", "").replace(",",".")
-                        assert s_field, "'Conso hebdo par pannier' indéfini pour %s"%(esp.nom)  
-                        esp.consoHebdoParPart = float(s_field)
+                        assert s_field, "'Conso hebdo par pannier' indéfini pour %s"%(espece.nom)  
+                        espece.consoHebdoParPart = float(s_field)
                         
                         s_field = d_line.get("Délai avant retour (an)", "")
-                        assert s_field, "'Délai avant retour (an)' indéfini pour %s"%(esp.nom)  
-                        esp.delai_avant_retour_an = int(s_field)
+                        assert s_field, "'Délai avant retour (an)' indéfini pour %s"%(espece.nom)  
+                        espece.delai_avant_retour_an = int(s_field)
                                                                  
                         s_field = d_line.get("Couleur", "brown").strip()
-                        assert s_field, "'Couleur' indéfini pour %s"%(esp.nom)  
-                        esp.couleur = s_field
+                        assert s_field, "'Couleur' indéfini pour %s"%(espece.nom)  
+                        espece.couleur = s_field
                                                                  
-                        esp.save()
+                        espece.save()
                     
                     except:
                         log.error(sys.exc_info()[1])
@@ -184,22 +187,19 @@ class Command(BaseCommand):
                 ## recup infos légumes
                 try: 
                     val = d_line.get("Intra rang (cm)","").split(",")[0]
-                    assert val, "Pas d'intra Rang défini pour %s"%(esp.nom)            
+                    assert val, "Pas d'intra Rang défini pour %s"%(espece.nom)            
                     leg.intra_rang_m = float(val)/100
                     
                     val = d_line.get("Inter rang (cm)","").split(",")[0]
-                    assert val, "Pas d'inter rang défini pour %s"%(esp.nom)
+                    assert val, "Pas d'inter rang défini pour %s"%(espece.nom)
                     leg.inter_rang_m = float(val)/100
                     
                     ## pas de controle car inutile si unité  = kg    
                     s_poidsParPiece = d_line.get("Poids estimé par pièce (g)").split(",")[0] or "0" 
                     leg.poidsParPiece_kg = float(s_poidsParPiece)/1000
 
-                    leg.nbGrainesParPied = getInt(d_line,"Nb graines par pied") 
-                    assert leg.nbGrainesParPied, "'Nb graines par pied' indéfini pour %s"%(esp.nom)
-
                     leg.rendementProduction_kg_m2 = getFloat(d_line, "Rendement (kg/m²)") 
-                    assert leg.rendementProduction_kg_m2, "Champs 'Rendement (kg/m²)' indéfini pour %s"%(esp.nom)            
+                    assert leg.rendementProduction_kg_m2, "Champs 'Rendement (kg/m²)' indéfini pour %s"%(espece.nom)            
 
                     leg.save()
                     

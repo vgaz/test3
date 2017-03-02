@@ -247,16 +247,24 @@ class Planche(models.Model):
         return "%s (%d), %d m x %.1f m = %d m2; %s" % ( self.nom, self.id, self.longueur_m, self.largeur_m,
                                                      self.surface_m2(), s_lieu)
 
+      
+class Variete(models.Model):
+    """Variété"""
+    nom = models.CharField(max_length=100)
+    def __str__(self):
+        return self.nom
+    
 class Espece(models.Model):
     """Espèce de légume"""
     nom = models.CharField(max_length=100)
-    varietes = models.ManyToManyField("Variete")
+    varietes = models.ManyToManyField(Variete)
     famille = models.ForeignKey("Famille", null=True, blank=True)
     avec = models.ManyToManyField("self", related_name="avec", blank=True)
     sans = models.ManyToManyField("self", related_name="sans", blank=True)
     unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     bStockable = models.BooleanField(default=False)
     rendementConservation = models.FloatField("Rendement de conservation", default=1)
+    nbGrainesParPied = models.PositiveIntegerField("Nb graines par pied", default=0)
     rendementGermination = models.FloatField("Rendement germination", default=1)
     consoHebdoParPart = models.FloatField("quantité consommée par semaine par part", default=0)
     nbParts = models.PositiveIntegerField("Nb de parts à servir", default=0)
@@ -292,12 +300,7 @@ class Panniers(models.Model):
         ## on renvoie le dernier
         return l_qtes[-1].val
 
-      
-class Variete(models.Model):
-    """Variété"""
-    nom = models.CharField(max_length=100)
-    def __str__(self):
-        return self.nom
+
       
 class Legume(models.Model):
     """légume"""
@@ -305,7 +308,6 @@ class Legume(models.Model):
     variete = models.ForeignKey(Variete)
     rendementProduction_kg_m2 = models.FloatField("Rendement de production (kg/m2)", default=1)
     poidsParPiece_kg = models.FloatField("Poids estimé par pièce (Kg)", default=0)  ## optionnel si unite_prod = kg
-    nbGrainesParPied = models.PositiveIntegerField("Nb graines par pied", default=1)
     intra_rang_m = models.FloatField("distance dans le rang (m)", default=0)
     inter_rang_m = models.FloatField("distance entre les rangs (m)", default=0)    
     
@@ -532,7 +534,7 @@ class Serie(models.Model):
  
     def nbGraines(self):
         """ retourne le nb de graines nécesaires en fonction du nb de pieds souhaité"""
-        return int(self.quantiteTotale() * self.legume.nbGrainesParPied / self.legume.espece.rendementGermination)
+        return int(self.quantiteTotale() * self.legume.espece.nbGrainesParPied / self.legume.espece.rendementGermination)
 
     def longueurRangTotal(self, intra_rang_m=None):
         """ retourne la longueur totale de tous les rangs en fonction de l'intra rang"""
