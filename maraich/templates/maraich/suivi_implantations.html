@@ -1,0 +1,657 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+
+<style>
+#divPlanchesVirtuelles
+{
+    border: 5px solid yellow;
+    width:20%;
+    display: inline-block;
+
+}
+#divPlanchesReelles
+{
+    border: 5px solid red;
+    display: inline-block;
+    width:70%;
+
+}
+
+.divTitrePlanche
+{
+    display:inline-block;
+    color: black;
+    text-align:center;
+}
+#editeSerie_evts
+{
+    text-align:left;
+
+}
+#divEditeEvenement
+{
+    display:none;
+    text-align:left;
+    border: 1px solid blue;
+}
+
+#divEditSerie
+    {
+    display:none;
+    position:fixed;
+    top:20px;
+    padding:10px;
+    draggable:"true";
+    }
+    
+#divDeplacementImplantation
+    {
+    display:none;
+    //position:fixed;
+    top:20px;
+    text-align:left;
+    padding:10px;
+    width: 600px;
+    height: 25 0px;
+    background: white;
+    color: black;
+    border: 5px solid brown;
+    border-radius:15px;
+    margin 0 auto 0 auto;    
+    z-index:3;
+    }  
+      
+#date_du_jour
+{
+    position:absolute;
+    width: 2px;
+    background: white;
+    border: 2px solid blue;   
+}
+
+
+
+.divImplantation
+    {
+    width: 30%;
+    padding-bottom:15px;
+    background: white;
+    color: black;
+    border: 5px solid green;
+    position:relative;
+    }
+    
+.evt
+{
+    background: red;
+    position:absolute;
+    height:15px; 
+    display:inline;    
+
+}
+
+.planche
+{
+    width: 95%;
+    border: 5px solid #20D626;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px;
+    background:#F0FFF0;
+}
+
+
+</style>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/planif.js"></script>
+
+    <script type="text/javascript">
+    
+    s_info = ""
+    date_debut_vue = "{{date_debut_vue|safe}}"
+    date_fin_vue = "{{date_fin_vue|safe}}"
+    date_du_jour = "{{date_du_jour|safe}}"
+    decalage_j = {{decalage_j|safe}}
+
+function    init()
+    {
+    o_nomTypeEvt = {{d_evtTypes|safe}}
+
+    changelePas(0) // juste pour affichage 1 ere fois
+
+    // nb px par jour en fonction des bornes , on ajoute 1 pour inclure le dernier jour plein 
+    pxParH = window.getComputedStyle(document.getElementsByClassName("planche")[0]).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours')
+
+    balisage()
+    
+    // ajout ligne date du jour
+    delta_h = moment(date_du_jour).diff(moment(date_debut_vue), 'hours')
+    
+    l_planches = document.getElementsByClassName("planche")
+    for (ii=0;ii<l_planches.length;ii++)
+    	{
+    	hBarreJour = l_planches[ii].getElementsByClassName("barre_du_jour")[0]
+	    hBarreJour.style.height = window.getComputedStyle(l_planches[ii]).height
+	    hBarreJour.style.marginLeft = delta_h * pxParH + "px" 
+	    }
+	// décalage vertical si besoin 
+    document.ondragover = scrollIfNeeded
+
+    }
+
+function scrollIfNeeded(e)
+    {
+    scrollpx = 0
+    myPosY = e.clientY
+    //document.getElementById("divInfoDebug").innerHTML = "X:"+myPosX + " Y:" + myPosY
+    if  (myPosY < 50) // haut de l'ecran
+        scrollpx = -30
+    else if  (myPosY < 100) // haut de l'ecran
+        scrollpx = -10  
+    else if  (myPosY > window.innerHeight - 50) // dans le bas de l'ecran
+        scrollpx = 30
+    else if  (myPosY > window.innerHeight - 100) // dans le bas de l'ecran
+        scrollpx = 10  
+        
+    if (scrollpx != 0)
+        {
+        window.scrollBy(0, scrollpx)
+        //setTimeout(scrollIfNeeded(e), 2000)        
+        }
+       
+    }
+
+// gestion des événements
+     
+function ajouteEvenement() // un nouveau
+    {
+    document.getElementById("edit_evt_id").value = 0
+    document.getElementById("divEditeEvenement").style.display = "block"
+    document.getElementById("edit_evt_nom").value = ""
+    document.getElementById("edit_evt_date").value = ""
+    document.getElementById("edit_evt_duree_j").value = ""
+    }
+    
+function editeEvenement(oEvent)
+    {
+    document.getElementById("edit_evt_id").value = oEvent.pk
+    document.getElementById("divEditeEvenement").style.display = "block"
+    document.getElementById("edit_evt_nom").value = oEvent.nom   
+    document.getElementById("edit_evt_date").value = getSdateFromTdate(oEvent.date)
+    document.getElementById("edit_evt_duree_j").value = oEvent.duree_j
+    }
+
+
+function supprimeEvenement(oEvent)
+    {
+    // supprime evt
+    alert("sûr de vouloir supprimer l'evt " + oEvent.nom + " ?")
+    s_request = "cde=supprime_evt&id=" + oEvent.pk
+    rep = requestServer(s_request)
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == false)
+        document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>"+ jsonRep.err + "</div>"
+
+    // maj fenetre d'edition de la série
+    id_serie = document.getElementById("editSerie_id_serie").value
+    majListEvts(id_serie)
+    document.getElementById("divEditeEvenement").style.display = "none"
+
+    }
+
+function sauveEvenement()
+    {
+    // recup données et
+    // ajout si id = 0
+    // modifie si id != 0
+    id_serie = document.getElementById("editSerie_id_serie").value
+    s_request = "cde=sauve_evt&id_serie=" + id_serie
+    s_request += "&id=" + document.getElementById("edit_evt_id").value
+    s_request += "&nom=" + document.getElementById("edit_evt_nom").value
+    s_request += "&date=" + document.getElementById("edit_evt_date").value
+    s_request += "&duree_j=" + document.getElementById("edit_evt_duree_j").value
+    rep = requestServer(s_request)
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == false)
+        document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>" + jsonRep.err + "</div>"
+
+    //masquage de la fenetre d'édition de l'evt
+    document.getElementById("divEditeEvenement").style.display = "none"
+    
+    // maj fenetre d'édition de la série
+    majListEvts(id_serie)
+    }
+
+function sauveQteImplantation(obj)
+    {
+    s_request = "cde=sauve_qte_impantation&id=" + obj.pk
+    s_request += "&qte=" + document.getElementById("editeImplantation_quantite_"+obj.pk).value
+
+    rep = requestServer(s_request)
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == false)
+        alert(jsonRep.err)
+
+    // maj fenetre d'edition de la série
+    id_serie = document.getElementById("editSerie_id_serie").value
+    majListImps(id_serie)
+
+    }
+    
+function getSdateFromTdate(tdate)
+    {
+    t_date = tdate.split("T")[0].split("-")
+    return t_date[2] + "/"+ t_date[1] + "/" + t_date[0]
+    }
+    
+function majListEvts(id_serie)
+    {
+    // recup et affichage des evts de la série
+    rep = requestServer("cde=get_evts_serie&id=" + id_serie)  
+    jsonRep = JSON.parse(rep)
+
+    if (jsonRep.status == true)
+        {
+     
+        s_evts = '<table border="1" width="100%">\n'
+        // récuperation de tous les evenements
+        for(ii=0;ii<jsonRep.l_evts.length;ii++)
+            {
+            d_evt = jsonRep.l_evts[ii].fields  
+            if (d_evt.type != {{codeEvtDivers}})
+                continue // que les evt divers
+            d_evt["pk"] =jsonRep.l_evts[ii].pk //la clé pk n'est pas dans les fields, on la rajoute        
+            sj_evt = JSON.stringify(d_evt)
+            s_evts += "<tr><td> " + getSdateFromTdate(d_evt.date) + " </td><td> " + d_evt.duree_j + "j </td><td> "  + d_evt.nom + " </td>"
+            s_evts += "<td><a href='javascript:editeEvenement(" + sj_evt + ")'>"
+            s_evts += "<img align='right' src='{{STATIC_URL}}images/editor.png' title='Editer'></a></td>"
+            s_evts += "<td><a href='javascript:supprimeEvenement(" + sj_evt + ")'>"
+            s_evts += "<img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td></tr>"
+            }
+          
+        s_evts +=  "</table>\n"
+        document.getElementById("editeSerie_evts").innerHTML = s_evts
+        }
+    else
+        alert("Erreur " + jsonRep.err)
+        
+    }
+
+function majListImpls(id_serie, id_impl)
+    {
+    // recup et affichage des implantations de la série
+    rep = requestServer("cde=get_impls_serie&id=" + id_serie)  
+    jsonRep = JSON.parse(rep)
+
+    if (jsonRep.status == true)
+        {
+        s_impl = '<table border="1" width="100%">\n'
+        s_impl += "<tr><th width='30px'>N°</th><th>Planche</th><th>Quantité</th>"
+        // récuperation de tous les evenements
+        for(ii=0;ii<jsonRep.l_impls.length;ii++)
+            {
+            d_impl = jsonRep.l_impls[ii].fields  
+            d_impl["pk"] =jsonRep.l_impls[ii].pk //la clé pk n'est pas dans les champs, on la rajoute        
+            s_json = JSON.stringify(d_impl)
+            s_impl += "<tr><td>" + d_impl.pk + "</td><td>" + d_impl.planche + "</td>"
+            s_impl += '<td><input style="width:40px" type="text" value="' + d_impl.quantite +'" id="editeImplantation_quantite_' +  d_impl.pk +'" '
+            
+            if (jsonRep.l_impls[ii].pk != id_impl)
+                s_impl += "readonly />"
+            else
+                s_impl += " /><img align='right' src='{{STATIC_URL}}images/ok.png' style='width:15px;heigth:15px;cursor:pointer' title='OK' onclick='javascript:sauveQteImplantation("+s_json+")'>"           
+            
+            s_impl += "</td></tr>"
+                //s_impl += "<td><a href='javascript:supprimeImplantation(" + s_json + ")'><img align='right'src='{{STATIC_URL}}images/toDelete.jpeg' title='Supprimer'></a></td>"
+            }
+        s_impl +=  "</table>\n"
+        document.getElementById("editeSerie_impls").innerHTML = s_impl
+        }
+    else
+        alert("Erreur " + jsonRep.err)
+        
+    }
+    
+
+function supprimeImplantation(oEvent)
+    {
+    // supprime impl
+    quantite = oEvent.quantite
+    pk = oEvent.pk
+    confirm("Etes vous sûr de vouloir supprimer l'implantation " + oEvent.pk + " ?")
+    s_request = "cde=supprime_impl&id=" + oEvent.pk
+    rep = requestServer(s_request)
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == true)
+        {
+        // maj fenetre d'edition de la série
+        id_serie = document.getElementById("editSerie_id_serie").value
+        majListImpls(id_serie)
+        document.getElementById(pk).style.display="none"
+        document.getElementById("editSerie_quantite").value = document.getElementById("editSerie_quantite").value - quantite
+       }
+    else
+        alert(jsonRep.err)
+    
+
+    }
+
+
+    
+function  balisage()
+    {
+    l_series = document.getElementsByClassName("divImplantation")
+    for (ii=0; ii<l_series.length; ii++)
+        {
+        // decalage debut
+        debut = l_series[ii].getAttribute("date_debut")
+        deltaHD = moment(debut).diff(moment(date_debut_vue), 'hours')
+        l_series[ii].style.marginLeft = deltaHD * pxParH + "px" 
+        // decalage fin
+        fin = l_series[ii].getAttribute("date_fin")
+        deltaHF = moment(fin).diff(moment(debut), "hours")
+        l_series[ii].style.width = deltaHF * pxParH  + "px"
+        
+        l_series[ii].style.borderColor = l_series[ii].getAttribute("couleur")
+        
+        // décalages des évenements
+        l_evts = l_series[ii].getElementsByClassName("evt")
+        for (jj=0;jj<l_evts.length;jj++)
+            {
+            deltaH = moment(l_evts[jj].getAttribute("date")).diff(moment(debut), 'hours')
+            l_evts[jj].style.left = deltaH * pxParH +"px"
+            l_evts[jj].style.width = l_evts[jj].getAttribute("duree_j") * 24 * pxParH + "px"
+            }
+        }
+    }
+
+
+
+function supprime_serie(id_serie)
+    {
+    if (confirm("Voulez-vous vraiment supprimer la série " + id_serie))
+        {
+        s_request = "cde=supprime_serie&id=" + id_serie
+        rep = requestServer(s_request)  
+        jsonRep = JSON.parse(rep)   
+        if (jsonRep.status == true)
+            {
+            alert("Série supprimée")
+            window.location.reload()
+            }  
+        else        
+            alert(jsonRep.err)
+        }
+    }
+
+
+
+function prepareAjouteSerie()
+    {
+    document.getElementById("editSerie_titre").innerHTML = "Création d'une nouvelle série" 
+    document.getElementById("divEditeEvenement").style.display="none"
+    hDiv = document.getElementById("divEditSerie")
+    hDiv.style.left = "50px"
+    hDiv.style.top = "50px"
+    hDiv.style.zIndex = 10
+    hDiv.style.draggable=true
+    hDiv.style.position = "absolute"
+    document.getElementById("editSerie_id_serie").value = 0
+    document.getElementById("editSerie_id_serie").style.display="none"
+    document.getElementById("editSerie_date_debut").value = ""
+    document.getElementById("editSerie_date_fin").innerHTML = ""  
+    document.getElementById("editSerie_date_fin").style.display="none"
+    document.getElementById("editSerie_nb_rangs").value = ""
+    document.getElementById("editSerie_duree_avant_recolte_j").value = ""
+    document.getElementById("editSerie_etalement_recolte_j").value = ""
+    document.getElementById("editSerie_intra_rang_cm").value = ""
+    document.getElementById("editSerie_titre").innerHTML = "Ajout d'une nouvelle série"
+    document.getElementById("editeSerie_evts").innerHTML = ""
+    document.getElementById("divEditeEvenement").innerHTML = ""
+    document.getElementById("editeSerie_impls").innerHTML = ""
+    hDiv.style.display = "block"
+    }
+    
+function prepareEditeSerie(id_impl)
+    {
+    document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
+    hDiv = document.getElementById("divEditSerie")
+    hDiv.style.display = "block"
+    hDiv.style.draggable=true
+
+    hImpl = document.getElementById(id_impl)
+    id_serie = hImpl.getAttribute("id_serie")
+    document.getElementById("editSerie_id_serie").value = id_serie
+    document.getElementById("editSerie_id_serie").innerHTML = "Série " +  id_serie + " sur la/les planche/s " + hImpl.getAttribute("s_liste_planches")
+    document.getElementById("editSerie_nb_rangs").value = hImpl.getAttribute("nb_rangs")
+    document.getElementById("editSerie_intra_rang_cm").value = hImpl.getAttribute("intra_rang_cm")
+    document.getElementById("editSerie_quantite").value = hImpl.getAttribute("quantite_serie")
+    document.getElementById("editSerie_date_debut").value = hImpl.getAttribute("date_debut_f")
+    document.getElementById("editSerie_duree_avant_recolte_j").value = hImpl.getAttribute("duree_avant_recolte_j")
+    document.getElementById("editSerie_etalement_recolte_j").value = hImpl.getAttribute("etalement_recolte_j")   
+    document.getElementById("editSerie_date_fin").innerHTML = hImpl.getAttribute("date_fin_f")
+    document.getElementById("editSerie_b_serre").checked = (hImpl.getAttribute("b_serre") == "True")
+
+    // maj legume dans la liste box
+    id_legume  = hImpl.getAttribute("id_legume")
+    list = document.getElementById("editSerie_id_legume").getElementsByTagName("option")
+    for(ii=0;ii<list.length;ii++)
+        if (list[ii].id == id_legume)
+            {
+            document.getElementById("editSerie_id_legume").options[ii].selected=true
+            break
+            }
+    document.getElementById("divEditeEvenement").style.display = "none"
+    majListImpls(id_serie, id_impl)
+    majListEvts(id_serie)
+    }
+    
+function sauveSerie()
+    {
+    // sauvegardedes paramètres d'une serie
+    s_request = "cde=sauve_serie&id_serie=" + document.getElementById("editSerie_id_serie").value
+    s_request += "&id_legume=" + document.getElementById("editSerie_id_legume").value
+    s_request += "&b_serre=" + document.getElementById("editSerie_b_serre").value
+    s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
+    s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
+    s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
+    s_request += "&duree_avant_recolte_j=" + document.getElementById("editSerie_duree_avant_recolte_j").value
+    s_request += "&etalement_recolte_j=" + document.getElementById("editSerie_etalement_recolte_j").value
+    //s_request += "&id_implantation=" + document.getElementById("editSerie_id_implantation").value
+    //s_request += "&quantite_implantation=" + document.getElementById("editSerie_quantite_implantation").value
+    alert(s_request)
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == true)
+        window.location.reload()
+    else
+        alert(jsonRep.err)
+    }
+    
+
+           
+function allowDrop(event) {
+    event.preventDefault()
+    if (event.target.className == "planche")
+        event.target.style.background = "green"
+}
+
+function dragStart(event) {
+    event.dataTransfer.setData("id_serieDeplacee", event.target.id);
+    event.dataTransfer.setData("id_implantation",  document.getElementById(event.target.id).getAttribute("id"))
+    event.dataTransfer.setData("quantite_implantation", document.getElementById(event.target.id).getAttribute("quantite_implantation"))
+}
+
+function drop(event) {
+    event.preventDefault();
+    id_serie = event.dataTransfer.getData("id_serieDeplacee")
+    id_implantation = event.dataTransfer.getData("id_implantation");
+    quantite_implantation = event.dataTransfer.getData("quantite_implantation");
+    id_plancheDest = event.target.id.split("__")[1]
+    prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
+    }
+
+function unfocus(event)
+    {
+    if ( event.target.className == "planche" )
+        event.target.style.background='white'
+    }
+</script>
+
+{% endblock %}
+
+{% block title %}Implantation des séries sur les planches{% endblock %}
+
+{% block content %}
+{{s_msg}}
+
+<p id="divInfoDebug"> </p>
+<div id="doc" class="BlueFrame" style="display:none" onclick="this.style.display='none';return false">{{doc}}</div>
+
+<form action="" method="POST" accept-charset="utf-8">
+{% csrf_token %}
+<input name="serres" type="checkbox" {% if selection_serres %}checked{% endif %} /> Serres 
+<input name="champs" type="checkbox" {% if selection_champs %}checked{% endif %} /> Champs 
+&nbsp;&nbsp;
+Filtre   <input style="width:50px" type="text" name="s_filtre_planches" value="{{s_filtre_planches}}" />
+<input type="submit" name="direction" value="avance" /> 
+<input style="margin-left: 10px" type="submit" name="direction" value="recul" />
+
+Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
+<button onclick="changelePas(-1);return(false)">-</button>
+<button onclick="changelePas(1);return(false)">+</button>
+<br/>
+ <input type="radio" name="periode" value="annee" {% if periode == "annee" %}checked{% endif %}>Cette année
+ <input type="radio" name="periode" value="mois" {% if periode == 'mois' %}checked{% endif %}>Ce mois
+ <input type="radio" name="periode" value="semaine" {% if periode == 'semaine' %}checked{% endif %}>Cette semaine
+ <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
+ du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
+ au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
+
+<input style="margin-left: 20px" type="submit" value="Envoyer" />
+<img src="{{STATIC_URL}}images/plus.png" title="Ajouter une série" onclick="prepareAjouteSerie();return false"> 
+<img src="{{STATIC_URL}}images/Help.png" title="Documentation" onclick="document.getElementById('doc').style.display='block';return(false)" style="width:30px;heigth:30px" > 
+</form>
+
+<div id="main" style="text-align:center" >
+
+<br/><br/>
+    {% for planche in l_planches %}
+
+    <div    class="planche"
+            id="pl__{{planche.id}}"
+            ondragover="allowDrop(event)"
+            ondragleave="unfocus(event)"
+            ondrop="drop(event)">
+        
+        <div class="barre_du_jour"> </div>  
+        <div class="divTitrePlanche">{{planche}}</div>
+        <div class="suiviConso"> </div>
+
+        {# séries existantes en base #}
+        {% for impl in planche.l_implantations %}
+
+        <div class="divImplantation"    id="{{impl.id}}"
+                                        id_legume="{{impl.serie.legume.id}}" 
+                                        couleur="{{impl.serie.legume.espece.couleur}}" 
+                                        quantite_implantation="{{impl.quantite}}"
+                                        surface_implantation="{{impl.surface_m2}}"
+                                        id_serie="{{impl.serie.id}}"
+                                        b_serre = "{{planche.bSerre}}"
+                                        quantite_serie="{{impl.serie.quantiteTotale}}"
+                                        s_liste_planches = "{{impl.serie.s_listeNomsPlanches}}"
+                                        date_debut="{{impl.serie.evt_debut.date|safe}}" 
+                                        date_debut_f="{{impl.serie.evt_debut.date|date:'d/m/Y'}}" 
+                                        duree_avant_recolte_j="{{impl.serie.dureeAvantRecolte_j}}"
+                                        etalement_recolte_j="{{impl.serie.etalementRecolte_j}}"
+                                        date_fin="{{impl.serie.evt_fin.date|safe}}"
+                                        date_fin_f="{{impl.serie.evt_fin.date|date:'d/m/Y'}}"
+                                        nb_rangs="{{impl.serie.nb_rangs}}" 
+                                        intra_rang_cm="{{impl.serie.intraRang_cm}}"
+                                        draggable="true" ondragstart="dragStart(event)" 
+                                        title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.quantite}}/{{impl.serie.quantiteTotale}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}"
+                                    >
+            <div class="divTitreImplantation">
+            Imp {{impl.id}} - S {{impl.serie.id}}. {{impl.surface_m2}}m2. {{impl.serie.legume.nom}} x {{impl.quantite}} / {{impl.serie.quantiteTotale}}
+            <img src='{{STATIC_URL}}images/editor.png' title='Editer la série' onclick="prepareEditeSerie({{impl.id}});return(false)">
+            </div>
+            {% for evt in impl.serie.evenements.all%}
+                <div class='evt' date="{{evt.date|date:'Y-m-d'}}" duree_j="{{evt.duree_j}}" nom="{{evt.nom}}" 
+                        texte ="{{evt.texte}}" title="{{evt.nom}} le {{evt.date|date:'d/m/Y'}}" > </div>            
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+</div>
+
+<div id="divEditSerie" draggable="true" class="BlueFrame" >
+
+	<h2 id="editSerie_titre"> </h2>
+	<p id="editSerie_id_serie" value=""> </p>
+	
+    <p>Légume : <select id="editSerie_id_legume" name="editSerie_id_legume" >
+                {% for leg in l_legumes %}
+                    <option value="{{leg.id}}" id="{{leg.id}}" name="{{leg.id}}">{{leg.nom|title}}</option>
+                {% endfor %}
+                </select>
+    <input type="checkbox" id="editSerie_b_serre" />sous Serre
+    </p>
+    Quantité <input style="width: 40px" type='text' value="" id="editSerie_quantite"  name="editSerie_quantite" />
+
+    <p>Nb rangs <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
+       Dans le rang (cm) <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" />
+           Rien si valeurs par défaut
+       </p>
+    <p>Début (jj/mm/aa)<input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
+    <p>Durée avant récolte (j) <input style="width:100px;width: 40px" type="text" value="" id="editSerie_duree_avant_recolte_j" name="editSerie_duree_avant_recolte_j"/>
+       Durée maxi de récolte (j)<input style="width:100px;width: 40px" type="text" value="" id="editSerie_etalement_recolte_j" name="editSerie_etalement_recolte_j"/>
+    </p>
+    Fin <div id="editSerie_date_fin" style="display:inline;"> </div>
+    <p>
+    <input type='button' value='Supprimer' name='supprime' onclick="supprime_serie(document.getElementById('editSerie_id_serie').value)" />
+    <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return false" />
+    <input type='button' value='Sauver' onclick="sauveSerie();return false" />
+    </p>    
+    <hr/>
+    <p><b>Implantations</b></p>
+    <div id="editeSerie_impls"> </div>
+    <hr/>
+    <p><b>Evenements </b> <input type='button' value='+' onclick="ajouteEvenement()" title="Ajouter un évènement"/></p>
+    <div id="editeSerie_evts"> </div>
+    <div id="divEditeEvenement">
+        <table>
+        <input type="hidden" id="edit_evt_id" value=""/>
+        <tr><td>Nom : <input type="text" value="" id="edit_evt_nom"/></td></tr>
+        <tr><td>Date (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
+        <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
+        <tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditeEvenement').style.display = 'none'" />
+        <input type="button" value="Sauver" onclick="sauveEvenement();return false;" /></td></tr>	            
+        </table>
+    </div>
+
+</div>
+	
+	
+	
+<div id="divDeplacementImplantation" draggable="true">
+    <h3>Déplacement de l'implantation <input id="deplacement_id_implantation" value="" type="text" readonly style="width: 30px;display:inline" />
+    série <input id="deplacement_id_serie" value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" />
+     <br/>
+    </h3>
+    Quantité :                  <input id="deplacement_quantite"           value="" type="text" style="width:40px;border: 5px solid brown" /><br/>
+    vers la planche N°          <input id="deplacement_id_planche_dest"    value="" type="text" readonly       style="width: 30px;margin-left: 10px"/><br/>
+    dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text" style="margin-left: 10px;width: 30px"/><br/>
+    Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text" style="margin-left: 10px;width: 30px"/><br/>
+    <br/>Simulation <input id="deplacement_simulation" type="checkbox" />
+    <br/><br/>
+    <input type="submit" value="Déplacement" onclick="deplaceImplantation()" style="margin-left: 30px" />
+    <input type='button' value='Annuler' onclick="document.getElementById('divDeplacementImplantation').style.display='none';return false"/>
+    
+</div>
+
+{% endblock %}

@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/planif.js"></script>
+
+	<script>
+	
+bEnMouvement = false
+pxParCm = 8
+id_plant_courant = ""
+
+function init()
+    {
+    g_index_ticket = 0
+    jsonVarietes = {  {% for var in l_vars %} {{var.id}}:'{{var.nom}}',{% endfor %}  }
+    o_nomTypeEvt = {{d_evtTypes|safe}}
+    //retaillage de la matrice, on fait un carré
+    document.getElementById("matrice").style.height = ({{planche.largeur_cm}} * pxParCm ).toString() + "px"
+    document.getElementById("matrice").style.width = ({{planche.largeur_cm}} * pxParCm ).toString() + "px"
+    affichePlants()
+    }
+
+ 
+function ajouteNouveauPlant()
+    {
+    s_nouveauPlanId = getTicket() + '_' 
+    s_plant = '<div class="plant" id="$ID_PLANT$" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)" \
+                variete="" \
+                quantite="" \
+                date_debut="" \
+                date_fin=""  \
+                largeur_cm=""  \
+                hauteur_cm=""  \
+                nb_rangs=""  \
+                intra_rang_cm=""  >'
+    s_plant += '<span><div class="num_plant"> </div><div class="variete"> </div></span><br/>' 
+    s_plant += '<div class="largeur_cm"> </div> <div class="hauteur_cm"> </div><br/>' 
+    s_plant += '<div class="coord_x_cm"> </div> <div class="coord_y_cm"> </div><br/>' 
+    s_plant += 'Du <div class="date_debut"> </div> au <div class="date_fin"> </div><br/>' 
+    s_plant += '</div>'
+    s_plant = s_plant.replace("$ID_PLANT$", s_nouveauPlanId)
+    
+    document.getElementById("matrice").innerHTML += s_plant
+    plan_courrant = s_nouveauPlanId
+    afficheSeries()
+                
+    }
+   
+function supprimePlant(plant_id)
+    {
+    s_request = "cde=supprime_plant&id="+ id_plant
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)        
+    document.getElementById('divEditPlant').style.display = "none"
+    document.getElementById('matrice').removeChild(document.getElementById(plant_id))
+    }
+
+    
+function editePlant(hPlant)
+    {
+    // recup evenements liés à ce plant
+    id_plant = hPlant.getAttribute("id")
+    
+    if (id_plant.search("_") != 1)
+        majListEvts(id_plant)
+        
+    // maj variété
+    id_variet  = hPlant.getAttribute("variete")
+    list = document.getElementById("editPlant_select_var").getElementsByTagName("option")
+    for(ii=0;ii<list.length;ii++)
+        if (list[ii].value == id_variet)
+            {
+            document.getElementById("editPlant_select_var").options[ii].selected=true
+            break
+           }
+
+    // maj attributs plant                   
+    document.getElementById("editPlant_id_planche").innerHTML = {{planche.num}}
+    document.getElementById("editPlant_plantId").innerHTML = id_plant
+    document.getElementById("editPlant_quantite").value = hPlant.getAttribute("quantite")
+    document.getElementById("editPlant_date_debut").value =  hPlant.getAttribute("date_debut")
+    document.getElementById("editPlant_date_fin").value =  hPlant.getAttribute("date_fin")
+    document.getElementById("divEditPlant").style.display = "inline"
+    }
+
+function majPlant()
+    {
+    // recup des infos de la fenetre d'edition et mise à jour des attributs dans le div du plant
+    id_plant = document.getElementById("editPlant_plantId").innerHTML
+    l_plants = document.getElementsByClassName("plant")
+    for(ii=0;ii<l_plants.length;ii++)
+        if (l_plants[ii].getAttribute("id") == id_plant)
+            {
+            l_plants[ii].setAttribute("variete", document.getElementById("editPlant_select_var").value)
+            l_plants[ii].setAttribute("quantite", document.getElementById("editPlant_quantite").value)
+            l_plants[ii].setAttribute("date_debut", document.getElementById("editPlant_date_debut").value)
+            l_plants[ii].setAttribute("date_fin", document.getElementById("editPlant_date_fin").value)
+            // mise à jour affichage 
+            affichePlant(l_plants[ii])
+            break
+			}
+    }
+
+/*
+function affichePlants()
+    {
+    l_plants = document.getElementsByClassName("plant")
+    for(ii=0;ii<l_plants.length;ii++)
+        affichePlant(l_plants[ii])
+    }
+*/
+  
+function affichePlant(hSerie)
+    {
+    // on affiche le contenu de la série à partir des attributs 
+    hSerie.getElementsByClassName("num_plant")[0].innerHTML = hSerie.getAttribute("id")
+    hSerie.getElementsByClassName("variete")[0].innerHTML = jsonVarietes[hSerie.getAttribute("variete")]
+    hSerie.getElementsByClassName("quantite")[0].innerHTML = hSerie.getAttribute("quantite")
+    hSerie.getElementsByClassName("date_debut")[0].innerHTML = hSerie.getAttribute("date_debut")
+    hSerie.getElementsByClassName("date_fin")[0].innerHTML = hSerie.getAttribute("date_fin")
+    hSerie.getElementsByClassName("coord_x_cm")[0].innerHTML = "x:" + hSerie.getAttribute("coord_x_cm") + "cm"
+    hSerie.getElementsByClassName("coord_y_cm")[0].innerHTML = "y:" + hSerie.getAttribute("coord_y_cm") + "cm"
+    hSerie.getElementsByClassName("hauteur_cm")[0].innerHTML = "h:" + hSerie.getAttribute("hauteur_cm") + "cm"
+    hSerie.getElementsByClassName("largeur_cm")[0].innerHTML = "l:" + hSerie.getAttribute("largeur_cm") + "cm"  
+    hSerie.style.height = hSerie.getAttribute("hauteur_cm") * pxParCm + "px"  
+    hSerie.style.width = hSerie.getAttribute("largeur_cm") * pxParCm + "px"  
+    hSerie.style.marginLeft = hSerie.getAttribute("coord_x_cm") * pxParCm + "px"  
+    hSerie.style.marginTop = hSerie.getAttribute("coord_y_cm") * pxParCm + "px"  
+    
+    }
+               
+     
+function ajouteEvenement()
+    {
+    document.getElementById("divEditEvenement").style.display = "block"
+    document.getElementById("edit_evt_id").value = 0
+    document.getElementById("edit_evt_nom").value = ""
+    document.getElementById("edit_evt_date").value = ""
+    document.getElementById("edit_evt_duree_j").value = "1"
+    document.getElementById("edit_evt_type").value = ""   
+    }
+    
+
+
+function supprimeEvenement(idEvent)
+    {
+    s_request = "cde=supprime_evenement&id=" + idEvent
+    rep = requestServer(s_request)
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == 'false')
+        alert (jsonRep.err)
+    else
+        majListEvts(document.getElementById("editPlant_plantId").innerHTML)
+    }
+
+function sauveEvenement()
+    {
+	// recup données et ajout
+	s_request = "cde=sauveEvt&id="+ document.getElementById("edit_evt_id").value +"&nom=" + document.getElementById("edit_evt_nom").value
+    s_request += "&date=" + document.getElementById("edit_evt_date").value
+    s_request += "&duree_j=" + document.getElementById("edit_evt_duree_j").value
+    s_request += "&type=" + document.getElementById("edit_evt_type").value
+    id_plant = document.getElementById("editPlant_plantId").innerHTML
+	s_request += "&id_plant=" + id_plant
+    rep = requestServer(s_request)
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == 'false')
+        document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>"+ jsonRep.err + "</div>"
+
+    // maj fenetre d'edition du plant
+    majListEvts(id_plant)    
+    
+    // nettoyage nom et date de l'evt
+    document.getElementById("edit_evt_nom").value = ""
+    document.getElementById("edit_evt_date").value = ""
+    document.getElementById("edit_evt_duree_j").value = ""
+    }
+
+function sauveMatrice()
+    {
+    // recup données et envoi plant par plant
+    id_planche = {{planche.num}}
+    l_plants = document.getElementsByClassName("plant")
+    s_msg = ""
+    for(pl=0; pl<l_plants.length; pl++)
+        {
+        id_plant = l_plants[pl].getAttribute("id")
+        variete = l_plants[pl].getAttribute("variete")
+        largeur_cm = l_plants[pl].getAttribute("largeur_cm")
+        hauteur_cm = l_plants[pl].getAttribute("hauteur_cm")
+        coord_x_cm = l_plants[pl].getAttribute("coord_x_cm")
+        coord_y_cm = l_plants[pl].getAttribute("coord_y_cm")
+        date_debut = l_plants[pl].getAttribute("date_debut")
+        date_fin = l_plants[pl].getAttribute("date_fin")
+        s_err = ""
+        if (variete == "")
+            s_err  += "La variété n'est pas définie\n\n"        
+
+        if (s_err != "")
+	    	{
+	        alert("Sauvegarde impossible plant " + id_plant + "\n" + s_err)
+	        continue
+           }
+  
+        s_request = "cde=sauve_plant&id_plant=" + id_plant + "&quantite=" + l_plants[pl].getAttribute("quantite")
+        s_request += "&id_planche=" + id_planche + "&variete=" + variete + "&largeur_cm="+ largeur_cm +"&hauteur_cm="+ hauteur_cm 
+        s_request += "&coord_x_cm="+ coord_x_cm + "&coord_y_cm=" + coord_y_cm 
+        s_request += "&date_debut="+ date_debut + "&date_fin=" + date_fin 
+        rep = requestServer(s_request)
+        jsonRep = JSON.parse(rep)
+        if (jsonRep.status == 'true' )
+            {
+            //on affecte le nouveau numero di plan à partir de l'id en base
+            l_plants[pl].setAttribute("id", jsonRep.id_plant)
+            s_msg += " plant " + id_plant
+            }
+        else
+           {
+            document.getElementById("divInfoDebug").innerHTML = "<div class='err_msg'>"+ jsonRep.err + "</div>"
+            return
+           }
+        }
+    affichePlants()
+ 	// masquage fenetre d'edition
+ 	document.getElementById("divEditPlant").style.display = 'none'
+    document.getElementById("div_info_debug").innerHTML = s_msg + ", sauvés"
+    }
+
+function majXYMouse(event) 
+    {
+    clientX = event.clientX
+    clientY = event.clientY
+   
+    if (id_plant_courant != "")
+        {
+        obj= document.getElementById(id_plant_courant)   
+        // maj hauteur largeur
+        hauteur_cm = parseInt(obj.style.height.split('px')[0] / pxParCm)
+        obj.setAttribute("hauteur_cm", hauteur_cm )
+        largeur_cm = parseInt(obj.style.width.split('px')[0] / pxParCm)
+        obj.setAttribute("largeur_cm", largeur_cm)
+        // recup position par rapport à la matrice , mise à jour affichage
+        x = parseInt(obj.style.marginLeft.split('px')[0]  / pxParCm)
+        obj.setAttribute("coord_x_cm", x)
+        y = parseInt(obj.style.marginTop.split('px')[0]  / pxParCm)
+        obj.setAttribute("coord_y_cm", y)
+        
+        affichePlant(obj)
+        }
+    //document.getElementById("divInfoDebug").innerHTML = id_plant_courant
+    }
+
+function toggleMove(hPlant)
+    {
+
+    rect = hPlant.getBoundingClientRect()
+    if(bEnMouvement == false)onmouseup
+        {
+        id_plant_courant = hPlant.getAttribute('id')
+        if ((clientY - rect.top < 40)&&(clientX - rect.left <40 ))  // pour prendre au coin
+            {
+            bEnMouvement = true
+            hPlant.style.borderColor = 'yellow'
+            }
+        }
+    else
+        {
+        id_plant_courant = ""
+        bEnMouvement = false
+        hPlant.style.borderColor = 'green'
+        }
+    }
+
+function deplace()
+    {
+    if (id_plant_courant == "")
+        return
+    
+    obj=document.getElementById(id_plant_courant)
+    matr = document.getElementById("matrice")
+
+    if (bEnMouvement)
+        {
+        obj.style.marginLeft = clientX - matr.offsetLeft - 10 + "px"
+        obj.style.marginTop = clientY - matr.offsetTop - 10 + "px"
+        } 
+    }
+</script>
+
+{% endblock %}
+
+{% block title %}
+Composition de la planche {{planche.num}} ({{planche.largeur_cm}}cm x {{planche.longueur_m}}m) 
+<br />{{planche.nom}}
+{% endblock %}
+
+{% block content %}
+<form action="" method="POST" accept-charset="utf-8">
+{% csrf_token %}
+<input style="margin-left: 20px" type="submit" name="delta" value="-10" />
+<input type="submit" name="delta" value="-1" />
+Date <input style="width: 100px" type="text" name="date" value="{{date|date:'d/m/Y'}}" />
+<input type="submit" name="delta" value="+1" />
+<input type="submit" name="delta" value="+10" />
+<input type="submit" value="Envoyer" />
+<input type="hidden" name="num_planche" value="{{planche.num}}" />
+</form><br/>
+
+<div id="main" onmousemove="majXYMouse(event);deplace();" style="width: 80%">
+<input type="button" onclick="ajouteNouveauPlant()" value="Ajout d'un plant">
+&nbsp;
+<input type="button" onclick="sauveMatrice()" value="Sauvegarder tous les plants">
+<a href="{% url 'chrono_planche' %}?num_planche={{planche.num}}"><img src="{{ STATIC_URL }}images/arrowR.jpg" width="24" height="24" title="Chronogramme"></a>
+<span id="div_info_debug"> </span>
+<br/><br/>
+
+<div id="matrice">
+            {# plants existants en base #}
+            {% for plant in l_plants %}
+	            <div class="plant" id="{{plant.id}}" onmousedown="editePlant(this);toggleMove(this)" onmouseup="toggleMove(this)"
+	            variete="{{plant.variete_id}}" 
+	            quantite="{{plant.quantite}}" 
+	            date_debut="{{plant.evt_debut.date|date:'d/m/Y'}}" 
+	            date_fin="{{plant.evt_fin.date|date:'d/m/Y'}}" 
+	            largeur_cm="{{plant.largeur_cm}}" 
+	            hauteur_cm="{{plant.hauteur_cm}}" 
+	            coord_x_cm="{{plant.coord_x_cm}}" 
+	            coord_y_cm="{{plant.coord_y_cm}}" >
+	            <div class="num_plant displayInLine"> </div>/ <div class="variete displayInLine"> </div> x <div class="quantite displayInLine"> </div><br/>
+	            <div class="largeur_cm displayInLine"> </div> <div class="hauteur_cm displayInLine"> </div><br/> 
+	            <div class="coord_x_cm displayInLine"> </div> <div class="coord_y_cm displayInLine"> </div><br/>
+	            Du <div class="date_debut displayInLine"> </div> au <div class="date_fin displayInLine"> </div>
+	            </div>
+            {% endfor %}
+</div>
+
+<div id="divEditPlant" style="display: none" class="BlueFrame">
+	
+	<h2>Gestion du/des plant/s <span id="editPlant_plantId"> </span></h2>
+	<p>Sur la planche N° <span id="editPlant_id_planche"> </span></p>
+    <p>Variété : <select id="editPlant_select_var" onchange="majPlant()">
+    			{% for var in l_vars %}
+    	        <option value="{{var.id}}" name="{{var.nom}}">{{var.nom}}</option>
+    	    	{% endfor %}
+    	      </select>
+    </p>
+    <p>Quantité : <input style="width: 100px" type='text' value='' id="editPlant_quantite" onchange="majPlant()" /></p>
+    <p>Date de début (jj/mm/aaaa) : <input style="width:100px" type="text" value=" " id="editPlant_date_debut" onchange="majPlant()"/></p>
+    <p>Date de fin (jj/mm/aaaa) : <input style="width:100px" type="text" value=" " id="editPlant_date_fin" onchange="majPlant()" /></p>
+    <br/><br/><b>Evenements</b><div id="editPlant_evts"> </div>
+    <br/>
+    <input type='button' value='Ajouter un évènement' name='ajout' onclick="ajouteEvenement()"/><br/>
+    <hr/>
+    <input type='button' value='Supprimer' name='supprime' onclick="supprimePlant(document.getElementById('editPlant_plantId').innerHTML)"/><br/>
+    <input type='button' value='Sauver' name='sauve' onclick="majPlant()"/><br/>
+</div>
+
+<div class="YellowFrame" style="display: none" id="divEditEvenement">
+    
+		<h2>Gestion d'évenement</h2>
+		
+		<table>
+		<tr><td>Type : <select id="edit_evt_type">
+		              {% for evtType in l_evtTypes %}  
+                      <option value="{{evtType.0}}">{{evtType.1}}</option>
+                      {% endfor %}
+                      </select>
+		</td></tr>
+        <tr><td>Nom : <input type="hidden" value="0" id="edit_evt_id"/><input type="text" value="" id="edit_evt_nom"/></td></tr>
+        <tr><td>Date : (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
+        <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
+		<tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditEvenement').style.display = 'none'" />
+		        <input type="button" value="Sauver" onclick="sauveEvenement()" />
+		</td></tr>
+        </table>
+        
+</div>
+
+</div>
+{% endblock %}

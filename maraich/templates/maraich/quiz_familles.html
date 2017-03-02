@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block javascript %}
+{% endblock %}
+{% block title %}Jeux des familles{% endblock %}
+{% block content %}
+<div class="BlueFrame" style="width: 60%;margin-left:20%">
+
+<h2 style="background:{{color}};">{{message|safe}}</h2>
+<br/>
+<h2>Trouvez la famille du(de la) {{form.esp.nom|title}}</h2>
+
+<form action="" method="POST" >
+    {% csrf_token %}
+    
+    {# liste des familles possibles#}
+    <ul>
+    {% for choice in form.l_choices%}
+    <li style="list-style-type: none;">
+        <label for="id_famChoice_{{choice.0}}">
+        <input id="id_famChoice_{{choice.0}}" name="famChoice" type="radio" value="{{choice.0}}" /> {{choice.1|title}}
+        </label>
+    </li>
+    {% endfor%}
+    </ul>
+    <input type="hidden" name="espece" value="{{form.esp.id}}" />
+    <input type="submit" value="OK" />
+</form>
+</div>
+{% endblock %}
