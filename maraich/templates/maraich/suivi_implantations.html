@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block pagetitle %}Suivi des implantation des séries sur les planches{% endblock %}
 {% load static %}
 
 {% block javascript %}
@@ -241,7 +242,24 @@ function sauveQteImplantation(obj)
     majListImps(id_serie)
 
     }
+
+function debutPatienter()
+    {
+    // on place au niveau du pointeur dans l'ecran
+    //e.clientX  e.clientY
+    // on allume le gif
+    hGif = document.getElementById("waiting")
+    hGif.style.display="block"
+    }
     
+function finPatienter()
+    {    
+    // on eteint le gif
+    hGif = document.getElementById("waiting")
+    hGif.style.display="none"
+    }
+    
+      
 function getSdateFromTdate(tdate)
     {
     t_date = tdate.split("T")[0].split("-")
@@ -272,7 +290,6 @@ function majListEvts(id_serie)
             s_evts += "<td><a href='javascript:supprimeEvenement(" + sj_evt + ")'>"
             s_evts += "<img align='right'src='{% static 'images/toDelete.jpeg'%}' title='Supprimer'></a></td></tr>"
             }
-          
         s_evts +=  "</table>\n"
         document.getElementById("editeSerie_evts").innerHTML = s_evts
         }
@@ -463,8 +480,10 @@ function sauveSerie()
     s_request += "&etalement_recolte_j=" + document.getElementById("editSerie_etalement_recolte_j").value
     //s_request += "&id_implantation=" + document.getElementById("editSerie_id_implantation").value
     //s_request += "&quantite_implantation=" + document.getElementById("editSerie_quantite_implantation").value
-    alert(s_request)
-    rep = requestServer(s_request)  
+    document.getElementById("divEditSerie").style.display="none"
+    debutPatienter()
+    rep = requestServer(s_request)
+    finPatienter() 
     jsonRep = JSON.parse(rep)
     if (jsonRep.status == true)
         window.location.reload()

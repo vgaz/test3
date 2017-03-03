@@ -34,7 +34,7 @@ def serveRequest(request):
             log.info(s_json)
         except:
             log.error(__name__ + ': ' + str(sys.exc_info()[1]) )
-            traceback.log.info_tb(sys.exc_info())
+#             traceback.print_tb(sys.exc_info()[1], file=log)
             s_json = '{"status":false,"err":"%s"}'%(sys.exc_info()[1])
               
         return HttpResponse(s_json, content_type="application/json")
@@ -123,7 +123,7 @@ def serveRequest(request):
         except:
             ex_type, ex, tb = sys.exc_info()
             log.error (str(ex_type) + str(ex))
-            traceback.log.info_tb(tb)
+#             traceback.print_tb(tb, file=log)
             s_json = '{"status":false,"msg":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>{% block pagetitle %}{% endblock %}</title>
 {% load static %}
 
 <link rel="shortcut icon" href="{% static "images/shadok_green.gif" %}" />
@@ -13,6 +14,7 @@
 
 </head>
 <body onload="init()">
+<img id="waiting" src="{% static "images/loading.gif" %}" >
 <div id="banner">
 	<div id="home"><h2>
         <a href="{% url 'home' %}"><img src="{% static "images/home.png" %}" title="Home"/></a>

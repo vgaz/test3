@@ -19,6 +19,18 @@ body
     z-index:3;
 }
 
+#waiting
+{
+    width:250px;
+    height:150px;
+    display:none;
+    z-index:30;
+
+    position: fixed;
+    top:30%;
+    left:30%;
+}
+
 .plant
     {
     width:150px;

@@ -2,27 +2,20 @@
 from django.core.management.base import BaseCommand       
 
 from maraich import serveRequest, views, constant
-from django.test import RequestFactory
 
 from maraich.models import *
+
+from UnitTests import testU_Series
 
 class Command(BaseCommand):
     help = "test divers"
 
     def handle(self, *args, **options):
+        leg = Legume.objects.get(id=10)
+        testU_Series.testU_sauveSerie()
         
-#         date_debut = MyTools.getDateFrom_d_m_y("26/12/2016")
-#         serie = Serie.objects.get(id=79)
-#         print (serie.descriptif())
-#         print (serie.prodHebdo(date_debut))
-#         return
-    
-#         b1 = respecteRotation(date_debut, 1, 1)
-        
+        return
 
-#         date_debut_sem = MyTools.getDateFrom_d_m_y("2/10/2016")
-# 
-#         serie.prodHebdo(date_debut_sem)
 #         
 
         

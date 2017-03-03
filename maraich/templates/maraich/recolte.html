@@ -23,69 +23,63 @@ function init()
     
     // maj tableau légumes 
     
-    // total par semaine (kg)
-    if (1)//document.getElementById('tab_legumes').style.display=='block')
+
+    cumulTotal = 0       
+    for (ii=0;ii<l_sems.length;ii++)
         {
-        cumulTotal = 0       
-        for (ii=0;ii<l_sems.length;ii++)
+        cumul = 0
+        for (jj=0;jj<l_legs.length;jj++)
             {
-            cumul = 0
-            for (jj=0;jj<l_legs.length;jj++)
-                {
-                poidsL = parseInt(document.getElementById("sem_" + l_sems[ii] + "__leg_" + l_legs[jj]).getAttribute("poids"))
-                cumul += poidsL
-                //alert("sem:" + l_sems[ii] + " leg:" + l_legs[jj] + " poidsL:" + poidsL +" cumul:" + cumul)
-                }
-            document.getElementById("ts_" + l_sems[ii]).innerHTML = cumul
-            document.getElementById("tlpp_" + l_sems[ii]).innerHTML = cumul/nbPanniers
-            cumulTotal += cumul
-            }   
-        document.getElementById("totalTotal").innerHTML = cumulTotal
-        
-        // total par légume (kg)
-        for (ll=0; ll<l_legs.length; ll++)
-            {
-            cumul = 0
-            for (ss=0;ss<l_sems.length;ss++)
-                cumul += parseInt(document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll]).getAttribute("qte"))
-            document.getElementById("tl_" + l_legs[ll]).innerHTML = cumul
+            poidsL = parseInt(document.getElementById("sem_" + l_sems[ii] + "__leg_" + l_legs[jj]).getAttribute("poids"))
+            cumul += poidsL
+            //alert("sem:" + l_sems[ii] + " leg:" + l_legs[jj] + " poidsL:" + poidsL +" cumul:" + cumul)
             }
+        document.getElementById("ts_" + l_sems[ii]).innerHTML = cumul
+        document.getElementById("tlpp_" + l_sems[ii]).innerHTML = cumul/nbPanniers
+        cumulTotal += cumul
+        }   
+    document.getElementById("totalTotal").innerHTML = cumulTotal
+    
+    // total par légume (kg)
+    for (ll=0; ll<l_legs.length; ll++)
+        {
+        cumul = 0
+        for (ss=0;ss<l_sems.length;ss++)
+            cumul += parseInt(document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll]).getAttribute("qte"))
+        document.getElementById("tl_" + l_legs[ll]).innerHTML = cumul
         }
 
 
-    if(1)//document.getElementById('tab_especes').style.display='block')
-        {    // maj tableau espèces
-    
-        // total par espece pour chaque semaine   
-        for (ee=0; ee<l_especes.length; ee++)
+    // total par espece pour chaque semaine   
+    for (ee=0; ee<l_especes.length; ee++)
+        {
+        cumulTETS = 0 // 
+        for (ss=0;ss<l_sems.length;ss++)
             {
-            cumulTETS = 0 // 
-            for (ss=0;ss<l_sems.length;ss++)
+            cumulEPS = 0
+            for (ll=0;ll<l_legs.length;ll++)
                 {
-                cumulEPS = 0
-                for (ll=0;ll<l_legs.length;ll++)
-                    {
-                    divLeg = document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll])
-                    esp_id = parseInt(divLeg.getAttribute("esp_id"))
-                    if( esp_id != l_especes[ee])
-                        continue
-                    qte = parseInt(divLeg.getAttribute("qte"))
-                    cumulEPS += qte
-                    cumulTETS += qte
-                    }
-    
-                id =  document.getElementById("sem_" + l_sems[ss] + "__esp_" + l_especes[ee])
-                id.innerHTML = cumulEPS
-                if (cumulEPS >0)
-                    { 
-                    id.style.border = "5px solid " + l_couleur_esp[l_especes[ee]]
-                    id.style.textAlign="center"
-                    }
-                else
-                    id.style.display = "none"    
+                divLeg = document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll])
+                esp_id = parseInt(divLeg.getAttribute("esp_id"))
+                if( esp_id != l_especes[ee])
+                    continue
+                qte = parseInt(divLeg.getAttribute("qte"))
+                cumulEPS += qte
+                cumulTETS += qte
                 }
-            document.getElementById("tets_" + l_especes[ee]).innerHTML = cumulTETS
-            }   
+
+            id =  document.getElementById("sem_" + l_sems[ss] + "__esp_" + l_especes[ee])
+            id.innerHTML = cumulEPS
+            if (cumulEPS >0)
+                { 
+                id.style.border = "5px solid " + l_couleur_esp[l_especes[ee]]
+                id.style.textAlign="center"
+                }
+            else
+                id.style.display = "none"    
+            }
+        document.getElementById("tets_" + l_especes[ee]).innerHTML = cumulTETS
+        }   
         
 
         // total par semaine pour chaque espece (en Kg) et liste des espèces dont le poids est non nul
@@ -106,7 +100,11 @@ function init()
                     poidsLeg = parseInt(divLeg.getAttribute("poids"))
                     poidsLegs += poidsLeg
                     if (poidsLeg != 0)
-                        s_listeEsp += "<br/>" + divLeg.getAttribute("esp_nom")
+                        {
+                        nom = divLeg.getAttribute("esp_nom")
+                        if (s_listeEsp.indexOf(nom) == -1)
+                            s_listeEsp += "<br/>" + nom
+                        }
                    }        
                 poids_SPE += poidsLegs
     
@@ -119,7 +117,6 @@ function init()
             }           
         
         document.getElementById("total_etets").innerHTML = total_etets
-        }
         
     }
     

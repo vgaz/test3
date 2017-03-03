@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.db import models
+from django.db import models as djangoModels
 import datetime
 import sys
 from django.utils import timezone
@@ -43,7 +43,7 @@ def creationEditionSerie(id_serie,
     """Création ou edition d'une série de plants sur planche virtuelle
     si id_serie == 0, c'est une demande de création, sinon , d'édition/modification
     """
-    assert id_leg, '%s pas de valeur pour var'%__name__
+    assert id_leg, '%s pas de valeur pour id_leg'
     assert duree_avant_recolte_j != 0, 'duree avant recolte = 0'
     assert etalement_recolte_j != 0, 'étalement recolte = 0'
     
@@ -210,9 +210,9 @@ def respecteRotation(dateDebutImplantation, espece, planche):
     
 #################################################################
 
-class Famille(models.Model):
+class Famille(djangoModels.Model):
     """famille associée à une ou plusieurs espèces"""
-    nom = models.CharField("Nom de la famille", max_length=100)
+    nom = djangoModels.CharField("Nom de la famille", max_length=100)
     
     class Meta: 
         ordering = ['id']
@@ -228,12 +228,12 @@ class Famille(models.Model):
         return self.espece_set.all()
 
 
-class Planche(models.Model):
+class Planche(djangoModels.Model):
     """ planche de culture"""
-    nom = models.CharField(max_length=100, blank=True, default="")
-    longueur_m = models.IntegerField()
-    largeur_m = models.FloatField()
-    bSerre = models.BooleanField(default=False)
+    nom = djangoModels.CharField(max_length=100, blank=True, default="")
+    longueur_m = djangoModels.IntegerField()
+    largeur_m = djangoModels.FloatField()
+    bSerre = djangoModels.BooleanField(default=False)
     
     class Meta: 
         ordering = ['nom']
@@ -248,28 +248,28 @@ class Planche(models.Model):
                                                      self.surface_m2(), s_lieu)
 
       
-class Variete(models.Model):
+class Variete(djangoModels.Model):
     """Variété"""
-    nom = models.CharField(max_length=100)
+    nom = djangoModels.CharField(max_length=100)
     def __str__(self):
         return self.nom
     
-class Espece(models.Model):
+class Espece(djangoModels.Model):
     """Espèce de légume"""
-    nom = models.CharField(max_length=100)
-    varietes = models.ManyToManyField(Variete)
-    famille = models.ForeignKey("Famille", null=True, blank=True)
-    avec = models.ManyToManyField("self", related_name="avec", blank=True)
-    sans = models.ManyToManyField("self", related_name="sans", blank=True)
-    unite_prod = models.PositiveIntegerField(default=constant.UNITE_PROD_KG)
-    bStockable = models.BooleanField(default=False)
-    rendementConservation = models.FloatField("Rendement de conservation", default=1)
-    nbGrainesParPied = models.PositiveIntegerField("Nb graines par pied", default=0)
-    rendementGermination = models.FloatField("Rendement germination", default=1)
-    consoHebdoParPart = models.FloatField("quantité consommée par semaine par part", default=0)
-    nbParts = models.PositiveIntegerField("Nb de parts à servir", default=0)
-    couleur = models.CharField(max_length=16, default="yellow")
-    delai_avant_retour_an = models.PositiveIntegerField("Délai avant retour de la même culture", default=3)
+    nom = djangoModels.CharField(max_length=100)
+    varietes = djangoModels.ManyToManyField(Variete)
+    famille = djangoModels.ForeignKey("Famille", null=True, blank=True)
+    avec = djangoModels.ManyToManyField("self", related_name="avec", blank=True)
+    sans = djangoModels.ManyToManyField("self", related_name="sans", blank=True)
+    unite_prod = djangoModels.PositiveIntegerField(default=constant.UNITE_PROD_KG)
+    bStockable = djangoModels.BooleanField(default=False)
+    rendementConservation = djangoModels.FloatField("Rendement de conservation", default=1)
+    nbGrainesParPied = djangoModels.PositiveIntegerField("Nb graines par pied", default=0)
+    rendementGermination = djangoModels.FloatField("Rendement germination", default=1)
+    consoHebdoParPart = djangoModels.FloatField("quantité consommée par semaine par part", default=0)
+    nbParts = djangoModels.PositiveIntegerField("Nb de parts à servir", default=0)
+    couleur = djangoModels.CharField(max_length=16, default="yellow")
+    delai_avant_retour_an = djangoModels.PositiveIntegerField("Délai avant retour de la même culture", default=3)
    
     class Meta:
         ordering = ['nom']
@@ -284,10 +284,10 @@ class Espece(models.Model):
         return self.nbParts * self.consoHebdoParPart
 
 
-class Panniers(models.Model):
+class Panniers(djangoModels.Model):
     """Quantité de panniers au fil du temps"""
-    val = models.PositiveIntegerField("Nb de parts ou panniers à servir par semaine", default=0)
-    dateDebut = models.DateTimeField("date d'engagement de cette quantité de panniers")
+    val = djangoModels.PositiveIntegerField("Nb de parts ou panniers à servir par semaine", default=0)
+    dateDebut = djangoModels.DateTimeField("date d'engagement de cette quantité de panniers")
     
     class Meta: 
         ordering = ['dateDebut'] ## pour lister du plus ancien au plus recent 
@@ -302,14 +302,14 @@ class Panniers(models.Model):
 
 
       
-class Legume(models.Model):
+class Legume(djangoModels.Model):
     """légume"""
-    espece = models.ForeignKey(Espece)
-    variete = models.ForeignKey(Variete)
-    rendementProduction_kg_m2 = models.FloatField("Rendement de production (kg/m2)", default=1)
-    poidsParPiece_kg = models.FloatField("Poids estimé par pièce (Kg)", default=0)  ## optionnel si unite_prod = kg
-    intra_rang_m = models.FloatField("distance dans le rang (m)", default=0)
-    inter_rang_m = models.FloatField("distance entre les rangs (m)", default=0)    
+    espece = djangoModels.ForeignKey(Espece)
+    variete = djangoModels.ForeignKey(Variete)
+    rendementProduction_kg_m2 = djangoModels.FloatField("Rendement de production (kg/m2)", default=1)
+    poidsParPiece_kg = djangoModels.FloatField("Poids estimé par pièce (Kg)", default=0)  ## optionnel si unite_prod = kg
+    intra_rang_m = djangoModels.FloatField("distance dans le rang (m)", default=0)
+    inter_rang_m = djangoModels.FloatField("distance entre les rangs (m)", default=0)    
     
     class Meta:
         ordering = ['espece', 'variete']
@@ -347,11 +347,11 @@ class Legume(models.Model):
 #         print (ret)
 #         return (ret)
 
-class Implantation(models.Model):
-    planche = models.ForeignKey("Planche")
-#     debut_m = models.FloatField("Début de la culture (m)", default=0)
-#     fin_m = models.FloatField("Début de la culture (m)", default=0)
-    quantite = models.IntegerField("nombre de pieds", default=0) ## en attendant le placement plus précis...@todo
+class Implantation(djangoModels.Model):
+    planche = djangoModels.ForeignKey("Planche")
+#     debut_m = djangoModels.FloatField("Début de la culture (m)", default=0)
+#     fin_m = djangoModels.FloatField("Début de la culture (m)", default=0)
+    quantite = djangoModels.IntegerField("nombre de pieds", default=0) ## en attendant le placement plus précis...@todo
 
     def longueur_m(self):
         return self.fin_m - self.debut_m
@@ -373,7 +373,7 @@ class Implantation(models.Model):
                                                                          self.planche.nom,
                                                                          self.planche.id)
 
-class SerieManager(models.Manager):
+class SerieManager(djangoModels.Manager):
     
     def activesEnDateDu(self, la_date, planche=None):
         """Filtrage des séries présentes à telle date, sur telle planche"""
@@ -413,7 +413,7 @@ class SerieManager(models.Manager):
 
 
         
-class Evenement(models.Model):
+class Evenement(djangoModels.Model):
     """Evenement ayant une date relative ou absolue"""
     TYPE_DEBUT = 1
     TYPE_FIN = 2
@@ -426,15 +426,15 @@ class Evenement(models.Model):
                    TYPE_PREPA_PLANTS:"Prépa plants en mottes",
                    TYPE_RECOLTE:"Début Récolte"
                    }
-    eRef = models.ForeignKey("Evenement", default=0) 
-    delta_j =  models.PositiveIntegerField("nb jours de decalage", default=0)
-    type =  models.PositiveIntegerField()
-    date = models.DateTimeField("date de l'évenement")
-    date_creation = models.DateTimeField(default=timezone.now)
-    duree_j = models.PositiveIntegerField("nb jours d'activité", default=1)
-    nom = models.CharField(max_length=100, default="")
-    texte = models.TextField(default="")
-    b_fini = models.BooleanField(default=False)
+    eRef = djangoModels.ForeignKey("Evenement", default=0) 
+    delta_j =  djangoModels.PositiveIntegerField("nb jours de decalage", default=0)
+    type =  djangoModels.PositiveIntegerField()
+    date = djangoModels.DateTimeField("date de l'évenement")
+    date_creation = djangoModels.DateTimeField(default=timezone.now)
+    duree_j = djangoModels.PositiveIntegerField("nb jours d'activité", default=1)
+    nom = djangoModels.CharField(max_length=100, default="")
+    texte = djangoModels.TextField(default="")
+    b_fini = djangoModels.BooleanField(default=False)
 
     class Meta: 
         ordering = ['date']
@@ -456,22 +456,22 @@ class Evenement(models.Model):
              
 
 
-class Serie(models.Model):
+class Serie(djangoModels.Model):
     
     class Meta:
         verbose_name = "Série de plants d'un même légume installée sur une ou plusieurs implantations"
 
-    legume = models.ForeignKey(Legume)
-    dureeAvantRecolte_j = models.IntegerField("durée min avant début de récolte (jours)", default=0)
-    etalementRecolte_j = models.IntegerField("durée étalement possible de la récolte (jours)", default=0)
-    nb_rangs = models.PositiveIntegerField("nombre de rangs", default=0)
-    intra_rang_m = models.FloatField("distance dans le rang (m)", default=0)
-    bSerre = models.BooleanField("sous serre", default=False)
-    implantations = models.ManyToManyField(Implantation)
-    evenements = models.ManyToManyField(Evenement)
-    evt_debut = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
-    evt_fin = models.ForeignKey(Evenement, related_name="+", null=True, default=0)
-    remarque = models.TextField(default="")
+    legume = djangoModels.ForeignKey(Legume)
+    dureeAvantRecolte_j = djangoModels.IntegerField("durée min avant début de récolte (jours)", default=0)
+    etalementRecolte_j = djangoModels.IntegerField("durée étalement possible de la récolte (jours)", default=0)
+    nb_rangs = djangoModels.PositiveIntegerField("nombre de rangs", default=0)
+    intra_rang_m = djangoModels.FloatField("distance dans le rang (m)", default=0)
+    bSerre = djangoModels.BooleanField("sous serre", default=False)
+    implantations = djangoModels.ManyToManyField(Implantation)
+    evenements = djangoModels.ManyToManyField(Evenement)
+    evt_debut = djangoModels.ForeignKey(Evenement, related_name="+", null=True, default=0)
+    evt_fin = djangoModels.ForeignKey(Evenement, related_name="+", null=True, default=0)
+    remarque = djangoModels.TextField(default="")
     objects = SerieManager()
     
     def enPlaceEnDatedu(self, date):  
@@ -615,12 +615,11 @@ class Serie(models.Model):
                                                                                         MyTools.getDMYFromDate(self.evt_debut.date),
                                                                                         MyTools.getDMYFromDate(self.evt_fin.date))
     def descriptif(self):
-        """retourrne une desctriptioin complete de la série"""
+        """retourne une desctriptioin complete de la série"""
         l_rep = []
         l_rep.append(self.__str__())
-        for field_name in self._meta.get_all_field_names():
-            value = getattr(self, field_name, None)
-            l_rep.append("%s : %s"%(field_name, str(value)))
+#         for field in self._meta.get_fields():
+#             l_rep.append("%s : %s"%(field.name, str(field)))
         for evt in self.evenements.all():
             l_rep.append(evt.__str__())
         for impl in self.implantations.all():
@@ -635,11 +634,11 @@ class Serie(models.Model):
     def __unicode__(self):
         return(self.__str__())
 
-class Production(models.Model):
+class Production(djangoModels.Model):
     """Enregisrement des productions réelles"""
-    dateDebutSemaine = models.DateTimeField("Date de début de semaine")
-    qte = models.PositiveIntegerField("Quantité produite", default=0)
-    legume = models.ForeignKey(Legume)
+    dateDebutSemaine = djangoModels.DateTimeField("Date de début de semaine")
+    qte = djangoModels.PositiveIntegerField("Quantité produite", default=0)
+    legume = djangoModels.ForeignKey(Legume)
     
     class Meta: 
         ordering = ['dateDebutSemaine']
