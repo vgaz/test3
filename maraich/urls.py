@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^quiz_familles/', views.quizFamilles, name="quiz_familles"),
     url(r'^suivi_implantations/', views.suiviImplantations, name="suivi_implantations"),        
     url(r'^recolte/', views.recolte, name="recolte"),
+    url(r'^utilisation_planches/', views.utilisationPlanches, name="utilisation_planches"),
     url(r'^evenements/', views.evenementsPlanches, name="evenements"),
     url(r'^creation_planches/', views.creationPlanches, name="creation_planches"),    
     url(r'^admin/', admin.site.urls),

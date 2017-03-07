@@ -123,7 +123,6 @@ def serveRequest(request):
         except:
             ex_type, ex, tb = sys.exc_info()
             log.error (str(ex_type) + str(ex))
-#             traceback.print_tb(tb, file=log)
             s_json = '{"status":false,"msg":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")
@@ -163,7 +162,8 @@ def serveRequest(request):
             impl.save()
             s_json = '{"status":true}'
         except:
-            traceback.log.info_tb(sys.exc_info())            
+            ex_type, ex, tb = sys.exc_info()
+            log.error (str(ex_type) + str(ex))
             s_json = '{"status":false,"err":"%s %s"}'%(__name__, sys.exc_info()[1])
            
         return HttpResponse(s_json)
@@ -187,7 +187,12 @@ def serveRequest(request):
             assert id_serie != 0, "bad id_serie in sauve_evt"
             date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))
             log.info (date)
-            duree_j = int(request.POST.get("duree_j", 1))
+            duree_j = request.POST.get("duree_j","")
+            if not duree_j:
+                duree_j = 1
+            else:
+                duree_j = int(duree_j)
+                
             nom = request.POST.get("nom","")
 
             if e_id == 0:
@@ -210,7 +215,8 @@ def serveRequest(request):
                 
             s_json = '{"status":true}'
         except:
-            traceback.log.info_tb(sys.exc_info())            
+            ex_type, ex, tb = sys.exc_info()
+            log.error (str(ex_type) + str(ex))
             s_json = '{"status":false,"err":"%s %s"}'%(__name__, sys.exc_info()[1])
            
         return HttpResponse(s_json)
@@ -218,7 +224,7 @@ def serveRequest(request):
     elif cde == "supprime_evt":
         try:
             evt = Evenement.objects.get(id=int(request.POST.get("id", 0)))
-            log.info("destruction de", evt)
+            log.info("destruction de %s", evt.__str__())
             evt.delete()
             s_json = '{"status":true}'
         except:

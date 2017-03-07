@@ -26,11 +26,12 @@
     color: black;
     text-align:center;
 }
+
 #editeSerie_evts
 {
     text-align:left;
-
 }
+
 #divEditeEvenement
 {
     display:none;
@@ -44,13 +45,11 @@
     position:fixed;
     top:20px;
     padding:10px;
-    draggable:"true";
     }
     
 #divDeplacementImplantation
     {
     display:none;
-    //position:fixed;
     top:20px;
     text-align:left;
     padding:10px;
@@ -67,7 +66,6 @@
 #date_du_jour
 {
     position:absolute;
-    width: 2px;
     background: white;
     border: 2px solid blue;   
 }
@@ -89,8 +87,7 @@
     background: red;
     position:absolute;
     height:15px; 
-    display:inline;    
-
+    display:inline;
 }
 
 .planche
@@ -103,6 +100,15 @@
     background:#F0FFF0;
 }
 
+#divInfoDate
+{
+    display:none; 
+    position:fixed;   
+    width: 100px;
+    height:100px; 
+    z-index:5;
+
+}
 
 </style>
 
@@ -121,6 +127,9 @@
 function    init()
     {
     o_nomTypeEvt = {{d_evtTypes|safe}}
+    draggingImpl = false
+    draggingEvt = false
+
 
     changelePas(0) // juste pour affichage 1 ere fois
 
@@ -148,7 +157,6 @@ function scrollIfNeeded(e)
     {
     scrollpx = 0
     myPosY = e.clientY
-    //document.getElementById("divInfoDebug").innerHTML = "X:"+myPosX + " Y:" + myPosY
     if  (myPosY < 50) // haut de l'ecran
         scrollpx = -30
     else if  (myPosY < 100) // haut de l'ecran
@@ -242,24 +250,7 @@ function sauveQteImplantation(obj)
     majListImps(id_serie)
 
     }
-
-function debutPatienter()
-    {
-    // on place au niveau du pointeur dans l'ecran
-    //e.clientX  e.clientY
-    // on allume le gif
-    hGif = document.getElementById("waiting")
-    hGif.style.display="block"
-    }
     
-function finPatienter()
-    {    
-    // on eteint le gif
-    hGif = document.getElementById("waiting")
-    hGif.style.display="none"
-    }
-    
-      
 function getSdateFromTdate(tdate)
     {
     t_date = tdate.split("T")[0].split("-")
@@ -415,7 +406,6 @@ function prepareAjouteSerie()
     hDiv.style.left = "50px"
     hDiv.style.top = "50px"
     hDiv.style.zIndex = 10
-    hDiv.style.draggable=true
     hDiv.style.position = "absolute"
     document.getElementById("editSerie_id_serie").value = 0
     document.getElementById("editSerie_id_serie").style.display="none"
@@ -438,8 +428,6 @@ function prepareEditeSerie(id_impl)
     document.getElementById("editSerie_titre").innerHTML = "Edition d'une série"
     hDiv = document.getElementById("divEditSerie")
     hDiv.style.display = "block"
-    hDiv.style.draggable=true
-
     hImpl = document.getElementById(id_impl)
     id_serie = hImpl.getAttribute("id_serie")
     document.getElementById("editSerie_id_serie").value = id_serie
@@ -447,6 +435,7 @@ function prepareEditeSerie(id_impl)
     document.getElementById("editSerie_nb_rangs").value = hImpl.getAttribute("nb_rangs")
     document.getElementById("editSerie_intra_rang_cm").value = hImpl.getAttribute("intra_rang_cm")
     document.getElementById("editSerie_quantite").value = hImpl.getAttribute("quantite_serie")
+    document.getElementById("editSerie_quantite").readOnly = true
     document.getElementById("editSerie_date_debut").value = hImpl.getAttribute("date_debut_f")
     document.getElementById("editSerie_duree_avant_recolte_j").value = hImpl.getAttribute("duree_avant_recolte_j")
     document.getElementById("editSerie_etalement_recolte_j").value = hImpl.getAttribute("etalement_recolte_j")   
@@ -492,32 +481,65 @@ function sauveSerie()
     }
     
 
-           
-function allowDrop(event) {
+function dragEvtStart(event) {
+    //event.stopPropagation()
+    draggingEvt = true
+    event.dataTransfer.setData("date_ori", event.target.getAttribute("date"))
+    document.getElementById("divInfoDate").style.display="block"
+}
+function dragEvt(event) {
+    //event.stopPropagation()
+    x = document.getElementById(event.target.id).offsetLeft
+    //offsetLeft
+    document.getElementById("divInfoDate").innerHTML = "X " + x 
+}
+
+function dragEvtStop(event) {
+    draggingEvt = false
+    document.getElementById("divInfoDate").style.display="none"
+}
+
+function dragImplStart(event) 
+    {
+    if(draggingEvt)
+        return
+    draggingImpl = true
+    event.dataTransfer.setData("id_implantation", event.target.id)
+    event.dataTransfer.setData("id_serieDeplacee", event.target.getAttribute("id_serie"))
+    event.dataTransfer.setData("id_planche_ori", event.target.getAttribute("id_planche"))
+    event.dataTransfer.setData("quantite_implantation", event.target.getAttribute("quantite_implantation"))
+    } 
+
+function dropImpl(event) 
+    {
+    if (draggingImpl == false)
+        return
+    draggingImpl = false
     event.preventDefault()
+    id_implantation = event.dataTransfer.getData("id_implantation")
+    id_serie = event.dataTransfer.getData("id_serieDeplacee")
+    id_plancheDest = event.target.id.split("__")[1]
+    quantite_implantation = event.dataTransfer.getData("quantite_implantation")
+    if (event.dataTransfer.getData("id_planche_ori") != id_plancheDest)
+        prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
+    }
+    
+function surlignePlanche(event)
+    {    
+    if (draggingImpl == false)
+        return
+    
+    event.preventDefault();
+    // chgt de couleur si atterissage possible suite à deplacement implantation
     if (event.target.className == "planche")
         event.target.style.background = "green"
-}
-
-function dragStart(event) {
-    event.dataTransfer.setData("id_serieDeplacee", event.target.id);
-    event.dataTransfer.setData("id_implantation",  document.getElementById(event.target.id).getAttribute("id"))
-    event.dataTransfer.setData("quantite_implantation", document.getElementById(event.target.id).getAttribute("quantite_implantation"))
-}
-
-function drop(event) {
-    event.preventDefault();
-    id_serie = event.dataTransfer.getData("id_serieDeplacee")
-    id_implantation = event.dataTransfer.getData("id_implantation");
-    quantite_implantation = event.dataTransfer.getData("quantite_implantation");
-    id_plancheDest = event.target.id.split("__")[1]
-    prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
     }
 
-function unfocus(event)
+function unfocusPlanche(event)
     {
-    if ( event.target.className == "planche" )
-        event.target.style.background='white'
+    event.preventDefault();
+    if (event.target.className == "planche" )
+        event.target.style.background = 'white'
     }
 </script>
 
@@ -529,6 +551,7 @@ function unfocus(event)
 {{s_msg}}
 
 <p id="divInfoDebug"> </p>
+<p id="divInfoDate"> qqq</p>
 <div id="doc" class="BlueFrame" style="display:none" onclick="this.style.display='none';return false">{{doc}}</div>
 
 <form action="" method="POST" accept-charset="utf-8">
@@ -563,9 +586,9 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
 
     <div    class="planche"
             id="pl__{{planche.id}}"
-            ondragover="allowDrop(event)"
-            ondragleave="unfocus(event)"
-            ondrop="drop(event)">
+            ondragover="surlignePlanche(event);return false"
+            ondragleave="unfocusPlanche(event);return false"
+            ondrop="dropImpl(event)">
         
         <div class="barre_du_jour"> </div>  
         <div class="divTitrePlanche">{{planche}}</div>
@@ -576,10 +599,11 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
 
         <div class="divImplantation"    id="{{impl.id}}"
                                         id_legume="{{impl.serie.legume.id}}" 
+                                        id_planche="{{impl.planche.id}}"
+                                        id_serie="{{impl.serie.id}}"
                                         couleur="{{impl.serie.legume.espece.couleur}}" 
                                         quantite_implantation="{{impl.quantite}}"
                                         surface_implantation="{{impl.surface_m2}}"
-                                        id_serie="{{impl.serie.id}}"
                                         b_serre = "{{planche.bSerre}}"
                                         quantite_serie="{{impl.serie.quantiteTotale}}"
                                         s_liste_planches = "{{impl.serie.s_listeNomsPlanches}}"
@@ -591,16 +615,29 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
                                         date_fin_f="{{impl.serie.evt_fin.date|date:'d/m/Y'}}"
                                         nb_rangs="{{impl.serie.nb_rangs}}" 
                                         intra_rang_cm="{{impl.serie.intraRang_cm}}"
-                                        draggable="true" ondragstart="dragStart(event)" 
+                                        draggable="true" 
+                                        ondragstart="dragImplStart(event)" 
                                         title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.quantite}}/{{impl.serie.quantiteTotale}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}"
-                                    >
+                                        >
             <div class="divTitreImplantation">
             Imp {{impl.id}} - S {{impl.serie.id}}. {{impl.surface_m2}}m2. {{impl.serie.legume.nom}} x {{impl.quantite}} / {{impl.serie.quantiteTotale}}
             <img src='{% static 'images/editor.png'%}' title='Editer la série' onclick="prepareEditeSerie({{impl.id}});return(false)">
             </div>
             {% for evt in impl.serie.evenements.all%}
-                <div class='evt' date="{{evt.date|date:'Y-m-d'}}" duree_j="{{evt.duree_j}}" nom="{{evt.nom}}" 
-                        texte ="{{evt.texte}}" title="{{evt.nom}} le {{evt.date|date:'d/m/Y'}}" > </div>            
+                <div class='evt' 
+                        id="evt__{{evt.id}}"
+                        id_evt="{{evt.id}}" 
+                        date="{{evt.date|date:'Y-m-d'}}" 
+                        duree_j="{{evt.duree_j}}" 
+                        nom="{{evt.nom}}" 
+                        texte ="{{evt.texte}}" 
+                        title="{{evt.nom}} le {{evt.date|date:'d/m/Y'}}"
+                        draggable="true"
+                        ondragstart="dragEvtStart(event)"
+                        ondrag="dragEvt(event)"
+                        ondragend="dragEvtStop(event)"
+                        > 
+                        </div>            
             {% endfor %}
         </div>
         {% endfor %}
@@ -609,7 +646,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
 
 </div>
 
-<div id="divEditSerie" draggable="true" class="BlueFrame" >
+<div id="divEditSerie" class="BlueFrame" >
 
 	<h2 id="editSerie_titre"> </h2>
 	<p id="editSerie_id_serie" value=""> </p>
@@ -648,7 +685,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
         <input type="hidden" id="edit_evt_id" value=""/>
         <tr><td>Nom : <input type="text" value="" id="edit_evt_nom"/></td></tr>
         <tr><td>Date (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
-        <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/></td></tr>
+        <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/> 1 par défaut si vide</td></tr>
         <tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditeEvenement').style.display = 'none'" />
         <input type="button" value="Sauver" onclick="sauveEvenement();return false;" /></td></tr>	            
         </table>
@@ -658,7 +695,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
 	
 	
 	
-<div id="divDeplacementImplantation" draggable="true">
+<div id="divDeplacementImplantation" >
     <h3>Déplacement de l'implantation <input id="deplacement_id_implantation" value="" type="text" readonly style="width: 30px;display:inline" />
     série <input id="deplacement_id_serie" value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" />
      <br/>

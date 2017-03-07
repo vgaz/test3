@@ -5,12 +5,14 @@ from maraich import serveRequest, views, constant
 
 from maraich.models import *
 
-from UnitTests import testU_Series
+from UnitTests import testU_Series, testU_ProdSemaine
 
 class Command(BaseCommand):
     help = "test divers"
 
     def handle(self, *args, **options):
+        testU_ProdSemaine.testU_ProdSemaine()
+        
         leg = Legume.objects.get(id=10)
         testU_Series.testU_sauveSerie()
         

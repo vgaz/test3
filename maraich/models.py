@@ -398,19 +398,6 @@ class SerieManager(djangoModels.Manager):
         return l_series
 
 
-    def engageeSurPeriode(self, date_debut, date_fin, planche=None):
-        """Filtrage des séries présentes, au moins partiellement, dans un encadrement de dates
-        on ne renvoie que les implantations de cette planche"""
-        if planche:
-            l_series = Serie.objects.filter(implantations__planche_id = planche.id)
-        else:
-            l_series = Serie.objects.all()
-            
-        l_series = l_series.distinct() ## évite les séries reprises plusieurs fois car présentes sur plusieurs planches  
-        l_series = l_series.exclude(evt_debut__date__gt = date_fin)
-        l_series = l_series.exclude(evt_debut__date__lt = date_debut)
-        return l_series
-
 
         
 class Evenement(djangoModels.Model):

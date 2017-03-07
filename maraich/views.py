@@ -17,7 +17,7 @@ from maraich.models import *
 from maraich.forms import PlancheForm
 
 def donnePeriodeVue(reqPost):
-    
+
     date_aujourdhui = datetime.datetime.now()
     periode = reqPost.get("periode","mois")
     if periode == "specifique":
@@ -29,7 +29,6 @@ def donnePeriodeVue(reqPost):
         date_debut_vue = date_premierJour
         date_fin_vue = date_premierJour + delta
     elif periode == "mois":
-        print ("mois", str(date_aujourdhui.month), " year", date_aujourdhui.year)
         date_premierJour = MyTools.getDateFrom_d_m_y("1/%s/%s"%(date_aujourdhui.month, date_aujourdhui.year))
         delta = datetime.timedelta(days=30)
         date_debut_vue = date_premierJour
@@ -40,7 +39,22 @@ def donnePeriodeVue(reqPost):
         date_fin_vue = date_debut_vue + delta
     else:
         assert False, "pas de periode trouvee"
-    return(periode, date_debut_vue, date_fin_vue)
+        
+    decalage_j = reqPost.get("decalage_j","")
+    if not decalage_j:
+        decalage_j = 10
+    else:
+        decalage_j = int(decalage_j)
+    delta = datetime.timedelta(days = decalage_j)
+    if reqPost.get("direction", "") == "avance":
+        date_debut_vue += delta 
+        date_fin_vue += delta
+        
+    if reqPost.get("direction", "") == "recul":
+        date_debut_vue -= delta 
+        date_fin_vue -= delta   
+          
+    return(periode, date_debut_vue, date_fin_vue, decalage_j)
 
 #################################################
 
@@ -105,40 +119,8 @@ def suiviImplantations(request):
         print(request.POST)
         s_msg = ""
 
-        periode, date_debut_vue, date_fin_vue = donnePeriodeVue(request.POST) 
+        periode, date_debut_vue, date_fin_vue, decalage_j = donnePeriodeVue(request.POST) 
           
-#         periode = request.POST.get("periode","annee")
-#         if periode == "specifique":
-#             date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
-#             date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", ""))
-#         elif periode == "annee":
-#             date_premierJour = MyTools.getDateFrom_d_m_y("1/1/%s"%date_aujourdhui.year)
-#             delta = datetime.timedelta(days=365)
-#             date_debut_vue = date_premierJour
-#             date_fin_vue = date_premierJour + delta
-#         elif periode == "mois":
-#             print ("mois", str(date_aujourdhui.month), " year", date_aujourdhui.year)
-#             date_premierJour = MyTools.getDateFrom_d_m_y("1/%s/%s"%(date_aujourdhui.month, date_aujourdhui.year))
-#             delta = datetime.timedelta(days=30)
-#             date_debut_vue = date_premierJour
-#             date_fin_vue = date_premierJour + delta
-#         elif periode == "semaine":
-#             delta = datetime.timedelta(days=6)
-#             date_debut_vue =  date_aujourdhui - datetime.timedelta(days=date_aujourdhui.weekday())
-#             date_fin_vue = date_debut_vue + delta
-#         else:
-#             assert False, "pas de periode trouvee"
-        
-        
-        decalage_j = int(request.POST.get("decalage_j", 10))
-        delta = datetime.timedelta(days = decalage_j)
-        if request.POST.get("direction", "") == "avance":
-            date_debut_vue += delta 
-            date_fin_vue += delta
-            
-        if request.POST.get("direction", "") == "recul":
-            date_debut_vue -= delta 
-            date_fin_vue -= delta
         
         
         if not request.POST.get("periode",""):
@@ -181,6 +163,9 @@ def suiviImplantations(request):
                     "appVersion": constant.APP_VERSION,
                     "appName": constant.APP_NAME,
                     "periode":periode,
+                    "date_debut_vue": date_debut_vue,
+                    "date_fin_vue": date_fin_vue,
+                    "decalage_j": decalage_j,
                     "selection_serres":bSerres,
                     "selection_champs":bChamps,
                     "s_filtre_planches":s_filtre_planches,
@@ -188,10 +173,7 @@ def suiviImplantations(request):
                     "d_evtTypes": Evenement.D_NOM_TYPES,
                     "codeEvtDivers":Evenement.TYPE_DIVERS,
                     "l_legumes": Legume.objects.all(),
-                    "date_debut_vue": date_debut_vue,
-                    "date_fin_vue": date_fin_vue,
                     "date_du_jour": date_aujourdhui,
-                    "decalage_j": decalage_j,
                     "s_msg":s_msg,
                     "doc":constant.DOC_CHRONOVIEW
                   })
@@ -408,7 +390,7 @@ def recolte(request):
         s_info = ""
         bDetailVar = request.POST.get("detail_variete", "") != ""
         ## récup de la fenetre de temps
-        periode, date_debut_vue, date_fin_vue = donnePeriodeVue(request.POST) 
+        periode, date_debut_vue, date_fin_vue, decalage_j = donnePeriodeVue(request.POST) 
         date_debut_sem_vue = date_debut_vue - datetime.timedelta(days=date_debut_vue.weekday()) 
         date_fin_sem_vue = date_fin_vue + datetime.timedelta(days = 6 - date_fin_vue.weekday()) 
     
@@ -454,7 +436,6 @@ def recolte(request):
                     couleur = leg.espece.couleur
                 
                 try : 
-                    print(sem.date_debut)
                     prodReelle = Production.objects.get(legume_id=leg.id, dateDebutSemaine = sem.date_debut).qte
                 except:
                     prodReelle = 0
@@ -475,6 +456,7 @@ def recolte(request):
                     {
                     "appVersion":constant.APP_VERSION,
                     "periode":periode,
+                    "decalage_j":decalage_j,
                     "date_debut_vue": date_debut_vue,
                     "date_fin_vue": date_fin_vue,
                     "l_semaines":l_semaines,
@@ -482,11 +464,67 @@ def recolte(request):
                     "l_especes" : Espece.objects.all(),
                     "bDetailVar":bDetailVar,
                     "nbPanniers":nbPanniers,
-                    "info":"s_info"
+                    "info":s_info
                     })
     
 #################################################
 
+def utilisationPlanches(request):
+    """affiche les surfaces occupées par planche"""
+    try:
+        s_info = ""
+        ## récup de la fenetre de temps
+        periode, date_debut_vue, date_fin_vue, decalage_j = donnePeriodeVue(request.POST)  
+    
+        ## création de la liste des semaines à examiner    
+        # on recadre sur le lundi pour démarrer en debut de semaine
+        l_semaines = []
+        date_debut_sem = date_debut_vue - datetime.timedelta(days=date_debut_vue.weekday())
+#         date_fin_semaines = date_fin_vue + datetime.timedelta(days = 6 - date_fin_vue.weekday()) 
+        while True:
+            date_fin_sem = date_debut_sem + datetime.timedelta(days=6)
+            sem = MyTools.MyEmptyObj()
+            sem.date_debut_iso = date_debut_sem.isocalendar()
+            sem.date_debut = date_debut_sem
+            sem.date_fin = date_fin_sem
+            l_semaines.append(sem)
+            if date_fin_sem > date_fin_vue: 
+                break
+            date_debut_sem = date_fin_sem + datetime.timedelta(days=1)
+    
+        ## on retire les planches virtuelles
+        l_planches = Planche.objects.exclude(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP, constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
+            
+        for pl in l_planches:        
+            ## Pour chaque semaine étudiée, on calcule la surface
+            pl.l_infoSem = []
+            for sem in l_semaines:
+                l_series = Serie.objects.activesSurPeriode(sem.date_debut, sem.date_fin, pl)
+                surface_occ_m2 = 0
+                ## ajout de l'implation spécifique à cette planche
+                for serie in l_series:
+                    surface_occ_m2 += serie.implantations.get(planche_id=pl.id).surface_m2()
+                ratioLibre = int(100 - surface_occ_m2*100/pl.surface_m2())
+                pl.l_infoSem.append((sem.date_debut, surface_occ_m2, ratioLibre))
+
+    except:
+        log.error(s_info)
+        s_info += str(sys.exc_info()[1])
+        
+    return render(request,'maraich/utilisation_planches.html',
+                    {
+                    "appVersion":constant.APP_VERSION,
+                    "periode":periode,
+                    "decalage_j":decalage_j,
+                    "date_debut_vue": date_debut_vue,
+                    "date_fin_vue": date_fin_vue,
+                    "l_semaines":l_semaines,
+                    "l_planches":l_planches,
+                    "info":s_info
+                    })
+    
+
+#########################################################
 def tab_legumes(request):
     s_info = ""
     try:

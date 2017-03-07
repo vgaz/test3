@@ -1343,3 +1343,748 @@ Variété indéfinie pour persil
 [2017-03-03 18:30:58,328 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
 [2017-03-03 18:30:58,329 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'date_debut': ['15/05/2017'], 'duree_avant_recolte_j': ['180'], 'cde': ['sauve_serie'], 'id_serie': ['7'], 'intra_rang_cm': ['10'], 'nb_rangs': ['4'], 'b_serre': ['on'], 'id_legume': ['8'], 'etalement_recolte_j': ['60']}>
 [2017-03-03 18:30:59,093 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s7), betterave rouge rouge cylindra, 2222 pieds, 2468 graines, 222 m, 55 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 10/01/2018
+[2017-03-03 20:30:28,390 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-03 20:30:28,415 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['71'], 'id_implantation': ['59'], 'nb_rangs': ['3'], 'intra_rang_cm': ['30'], 'simulation': ['true'], 'id_planche_dest': ['2'], 'id_serie': ['59']}>
+[2017-03-03 20:31:04,474 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-03 20:31:04,475 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['84'], 'id_implantation': ['3'], 'nb_rangs': ['2'], 'intra_rang_cm': ['50'], 'simulation': ['true'], 'id_planche_dest': ['undefined'], 'id_serie': ['3']}>
+[2017-03-03 20:31:04,499 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-03-03 20:38:27,308 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-03 20:38:27,308 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['84'], 'id_implantation': ['3'], 'nb_rangs': ['2'], 'intra_rang_cm': ['50'], 'simulation': ['true'], 'id_planche_dest': ['21'], 'id_serie': ['3']}>
+[2017-03-03 20:38:28,421 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-03 20:38:28,421 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['84'], 'id_implantation': ['3'], 'nb_rangs': ['2'], 'intra_rang_cm': ['50'], 'simulation': ['false'], 'id_planche_dest': ['21'], 'id_serie': ['3']}>
+[2017-03-03 20:41:42,072 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-03-03 20:41:42,072 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['95']}>
+[2017-03-03 20:41:42,224 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 95, "fields": {"planche": 2, "quantite": 56}}]}
+[2017-03-03 20:41:42,258 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-03 20:41:42,259 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['95']}>
+[2017-03-03 20:41:42,271 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 350, "fields": {"eRef": 347, "delta_j": -21, "type": 4, "date": "2017-04-24T00:00:00", "date_creation": "2017-03-02T15:42:49.953", "duree_j": 1, "nom": "semi motte poivron corno di toro rouge", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 347, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-05-15T00:00:00", "date_creation": "2017-03-02T15:42:48.884", "duree_j": 1, "nom": "d\u00e9but poivron corno di toro rouge", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 349, "fields": {"eRef": 347, "delta_j": 90, "type": 5, "date": "2017-08-13T00:00:00", "date_creation": "2017-03-02T15:42:49.528", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte poivron corno di toro rouge", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 348, "fields": {"eRef": 347, "delta_j": 165, "type": 2, "date": "2017-10-27T00:00:00", "date_creation": "2017-03-02T15:42:49.215", "duree_j": 1, "nom": "fin poivron corno di toro rouge", "texte": "", "b_fini": false}}]}
+[2017-03-03 20:42:05,788 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-03 20:42:05,788 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'duree_j': ['1'], 'id': ['0'], 'date': ['27/9'], 'nom': ['th'], 'id_serie': ['95']}>
+[2017-03-03 20:42:13,758 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-03 20:42:13,759 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'duree_j': ['1'], 'id': ['0'], 'date': ['27/9'], 'nom': ['th'], 'id_serie': ['95']}>
+[2017-03-03 20:42:26,127 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-03-03 20:42:26,127 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['99']}>
+[2017-03-03 20:42:26,132 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 99, "fields": {"planche": 2, "quantite": 444}}]}
+[2017-03-03 20:42:26,175 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-03 20:42:26,175 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['99']}>
+[2017-03-03 20:42:26,183 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 361, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-02-15T00:00:00", "date_creation": "2017-03-02T15:43:01.273", "duree_j": 1, "nom": "d\u00e9but pomme de terre primeur charlotte", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 363, "fields": {"eRef": 361, "delta_j": 110, "type": 5, "date": "2017-06-05T00:00:00", "date_creation": "2017-03-02T15:43:02.028", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte pomme de terre primeur charlotte", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 362, "fields": {"eRef": 361, "delta_j": 140, "type": 2, "date": "2017-07-05T00:00:00", "date_creation": "2017-03-02T15:43:01.659", "duree_j": 1, "nom": "fin pomme de terre primeur charlotte", "texte": "", "b_fini": false}}]}
+[2017-03-03 20:42:42,816 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-03-03 20:42:42,817 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_serie'], 'duree_avant_recolte_j': ['110'], 'date_debut': ['15/02/2017'], 'b_serre': ['on'], 'id_legume': ['79'], 'intra_rang_cm': ['20'], 'nb_rangs': ['4'], 'etalement_recolte_j': ['30'], 'id_serie': ['99']}>
+[2017-03-03 20:42:43,624 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s99), pomme de terre primeur charlotte, 444 pieds, 493 graines, 88 m, 22 m2 de planche(s) [Virtuelle sous abris], du 15/02/2017 au 05/07/2017
+[2017-03-03 20:42:50,097 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-03-03 20:42:50,098 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['99']}>
+[2017-03-03 20:42:50,104 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 99, "fields": {"planche": 2, "quantite": 444}}]}
+[2017-03-03 20:42:50,170 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-03 20:42:50,171 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['99']}>
+[2017-03-03 20:42:50,178 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 361, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-02-15T00:00:00", "date_creation": "2017-03-02T15:43:01.273", "duree_j": 1, "nom": "d\u00e9but pomme de terre primeur charlotte", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 363, "fields": {"eRef": 361, "delta_j": 110, "type": 5, "date": "2017-06-05T00:00:00", "date_creation": "2017-03-02T15:43:02.028", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte pomme de terre primeur charlotte", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 362, "fields": {"eRef": 361, "delta_j": 140, "type": 2, "date": "2017-07-05T00:00:00", "date_creation": "2017-03-02T15:43:01.659", "duree_j": 1, "nom": "fin pomme de terre primeur charlotte", "texte": "", "b_fini": false}}]}
+[2017-03-03 20:46:40,886 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-03-03 20:46:40,886 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['99']}>
+[2017-03-03 20:46:40,889 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 99, "fields": {"planche": 2, "quantite": 444}}]}
+[2017-03-03 20:46:40,977 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-03 20:46:40,977 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['99']}>
+[2017-03-03 20:46:40,984 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 361, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-02-15T00:00:00", "date_creation": "2017-03-02T15:43:01.273", "duree_j": 1, "nom": "d\u00e9but pomme de terre primeur charlotte", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 363, "fields": {"eRef": 361, "delta_j": 110, "type": 5, "date": "2017-06-05T00:00:00", "date_creation": "2017-03-02T15:43:02.028", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte pomme de terre primeur charlotte", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 362, "fields": {"eRef": 361, "delta_j": 140, "type": 2, "date": "2017-07-05T00:00:00", "date_creation": "2017-03-02T15:43:01.659", "duree_j": 1, "nom": "fin pomme de terre primeur charlotte", "texte": "", "b_fini": false}}]}
+[2017-03-03 20:46:55,336 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_qte_impantation
+[2017-03-03 20:46:55,337 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_qte_impantation'], 'qte': ['444'], 'id': ['99']}>
+[2017-03-03 20:52:39,898 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-03-03 20:52:39,899 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['99']}>
+[2017-03-03 20:52:39,904 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 99, "fields": {"planche": 2, "quantite": 444}}]}
+[2017-03-03 20:52:39,974 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-03 20:52:39,974 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['99']}>
+[2017-03-03 20:52:39,979 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 361, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-02-15T00:00:00", "date_creation": "2017-03-02T15:43:01.273", "duree_j": 1, "nom": "d\u00e9but pomme de terre primeur charlotte", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 363, "fields": {"eRef": 361, "delta_j": 110, "type": 5, "date": "2017-06-05T00:00:00", "date_creation": "2017-03-02T15:43:02.028", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte pomme de terre primeur charlotte", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 362, "fields": {"eRef": 361, "delta_j": 140, "type": 2, "date": "2017-07-05T00:00:00", "date_creation": "2017-03-02T15:43:01.659", "duree_j": 1, "nom": "fin pomme de terre primeur charlotte", "texte": "", "b_fini": false}}]}
+[2017-03-03 20:52:47,430 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-03-03 20:52:47,430 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_serie'], 'duree_avant_recolte_j': ['90'], 'date_debut': ['15/02/2017'], 'b_serre': ['on'], 'id_legume': ['79'], 'intra_rang_cm': ['20'], 'nb_rangs': ['4'], 'etalement_recolte_j': ['30'], 'id_serie': ['99']}>
+[2017-03-03 20:52:48,136 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s99), pomme de terre primeur charlotte, 444 pieds, 493 graines, 88 m, 22 m2 de planche(s) [Virtuelle sous abris], du 15/02/2017 au 15/06/2017
+[2017-03-03 20:53:14,041 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-03-03 20:53:14,041 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['100']}>
+[2017-03-03 20:53:14,047 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 100, "fields": {"planche": 2, "quantite": 444}}]}
+[2017-03-03 20:53:14,137 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-03 20:53:14,138 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['100']}>
+[2017-03-03 20:53:14,144 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 364, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-02-08T00:00:00", "date_creation": "2017-03-02T15:43:03.905", "duree_j": 1, "nom": "d\u00e9but pomme de terre primeur d\u00e9sir\u00e9e", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 366, "fields": {"eRef": 364, "delta_j": 120, "type": 5, "date": "2017-06-08T00:00:00", "date_creation": "2017-03-02T15:43:04.604", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte pomme de terre primeur d\u00e9sir\u00e9e", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 365, "fields": {"eRef": 364, "delta_j": 150, "type": 2, "date": "2017-07-08T00:00:00", "date_creation": "2017-03-02T15:43:04.224", "duree_j": 1, "nom": "fin pomme de terre primeur d\u00e9sir\u00e9e", "texte": "", "b_fini": false}}]}
+[2017-03-03 20:53:20,139 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-03-03 20:53:20,140 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_serie'], 'duree_avant_recolte_j': ['90'], 'date_debut': ['08/02/2017'], 'b_serre': ['on'], 'id_legume': ['80'], 'intra_rang_cm': ['20'], 'nb_rangs': ['4'], 'etalement_recolte_j': ['30'], 'id_serie': ['100']}>
+[2017-03-03 20:53:21,044 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s100), pomme de terre primeur désirée, 444 pieds, 493 graines, 88 m, 22 m2 de planche(s) [Virtuelle sous abris], du 08/02/2017 au 08/06/2017
+[2017-03-03 20:56:42,925 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-03-03 20:56:42,926 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'date_debut': ['20/05/2017'], 'id_serie': ['9'], 'cde': ['sauve_serie'], 'b_serre': ['on'], 'nb_rangs': ['1'], 'id_legume': ['10'], 'duree_avant_recolte_j': ['50'], 'etalement_recolte_j': ['21'], 'intra_rang_cm': ['50']}>
+[2017-03-03 20:56:43,847 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s9), brocoli calinaro, 107 pieds, 118 graines, 53 m, 53 m2 de planche(s) [Virtuelle plein champ], du 20/05/2017 au 30/07/2017
+[2017-03-03 21:01:45,834 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-03-03 21:01:45,835 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['99']}>
+[2017-03-03 21:01:45,840 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 99, "fields": {"planche": 2, "quantite": 444}}]}
+[2017-03-03 21:01:45,910 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-03 21:01:45,910 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['99']}>
+[2017-03-03 21:01:45,917 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 361, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-02-15T00:00:00", "date_creation": "2017-03-02T15:43:01.273", "duree_j": 1, "nom": "d\u00e9but pomme de terre primeur charlotte", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 363, "fields": {"eRef": 361, "delta_j": 90, "type": 5, "date": "2017-05-16T00:00:00", "date_creation": "2017-03-02T15:43:02.028", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte pomme de terre primeur charlotte", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 362, "fields": {"eRef": 361, "delta_j": 120, "type": 2, "date": "2017-06-15T00:00:00", "date_creation": "2017-03-02T15:43:01.659", "duree_j": 1, "nom": "fin pomme de terre primeur charlotte", "texte": "", "b_fini": false}}]}
+[2017-03-03 21:02:54,140 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-03-03 21:02:54,141 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_legume': ['10'], 'date_debut': ['20/05/2017'], 'b_serre': ['on'], 'intra_rang_cm': ['50'], 'id_serie': ['9'], 'cde': ['sauve_serie'], 'duree_avant_recolte_j': ['50'], 'etalement_recolte_j': ['21'], 'nb_rangs': ['1']}>
+[2017-03-03 21:02:55,211 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s9), brocoli calinaro, 107 pieds, 118 graines, 53 m, 53 m2 de planche(s) [Virtuelle plein champ], du 20/05/2017 au 30/07/2017
+[2017-03-04 20:19:07,495 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-04 20:19:07,518 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['333'], 'id_planche_dest': ['undefined'], 'simulation': ['true'], 'id_serie': ['54'], 'id_implantation': ['54'], 'intra_rang_cm': ['15'], 'nb_rangs': ['2']}>
+[2017-03-04 20:19:07,520 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-03-04 20:19:38,277 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-04 20:19:38,277 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['333'], 'id_planche_dest': ['undefined'], 'simulation': ['true'], 'id_serie': ['54'], 'id_implantation': ['54'], 'intra_rang_cm': ['15'], 'nb_rangs': ['2']}>
+[2017-03-04 20:19:38,279 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-03-04 20:20:02,947 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-04 20:20:02,947 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['47'], 'id_planche_dest': ['3'], 'simulation': ['true'], 'id_serie': ['20'], 'id_implantation': ['20'], 'intra_rang_cm': ['50'], 'nb_rangs': ['2']}>
+[2017-03-04 20:20:04,185 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-04 20:20:04,185 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['47'], 'id_planche_dest': ['3'], 'simulation': ['false'], 'id_serie': ['20'], 'id_implantation': ['20'], 'intra_rang_cm': ['50'], 'nb_rangs': ['2']}>
+[2017-03-04 20:20:15,735 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-04 20:20:15,735 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['47'], 'id_planche_dest': ['undefined'], 'simulation': ['true'], 'id_serie': ['20'], 'id_implantation': ['20'], 'intra_rang_cm': ['50'], 'nb_rangs': ['2']}>
+[2017-03-04 20:20:15,737 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-03-04 20:20:20,695 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-04 20:20:20,696 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['47'], 'id_planche_dest': ['undefined'], 'simulation': ['true'], 'id_serie': ['20'], 'id_implantation': ['20'], 'intra_rang_cm': ['50'], 'nb_rangs': ['2']}>
+[2017-03-04 20:20:20,699 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-03-04 20:21:32,230 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-04 20:21:32,230 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['47'], 'id_planche_dest': ['undefined'], 'simulation': ['true'], 'id_serie': ['20'], 'id_implantation': ['20'], 'intra_rang_cm': ['50'], 'nb_rangs': ['2']}>
+[2017-03-04 20:21:32,233 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-03-04 20:22:03,323 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-04 20:22:03,323 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['47'], 'id_planche_dest': ['undefined'], 'simulation': ['true'], 'id_serie': ['20'], 'id_implantation': ['20'], 'intra_rang_cm': ['50'], 'nb_rangs': ['2']}>
+[2017-03-04 20:22:03,325 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-03-04 20:25:39,761 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-04 20:25:39,761 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['47'], 'id_planche_dest': ['4'], 'simulation': ['true'], 'id_serie': ['20'], 'id_implantation': ['20'], 'intra_rang_cm': ['50'], 'nb_rangs': ['2']}>
+[2017-03-04 20:25:41,603 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-04 20:25:41,604 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'quantite': ['47'], 'id_planche_dest': ['4'], 'simulation': ['false'], 'id_serie': ['20'], 'id_implantation': ['20'], 'intra_rang_cm': ['50'], 'nb_rangs': ['2']}>
+[2017-03-05 11:10:19,137 MARAICH_INFO    ] updatedb       .creationPlanches: S_01 (45), 25 m x 1.2 m = 30 m2; sous serre
+[2017-03-05 11:10:19,349 MARAICH_INFO    ] updatedb       .creationPlanches: S_02 (46), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:19,496 MARAICH_INFO    ] updatedb       .creationPlanches: S_03 (47), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:19,630 MARAICH_INFO    ] updatedb       .creationPlanches: S_04 (48), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:19,764 MARAICH_INFO    ] updatedb       .creationPlanches: S_05 (49), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:19,899 MARAICH_INFO    ] updatedb       .creationPlanches: S_06 (50), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:20,044 MARAICH_INFO    ] updatedb       .creationPlanches: S_07 (51), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:20,178 MARAICH_INFO    ] updatedb       .creationPlanches: S_08 (52), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:20,312 MARAICH_INFO    ] updatedb       .creationPlanches: S_09 (53), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:20,447 MARAICH_INFO    ] updatedb       .creationPlanches: S_10 (54), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:20,581 MARAICH_INFO    ] updatedb       .creationPlanches: S_11 (55), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:20,749 MARAICH_INFO    ] updatedb       .creationPlanches: S_12 (56), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:20,894 MARAICH_INFO    ] updatedb       .creationPlanches: S_13 (57), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:21,039 MARAICH_INFO    ] updatedb       .creationPlanches: S_14 (58), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:21,185 MARAICH_INFO    ] updatedb       .creationPlanches: S_15 (59), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:21,332 MARAICH_INFO    ] updatedb       .creationPlanches: S_16 (60), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:21,466 MARAICH_INFO    ] updatedb       .creationPlanches: S_17 (61), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:21,589 MARAICH_INFO    ] updatedb       .creationPlanches: S_18 (62), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:21,723 MARAICH_INFO    ] updatedb       .creationPlanches: S_19 (63), 30 m x 1.2 m = 36 m2; sous serre
+[2017-03-05 11:10:21,857 MARAICH_INFO    ] updatedb       .creationPlanches: C_01 (64), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:21,991 MARAICH_INFO    ] updatedb       .creationPlanches: C_02 (65), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:22,126 MARAICH_INFO    ] updatedb       .creationPlanches: C_03 (66), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:22,271 MARAICH_INFO    ] updatedb       .creationPlanches: C_04 (67), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:22,416 MARAICH_INFO    ] updatedb       .creationPlanches: C_05 (68), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:22,562 MARAICH_INFO    ] updatedb       .creationPlanches: C_06 (69), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:22,707 MARAICH_INFO    ] updatedb       .creationPlanches: C_07 (70), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:22,852 MARAICH_INFO    ] updatedb       .creationPlanches: C_08 (71), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:22,987 MARAICH_INFO    ] updatedb       .creationPlanches: C_09 (72), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:23,111 MARAICH_INFO    ] updatedb       .creationPlanches: C_10 (73), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:23,245 MARAICH_INFO    ] updatedb       .creationPlanches: C_11 (74), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:23,380 MARAICH_INFO    ] updatedb       .creationPlanches: C_12 (75), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:23,514 MARAICH_INFO    ] updatedb       .creationPlanches: C_13 (76), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:23,626 MARAICH_INFO    ] updatedb       .creationPlanches: C_14 (77), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:23,771 MARAICH_INFO    ] updatedb       .creationPlanches: C_15 (78), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:23,916 MARAICH_INFO    ] updatedb       .creationPlanches: C_16 (79), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:24,062 MARAICH_INFO    ] updatedb       .creationPlanches: C_17 (80), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:24,207 MARAICH_INFO    ] updatedb       .creationPlanches: C_18 (81), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:24,353 MARAICH_INFO    ] updatedb       .creationPlanches: C_19 (82), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:24,498 MARAICH_INFO    ] updatedb       .creationPlanches: C_20 (83), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:24,632 MARAICH_INFO    ] updatedb       .creationPlanches: C_21 (84), 30 m x 1.2 m = 36 m2; plein champ
+[2017-03-05 11:10:24,643 MARAICH_INFO    ] updatedb       .handle: Ajout ail
+[2017-03-05 11:10:25,184 MARAICH_INFO    ] updatedb       .handle: Ajout artichaut
+[2017-03-05 11:10:25,743 MARAICH_INFO    ] updatedb       .handle: Ajout aubergine
+[2017-03-05 11:10:26,302 MARAICH_INFO    ] updatedb       .handle: Ajout betterave rouge
+[2017-03-05 11:10:26,884 MARAICH_INFO    ] updatedb       .handle: Ajout blette
+[2017-03-05 11:10:27,321 MARAICH_INFO    ] updatedb       .handle: Ajout brocoli
+[2017-03-05 11:10:27,902 MARAICH_INFO    ] updatedb       .handle: Ajout carotte de garde
+[2017-03-05 11:10:28,394 MARAICH_INFO    ] updatedb       .handle: Ajout carotte primeur
+[2017-03-05 11:10:28,821 MARAICH_INFO    ] updatedb       .handle: Ajout carotte saison
+[2017-03-05 11:10:29,279 MARAICH_INFO    ] updatedb       .handle: Ajout céleri branche
+[2017-03-05 11:10:29,726 MARAICH_INFO    ] updatedb       .handle: Ajout céleri rave
+[2017-03-05 11:10:30,106 MARAICH_INFO    ] updatedb       .handle: Ajout chou blanc
+[2017-03-05 11:10:30,532 MARAICH_INFO    ] updatedb       .handle: Ajout chou fleur
+[2017-03-05 11:10:30,990 MARAICH_INFO    ] updatedb       .handle: Ajout chou frisé
+[2017-03-05 11:10:31,347 MARAICH_INFO    ] updatedb       .handle: Ajout chou rave
+[2017-03-05 11:10:31,773 MARAICH_INFO    ] updatedb       .handle: Ajout chou rouge
+[2017-03-05 11:10:32,187 MARAICH_INFO    ] updatedb       .handle: Ajout chou rutabaga
+[2017-03-05 11:10:32,624 MARAICH_INFO    ] updatedb       .handle: Ajout chou vert
+[2017-03-05 11:10:33,025 MARAICH_INFO    ] updatedb       .handle: Ajout ciboule
+[2017-03-05 11:10:33,372 MARAICH_INFO    ] updatedb       .handle: Ajout concombre
+[2017-03-05 11:10:33,798 MARAICH_INFO    ] updatedb       .handle: Ajout courge
+[2017-03-05 11:10:34,448 MARAICH_INFO    ] updatedb       .handle: Ajout courgette
+[2017-03-05 11:10:34,875 MARAICH_INFO    ] updatedb       .handle: Ajout echalote
+[2017-03-05 11:10:35,278 MARAICH_INFO    ] updatedb       .handle: Ajout epinard
+[2017-03-05 11:10:35,714 MARAICH_INFO    ] updatedb       .handle: Ajout fenouil
+[2017-03-05 11:10:36,150 MARAICH_INFO    ] updatedb       .handle: Ajout fèves
+[2017-03-05 11:10:36,666 MARAICH_INFO    ] updatedb       .handle: Ajout haricot
+[2017-03-05 11:10:37,101 MARAICH_INFO    ] updatedb       .handle: Ajout laitue
+[2017-03-05 11:10:37,672 MARAICH_INFO    ] updatedb       .handle: Ajout mâche
+[2017-03-05 11:10:38,256 MARAICH_INFO    ] updatedb       .handle: Ajout melon
+[2017-03-05 11:10:38,681 MARAICH_INFO    ] updatedb       .handle: Ajout navet
+[2017-03-05 11:10:39,116 MARAICH_INFO    ] updatedb       .handle: Ajout oignon de printemps
+[2017-03-05 11:10:39,541 MARAICH_INFO    ] updatedb       .handle: Ajout oignon de garde
+[2017-03-05 11:10:39,968 MARAICH_INFO    ] updatedb       .handle: Ajout panais
+[2017-03-05 11:10:40,393 MARAICH_INFO    ] updatedb       .handle: Ajout persil
+[2017-03-05 11:10:40,829 MARAICH_INFO    ] updatedb       .handle: Ajout poireau
+[2017-03-05 11:10:41,254 MARAICH_INFO    ] updatedb       .handle: Ajout pois
+[2017-03-05 11:10:41,657 MARAICH_INFO    ] updatedb       .handle: Ajout poivron
+[2017-03-05 11:10:42,094 MARAICH_INFO    ] updatedb       .handle: Ajout pomme de terre de garde
+[2017-03-05 11:10:42,541 MARAICH_INFO    ] updatedb       .handle: Ajout pomme de terre primeur
+[2017-03-05 11:10:42,944 MARAICH_INFO    ] updatedb       .handle: Ajout pourpier
+[2017-03-05 11:10:43,481 MARAICH_INFO    ] updatedb       .handle: Ajout radis noir
+[2017-03-05 11:10:43,918 MARAICH_INFO    ] updatedb       .handle: Ajout radis rose
+[2017-03-05 11:10:44,377 MARAICH_INFO    ] updatedb       .handle: Ajout roquette
+[2017-03-05 11:10:44,790 MARAICH_INFO    ] updatedb       .handle: Ajout tomate
+[2017-03-05 11:10:45,256 MARAICH_INFO    ] updatedb       .handle: Ajout variété blanc messidor
+[2017-03-05 11:10:45,721 MARAICH_INFO    ] updatedb       .handle: Ajout légume ail blanc messidor
+[2017-03-05 11:10:47,503 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 119, 421 pieds (21 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:10:47,508 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose flavor bio
+[2017-03-05 11:10:47,903 MARAICH_INFO    ] updatedb       .handle: Ajout légume ail rose flavor bio
+[2017-03-05 11:10:49,640 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 120, 421 pieds (21 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:10:49,644 MARAICH_INFO    ] updatedb       .handle: Ajout variété imperial star
+[2017-03-05 11:10:50,085 MARAICH_INFO    ] updatedb       .handle: Ajout légume artichaut imperial star
+[2017-03-05 11:10:50,224 MARAICH_INFO    ] updatedb       .handle: Ajout variété impérial black beauty
+[2017-03-05 11:10:50,657 MARAICH_INFO    ] updatedb       .handle: Ajout légume aubergine impérial black beauty
+[2017-03-05 11:10:52,719 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 121, 84 pieds (21 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:10:52,720 MARAICH_INFO    ] updatedb       .handle: Ajout variété ronde de valence
+[2017-03-05 11:10:53,097 MARAICH_INFO    ] updatedb       .handle: Ajout légume aubergine ronde de valence
+[2017-03-05 11:10:55,025 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 122, 84 pieds (21 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:10:55,029 MARAICH_INFO    ] updatedb       .handle: Ajout variété plate d'egypte
+[2017-03-05 11:10:55,492 MARAICH_INFO    ] updatedb       .handle: Ajout légume betterave rouge plate d'egypte
+[2017-03-05 11:10:57,173 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 123, 2222 pieds (55 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:10:57,175 MARAICH_INFO    ] updatedb       .handle: Ajout variété crapaudine
+[2017-03-05 11:10:57,652 MARAICH_INFO    ] updatedb       .handle: Ajout légume betterave rouge crapaudine
+[2017-03-05 11:10:59,386 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 124, 2222 pieds (55 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:10:59,387 MARAICH_INFO    ] updatedb       .handle: Ajout variété rouge cylindra
+[2017-03-05 11:10:59,824 MARAICH_INFO    ] updatedb       .handle: Ajout légume betterave rouge rouge cylindra
+[2017-03-05 11:11:01,706 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 125, 2222 pieds (55 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:01,708 MARAICH_INFO    ] updatedb       .handle: Ajout variété verte à carde blanche 2
+[2017-03-05 11:11:02,184 MARAICH_INFO    ] updatedb       .handle: Ajout légume blette verte à carde blanche 2
+[2017-03-05 11:11:04,256 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 126, 250 pieds (50 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:04,259 MARAICH_INFO    ] updatedb       .handle: Ajout variété calinaro
+[2017-03-05 11:11:04,646 MARAICH_INFO    ] updatedb       .handle: Ajout légume brocoli calinaro
+[2017-03-05 11:11:06,639 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 127, 107 pieds (53 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:06,643 MARAICH_INFO    ] updatedb       .handle: Ajout variété robila
+[2017-03-05 11:11:07,053 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte de garde robila
+[2017-03-05 11:11:08,667 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 128, 5925 pieds (49 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:08,668 MARAICH_INFO    ] updatedb       .handle: Ajout variété gniff
+[2017-03-05 11:11:09,156 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte de garde gniff
+[2017-03-05 11:11:10,871 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 129, 5925 pieds (49 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:10,875 MARAICH_INFO    ] updatedb       .handle: Ajout variété nantaise 2
+[2017-03-05 11:11:11,271 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte de garde nantaise 2
+[2017-03-05 11:11:12,974 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 130, 5925 pieds (49 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:12,975 MARAICH_INFO    ] updatedb       .handle: Ajout variété de carentan
+[2017-03-05 11:11:13,330 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte primeur de carentan
+[2017-03-05 11:11:14,866 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 131, 6802 pieds (34 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:11:14,870 MARAICH_INFO    ] updatedb       .handle: Ajout variété oxhella
+[2017-03-05 11:11:15,255 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte primeur oxhella
+[2017-03-05 11:11:16,947 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 132, 6802 pieds (34 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:11:16,948 MARAICH_INFO    ] updatedb       .handle: Ajout variété jaune du doubs
+[2017-03-05 11:11:17,459 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte saison jaune du doubs
+[2017-03-05 11:11:19,225 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 133, 1451 pieds (12 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:19,226 MARAICH_INFO    ] updatedb       .handle: Ajout variété de la halle
+[2017-03-05 11:11:19,609 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte saison de la halle
+[2017-03-05 11:11:21,390 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 134, 1451 pieds (12 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:21,394 MARAICH_INFO    ] updatedb       .handle: Ajout variété colmar à coeur rouge
+[2017-03-05 11:11:21,834 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte saison colmar à coeur rouge
+[2017-03-05 11:11:23,627 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 135, 1451 pieds (12 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:23,631 MARAICH_INFO    ] updatedb       .handle: Ajout variété à côtes violettes
+[2017-03-05 11:11:24,016 MARAICH_INFO    ] updatedb       .handle: Ajout légume céleri branche à côtes violettes
+[2017-03-05 11:11:25,921 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 136, 25 pieds (5 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:25,923 MARAICH_INFO    ] updatedb       .handle: Ajout variété monarch
+[2017-03-05 11:11:26,377 MARAICH_INFO    ] updatedb       .handle: Ajout légume céleri rave monarch
+[2017-03-05 11:11:28,370 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 137, 197 pieds (19 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:28,372 MARAICH_INFO    ] updatedb       .handle: Ajout variété holsteiner platter
+[2017-03-05 11:11:28,817 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou blanc holsteiner platter
+[2017-03-05 11:11:30,866 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 138, 47 pieds (11 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:11:33,069 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 139, 47 pieds (11 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:33,073 MARAICH_INFO    ] updatedb       .handle: Ajout variété blanc2xx
+[2017-03-05 11:11:33,558 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou blanc blanc2xx
+[2017-03-05 11:11:35,563 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 140, 47 pieds (11 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:35,567 MARAICH_INFO    ] updatedb       .handle: Ajout variété cb1
+[2017-03-05 11:11:35,985 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou fleur cb1
+[2017-03-05 11:11:37,978 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 141, 105 pieds (73 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:37,980 MARAICH_INFO    ] updatedb       .handle: Ajout variété cb2
+[2017-03-05 11:11:38,526 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou fleur cb2
+[2017-03-05 11:11:40,598 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 142, 105 pieds (73 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:40,600 MARAICH_INFO    ] updatedb       .handle: Ajout variété gros des vertus
+[2017-03-05 11:11:41,065 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou frisé gros des vertus
+[2017-03-05 11:11:43,159 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 143, 35 pieds (8 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:43,163 MARAICH_INFO    ] updatedb       .handle: Ajout variété cf1
+[2017-03-05 11:11:43,648 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou frisé cf1
+[2017-03-05 11:11:43,787 MARAICH_INFO    ] updatedb       .handle: Ajout variété lanro
+[2017-03-05 11:11:44,197 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou rave lanro
+[2017-03-05 11:11:46,113 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 144, 104 pieds (13 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:46,117 MARAICH_INFO    ] updatedb       .handle: Ajout variété cabu rouge
+[2017-03-05 11:11:46,558 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou rouge cabu rouge
+[2017-03-05 11:11:48,541 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 145, 142 pieds (35 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:48,543 MARAICH_INFO    ] updatedb       .handle: Ajout variété héléonor
+[2017-03-05 11:11:49,007 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou rutabaga héléonor
+[2017-03-05 11:11:51,001 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 146, 69 pieds (10 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:51,003 MARAICH_INFO    ] updatedb       .handle: Ajout variété helenor
+[2017-03-05 11:11:51,457 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou rutabaga helenor
+[2017-03-05 11:11:53,541 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 147, 69 pieds (10 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:53,546 MARAICH_INFO    ] updatedb       .handle: Ajout variété cv1
+[2017-03-05 11:11:53,984 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou vert cv1
+[2017-03-05 11:11:56,091 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 148, 47 pieds (11 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:56,092 MARAICH_INFO    ] updatedb       .handle: Ajout variété cv2
+[2017-03-05 11:11:56,514 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou vert cv2
+[2017-03-05 11:11:58,563 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 149, 47 pieds (11 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:11:58,567 MARAICH_INFO    ] updatedb       .handle: Ajout variété rollison's telepraph
+[2017-03-05 11:11:58,963 MARAICH_INFO    ] updatedb       .handle: Ajout légume concombre rollison's telepraph
+[2017-03-05 11:12:01,046 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 150, 14 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:12:01,048 MARAICH_INFO    ] updatedb       .handle: Ajout variété le généreux
+[2017-03-05 11:12:01,438 MARAICH_INFO    ] updatedb       .handle: Ajout légume concombre le généreux
+[2017-03-05 11:12:03,387 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 151, 14 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:12:03,388 MARAICH_INFO    ] updatedb       .handle: Ajout variété olive
+[2017-03-05 11:12:03,787 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge olive
+[2017-03-05 11:12:05,748 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 152, 37 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:05,751 MARAICH_INFO    ] updatedb       .handle: Ajout variété butternut
+[2017-03-05 11:12:06,223 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge butternut
+[2017-03-05 11:12:08,231 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 153, 37 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:08,235 MARAICH_INFO    ] updatedb       .handle: Ajout variété pomme d'or
+[2017-03-05 11:12:08,644 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge pomme d'or
+[2017-03-05 11:12:10,582 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 154, 37 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:10,583 MARAICH_INFO    ] updatedb       .handle: Ajout variété muscade
+[2017-03-05 11:12:11,116 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge muscade
+[2017-03-05 11:12:13,054 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 155, 37 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:13,058 MARAICH_INFO    ] updatedb       .handle: Ajout variété patidou
+[2017-03-05 11:12:13,421 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge patidou
+[2017-03-05 11:12:15,447 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 156, 37 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:15,448 MARAICH_INFO    ] updatedb       .handle: Ajout variété longue de nice
+[2017-03-05 11:12:15,858 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge longue de nice
+[2017-03-05 11:12:17,887 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 157, 37 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:17,891 MARAICH_INFO    ] updatedb       .handle: Ajout variété potimaron red kuri
+[2017-03-05 11:12:18,298 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge potimaron red kuri
+[2017-03-05 11:12:20,431 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 158, 37 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:20,432 MARAICH_INFO    ] updatedb       .handle: Ajout variété kabocha
+[2017-03-05 11:12:20,825 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge kabocha
+[2017-03-05 11:12:22,995 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 159, 37 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:22,996 MARAICH_INFO    ] updatedb       .handle: Ajout variété sucrine du berry
+[2017-03-05 11:12:23,396 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge sucrine du berry
+[2017-03-05 11:12:25,422 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 160, 37 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:25,426 MARAICH_INFO    ] updatedb       .handle: Ajout variété pleine de napple
+[2017-03-05 11:12:25,844 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge pleine de napple
+[2017-03-05 11:12:27,948 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 161, 37 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:27,951 MARAICH_INFO    ] updatedb       .handle: Ajout variété de nice à fruit rond
+[2017-03-05 11:12:28,417 MARAICH_INFO    ] updatedb       .handle: Ajout légume courgette de nice à fruit rond
+[2017-03-05 11:12:30,679 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 162, 14 pieds (14 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:12:30,680 MARAICH_INFO    ] updatedb       .handle: Ajout variété gold rush
+[2017-03-05 11:12:31,169 MARAICH_INFO    ] updatedb       .handle: Ajout légume courgette gold rush
+[2017-03-05 11:12:33,326 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 163, 14 pieds (14 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:33,328 MARAICH_INFO    ] updatedb       .handle: Ajout variété black beauty
+[2017-03-05 11:12:33,805 MARAICH_INFO    ] updatedb       .handle: Ajout légume courgette black beauty
+[2017-03-05 11:12:35,777 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 164, 14 pieds (14 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:35,781 MARAICH_INFO    ] updatedb       .handle: Ajout variété cuisse de poulet longor
+[2017-03-05 11:12:36,210 MARAICH_INFO    ] updatedb       .handle: Ajout légume echalote cuisse de poulet longor
+[2017-03-05 11:12:37,991 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 165, 462 pieds (13 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:37,995 MARAICH_INFO    ] updatedb       .handle: Ajout variété ronde red sun bio
+[2017-03-05 11:12:38,416 MARAICH_INFO    ] updatedb       .handle: Ajout légume echalote ronde red sun bio
+[2017-03-05 11:12:40,274 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 166, 462 pieds (13 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:40,275 MARAICH_INFO    ] updatedb       .handle: Ajout variété monstrueux de viroflay
+[2017-03-05 11:12:40,719 MARAICH_INFO    ] updatedb       .handle: Ajout légume epinard monstrueux de viroflay
+[2017-03-05 11:12:42,789 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 167, 1185 pieds (44 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:12:45,024 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 168, 1185 pieds (44 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:12:45,027 MARAICH_INFO    ] updatedb       .handle: Ajout variété viking
+[2017-03-05 11:12:45,558 MARAICH_INFO    ] updatedb       .handle: Ajout légume epinard viking
+[2017-03-05 11:12:47,829 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 169, 1185 pieds (44 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:12:47,833 MARAICH_INFO    ] updatedb       .handle: Ajout variété doux précoce d'été
+[2017-03-05 11:12:48,315 MARAICH_INFO    ] updatedb       .handle: Ajout légume fenouil doux précoce d'été
+[2017-03-05 11:12:50,329 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 170, 114 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:12:52,255 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 171, 114 pieds (7 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:52,257 MARAICH_INFO    ] updatedb       .handle: Ajout variété express eleonora
+[2017-03-05 11:12:52,693 MARAICH_INFO    ] updatedb       .handle: Ajout légume fèves express eleonora
+[2017-03-05 11:12:54,356 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 172, 333 pieds (24 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:12:54,357 MARAICH_INFO    ] updatedb       .handle: Ajout variété super d'aguadulce
+[2017-03-05 11:12:54,762 MARAICH_INFO    ] updatedb       .handle: Ajout légume fèves super d'aguadulce
+[2017-03-05 11:12:56,542 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 173, 333 pieds (24 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:12:56,547 MARAICH_INFO    ] updatedb       .handle: Ajout variété rames cobra
+[2017-03-05 11:12:56,932 MARAICH_INFO    ] updatedb       .handle: Ajout légume haricot rames cobra
+[2017-03-05 11:12:58,756 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 174, 142 pieds (56 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:12:58,760 MARAICH_INFO    ] updatedb       .handle: Ajout variété nain beurre fructidor
+[2017-03-05 11:12:59,190 MARAICH_INFO    ] updatedb       .handle: Ajout légume haricot nain beurre fructidor
+[2017-03-05 11:13:00,937 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 175, 142 pieds (56 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:13:00,939 MARAICH_INFO    ] updatedb       .handle: Ajout variété feuille de chêne rouge
+[2017-03-05 11:13:01,359 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue feuille de chêne rouge
+[2017-03-05 11:13:03,341 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 176, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:03,346 MARAICH_INFO    ] updatedb       .handle: Ajout variété romaine victorinus
+[2017-03-05 11:13:03,786 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue romaine victorinus
+[2017-03-05 11:13:05,767 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 177, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:05,771 MARAICH_INFO    ] updatedb       .handle: Ajout variété batavia rouge
+[2017-03-05 11:13:06,201 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue batavia rouge
+[2017-03-05 11:13:08,171 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 178, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:08,175 MARAICH_INFO    ] updatedb       .handle: Ajout variété batavia blonde
+[2017-03-05 11:13:08,595 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue batavia blonde
+[2017-03-05 11:13:10,542 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 179, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:12,508 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 180, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:12,512 MARAICH_INFO    ] updatedb       .handle: Ajout variété feuille de chêne bonde
+[2017-03-05 11:13:12,912 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue feuille de chêne bonde
+[2017-03-05 11:13:15,050 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 181, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:17,085 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 182, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:19,309 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 183, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:19,311 MARAICH_INFO    ] updatedb       .handle: Ajout variété grosse blonde paresseuse
+[2017-03-05 11:13:19,742 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue grosse blonde paresseuse
+[2017-03-05 11:13:21,780 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 184, 71 pieds (7 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:13:23,826 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 185, 71 pieds (7 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:13:25,839 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 186, 71 pieds (7 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:13:25,840 MARAICH_INFO    ] updatedb       .handle: Ajout variété sucrine
+[2017-03-05 11:13:26,239 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue sucrine
+[2017-03-05 11:13:28,254 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 187, 71 pieds (7 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:13:30,373 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 188, 71 pieds (7 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:13:32,333 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 189, 71 pieds (7 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:13:34,275 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 190, 71 pieds (7 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:13:36,257 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 191, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:38,423 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 192, 71 pieds (7 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:13:40,525 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 193, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:42,570 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 194, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:44,593 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 195, 71 pieds (7 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:44,595 MARAICH_INFO    ] updatedb       .handle: Ajout variété vit
+[2017-03-05 11:13:44,983 MARAICH_INFO    ] updatedb       .handle: Ajout légume mâche vit
+[2017-03-05 11:13:47,031 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 196, 777 pieds (19 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:47,035 MARAICH_INFO    ] updatedb       .handle: Ajout variété verte de cambrai
+[2017-03-05 11:13:47,531 MARAICH_INFO    ] updatedb       .handle: Ajout légume mâche verte de cambrai
+[2017-03-05 11:13:49,468 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 197, 777 pieds (19 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:51,502 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 198, 777 pieds (19 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:53,525 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 199, 777 pieds (19 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:13:53,529 MARAICH_INFO    ] updatedb       .handle: Ajout variété boule d'or
+[2017-03-05 11:13:53,959 MARAICH_INFO    ] updatedb       .handle: Ajout légume navet boule d'or
+[2017-03-05 11:13:55,772 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 200, 3401 pieds (28 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:13:55,776 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose de milan
+[2017-03-05 11:13:56,182 MARAICH_INFO    ] updatedb       .handle: Ajout légume navet rose de milan
+[2017-03-05 11:13:58,115 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 201, 3401 pieds (28 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:00,005 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 202, 3401 pieds (28 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:01,860 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 203, 3401 pieds (28 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:01,863 MARAICH_INFO    ] updatedb       .handle: Ajout variété paille des vertus
+[2017-03-05 11:14:02,271 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de garde paille des vertus
+[2017-03-05 11:14:04,085 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 204, 4535 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:04,089 MARAICH_INFO    ] updatedb       .handle: Ajout variété doux de tarrassac
+[2017-03-05 11:14:04,474 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de garde doux de tarrassac
+[2017-03-05 11:14:06,319 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 205, 4535 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:06,323 MARAICH_INFO    ] updatedb       .handle: Ajout variété de mazé
+[2017-03-05 11:14:06,742 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de garde de mazé
+[2017-03-05 11:14:08,555 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 206, 4535 pieds (37 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:08,559 MARAICH_INFO    ] updatedb       .handle: Ajout variété blanc hatif de paris
+[2017-03-05 11:14:08,963 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de printemps blanc hatif de paris
+[2017-03-05 11:14:10,925 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 207, 333 pieds (16 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:12,914 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 208, 333 pieds (16 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:12,918 MARAICH_INFO    ] updatedb       .handle: Ajout variété aromata
+[2017-03-05 11:14:13,381 MARAICH_INFO    ] updatedb       .handle: Ajout légume panais aromata
+[2017-03-05 11:14:15,227 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 209, 5291 pieds (88 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:15,231 MARAICH_INFO    ] updatedb       .handle: Ajout variété atlanta
+[2017-03-05 11:14:15,672 MARAICH_INFO    ] updatedb       .handle: Ajout légume poireau atlanta
+[2017-03-05 11:14:17,616 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 210, 2612 pieds (87 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:17,619 MARAICH_INFO    ] updatedb       .handle: Ajout variété mangetout héraut
+[2017-03-05 11:14:18,187 MARAICH_INFO    ] updatedb       .handle: Ajout légume pois mangetout héraut
+[2017-03-05 11:14:20,021 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 211, 190 pieds (38 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:21,765 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 212, 190 pieds (38 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:21,769 MARAICH_INFO    ] updatedb       .handle: Ajout variété corno di toro rouge
+[2017-03-05 11:14:22,242 MARAICH_INFO    ] updatedb       .handle: Ajout légume poivron corno di toro rouge
+[2017-03-05 11:14:24,301 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 213, 56 pieds (14 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:24,305 MARAICH_INFO    ] updatedb       .handle: Ajout variété yolo wonder
+[2017-03-05 11:14:24,746 MARAICH_INFO    ] updatedb       .handle: Ajout légume poivron yolo wonder
+[2017-03-05 11:14:26,793 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 214, 56 pieds (14 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:26,797 MARAICH_INFO    ] updatedb       .handle: Ajout variété alliance
+[2017-03-05 11:14:27,284 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre de garde alliance
+[2017-03-05 11:14:29,173 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 215, 1904 pieds (333 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:29,175 MARAICH_INFO    ] updatedb       .handle: Ajout variété nicola
+[2017-03-05 11:14:29,697 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre de garde nicola
+[2017-03-05 11:14:31,653 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 216, 1904 pieds (333 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:31,657 MARAICH_INFO    ] updatedb       .handle: Ajout variété charlotte
+[2017-03-05 11:14:32,133 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre primeur charlotte
+[2017-03-05 11:14:33,955 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 217, 444 pieds (22 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:33,959 MARAICH_INFO    ] updatedb       .handle: Ajout variété désirée
+[2017-03-05 11:14:34,368 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre primeur désirée
+[2017-03-05 11:14:36,244 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 218, 444 pieds (22 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:36,245 MARAICH_INFO    ] updatedb       .handle: Ajout variété claytone de cuba
+[2017-03-05 11:14:36,711 MARAICH_INFO    ] updatedb       .handle: Ajout légume pourpier claytone de cuba
+[2017-03-05 11:14:38,524 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 219, 416 pieds (24 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:38,528 MARAICH_INFO    ] updatedb       .handle: Ajout variété noir rond
+[2017-03-05 11:14:38,916 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis noir noir rond
+[2017-03-05 11:14:40,616 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 220, 1403 pieds (35 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:42,435 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 221, 1403 pieds (35 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:44,333 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 222, 1403 pieds (35 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:44,335 MARAICH_INFO    ] updatedb       .handle: Ajout variété flamboyant 3
+[2017-03-05 11:14:44,738 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose flamboyant 3
+[2017-03-05 11:14:46,436 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 223, 8928 pieds (22 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:48,217 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 224, 8928 pieds (22 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:48,219 MARAICH_INFO    ] updatedb       .handle: Ajout variété pernot clair
+[2017-03-05 11:14:48,705 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose pernot clair
+[2017-03-05 11:14:50,451 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 225, 8928 pieds (22 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:52,105 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 226, 8928 pieds (22 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:14:52,108 MARAICH_INFO    ] updatedb       .handle: Ajout variété rond écarlate sora
+[2017-03-05 11:14:52,541 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose rond écarlate sora
+[2017-03-05 11:14:54,264 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 227, 8928 pieds (22 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:56,084 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 228, 8928 pieds (22 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:14:56,089 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose de pâques
+[2017-03-05 11:14:56,574 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose rose de pâques
+[2017-03-05 11:14:58,431 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 229, 8928 pieds (22 m2) sur planche Virtuelle plein champ (43)
+[2017-03-05 11:15:00,275 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 230, 8928 pieds (22 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:15:00,279 MARAICH_INFO    ] updatedb       .handle: Ajout variété cultivée
+[2017-03-05 11:15:00,664 MARAICH_INFO    ] updatedb       .handle: Ajout légume roquette cultivée
+[2017-03-05 11:15:02,799 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 231, 333 pieds (11 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:15:05,023 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 232, 333 pieds (11 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:15:05,028 MARAICH_INFO    ] updatedb       .handle: Ajout variété green zébra
+[2017-03-05 11:15:05,491 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate green zébra
+[2017-03-05 11:15:07,659 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 233, 83 pieds (20 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:15:07,660 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose de berne
+[2017-03-05 11:15:08,106 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate rose de berne
+[2017-03-05 11:15:10,316 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 234, 83 pieds (20 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:15:10,318 MARAICH_INFO    ] updatedb       .handle: Ajout variété cur de boeuf orange
+[2017-03-05 11:15:10,765 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate cur de boeuf orange
+[2017-03-05 11:15:12,890 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 235, 83 pieds (20 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:15:12,891 MARAICH_INFO    ] updatedb       .handle: Ajout variété andine cornue
+[2017-03-05 11:15:13,457 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate andine cornue
+[2017-03-05 11:15:15,615 MARAICH_INFO    ] updatedb       .handle: Ajout implantation de base Implantation 236, 83 pieds (20 m2) sur planche Virtuelle sous abris (44)
+[2017-03-05 11:15:15,615 MARAICH_INFO    ] updatedb       .handle: Fin de comande updatedb : mise à jour de la base à partir des tableaux CSV
+ nombre d'erreurs = 6
+Champ 'Nombre de pieds' indéfini pour artichaut imperial star 
+Champ 'Date en terre' indéfini pour chou frisé cf1
+Variété indéfinie pour ciboule
+could not convert string to float: 
+could not convert string to float: 
+Variété indéfinie pour persil
+[2017-03-05 18:00:42,345 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 18:00:42,399 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['63'], 'simulation': ['true'], 'id_serie': ['123'], 'id_implantation': ['123'], 'intra_rang_cm': ['10'], 'quantite': ['2222'], 'nb_rangs': ['4'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 18:00:44,509 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 18:00:44,509 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['63'], 'simulation': ['false'], 'id_serie': ['123'], 'id_implantation': ['123'], 'intra_rang_cm': ['10'], 'quantite': ['2222'], 'nb_rangs': ['4'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 18:07:50,496 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 18:07:50,496 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['45'], 'simulation': ['true'], 'id_serie': ['131'], 'id_implantation': ['131'], 'intra_rang_cm': ['3'], 'quantite': ['6802'], 'nb_rangs': ['6'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 18:07:52,467 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 18:07:52,487 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['45'], 'simulation': ['false'], 'id_serie': ['131'], 'id_implantation': ['131'], 'intra_rang_cm': ['3'], 'quantite': ['6802'], 'nb_rangs': ['6'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 18:38:54,992 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 18:38:54,993 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['undefined'], 'simulation': ['true'], 'id_serie': ['131'], 'id_implantation': ['238'], 'intra_rang_cm': ['3'], 'quantite': ['5136'], 'nb_rangs': ['6'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 18:38:54,996 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-03-05 18:39:54,904 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 18:39:54,904 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['47'], 'simulation': ['true'], 'id_serie': ['131'], 'id_implantation': ['238'], 'intra_rang_cm': ['3'], 'quantite': ['5136'], 'nb_rangs': ['6'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 18:39:56,663 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 18:39:56,664 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['47'], 'simulation': ['false'], 'id_serie': ['131'], 'id_implantation': ['238'], 'intra_rang_cm': ['3'], 'quantite': ['5136'], 'nb_rangs': ['6'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 19:00:58,512 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 19:00:58,512 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['62'], 'simulation': ['true'], 'id_serie': ['123'], 'id_implantation': ['237'], 'intra_rang_cm': ['10'], 'quantite': ['1222'], 'nb_rangs': ['4'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 19:00:59,948 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 19:00:59,949 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['62'], 'simulation': ['false'], 'id_serie': ['123'], 'id_implantation': ['237'], 'intra_rang_cm': ['10'], 'quantite': ['1222'], 'nb_rangs': ['4'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 19:01:10,618 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 19:01:10,618 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['58'], 'simulation': ['true'], 'id_serie': ['123'], 'id_implantation': ['237'], 'intra_rang_cm': ['10'], 'quantite': ['1222'], 'nb_rangs': ['4'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 19:01:12,107 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 19:01:12,108 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['58'], 'simulation': ['false'], 'id_serie': ['123'], 'id_implantation': ['237'], 'intra_rang_cm': ['10'], 'quantite': ['1222'], 'nb_rangs': ['4'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 19:01:23,461 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 19:01:23,462 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['45'], 'simulation': ['true'], 'id_serie': ['123'], 'id_implantation': ['123'], 'intra_rang_cm': ['10'], 'quantite': ['1000'], 'nb_rangs': ['4'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 19:01:25,177 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 19:01:25,178 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['45'], 'simulation': ['false'], 'id_serie': ['123'], 'id_implantation': ['123'], 'intra_rang_cm': ['10'], 'quantite': ['1000'], 'nb_rangs': ['4'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 19:53:26,227 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-05 19:53:26,228 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['undefined'], 'simulation': ['true'], 'id_serie': ['123'], 'id_implantation': ['237'], 'intra_rang_cm': ['10'], 'quantite': ['1222'], 'nb_rangs': ['4'], 'cde': ['deplacement_implantation']}>
+[2017-03-05 19:53:26,230 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-03-07 10:12:36,656 MARAICH_ERROR   ] views          .infoPlanches: 
+[2017-03-07 10:14:20,955 MARAICH_ERROR   ] views          .infoPlanches: 
+[2017-03-07 10:16:26,555 MARAICH_ERROR   ] views          .infoPlanches: 
+[2017-03-07 10:17:28,192 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 10:17:38,593 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 10:17:45,971 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 10:19:49,829 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 10:21:44,451 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 10:22:34,815 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 10:26:37,655 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:02:25,424 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:02:25,424 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['3'], 'cde': ['deplacement_implantation'], 'id_implantation': ['131'], 'quantite': ['1666'], 'id_planche_dest': ['59'], 'id_serie': ['131'], 'nb_rangs': ['6']}>
+[2017-03-07 11:02:27,789 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:02:27,789 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['3'], 'cde': ['deplacement_implantation'], 'id_implantation': ['131'], 'quantite': ['1666'], 'id_planche_dest': ['59'], 'id_serie': ['131'], 'nb_rangs': ['6']}>
+[2017-03-07 11:02:39,226 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:02:39,226 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['3'], 'cde': ['deplacement_implantation'], 'id_implantation': ['132'], 'quantite': ['6802'], 'id_planche_dest': ['60'], 'id_serie': ['132'], 'nb_rangs': ['6']}>
+[2017-03-07 11:02:40,963 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:02:40,963 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['3'], 'cde': ['deplacement_implantation'], 'id_implantation': ['132'], 'quantite': ['6802'], 'id_planche_dest': ['60'], 'id_serie': ['132'], 'nb_rangs': ['6']}>
+[2017-03-07 11:02:59,546 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:02:59,547 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['3'], 'cde': ['deplacement_implantation'], 'id_implantation': ['132'], 'quantite': ['666'], 'id_planche_dest': ['61'], 'id_serie': ['132'], 'nb_rangs': ['6']}>
+[2017-03-07 11:03:00,713 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:03:00,714 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['3'], 'cde': ['deplacement_implantation'], 'id_implantation': ['132'], 'quantite': ['666'], 'id_planche_dest': ['61'], 'id_serie': ['132'], 'nb_rangs': ['6']}>
+[2017-03-07 11:03:12,641 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:03:12,641 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['50'], 'cde': ['deplacement_implantation'], 'id_implantation': ['138'], 'quantite': ['47'], 'id_planche_dest': ['62'], 'id_serie': ['138'], 'nb_rangs': ['2']}>
+[2017-03-07 11:03:14,038 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:03:14,038 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['50'], 'cde': ['deplacement_implantation'], 'id_implantation': ['138'], 'quantite': ['47'], 'id_planche_dest': ['62'], 'id_serie': ['138'], 'nb_rangs': ['2']}>
+[2017-03-07 11:03:24,034 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:03:24,034 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['25'], 'cde': ['deplacement_implantation'], 'id_implantation': ['170'], 'quantite': ['114'], 'id_planche_dest': ['63'], 'id_serie': ['170'], 'nb_rangs': ['4']}>
+[2017-03-07 11:03:25,221 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:03:25,222 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['25'], 'cde': ['deplacement_implantation'], 'id_implantation': ['170'], 'quantite': ['114'], 'id_planche_dest': ['63'], 'id_serie': ['170'], 'nb_rangs': ['4']}>
+[2017-03-07 11:03:39,118 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:03:39,118 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['50'], 'cde': ['deplacement_implantation'], 'id_implantation': ['138'], 'quantite': ['47'], 'id_planche_dest': ['61'], 'id_serie': ['138'], 'nb_rangs': ['2']}>
+[2017-03-07 11:03:41,713 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:03:41,713 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['50'], 'cde': ['deplacement_implantation'], 'id_implantation': ['138'], 'quantite': ['47'], 'id_planche_dest': ['61'], 'id_serie': ['138'], 'nb_rangs': ['2']}>
+[2017-03-07 11:04:55,545 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:04:55,546 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['25'], 'cde': ['deplacement_implantation'], 'id_implantation': ['170'], 'quantite': ['114'], 'id_planche_dest': ['61'], 'id_serie': ['170'], 'nb_rangs': ['4']}>
+[2017-03-07 11:04:57,958 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:04:57,958 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['25'], 'cde': ['deplacement_implantation'], 'id_implantation': ['170'], 'quantite': ['114'], 'id_planche_dest': ['61'], 'id_serie': ['170'], 'nb_rangs': ['4']}>
+[2017-03-07 11:05:53,488 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:05:53,488 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['15'], 'cde': ['deplacement_implantation'], 'id_implantation': ['172'], 'quantite': ['333'], 'id_planche_dest': ['undefined'], 'id_serie': ['172'], 'nb_rangs': ['2']}>
+[2017-03-07 11:05:53,490 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-03-07 11:06:01,816 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:06:01,817 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['174'], 'quantite': ['142'], 'id_planche_dest': ['61'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:06:09,754 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:06:09,754 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['174'], 'quantite': ['142'], 'id_planche_dest': ['61'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:07:00,655 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:07:00,655 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['15'], 'cde': ['deplacement_implantation'], 'id_implantation': ['172'], 'quantite': ['333'], 'id_planche_dest': ['62'], 'id_serie': ['172'], 'nb_rangs': ['2']}>
+[2017-03-07 11:07:01,744 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:07:01,744 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['15'], 'cde': ['deplacement_implantation'], 'id_implantation': ['172'], 'quantite': ['333'], 'id_planche_dest': ['62'], 'id_serie': ['172'], 'nb_rangs': ['2']}>
+[2017-03-07 11:07:14,333 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:07:14,334 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['174'], 'quantite': ['118'], 'id_planche_dest': ['62'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:07:21,332 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:07:21,333 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['174'], 'quantite': ['118'], 'id_planche_dest': ['63'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:07:28,369 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:07:28,369 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['174'], 'quantite': ['118'], 'id_planche_dest': ['63'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:07:54,599 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:07:54,600 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['241'], 'quantite': ['77'], 'id_planche_dest': ['44'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:07:58,567 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:07:58,567 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['241'], 'quantite': ['77'], 'id_planche_dest': ['44'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:08:11,751 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:08:11,751 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['240'], 'quantite': ['24'], 'id_planche_dest': ['44'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:08:14,001 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:08:14,001 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['240'], 'quantite': ['24'], 'id_planche_dest': ['44'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:09:59,272 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:09:59,272 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['174'], 'quantite': ['142'], 'id_planche_dest': ['56'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:10:00,584 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:10:00,584 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['174'], 'quantite': ['142'], 'id_planche_dest': ['56'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:10:11,382 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:10:11,382 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['174'], 'quantite': ['66'], 'id_planche_dest': ['55'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:10:12,535 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 11:10:12,535 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['false'], 'intra_rang_cm': ['40'], 'cde': ['deplacement_implantation'], 'id_implantation': ['174'], 'quantite': ['66'], 'id_planche_dest': ['55'], 'id_serie': ['174'], 'nb_rangs': ['1']}>
+[2017-03-07 11:31:22,755 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:33:24,838 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:35:20,352 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:36:23,514 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:37:12,112 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:39:14,697 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:40:24,539 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:41:43,848 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:42:24,976 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:44:53,396 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:46:45,423 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:48:05,093 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 11:48:10,673 MARAICH_ERROR   ] views          .utilisationPlanches: 
+[2017-03-07 13:00:43,198 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:00:43,198 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['5'], 'simulation': ['true'], 'id_implantation': ['128'], 'quantite': ['5925'], 'id_planche_dest': ['49'], 'id_serie': ['128'], 'nb_rangs': ['6']}>
+[2017-03-07 13:00:43,205 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : Attention, incompatibilité plein champ /sous serre entre série déplacée et planche de destination
+[2017-03-07 13:01:03,951 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:01:03,952 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['5'], 'simulation': ['true'], 'id_implantation': ['128'], 'quantite': ['5925'], 'id_planche_dest': ['72'], 'id_serie': ['128'], 'nb_rangs': ['6']}>
+[2017-03-07 13:01:06,906 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:01:06,906 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['5'], 'simulation': ['false'], 'id_implantation': ['128'], 'quantite': ['5925'], 'id_planche_dest': ['72'], 'id_serie': ['128'], 'nb_rangs': ['6']}>
+[2017-03-07 13:01:32,296 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:01:32,296 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['5'], 'simulation': ['true'], 'id_implantation': ['128'], 'quantite': ['2300'], 'id_planche_dest': ['73'], 'id_serie': ['128'], 'nb_rangs': ['6']}>
+[2017-03-07 13:01:33,492 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:01:33,492 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['5'], 'simulation': ['false'], 'id_implantation': ['128'], 'quantite': ['2300'], 'id_planche_dest': ['73'], 'id_serie': ['128'], 'nb_rangs': ['6']}>
+[2017-03-07 13:01:56,676 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:01:56,677 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['5'], 'simulation': ['true'], 'id_implantation': ['129'], 'quantite': ['5925'], 'id_planche_dest': ['73'], 'id_serie': ['129'], 'nb_rangs': ['6']}>
+[2017-03-07 13:01:57,795 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:01:57,795 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['5'], 'simulation': ['false'], 'id_implantation': ['129'], 'quantite': ['5925'], 'id_planche_dest': ['73'], 'id_serie': ['129'], 'nb_rangs': ['6']}>
+[2017-03-07 13:02:47,799 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:02:47,799 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['20'], 'simulation': ['true'], 'id_implantation': ['119'], 'quantite': ['421'], 'id_planche_dest': ['73'], 'id_serie': ['119'], 'nb_rangs': ['4']}>
+[2017-03-07 13:02:59,380 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:02:59,380 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['20'], 'simulation': ['true'], 'id_implantation': ['119'], 'quantite': ['421'], 'id_planche_dest': ['71'], 'id_serie': ['119'], 'nb_rangs': ['4']}>
+[2017-03-07 13:03:00,984 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:03:00,984 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['20'], 'simulation': ['false'], 'id_implantation': ['119'], 'quantite': ['421'], 'id_planche_dest': ['71'], 'id_serie': ['119'], 'nb_rangs': ['4']}>
+[2017-03-07 13:04:00,866 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:04:00,866 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['20'], 'simulation': ['true'], 'id_implantation': ['120'], 'quantite': ['421'], 'id_planche_dest': ['70'], 'id_serie': ['120'], 'nb_rangs': ['4']}>
+[2017-03-07 13:04:01,971 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-03-07 13:04:01,971 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'intra_rang_cm': ['20'], 'simulation': ['false'], 'id_implantation': ['120'], 'quantite': ['421'], 'id_planche_dest': ['70'], 'id_serie': ['120'], 'nb_rangs': ['4']}>
+[2017-03-07 13:09:28,119 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-03-07 13:09:28,120 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['120']}>
+[2017-03-07 13:09:28,350 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 120, "fields": {"planche": 70, "quantite": 421}}]}
+[2017-03-07 13:09:28,369 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:09:28,372 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['120']}>
+[2017-03-07 13:09:28,381 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:10:04,890 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:10:04,890 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'duree_j': [''], 'nom': ['sssd'], 'id_serie': ['120'], 'date': ['6/8'], 'id': ['0']}>
+[2017-03-07 13:12:21,231 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:12:21,231 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'duree_j': [''], 'cde': ['sauve_evt'], 'nom': ['sssd'], 'id': ['0'], 'date': ['6/8'], 'id_serie': ['120']}>
+[2017-03-07 13:12:21,231 MARAICH_ERROR   ] serveRequest   .serveRequest: <traceback object at 0x7f084e263488>
+Traceback (most recent call last):
+  File "/home/vincent/git/maraich/maraich/serveRequest.py", line 188, in serveRequest
+    date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))
+  File "/home/vincent/Documents/donnees/DIVERS/DeveloppementLogiciel/python/MyPyTools/MyTools.py", line 57, in getDateFrom_d_m_y
+    d,m,y = s_date.split("/")
+ValueError: need more than 2 values to unpack
+[2017-03-07 13:12:21,243 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:12:21,244 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['120']}>
+[2017-03-07 13:12:21,257 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:12:34,529 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:12:34,529 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'duree_j': ['1'], 'cde': ['sauve_evt'], 'nom': ['jjjjj,'], 'id': ['0'], 'date': ['8/8'], 'id_serie': ['120']}>
+[2017-03-07 13:12:34,530 MARAICH_ERROR   ] serveRequest   .serveRequest: <traceback object at 0x7f084d7db148>
+Traceback (most recent call last):
+  File "/home/vincent/git/maraich/maraich/serveRequest.py", line 188, in serveRequest
+    date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))
+  File "/home/vincent/Documents/donnees/DIVERS/DeveloppementLogiciel/python/MyPyTools/MyTools.py", line 57, in getDateFrom_d_m_y
+    d,m,y = s_date.split("/")
+ValueError: need more than 2 values to unpack
+[2017-03-07 13:12:34,542 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:12:34,542 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['120']}>
+[2017-03-07 13:12:34,551 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:22:28,575 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:22:28,575 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'id': ['0'], 'id_serie': ['120'], 'duree_j': [''], 'date': ['2/5'], 'nom': ['efef']}>
+[2017-03-07 13:22:28,575 MARAICH_ERROR   ] serveRequest   .serveRequest: <traceback object at 0x7f5584e20388>
+Traceback (most recent call last):
+  File "/home/vincent/git/maraich/maraich/serveRequest.py", line 188, in serveRequest
+    date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))
+  File "/home/vincent/Documents/donnees/DIVERS/DeveloppementLogiciel/python/MyPyTools/MyTools.py", line 61, in getDateFrom_d_m_y
+    d,m,y = s_date.split("/")
+ValueError: need more than 2 values to unpack
+[2017-03-07 13:22:28,595 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:22:28,595 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['120']}>
+[2017-03-07 13:22:28,622 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:24:57,623 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:24:57,624 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'date': ['3/9'], 'duree_j': [''], 'id': ['0'], 'nom': ['ui'], 'id_serie': ['120']}>
+[2017-03-07 13:24:57,624 MARAICH_ERROR   ] serveRequest   .serveRequest: <class 'ValueError'>need more than 2 values to unpack
+[2017-03-07 13:24:57,639 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:24:57,639 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['120']}>
+[2017-03-07 13:24:57,654 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:26:12,787 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:26:12,787 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'date': ['2/8/2017'], 'duree_j': ['2'], 'id': ['0'], 'nom': ['ef'], 'id_serie': ['120']}>
+[2017-03-07 13:26:12,787 MARAICH_INFO    ] serveRequest   .serveRequest: 2017-08-02 00:00:00
+[2017-03-07 13:26:13,077 MARAICH_INFO    ] serveRequest   .serveRequest: Evt Divers (853) 2017-08-02 00:00:00 pour 2 j
+[2017-03-07 13:26:13,085 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:26:13,085 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['120']}>
+[2017-03-07 13:26:13,090 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 853, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-02T00:00:00", "date_creation": "2017-03-07T13:26:12.788", "duree_j": 2, "nom": "ef", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:26:26,595 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:26:26,595 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'date': ['2/8'], 'duree_j': ['1'], 'id': ['0'], 'nom': ['ff'], 'id_serie': ['120']}>
+[2017-03-07 13:26:26,596 MARAICH_ERROR   ] serveRequest   .serveRequest: <class 'ValueError'>need more than 2 values to unpack
+[2017-03-07 13:26:26,606 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:26:26,606 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['120']}>
+[2017-03-07 13:26:26,614 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 853, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-02T00:00:00", "date_creation": "2017-03-07T13:26:12.788", "duree_j": 2, "nom": "ef", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:26:37,540 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:26:37,540 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'date': ['7/5'], 'duree_j': ['1'], 'id': ['0'], 'nom': ['efe'], 'id_serie': ['120']}>
+[2017-03-07 13:26:37,541 MARAICH_ERROR   ] serveRequest   .serveRequest: <class 'ValueError'>need more than 2 values to unpack
+[2017-03-07 13:26:37,561 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:26:37,561 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['120']}>
+[2017-03-07 13:26:37,568 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 853, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-02T00:00:00", "date_creation": "2017-03-07T13:26:12.788", "duree_j": 2, "nom": "ef", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:26:51,572 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:26:51,573 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'date': ['8/5/2017'], 'duree_j': ['2'], 'id': ['0'], 'nom': ['dzd'], 'id_serie': ['120']}>
+[2017-03-07 13:26:51,573 MARAICH_INFO    ] serveRequest   .serveRequest: 2017-05-08 00:00:00
+[2017-03-07 13:26:51,863 MARAICH_INFO    ] serveRequest   .serveRequest: Evt Divers (854) 2017-05-08 00:00:00 pour 2 j
+[2017-03-07 13:26:51,871 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:26:51,871 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['120']}>
+[2017-03-07 13:26:51,875 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 854, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-05-08T00:00:00", "date_creation": "2017-03-07T13:26:51.574", "duree_j": 2, "nom": "dzd", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 853, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-02T00:00:00", "date_creation": "2017-03-07T13:26:12.788", "duree_j": 2, "nom": "ef", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:27:04,032 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:27:04,032 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'date': ['8/5/2017'], 'duree_j': [''], 'id': ['0'], 'nom': ['fefe'], 'id_serie': ['120']}>
+[2017-03-07 13:27:04,032 MARAICH_INFO    ] serveRequest   .serveRequest: 2017-05-08 00:00:00
+[2017-03-07 13:27:04,032 MARAICH_ERROR   ] serveRequest   .serveRequest: <class 'ValueError'>invalid literal for int() with base 10: ''
+[2017-03-07 13:27:04,038 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:27:04,038 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['120']}>
+[2017-03-07 13:27:04,042 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 854, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-05-08T00:00:00", "date_creation": "2017-03-07T13:26:51.574", "duree_j": 2, "nom": "dzd", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 853, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-02T00:00:00", "date_creation": "2017-03-07T13:26:12.788", "duree_j": 2, "nom": "ef", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:29:56,038 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:29:56,039 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'duree_j': [''], 'cde': ['sauve_evt'], 'nom': ['tg'], 'date': ['2/3/2017'], 'id_serie': ['120'], 'id': ['0']}>
+[2017-03-07 13:29:56,039 MARAICH_INFO    ] serveRequest   .serveRequest: 2017-03-02 00:00:00
+[2017-03-07 13:29:56,358 MARAICH_INFO    ] serveRequest   .serveRequest: Evt Divers (855) 2017-03-02 00:00:00 pour 1 j
+[2017-03-07 13:29:56,367 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:29:56,367 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['120'], 'cde': ['get_evts_serie']}>
+[2017-03-07 13:29:56,381 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 855, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-03-02T00:00:00", "date_creation": "2017-03-07T13:29:56.039", "duree_j": 1, "nom": "tg", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 854, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-05-08T00:00:00", "date_creation": "2017-03-07T13:26:51.574", "duree_j": 2, "nom": "dzd", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 853, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-02T00:00:00", "date_creation": "2017-03-07T13:26:12.788", "duree_j": 2, "nom": "ef", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:30:48,586 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-03-07 13:30:48,586 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['120'], 'cde': ['get_impls_serie']}>
+[2017-03-07 13:30:48,591 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 120, "fields": {"planche": 70, "quantite": 421}}]}
+[2017-03-07 13:30:48,652 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:30:48,653 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['120'], 'cde': ['get_evts_serie']}>
+[2017-03-07 13:30:48,665 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 855, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-03-02T00:00:00", "date_creation": "2017-03-07T13:29:56.039", "duree_j": 1, "nom": "tg", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 854, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-05-08T00:00:00", "date_creation": "2017-03-07T13:26:51.574", "duree_j": 2, "nom": "dzd", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 853, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-02T00:00:00", "date_creation": "2017-03-07T13:26:12.788", "duree_j": 2, "nom": "ef", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:31:17,779 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:31:17,779 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'duree_j': ['2'], 'cde': ['sauve_evt'], 'nom': ['ggh'], 'date': ['5/8'], 'id_serie': ['120'], 'id': ['0']}>
+[2017-03-07 13:31:17,780 MARAICH_ERROR   ] serveRequest   .serveRequest: <class 'ValueError'>need more than 2 values to unpack
+[2017-03-07 13:31:17,794 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:31:17,795 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['120'], 'cde': ['get_evts_serie']}>
+[2017-03-07 13:31:17,802 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 855, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-03-02T00:00:00", "date_creation": "2017-03-07T13:29:56.039", "duree_j": 1, "nom": "tg", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 854, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-05-08T00:00:00", "date_creation": "2017-03-07T13:26:51.574", "duree_j": 2, "nom": "dzd", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 853, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-02T00:00:00", "date_creation": "2017-03-07T13:26:12.788", "duree_j": 2, "nom": "ef", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:33:42,313 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-03-07 13:33:42,314 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'duree_j': [''], 'id_serie': ['120'], 'date': ['4/8'], 'nom': ['hjjhjhjjjj'], 'id': ['0'], 'cde': ['sauve_evt']}>
+[2017-03-07 13:33:42,314 MARAICH_INFO    ] serveRequest   .serveRequest: 2017-08-04 00:00:00
+[2017-03-07 13:33:42,613 MARAICH_INFO    ] serveRequest   .serveRequest: Evt Divers (856) 2017-08-04 00:00:00 pour 1 j
+[2017-03-07 13:33:42,618 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:33:42,619 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['120'], 'cde': ['get_evts_serie']}>
+[2017-03-07 13:33:42,637 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 855, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-03-02T00:00:00", "date_creation": "2017-03-07T13:29:56.039", "duree_j": 1, "nom": "tg", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 854, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-05-08T00:00:00", "date_creation": "2017-03-07T13:26:51.574", "duree_j": 2, "nom": "dzd", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 853, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-02T00:00:00", "date_creation": "2017-03-07T13:26:12.788", "duree_j": 2, "nom": "ef", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 856, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-04T00:00:00", "date_creation": "2017-03-07T13:33:42.314", "duree_j": 1, "nom": "hjjhjhjjjj", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}
+[2017-03-07 13:34:09,671 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........supprime_evt
+[2017-03-07 13:34:09,672 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['854'], 'cde': ['supprime_evt']}>
+[2017-03-07 13:34:09,677 MARAICH_INFO    ] serveRequest   .serveRequest: destruction de Evt Divers (854) 2017-05-08 00:00:00 pour 2 j
+[2017-03-07 13:34:09,849 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-03-07 13:34:09,850 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['120'], 'cde': ['get_evts_serie']}>
+[2017-03-07 13:34:09,859 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 855, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-03-02T00:00:00", "date_creation": "2017-03-07T13:29:56.039", "duree_j": 1, "nom": "tg", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 430, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-03-14T00:00:00", "date_creation": "2017-03-05T11:10:48.218", "duree_j": 1, "nom": "d\u00e9but ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 853, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-02T00:00:00", "date_creation": "2017-03-07T13:26:12.788", "duree_j": 2, "nom": "ef", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 856, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-08-04T00:00:00", "date_creation": "2017-03-07T13:33:42.314", "duree_j": 1, "nom": "hjjhjhjjjj", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 432, "fields": {"eRef": 430, "delta_j": 150, "type": 5, "date": "2017-08-11T00:00:00", "date_creation": "2017-03-05T11:10:48.772", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ail rose flavor bio", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 431, "fields": {"eRef": 430, "delta_j": 155, "type": 2, "date": "2017-08-16T00:00:00", "date_creation": "2017-03-05T11:10:48.481", "duree_j": 1, "nom": "fin ail rose flavor bio", "texte": "", "b_fini": false}}]}

@@ -65,7 +65,7 @@ class Command(BaseCommand):
             dateDest =  MyTools.getDateFrom_d_m_y("31/12/%d"%anneeDestination)
             assert dateDest > dateOrig, "Années d'origine et de destination incohérentes"
             
-            for serie in Serie.objects.engageeSurPeriode(dateOrig, dateDest):
+            for serie in Serie.objects.activesSurPeriode(dateOrig, dateDest):
                 serieDest = cloneSerie(serie)
                 ## changement des dates des évèmenents + 365j
                 for evt in serieDest.evenements.all():

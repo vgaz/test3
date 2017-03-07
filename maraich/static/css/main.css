@@ -180,7 +180,7 @@ margin:10px;
 .barre_du_jour
 {
     position:absolute;
-    width: 1px;
+    width: 0px;
     background: white;
     border: 1px solid blue; 
     z-index:2;  

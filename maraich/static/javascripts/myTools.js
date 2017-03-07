@@ -9,7 +9,22 @@ function changelePas(delta)
     document.getElementById("decalage_j").value = decalage_j
 }
 
-
+function debutPatienter()
+    {
+    // on place au niveau du pointeur dans l'ecran
+    //e.clientX  e.clientY
+    // on allume le gif
+    hGif = document.getElementById("waiting")
+    hGif.style.display="block"
+    }
+    
+function finPatienter()
+    {    
+    // on eteint le gif
+    hGif = document.getElementById("waiting")
+    hGif.style.display="none"
+    }
+    
 function checkConnexion()
 	{
 	rep = requestServer('expert_mode=get_status')
@@ -122,12 +137,12 @@ function prepareDeplacementImplantation(id_serie, id_implantation, quantite_impl
     // boite de dialogue de confirmation de déplacement avant requete serveur
     hDiv = document.getElementById("divDeplacementImplantation")
     //hDiv.style.display = "block"
-    hDivSerie = document.getElementById(id_serie)
+    hDivImpl = document.getElementById(id_implantation)
     document.getElementById("deplacement_id_serie").value = id_serie
     document.getElementById("deplacement_id_implantation").value = id_implantation
     document.getElementById("deplacement_id_planche_dest").value = id_plancheDest
-    document.getElementById("deplacement_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
-    document.getElementById("deplacement_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
+    document.getElementById("deplacement_nb_rangs").value = hDivImpl.getAttribute("nb_rangs")
+    document.getElementById("deplacement_intra_rang_cm").value = hDivImpl.getAttribute("intra_rang_cm")
     document.getElementById("deplacement_quantite").value = quantite_implantation
     deplaceImplantation()
     }

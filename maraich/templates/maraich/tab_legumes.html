@@ -21,22 +21,8 @@
           <tr>
           {% if leg.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
           <td><h2>{{leg.nom|title}}</h2>
-            <p>{{leg.espece.famille.nom|title}}</p>
+            <p>famille : {{leg.espece.famille.nom|title}} ; espèce : {{leg.espece.nom|title}}</p>
             
-            <!-- 
-            Plantation possible du
-            <input style="width:40px" type="text" name="v_{{var.pk}}_date_min_plantation_pc" value="{{leg.variete.date_min_plantation_pc}}" />
-            au
-            <input style="width:40px" type="text" name="v_{{leg.variete.pk}}_date_max_plantation_pc" value="{{leg.variete.date_min_plantation_pc}}" />
-            en plein champ <br />
-            Plantation possible du
-            <input style="width:40px" type="text" name="v_{{leg.variete.pk}}_date_min_plantation_sa" value="{{leg.variete.date_min_plantation_sa}}" />
-            au
-            <input style="width:40px" type="text" name="v_{{leg.variete.pk}}_date_max_plantation_sa" value="{{leg.variete.date_max_plantation_sa}}" />
-            sous abris<br />
-            Durée de pousse avant récolte plein champ (jours) : <input style="width: 40px" type="text" name="v_{{leg.pk}}_duree_avant_recolte_pc_j" value="{{leg.duree_avant_recolte_pc_j}}" /> <br/>
-            Durée de pousse avant récolte sous abris (jours) : <input style="width: 40px" type="text" name="v_{{leg.pk}}_duree_avant_recolte_sa_j" value="{{leg.duree_avant_recolte_sa_j}}" /> <br/>
-            -->
             Distance conseillée. Dans le rang (cm) <input style="width:40px" type="text" name="leg_{{leg.pk}}_intra_rang_cm" value="{{leg.intraRang_cm}}" />
             Entre les rangs (cm) <input style="width:40px" type="text" name="leg_{{leg.pk}}_inter_rang_cm" value="{{leg.interRang_cm}}" /> <br/>
             Unité 
@@ -49,8 +35,8 @@
 
             Rendement germination <input style="width:40px" type="text" name="leg_{{leg.pk}}_rendementGermination" value="{{leg.espece.rendementGermination}}" />
             Rendement production (kg/m2) <input style="width: 40px" type="text" name="leg_{{leg.pk}}_rendementProduction_kg_m2" value="{{leg.rendementProduction_kg_m2}}" /> <br/>
-            Nb graines par pied <input style="width: 40px" type="text" name="leg_{{leg.pk}}_nbGrainesParPied" value="{{leg.nbGrainesParPied}}" /> <br/>
-            <hr/>lié à toute l'espèce {{leg.espece.nom}}
+            Nb graines par pied <input style="width: 40px" type="text" name="leg_{{leg.pk}}_nbGrainesParPied" value="{{leg.espece.nbGrainesParPied}}" /> <br/>
+
             {% if leg.espece.avec.distinct %} <img src="{{ STATIC_URL }}images/smileyOK.jpg" width="32px" height="32px"  title="Avec"/> 
             {% for varAvec in leg.espece.avec.distinct %}{{varAvec.nom|title}}, {% endfor %} <br/>
             {% endif %}
@@ -58,7 +44,7 @@
             {% if leg.espece.sans.distinct %} <img src="{{ STATIC_URL }}images/smileyKO.jpg" width="32px" height="32px"  title="Sans"/>
             {% for varSans in leg.espece.sans.distinct %}{{varSans.nom|title}}, {% endfor %} <br/>
             {% endif %}
-            
+            <br/>
             <input style="margin-left: 20px" type="submit" value="Sauver"/>
             </td>
           </tr>
