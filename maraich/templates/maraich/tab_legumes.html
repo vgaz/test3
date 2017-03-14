@@ -32,7 +32,7 @@
                 {% endfor %}
             </select>
             poids par pièce(kg) si comptage en pièce <input style="width: 40px" type="text" name="leg_{{leg.pk}}_poidsParPiece_kg" value="{{leg.poidsParPiece_kg}}" /> <br/>
-
+            Si dispo, consommation hebdo par panier : <input style="width: 40px" type="text" name="leg_{{leg.pk}}_consoHebdo" value="{{leg.espece.consoHebdoParPart}}" /><br/>
             Rendement germination <input style="width:40px" type="text" name="leg_{{leg.pk}}_rendementGermination" value="{{leg.espece.rendementGermination}}" />
             Rendement production (kg/m2) <input style="width: 40px" type="text" name="leg_{{leg.pk}}_rendementProduction_kg_m2" value="{{leg.rendementProduction_kg_m2}}" /> <br/>
             Nb graines par pied <input style="width: 40px" type="text" name="leg_{{leg.pk}}_nbGrainesParPied" value="{{leg.espece.nbGrainesParPied}}" /> <br/>

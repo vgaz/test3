@@ -153,6 +153,7 @@ margin:10px;
 .BlueFrame
 {
     border:5px solid #00D6D6;
+    z-index:20;
 }
 
 .YellowFrame

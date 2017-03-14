@@ -2,7 +2,8 @@
 from django.core.management.base import BaseCommand       
 
 from maraich import serveRequest, views, constant
-
+import os
+from maraich import settings
 from maraich.models import *
 
 from UnitTests import testU_Series, testU_ProdSemaine
@@ -11,6 +12,14 @@ class Command(BaseCommand):
     help = "test divers"
 
     def handle(self, *args, **options):
+        ics_txt = """cououc
+        c'est moi"""
+        MyTools.strToFic(os.path.join(settings.BASE_DIR, "cultures.ics"), ics_txt)
+        
+        return
+    
+        
+        
         testU_ProdSemaine.testU_ProdSemaine()
         
         leg = Legume.objects.get(id=10)

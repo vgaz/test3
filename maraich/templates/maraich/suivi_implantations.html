@@ -559,10 +559,10 @@ function unfocusPlanche(event)
 <input name="serres" type="checkbox" {% if selection_serres %}checked{% endif %} /> Serres 
 <input name="champs" type="checkbox" {% if selection_champs %}checked{% endif %} /> Champs 
 &nbsp;&nbsp;
-Filtre   <input style="width:50px" type="text" name="s_filtre_planches" value="{{s_filtre_planches}}" />
-<input type="submit" name="direction" value="avance" /> 
+Filtre  planche:<input style="width:50px" type="text" name="s_filtre_planches" value="{{s_filtre_planches}}" />
+ Filtre légume:<input style="width:60px" type="text" name="s_filtre_legumes" value="{{s_filtre_legumes}}" />
 <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
-
+<input type="submit" name="direction" value="avance" /> 
 Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
 <button onclick="changelePas(-1);return(false)">-</button>
 <button onclick="changelePas(1);return(false)">+</button>
@@ -592,7 +592,14 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
         
         <div class="barre_du_jour"> </div>  
         <div class="divTitrePlanche">{{planche}}</div>
-        <div class="suiviConso"> </div>
+        <div class="suiviConso">
+            <table border="1" width="100%"><tr>
+                {% for sem in l_semaines %}
+                <td title="{{sem.s_dm}}"> </td>
+                {% endfor %}
+                </table>
+            
+        </div>
 
         {# séries existantes en base #}
         {% for impl in planche.l_implantations %}
@@ -620,7 +627,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
                                         title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.quantite}}/{{impl.serie.quantiteTotale}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}"
                                         >
             <div class="divTitreImplantation">
-            Imp {{impl.id}} - S {{impl.serie.id}}. {{impl.surface_m2}}m2. {{impl.serie.legume.nom}} x {{impl.quantite}} / {{impl.serie.quantiteTotale}}
+            {{impl.serie.legume.nom}}  {{impl.quantite}}/{{impl.serie.quantiteTotale}} {{impl.surface_m2}}m2
             <img src='{% static 'images/editor.png'%}' title='Editer la série' onclick="prepareEditeSerie({{impl.id}});return(false)">
             </div>
             {% for evt in impl.serie.evenements.all%}

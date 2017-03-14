@@ -54,7 +54,8 @@ function    init()
 
 <input  type="radio" name="bEncours" value="on" {% if bEncours %}checked{%endif%} />Juste les évenements non terminés 
 <input  type="radio" name="bEncours" value="off" {% if not bEncours %}checked{%endif%} />Tous
-
+<br/>
+<input  type="checkbox" name="vers_fichier"/>Enregistrer
 <input style="margin-left: 20px" type="submit" value="Envoyer"/>
 
 <div id="main" style="text-align: center" >

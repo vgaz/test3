@@ -145,11 +145,8 @@ function montre_especes()
     
     <form action="" method="POST" accept-charset="utf-8">
     {% csrf_token %}
-    <div class="BlueFrame" style="width:100%">
-
-        <input type="submit" name="direction" value="avance" /> 
-        <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
-        
+    <div class="BlueFrame" style="width:90%;display:block">
+    
         Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
         <button onclick="changelePas(-1);return(false)">-</button>
         <button onclick="changelePas(1);return(false)">+</button>
@@ -160,18 +157,19 @@ function montre_especes()
          <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
          du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
          au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
-    
+        <br/>
         <input type="radio" name="detail" value="espece" onclick="montre_especes()" checked >Regroupé par espèce
         <input type="radio" name="detail" value="legume" onclick="montre_legumes()" >Détaillé par légume
     
         <input style="margin-left: 20px" type="submit" value="Envoyer" />
-
+        <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
+        <input type="submit" name="direction" value="avance" /> 
     </div>    
     </form>
-    <p>
+    <br/>
     
     <table border="1" id="tab_legumes" >
-        <tr><th>Légumes/Semaines</th>
+        <tr style="position:fixed"><th>Légumes/Semaines</th>
             {% for semaine in l_semaines %}
                 <td align="center">Semaine {{semaine.date_debut_sem_iso}}<br/>du {{semaine.date_debut|date:'d/m/Y'}}<br/>au {{semaine.date_fin|date:'d/m/Y'}}</td>
             {% endfor %}
@@ -181,7 +179,7 @@ function montre_especes()
         <!-- tab légumes -->
         {% for leg in l_legumes %}
         <tr>
-            <td>{{leg.nom|title}}<br/><small> ({{leg.espece.nomUniteProd}})</small></td>
+            <td><small>{{leg.nom|title}} ({{leg.espece.nomUniteProd}})</small></td>
             
             {% for t_prod in leg.l_prod %}
             <td>{{t_prod.0|date:'d/m/Y'}}<br/>
@@ -231,11 +229,11 @@ function montre_especes()
         </tr>        
     </table>
     
-    <hr/>
+    <p> </p>
     
     <!------------------- tableau par especes -------------------------->
     
-    <table border="1" id="tab_especes">
+    <table border="1" id="tab_especes" >
         <tr><th>Espèces/Semaines</th>
             {% for semaine in l_semaines %}
                 <td align="center">Semaine {{semaine.date_debut_sem_iso}}<br/>du {{semaine.date_debut|date:'d/m/Y'}}<br/>au {{semaine.date_fin|date:'d/m/Y'}}</td>
@@ -245,11 +243,11 @@ function montre_especes()
         
         {% for esp in l_especes %}
         <tr>
-            <td>{{esp.nom|title}}<br/><small> ({{esp.nomUniteProd}})</small></td>
+            <td style="width:200px"><small>{{esp.nom|title}} ({{esp.nomUniteProd}})</small></td>
             
             {% for semaine in l_semaines %}            
             <td>{{semaine.date_debut|date:'d/m/Y'}}<br/>
-            <div id="sem_{{semaine.date_debut|date:'Y-m-d'}}__esp_{{esp.id}}"> xx </div>    
+            <small><div id="sem_{{semaine.date_debut|date:'Y-m-d'}}__esp_{{esp.id}}"></div></small>    
             </td>
             {% endfor %}
             <td><div style="font-weight:bold;text-align: center" id="tets_{{esp.id}}"> </div></td>

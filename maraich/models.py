@@ -563,7 +563,6 @@ class Serie(djangoModels.Model):
             else:
                 return self.quantiteTotale()
     
-    
     def prodHebdo(self, dateDebutSem):
         """ renvoi la production estimée de cette semaine
         soit le stock lissé sur le nombre de semaines de consommation pour les legumes de garde
@@ -576,11 +575,17 @@ class Serie(djangoModels.Model):
             else:
                 return 0
         else:
-            ## legume frais 
-            if self.recoltePossibleEnDatedu(dateDebutSem):
-                return self.quantiteEstimee_kg_ou_piece() / (self.etalementRecolte_j / 7)
+            ## legume frais cueilli jusquà fin du stocke en terre
+            ## on retourne la quantité demandée en fonction du nombre de parts ou zéro si tout ramassé 
+            dateDebutRecolte = self.evenements.get(type=Evenement.TYPE_RECOLTE).date
+            nbSemEcoulementStock = int(self.quantiteEstimee_kg_ou_piece() / (self.legume.espece.consoHebdoTotale()))
+            
+            dateFinStock = dateDebutRecolte + datetime.timedelta(weeks = nbSemEcoulementStock)
+            if dateDebutSem >= dateDebutRecolte and dateDebutSem < dateFinStock :
+                return self.legume.espece.consoHebdoTotale()
             else:
                 return 0
+
 
     def quantiteTotale(self):
         """cumul de tous les pieds sur toutes des implantations"""
@@ -611,7 +616,6 @@ class Serie(djangoModels.Model):
             l_rep.append(evt.__str__())
         for impl in self.implantations.all():
             l_rep.append(impl.__str__())
-            
         
         l_rep.append("surface Occupée : %s m2"%(self.surfaceOccupee_m2()))
         l_rep.append("quantité estimée : %d"%(self.quantiteEstimee_kg_ou_piece()))

@@ -3,8 +3,8 @@ import MyTools
 
 def testU_ProdSemaine():
     print ('DEBUT du test', __name__)
-    date_debut = MyTools.getDateFrom_d_m_y("26/05/2017")
-    serie = Serie.objects.get(id=100)
+    date_debut = MyTools.getDateFrom_d_m_y("14/06/2017")
+    serie = Serie.objects.get(id=213)
     print (serie.descriptif())
     print (serie.prodHebdo(date_debut))
 
