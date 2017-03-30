@@ -378,8 +378,10 @@ def recolte(request):
         bDetailVar = request.POST.get("detail_variete", "") != ""
         ## récup de la fenetre de temps
         periode, date_debut_vue, date_fin_vue, decalage_j = donnePeriodeVue(request.POST) 
-    
-        nbPanniers = constant.NB_PANNIERS
+        bSerres = request.POST.get("bSerres","")=="on"
+        bChamps = request.POST.get("bChamps","")=="on"
+
+        nbPanniers = Espece.objects.get(nom="ail").nbParts
         l_semaines = MyTools.getListeSemaines(date_debut_vue, date_fin_vue)
 
         ## on ne garde que la fenetre de temps étudiée
@@ -387,9 +389,16 @@ def recolte(request):
         ## recherche des productions par semaine regroupées par légume ou par espèce
         l_legumes = Legume.objects.all()
         for leg in l_legumes:
+            
+            if "arteno" in leg.variete.nom:
+                pass
             ## calcul des productions de légumes
             l_series = l_seriesActives.filter(legume_id = leg.id)
-            
+            if bSerres and not bChamps:
+                l_series = l_series.filter(bSerre = True)
+            elif bChamps and not bSerres:
+                l_series = l_series.filter(bSerre = False)
+
             ## Pour chaque semaine étudiée, on calcule le stock cumulé de chaque série 
             ## le stock est lissé 
             ## soit sur la conso hebdo pour les légumes stockables
@@ -399,7 +408,7 @@ def recolte(request):
                 qteHebdo = 0
                 for serie in l_series:
                     qteHebdo += serie.prodHebdo(sem.date_debut)
-                    print("leg %s, %s %f"%(leg.nom(), sem.date_debut, qteHebdo))
+#                 print("sem %s ******************* leg %s, %s %f"%(sem.s_dm, leg.nom(), sem.date_debut, qteHebdo))
                   
                 if qteHebdo == 0:
                     couleur = "white"
@@ -429,6 +438,8 @@ def recolte(request):
                     "decalage_j":decalage_j,
                     "date_debut_vue": date_debut_vue,
                     "date_fin_vue": date_fin_vue,
+                    "bSerres":bSerres,
+                    "bChamps":bChamps,
                     "l_semaines":l_semaines,
                     "l_legumes":l_legumes,
                     "l_especes" : Espece.objects.all(),
@@ -445,32 +456,31 @@ def utilisationPlanches(request):
         s_info = ""
         ## récup de la fenetre de temps
         periode, date_debut_vue, date_fin_vue, decalage_j = donnePeriodeVue(request.POST)  
-        l_semaines = MyTools.getListeSemaines(date_debut_vue, date_fin_vue)
+        l_jours = MyTools.getListeJours(date_debut_vue, date_fin_vue)
 
         ## on retire les planches virtuelles
-        l_planches = Planche.objects.exclude(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP, constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
-        if not request.POST.get("serres","")=="on":
+ #       l_planches = Planche.objects.filter(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
+#         l_planches = Planche.objects.exclude(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP, constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
+        l_planches = Planche.objects.all()
+        bSerres = request.POST.get("bSerres","")=="on"
+        if not bSerres:
             l_planches = l_planches.exclude(bSerre = True)
-        if not request.POST.get("champs","")=="on":
+        bChamps = request.POST.get("bChamps","")=="on"
+        if not bChamps:
             l_planches = l_planches.exclude(bSerre = False)
-
+        
         for pl in l_planches:        
             ## Pour chaque semaine étudiée, on calcule la surface
-            pl.l_infoSem = []
-            for sem in l_semaines:
-                l_series = Serie.objects.activesSurPeriode(sem.date_debut, sem.date_fin, pl)
+            pl.l_infoJours = []
+            for j in l_jours:
+                l_series = Serie.objects.activesEnDateDu(j)
                 surface_occ_m2 = 0
                 ## ajout de l'implation spécifique à cette planche
                 for serie in l_series:
-                    surface_occ_m2 += serie.implantations.get(planche_id=pl.id).surface_m2()
+                    surface_occ_m2 += serie.surfaceOccupee_m2(pl)
                 ratioLibre = int(100 - surface_occ_m2*100/pl.surface_m2())
-                pl.l_infoSem.append((sem.date_debut, surface_occ_m2, ratioLibre))
-#                 
-#         ## cumul par sem
-#         for sem in l_semaines:
-#             for pl in l_planches:
-#                 cumulS +=   
-
+                pl.l_infoJours.append((j, int(surface_occ_m2), ratioLibre))
+            
     except:
         log.error(s_info)
         s_info += str(sys.exc_info()[1])
@@ -482,8 +492,10 @@ def utilisationPlanches(request):
                     "decalage_j":decalage_j,
                     "date_debut_vue": date_debut_vue,
                     "date_fin_vue": date_fin_vue,
-                    "l_semaines":l_semaines,
+                    "l_jours":l_jours,
                     "l_planches":l_planches,
+                    "bSerres":bSerres,
+                    "bChamps":bChamps,
                     "info":s_info
                     })
     

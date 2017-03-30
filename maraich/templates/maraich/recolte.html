@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% block pagetitle %}Récoltes estimées{% endblock %}
 {% block javascript %}
 <script type="text/javascript" src="{% static 'javascripts/myTools.js' %}"> </script>
 <script type="text/javascript" >
@@ -9,6 +9,7 @@ l_sems = [{% for sem in l_semaines %}"{{sem.date_debut|date:'Y-m-d'}}"{% if not 
 l_legs = [{% for leg in l_legumes %}{{leg.id}}{% if not forloop.last %},{% endif %}{% endfor %}]
 l_especes = [{% for esp in l_especes %}{{esp.id}}{% if not forloop.last %},{% endif %}{% endfor %}]
 l_couleur_esp = { {% for esp in l_especes %}{{esp.id}}:"{{esp.couleur}}"{% if not forloop.last %},{% endif %}{% endfor %}}
+l_parts_esp = { {% for esp in l_especes %}{{esp.id}}:"{{esp.nbParts}}"{% if not forloop.last %},{% endif %}{% endfor %}}
 nbPanniers = {{nbPanniers}}
 
 function enregistreRecolte(ptDiv)
@@ -22,8 +23,6 @@ function init()
     montre_especes()
     
     // maj tableau légumes 
-    
-
     cumulTotal = 0       
     for (ii=0;ii<l_sems.length;ii++)
         {
@@ -50,7 +49,7 @@ function init()
         }
 
 
-    // total par espece pour chaque semaine   
+    // total par espèce pour chaque semaine   
     for (ee=0; ee<l_especes.length; ee++)
         {
         cumulTETS = 0 // 
@@ -81,10 +80,9 @@ function init()
         document.getElementById("tets_" + l_especes[ee]).innerHTML = cumulTETS
         }   
         
-
         // total par semaine pour chaque espece (en Kg) et liste des espèces dont le poids est non nul
         total_etets = 0
-        for (ss=0;ss<l_sems.length;ss++)
+        for (ss=0; ss<l_sems.length; ss++)
             {
             s_listeEsp = ""
             poids_SPE = 0 // total de chaque semaine
@@ -107,18 +105,15 @@ function init()
                         }
                    }        
                 poids_SPE += poidsLegs
-    
                 }
             document.getElementById("tets_" + l_sems[ss]).innerHTML = poids_SPE
-            document.getElementById("tepspp_" + l_sems[ss]).innerHTML = poids_SPE   /nbPanniers + " kg"
+            document.getElementById("tepspp_" + l_sems[ss]).innerHTML = poids_SPE / nbPanniers + " kg"
             document.getElementById("cont_pspp_" + l_sems[ss]).innerHTML = s_listeEsp
-        
             total_etets += poids_SPE
             }           
-        
         document.getElementById("total_etets").innerHTML = total_etets
-        
     }
+    
     
 function montre_legumes()
     {
@@ -160,7 +155,8 @@ function montre_especes()
         <br/>
         <input type="radio" name="detail" value="espece" onclick="montre_especes()" checked >Regroupé par espèce
         <input type="radio" name="detail" value="legume" onclick="montre_legumes()" >Détaillé par légume
-    
+        <input name="bSerres" type="checkbox" {% if bSerres %}checked{% endif %} /> Serres 
+        <input name="bChamps" type="checkbox" {% if bChamps %}checked{% endif %} /> Champs 
         <input style="margin-left: 20px" type="submit" value="Envoyer" />
         <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
         <input type="submit" name="direction" value="avance" /> 
@@ -169,7 +165,7 @@ function montre_especes()
     <br/>
     
     <table border="1" id="tab_legumes" >
-        <tr style="position:fixed"><th>Légumes/Semaines</th>
+        <tr><th>Légumes/Semaines</th>
             {% for semaine in l_semaines %}
                 <td align="center">Semaine {{semaine.date_debut_sem_iso}}<br/>du {{semaine.date_debut|date:'d/m/Y'}}<br/>au {{semaine.date_fin|date:'d/m/Y'}}</td>
             {% endfor %}

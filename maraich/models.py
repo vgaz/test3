@@ -377,8 +377,7 @@ class SerieManager(djangoModels.Manager):
     
     def activesEnDateDu(self, la_date, planche=None):
         """Filtrage des séries présentes à telle date, sur telle planche"""
-        l_series = Serie.objects.filter(evt_debut__date__lte = la_date, 
-                                        evt_fin__date__gte = la_date).distinct()
+        l_series = Serie.objects.filter(evt_debut__date__lte = la_date, evt_fin__date__gte = la_date).distinct()
         if planche:
             l_series = l_series.filter(implantations__planche_id = planche.id)
         
@@ -564,27 +563,14 @@ class Serie(djangoModels.Model):
                 return self.quantiteTotale()
     
     def prodHebdo(self, dateDebutSem):
-        """ renvoi la production estimée de cette semaine
-        soit le stock lissé sur le nombre de semaines de consommation pour les legumes de garde
-        soit le stock lissé sur la durée de la récolte pour les légumes en terre"""
-        if self.legume.espece.bStockable: 
-            nbSemEcoulementStock = int(self.quantiteEstimee_kg_ou_piece() / (self.legume.espece.consoHebdoTotale()))
-            dateFinStock = self.evt_fin.date + datetime.timedelta(weeks = nbSemEcoulementStock)
-            if dateDebutSem > self.evt_fin.date and dateDebutSem < dateFinStock :
-                return self.quantiteEstimee_kg_ou_piece()/nbSemEcoulementStock
-            else:
-                return 0
+        """ renvoi la production estimée de cette semaine 
+        soit le stock lissé sur le nombre de semaines de consommation"""
+        nbSemEcoulementStock = max([1, int(self.quantiteEstimee_kg_ou_piece() / (self.legume.espece.consoHebdoTotale()))])
+        dateFinStock = self.evt_fin.date + datetime.timedelta(weeks = nbSemEcoulementStock)
+        if dateDebutSem > self.evenements.get(type=Evenement.TYPE_RECOLTE).date and dateDebutSem < dateFinStock :
+            return self.quantiteEstimee_kg_ou_piece()/nbSemEcoulementStock
         else:
-            ## legume frais cueilli jusquà fin du stocke en terre
-            ## on retourne la quantité demandée en fonction du nombre de parts ou zéro si tout ramassé 
-            dateDebutRecolte = self.evenements.get(type=Evenement.TYPE_RECOLTE).date
-            nbSemEcoulementStock = int(self.quantiteEstimee_kg_ou_piece() / (self.legume.espece.consoHebdoTotale()))
-            
-            dateFinStock = dateDebutRecolte + datetime.timedelta(weeks = nbSemEcoulementStock)
-            if dateDebutSem >= dateDebutRecolte and dateDebutSem < dateFinStock :
-                return self.legume.espece.consoHebdoTotale()
-            else:
-                return 0
+            return 0
 
 
     def quantiteTotale(self):

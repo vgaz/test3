@@ -1,1 +1,7 @@
-
+Légume,date début,délai croissance avant première récolte,stockable,date fin,prod hebdo
+pdt,,,oui,jj/mm/AAA,SL = besoin hebdo depuis début récolte jusqu'à fin du stock
+salades,,,non,SL = date début + délai croissance +(stock / besoin hebdo)*7,SL = besoin hebdo depuis début récolte jusqu'à fin du stock
+"tomates, poivron, blette.. légumes avec production dans le temps",,,non,jj/mm/AAA,SDR = stock estimé / durée récolte
+,,,,,
+,,,,SL = selon livraison,
+,,,,,SDR = selon durée de récolte

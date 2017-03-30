@@ -14,7 +14,6 @@ def getFloat(d_line, name, default="0"):
     return float(d_line.get(name, default).replace(",","."))
 
 
-
 class Command(BaseCommand):
     """updatedb : mise à jour de la base à partir des tableaux CSV"""
     help = "Tapper python manage.py updatedb"
@@ -124,9 +123,8 @@ class Command(BaseCommand):
                         assert espece.rendementConservation !=0, "'Rendement conservation' indéfini pour %s"%(esp.nom)            
 
                         ## maj conso
-                        s_field = d_line.get("Nombre de paniers", "")
-                        assert s_field, "'Nombre de paniers' indéfini pour %s"%(espece.nom)  
-                        espece.nbParts = int(s_field)
+                        espece.nbParts = getInt(d_line, "Nombre de pieds", "0")
+                        assert espece.nbParts != 0, "'Nombre de paniers' indéfini ou nul pour %s"%(espece.nom)  
                  
                         s_field = d_line.get("Conso hebdo par pannier", "").replace(",",".")
                         assert s_field, "'Conso hebdo par pannier' indéfini pour %s"%(espece.nom)  
@@ -154,7 +152,11 @@ class Command(BaseCommand):
                 
                 try:
                     s_espece = d_line.get("Espèce", "").lower().strip()
-                    assert s_espece, "Espèce indéfinie"           
+                    assert s_espece, "Espèce indéfinie"   
+                    
+#                     assert s_espece == "laitue",'on ne garde sque les laitues pour test'
+                    
+                            
                     s_variet = d_line.get("Variété", "").lower().strip() 
                     assert s_variet, "Variété indéfinie pour %s"%(s_espece)
                     espece = Espece.objects.get(nom=s_espece) 
@@ -230,7 +232,8 @@ class Command(BaseCommand):
                     serie.intra_rang_m = leg.intra_rang_m
                     serie.remarque = d_line.get("Remarque", "")       
                     dureeAvantRecolte_j = getInt(d_line, "Durée avant récolte (j)")
-                    assert dureeAvantRecolte_j!=0, "Champ 'Durée avant récolte (j)' indéfini pour %s "%(leg.nom())                        
+                    assert dureeAvantRecolte_j!=0, "Champ 'Durée avant récolte (j)' indéfini pour %s "%(leg.nom())
+                    
                     etalementRecolte_j = getInt(d_line, "Étalement récolte (j)")
                     assert etalementRecolte_j!=0, "Champ 'Étalement récolte (j)' indéfini pour %s "%(leg.nom())                    
                     delaiCroissancePlants_j = getInt(d_line, "Délai croissance plants (j)")
@@ -250,10 +253,12 @@ class Command(BaseCommand):
                     implantation.save()
                     serie.implantations.add(implantation)
                     serie.save()
-                    log.info("Ajout implantation de base %s", str(implantation))
+                    log.info("Ajout %s", str(implantation))
 
                 except:
                     s_err = str(sys.exc_info()[1])
+                    if "could not convert string to float" in s_err:
+                        pass
                     l_err.append(s_err)
                     continue
 

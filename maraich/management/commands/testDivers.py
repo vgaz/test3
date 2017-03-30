@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand       
+from django.test import TestCase, RequestFactory
 
 from maraich import serveRequest, views, constant
 import os
@@ -12,20 +13,29 @@ class Command(BaseCommand):
     help = "test divers"
 
     def handle(self, *args, **options):
-        ics_txt = """cououc
-        c'est moi"""
-        MyTools.strToFic(os.path.join(settings.BASE_DIR, "cultures.ics"), ics_txt)
+
+        self.factory = RequestFactory()
+
+        # Create an instance of a POST request.
+        request = self.factory.post('/recolte/', 
+                                    
+                                    data={"periode":"specifique",
+                                          "date_debut_vue":"29/5/2017",
+                                          "date_fin_vue":"5/6/2017", 
+                                          "bSerres":"on"
+                    
+                                         
+                                        }
+                                    )
+        views.recolte(request)    
         
-        return
-    
-        
-        
-        testU_ProdSemaine.testU_ProdSemaine()
-        
-        leg = Legume.objects.get(id=10)
-        testU_Series.testU_sauveSerie()
-        
-        return
+#         
+#         testU_ProdSemaine.testU_ProdSemaine()
+#         
+#         leg = Legume.objects.get(id=10)
+#         testU_Series.testU_sauveSerie()
+#         
+#         return
 
 #         
 
@@ -41,56 +51,49 @@ class Command(BaseCommand):
 #         s = surfacePourQuantite(1, q, 3, 0.2)
 #         print (s)
 #         return 0
+
+#         self.factory = RequestFactory()
 #         
-        self.factory = RequestFactory()
-        
-        # Create an instance of a POST request.   
-        request = self.factory.post('/recolte/', 
-                                        data={  "periode":"specifique",
-                                                "date_debut_vue":"22/01/2017",
-                                                "date_fin_vue":"3/4/2017"                            
-                                                }
-                                    )        
-        views.recolte(request)
-        
-        return
-
-        
-        serveRequest.serveRequest(request)
-         
-         
-         
-
-        date_debut_vue = MyTools.getDateFrom_d_m_y("1/7/2016")
-        date_fin_vue = MyTools.getDateFrom_d_m_y("31/7/2016")
-        la_date = MyTools.getDateFrom_d_m_y("14/03/2016")
-#         l_implantations = Implantation.objects.filter(planche_id = 2)
-        planche = Planche.objects.get(id=1)
-        l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, planche)
-        print(len(l_series))
-        for pl in l_series:
-            print (pl)
-        
-        return
-        l_series = Serie.objects.activesEnDateDu(la_date, planche)
-        print("séries actives en date du", la_date, l_series.values_list("id",flat=True))
-        
-        return 
-    
-        print(l_series.values_list("id",flat=True))
-        
-        
-        return
-#         date_debut_vue = datetime.datetime.strptime("18/5/2015", constant.FORMAT_DATE)
-#         date_fin_vue = datetime.datetime.strptime("24/5/2015", constant.FORMAT_DATE) + delta20h
-# 
-#         planification.planif(date_debut_vue, date_fin_vue)
+#         # Create an instance of a POST request.   
+#         request = self.factory.post('/utilisation_planches/', 
+#                                         data={  "periode":"specifique",
+#                                                 "date_debut_vue":"22/01/2017",
+#                                                 "date_fin_vue":"3/4/2017",
+#                                                 "bSerres":"on"                           
+#                                                 }
+#                                     )        
+#         views.utilisationPlanches(request)
+#         
 #         return
-#         laPlanche = Planche.objects.get(id=11)
-#         print( Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue))
 # 
-#         laPlanche = Planche.objects.get(id=1)
-#         print( Serie.objects.surPlancheDansPeriode(laPlanche.id, date_debut_vue,date_fin_vue))
+#         
+#         serveRequest.serveRequest(request)
+    
+
+        date_debut_vue = MyTools.getDateFrom_d_m_y("1/4/2017")
+        date_fin_vue = MyTools.getDateFrom_d_m_y("31/7/2017")
+#         la_date = MyTools.getDateFrom_d_m_y("14/03/2016")
+#         l_implantations = Implantation.objects.filter(planche_id = 2)
+#         planche = Planche.objects.get(id=1)
+        l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue)
+        for ser in l_series:
+            print (ser)
+            pr = ser.prodHebdo(date_debut_vue)
+        
+        return
+    
+    
+    
+    
+#     
+#         l_series = Serie.objects.activesEnDateDu(la_date, planche)
+#         print("séries actives en date du", la_date, l_series.values_list("id",flat=True))
+#         print(l_series.values_list("id",flat=True))
+#         
+#         return 
+    
+    
+
 
         return
 
@@ -108,7 +111,7 @@ class Command(BaseCommand):
 #         plant.quantite = reste
 #         plant.save()
 
-        print(help)
+#         print(help)
         
         self.factory = RequestFactory()
 
@@ -126,6 +129,9 @@ class Command(BaseCommand):
                                         }
                                     )
         views.chronoPlanches(request)
+        
+        
+        
 #         serveRequest.serveRequest(request)
 
    
