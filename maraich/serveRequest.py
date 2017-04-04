@@ -69,11 +69,11 @@ def serveRequest(request):
              
         return HttpResponse(s_json, content_type="application/json")
     
-    elif cde == "sauve_qte_impantation":
+    elif cde == "sauve_nb_pieds_implantation":
         ## sauvegarde suite à modif de qté
         try:
             impl = Implantation.objects.get(id = int(request.POST.get("id")))
-            impl.quantite = int(request.POST.get("qte"))
+            impl.nbPieds = int(request.POST.get("nbPieds"))
             impl.save()                            
             s_json = '{"status":true}'
         except:
@@ -155,18 +155,18 @@ def serveRequest(request):
         return HttpResponse( s_json, content_type="application/json")
 
 
-    elif cde == "sauve_impl": 
-        try:
-            impl = Implantation.objects.get(id=int(request.POST.get("id")))                
-            impl.quantite = int(request.POST.get("quantite"))
-            impl.save()
-            s_json = '{"status":true}'
-        except:
-            ex_type, ex, tb = sys.exc_info()
-            log.error (str(ex_type) + str(ex))
-            s_json = '{"status":false,"err":"%s %s"}'%(__name__, sys.exc_info()[1])
-           
-        return HttpResponse(s_json)
+#     elif cde == "sauve_impl": 
+#         try:
+#             impl = Implantation.objects.get(id=int(request.POST.get("id")))                
+#             impl.nbPieds = int(request.POST.get("quantite"))
+#             impl.save()
+#             s_json = '{"status":true}'
+#         except:
+#             ex_type, ex, tb = sys.exc_info()
+#             log.error (str(ex_type) + str(ex))
+#             s_json = '{"status":false,"err":"%s %s"}'%(__name__, sys.exc_info()[1])
+#            
+#         return HttpResponse(s_json)
     
     elif cde == 'supprime_impl':
         try:

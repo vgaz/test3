@@ -332,8 +332,8 @@ function prepareEditeSerie(id_serie)
     document.getElementById("editSerie_nb_rangs").value = hDivSerie.getAttribute("nb_rangs")
     document.getElementById("editSerie_intra_rang_cm").value = hDivSerie.getAttribute("intra_rang_cm")
     document.getElementById("editSerie_id_implantation").value = hDivSerie.getAttribute("id_implantation")
-    document.getElementById("editSerie_quantite_implantation").value = hDivSerie.getAttribute("quantite_implantation")
-    document.getElementById("editSerie_quantite").innerHTML = hDivSerie.getAttribute("quantite")
+    document.getElementById("editSerie_nb_pieds_implantation").value = hDivSerie.getAttribute("nb_pieds_implantation")
+    document.getElementById("editSerie_nb_pieds_serie").innerHTML = hDivSerie.getAttribute("nb_pieds_serie")
     document.getElementById("editSerie_date_debut").value = hDivSerie.getAttribute("date_debut_f")
     document.getElementById("editSerie_date_fin").value = hDivSerie.getAttribute("date_fin_f")
     // maj espece
@@ -369,7 +369,7 @@ function sauveSerie()
     s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
     s_request += "&date_fin=" + document.getElementById("editSerie_date_fin").value
     s_request += "&id_implantation=" + document.getElementById("editSerie_id_implantation").value
-    s_request += "&quantite_implantation=" + document.getElementById("editSerie_quantite_implantation").value
+    s_request += "&nb_pieds_implantation=" + document.getElementById("editSerie_nb_pieds_implantation").value
 
     rep = requestServer(s_request)  
     jsonRep = JSON.parse(rep)
@@ -391,16 +391,16 @@ function allowDrop(event) {
 function dragStart(event) {
     event.dataTransfer.setData("id_serieDeplacee", event.target.id);
     event.dataTransfer.setData("id_implantation",  document.getElementById(event.target.id).getAttribute("id_implantation"))
-    event.dataTransfer.setData("quantite_implantation", document.getElementById(event.target.id).getAttribute("quantite_implantation"))
+    event.dataTransfer.setData("nb_pieds_implantation", document.getElementById(event.target.id).getAttribute("nb_pieds_implantation"))
 }
 
 function drop(event) {
     event.preventDefault();
     id_serie = event.dataTransfer.getData("id_serieDeplacee")
     id_implantation = event.dataTransfer.getData("id_implantation");
-    quantite_implantation = event.dataTransfer.getData("quantite_implantation");
+    nb_pieds_implantation = event.dataTransfer.getData("nb_pieds_implantation");
     id_plancheDest = event.target.id.split("__")[1]
-    prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
+    prepareDeplacementImplantation(id_serie, id_implantation, nb_pieds_implantation, id_plancheDest)
     }
 
 function unfocus(event)
@@ -454,11 +454,11 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 
         <div class="chrono_serie"   id="{{serie.id}}"
                                     id_implantation="{{serie.implantationPlanche.id}}"
-                                    quantite_implantation="{{serie.implantationPlanche.quantite}}"
+                                    nb_pieds_implantation="{{serie.implantationPlanche.nbPieds}}"
                                     nom_variete="{{serie.variete}}" 
                                     id_variete="{{serie.variete.id}}" 
                                     id_espece="{{serie.variete.espece.id}}" 
-                                    quantite="{{serie.quantiteTotale}}"
+                                    nb_pieds_serie="{{serie.nbPieds}}"
                                     s_liste_planches = "{{serie.s_listeNomsPlanches}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
@@ -468,7 +468,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     title="Série {{serie.id}}, {{serie.variete}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"
                                     >
             <div class="divTitreImplantation">
-            (S {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.variete}} x {{serie.implantationPlanche.quantite}}
+            (S {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.variete}} x {{serie.implantationPlanche.nbPieds}}
             <img src='{{STATIC_URL}}images/editor.png' title='Editer' onclick="prepareEditeSerie({{serie.id}});return(false)">
             </div>
         </div>
@@ -483,7 +483,6 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 <div id="divPlanchesReelles"  >
 	
     {% for planche in l_planches %}
-    {% if planche.id != 1 and planche.id != 2  %}
 
     <div    class="planche"
             id="pl__{{planche.id}}"
@@ -502,11 +501,11 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
 
         <div class="chrono_serie"   id="{{serie.id}}"
                                     id_implantation="{{serie.implantationPlanche.id}}"
-                                    quantite_implantation="{{serie.implantationPlanche.quantite}}"
+                                    nb_pieds_implantation="{{serie.implantationPlanche.nbPieds}}"
                                     nom_variete="{{serie.variete}}" 
                                     id_variete="{{serie.variete.id}}" 
                                     id_espece="{{serie.variete.espece.id}}" 
-                                    quantite="{{serie.quantiteTotale}}"
+                                    nb_pieds_serie="{{serie.nbPieds}}"
                                     s_liste_planches = "{{serie.s_listeNomsPlanches}}"
                                     date_debut="{{serie.evt_debut.date|safe}}" date_fin="{{serie.evt_fin.date|safe}}"
                                     date_debut_f="{{serie.evt_debut.date|date:'d/m/Y'}}" date_fin_f="{{serie.evt_fin.date|date:'d/m/Y'}}"
@@ -516,7 +515,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                                     title="Série {{serie.id}}, {{serie.variete}}, {{serie.nb_rangs}} rangs, intra_rang_cm={{serie.intraRang_cm}} &#13;{{serie.implantationPlanche}} &#13; Du {{serie.evt_debut.date|date:'d/m/Y'}} au {{serie.evt_fin.date|date:'d/m/Y'}}"
                                     >
             <div class="divTitreImplantation">
-            (S {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.variete}} x {{serie.implantationPlanche.quantite}}
+            (S {{serie.id}}, impl {{serie.implantationPlanche.id}}) {{serie.variete}} x {{serie.implantationPlanche.nbPieds}}
             <img src='{{STATIC_URL}}images/editor.png' title='Editer' onclick="prepareEditeSerie({{serie.id}});return(false)">
             </div>
             {% for evt in serie.evenements.all%}
@@ -526,13 +525,12 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
         </div>
         {% endfor %}
     </div>
-    {% endif %}
     {% endfor %}
 
 </div>
 
 
-<div id="divEditSerie" draggable='true' class="BlueFrame" >
+<div id="divEditSerie" class="BlueFrame" >
 	<h2 id="editSerie_titre"> </h2>
 	<p>Série <input style="width:40px" type="text" id="editSerie_id_serie" name="editSerie_id_serie" value="" /></p>
 	sur planche(s) <div style="display: inline" id="editSerie_liste_planches"> </div>
@@ -550,8 +548,8 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
                  </select>
     </p>
     <input type="hidden" value="" id="editSerie_id_implantation" name="editSerie_id_implantation" />
-    <div>Quantité pour cette implantation <input style="width: 40px" type="text" value="" id="editSerie_quantite_implantation" name="editSerie_quantite_implantation" />
-         (<div id="editSerie_quantite" style="display:inline;"> </div> en tout)
+    <div>Nombre de pieds pour cette implantation <input style="width: 40px" type="text" value="" id="editSerie_nb_pieds_implantation" name="editSerie_nb_pieds_implantation" />
+         (<div id="editSerie_nb_pieds_serie" style="display:inline;"> </div> en tout)
     </div>
     <p>Nb rangs :               <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
        Dans le rang (cm) :      <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" /></p>
@@ -583,7 +581,7 @@ Pas de <input style="width: 50px" type="text" id="decalage_j" name="decalage_j" 
     série <input id="deplacement_id_serie"         value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" />
      <br/>
     </h3>
-    Quantité :                  <input id="deplacement_quantite"           value="" type="text" style="width:40px;border: 5px solid brown" /><br/>
+    Nombre de pieds :           <input id="deplacement_nb_pieds"           value="" type="text" style="width:40px;border: 5px solid brown" /><br/>
     vers la planche N°          <input id="deplacement_id_planche_dest"    value="" type="text" readonly       style="width: 30px;margin-left: 10px"/><br/>
     dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text" style="margin-left: 10px;width: 30px"/><br/>
     Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text" style="margin-left: 10px;width: 30px"/><br/>

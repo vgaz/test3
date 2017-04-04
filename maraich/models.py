@@ -143,7 +143,7 @@ def quantitePourSurface(largeurPlanche_m, surface_m2, nbRangs, intraRang_m):
     return int(surface_m2 / largeurPlanche_m * nbRangs / intraRang_m)
 
 def surfacePourQuantite(largeurPlanche_m, quantite, nbRangs, intraRang_m):
-    """ estimation de la surface pour n de pieds implantables sur une planche """
+    """ estimation de la surface pour une quantité de pieds implantables sur une planche """
     return int(quantite * intraRang_m / nbRangs * largeurPlanche_m)
 
 def cloneSerie(serie):
@@ -263,9 +263,9 @@ class Espece(djangoModels.Model):
     sans = djangoModels.ManyToManyField("self", related_name="sans", blank=True)
     unite_prod = djangoModels.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     bStockable = djangoModels.BooleanField(default=False)
-    rendementConservation = djangoModels.FloatField("Rendement de conservation", default=1)
+    rendementConservation = djangoModels.FloatField("Rendement de pousse et conservation", default=0)
     nbGrainesParPied = djangoModels.PositiveIntegerField("Nb graines par pied", default=0)
-    rendementGermination = djangoModels.FloatField("Rendement germination", default=1)
+    rendementGermination = djangoModels.FloatField("Rendement germination", default=0)
     consoHebdoParPart = djangoModels.FloatField("quantité consommée par semaine par part", default=0)
     nbParts = djangoModels.PositiveIntegerField("Nb de parts à servir", default=0)
     couleur = djangoModels.CharField(max_length=16, default="yellow")
@@ -300,16 +300,14 @@ class Panniers(djangoModels.Model):
         ## on renvoie le dernier
         return l_qtes[-1].val
 
-
       
 class Legume(djangoModels.Model):
     """légume"""
     espece = djangoModels.ForeignKey(Espece)
     variete = djangoModels.ForeignKey(Variete)
-    rendementProduction_kg_m2 = djangoModels.FloatField("Rendement de production (kg/m2)", default=1)
+    prodParPied_kg = djangoModels.FloatField("Production par pied (kg)")
     poidsParPiece_kg = djangoModels.FloatField("Poids estimé par pièce (Kg)", default=0)  ## optionnel si unite_prod = kg
     intra_rang_m = djangoModels.FloatField("distance dans le rang (m)", default=0)
-    inter_rang_m = djangoModels.FloatField("distance entre les rangs (m)", default=0)    
     
     class Meta:
         ordering = ['espece', 'variete']
@@ -320,11 +318,8 @@ class Legume(djangoModels.Model):
     def intraRang_cm(self):
         return int(self.intra_rang_m * 100)                    
  
-    def interRang_cm(self):
-        return int(self.inter_rang_m * 100) 
-    
     def nom(self):
-        return "%s %s"%(self.espece.nom, self.variete.nom) 
+        return "%s %s"%(self.espece.nom, self.variete.nom)
 
     def poids_kg(self, qte):
         """Retourne la quantité en kg avec conversion éventuelle pièce > Kg
@@ -333,25 +328,13 @@ class Legume(djangoModels.Model):
             return (qte * self.poidsParPiece_kg)
         else:
             return (qte)
-# 
-#     def plantsPourProdHebdo(self, productionDemandee):
-#         """ A REFAIRE retourne nb de plants en fonction de la prod escomptée (en kg ou en unité
-#         pour les plantes donnaPositiveIntegerFieldnt sur plusieurs semaines, on prend le rendement de la première semaine"""
-#         print ("productionDemandee_kg", productionDemandee)
-#         print ("self.prod_hebdo_moy_g", self.prod_hebdo_moy_g)  
-#         if self.prod_hebdo_moy_g == "0":
-#             print ("attention , réponse bidon dans  plantsPourProdHebdo %s"%self.nom)
-#             return productionDemandee
-#         
-#         ret =  int( (float(productionDemandee) * 1000) / float(self.prod_hebdo_moy_g.split(",")[0])  )
-#         print (ret)
-#         return (ret)
+
 
 class Implantation(djangoModels.Model):
     planche = djangoModels.ForeignKey("Planche")
 #     debut_m = djangoModels.FloatField("Début de la culture (m)", default=0)
 #     fin_m = djangoModels.FloatField("Début de la culture (m)", default=0)
-    quantite = djangoModels.IntegerField("nombre de pieds", default=0) ## en attendant le placement plus précis...@todo
+    nbPieds = djangoModels.IntegerField("nombre de pieds", default=0)
 
     def longueur_m(self):
         return self.fin_m - self.debut_m
@@ -363,12 +346,12 @@ class Implantation(djangoModels.Model):
     def surface_m2(self):
         serie = self.serie()
         return surfacePourQuantite(self.planche.largeur_m, 
-                                   self.quantite, 
+                                   self.nbPieds, 
                                    serie.nb_rangs, 
                                    serie.intra_rang_m)
     def __str__(self):
         return "Implantation %d, %d pieds (%d m2) sur planche %s (%d)"%( self.id, 
-                                                                         self.quantite, 
+                                                                         self.nbPieds, 
                                                                          self.surface_m2(), 
                                                                          self.planche.nom,
                                                                          self.planche.id)
@@ -520,14 +503,14 @@ class Serie(djangoModels.Model):
  
     def nbGraines(self):
         """ retourne le nb de graines nécesaires en fonction du nb de pieds souhaité"""
-        return int(self.quantiteTotale() * self.legume.espece.nbGrainesParPied / self.legume.espece.rendementGermination)
+        return int(self.nbPieds() * self.legume.espece.nbGrainesParPied / self.legume.espece.rendementGermination)
 
     def longueurRangTotal(self, intra_rang_m=None):
         """ retourne la longueur totale de tous les rangs en fonction de l'intra rang"""
         if not intra_rang_m:
             intra_rang_m = self.intra_rang_m
         assert intra_rang_m, Exception("intra_rang_m non défini")              
-        return self.quantiteTotale() * intra_rang_m
+        return self.nbPieds() * intra_rang_m
     
     def longueurSurPlanche_m(self, intra_rang_m=None, nb_rangs=None):
         """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
@@ -545,8 +528,7 @@ class Serie(djangoModels.Model):
         return self.longueurRangTotal(intra_rang_m) / nb_rangs
     
     def surfaceOccupee_m2(self, planche=None):
-        """ retourne la surface occupée de toutes ou d'une implantation
-        si planche != None, retourne juste l'implantation sur cette planche """
+        """ retourne la surface occupée de toutes ou d'une implantation (si planche != None)"""
         surface_m2 = 0
         for impl in self.implantations.all():
             if planche and impl.planche.id != planche.id:
@@ -556,27 +538,25 @@ class Serie(djangoModels.Model):
         return surface_m2
 
     def quantiteEstimee_kg_ou_piece(self):
-            """Retourne la quantité totale escomptée ( en kg ou pièces)""" 
+            """Retourne la quantité totale escomptée (en kg ou pièces)""" 
+            poids_kg = self.legume.prodParPied_kg * self.nbPieds()
             if self.legume.espece.unite_prod == constant.UNITE_PROD_KG:
-                return self.legume.rendementProduction_kg_m2 * self.surfaceOccupee_m2()
+                return poids_kg
             else:
-                return self.quantiteTotale()
+                return poids_kg / self.legume.poidsParPiece_kg
     
     def prodHebdo(self, dateDebutSem):
-        """ renvoi la production estimée de cette semaine 
-        soit le stock lissé sur le nombre de semaines de consommation"""
-        nbSemEcoulementStock = max([1, int(self.quantiteEstimee_kg_ou_piece() / (self.legume.espece.consoHebdoTotale()))])
-        dateFinStock = self.evt_fin.date + datetime.timedelta(weeks = nbSemEcoulementStock)
+        """ renvoie la production estimée de cette semaine lissée sur le nombre de semaines de consommation possible"""
+        nbSemEcoulementStock = max([1, int(self.quantiteEstimee_kg_ou_piece() / self.legume.espece.consoHebdoTotale())])
+        dateFinStock = self.evt_fin.date + datetime.timedelta(weeks = nbSemEcoulementStock) 
         if dateDebutSem > self.evenements.get(type=Evenement.TYPE_RECOLTE).date and dateDebutSem < dateFinStock :
             return self.quantiteEstimee_kg_ou_piece()/nbSemEcoulementStock
         else:
             return 0
 
-
-    def quantiteTotale(self):
-        """cumul de tous les pieds sur toutes des implantations"""
-        qte = sum(self.implantations.all().values_list("quantite",flat=True))
-        return qte
+    def nbPieds(self):
+        """cumul de tous les pieds de toutes des implantations"""
+        return sum(self.implantations.all().values_list("nbPieds",flat=True))
                
     def s_listeNomsPlanches(self):
         """retourne la liste des planches de la série"""
@@ -585,7 +565,7 @@ class Serie(djangoModels.Model):
     def __str__(self):       
         return "(s%d), %s, %d pieds, %d graines, %d m, %d m2 de planche(s) [%s], du %s au %s" %( self.id,
                                                                                         self.legume.nom(),
-                                                                                        self.quantiteTotale(),
+                                                                                        self.nbPieds(),
                                                                                         self.nbGraines(),
                                                                                         self.longueurRangTotal(), 
                                                                                         self.surfaceOccupee_m2(), 

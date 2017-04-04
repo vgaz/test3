@@ -132,7 +132,7 @@ function supprime_planche(plId)
         alert(jsonRep.err)
     }
     
-function prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
+function prepareDeplacementImplantation(id_serie, id_implantation, nbPieds, id_plancheDest)
     {
     // boite de dialogue de confirmation de déplacement avant requete serveur
     hDiv = document.getElementById("divDeplacementImplantation")
@@ -143,7 +143,7 @@ function prepareDeplacementImplantation(id_serie, id_implantation, quantite_impl
     document.getElementById("deplacement_id_planche_dest").value = id_plancheDest
     document.getElementById("deplacement_nb_rangs").value = hDivImpl.getAttribute("nb_rangs")
     document.getElementById("deplacement_intra_rang_cm").value = hDivImpl.getAttribute("intra_rang_cm")
-    document.getElementById("deplacement_quantite").value = quantite_implantation
+    document.getElementById("deplacement_quantite").value = nbPieds
     deplaceImplantation()
     }
 

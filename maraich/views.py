@@ -389,9 +389,7 @@ def recolte(request):
         ## recherche des productions par semaine regroupées par légume ou par espèce
         l_legumes = Legume.objects.all()
         for leg in l_legumes:
-            
-            if "arteno" in leg.variete.nom:
-                pass
+ 
             ## calcul des productions de légumes
             l_series = l_seriesActives.filter(legume_id = leg.id)
             if bSerres and not bChamps:
@@ -513,10 +511,9 @@ def tab_legumes(request):
                 leg.espece.nbGrainesParPied = int(request.POST.get(s_pk + "nbGrainesParPied", "1"))
       
                 leg.poidsParPiece_kg = float(request.POST.get(s_pk + "poidsParPiece_kg", "0").replace(",","."))
-                leg.rendementProduction_kg_m2 = float(request.POST.get(s_pk + "rendementProduction_kg_m2", "0").replace(",","."))
+                leg.prodParPied_kg = float(request.POST.get(s_pk + "prodParPied_kg", "0").replace(",","."))
                 leg.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent", "100"))
                 leg.intra_rang_m = float(request.POST.get(s_pk + "intra_rang_cm", "0").replace(",","."))/100
-                leg.inter_rang_m = float(request.POST.get(s_pk + "inter_rang_cm", "0").replace(",","."))/100
                 leg.save()
 
     except:

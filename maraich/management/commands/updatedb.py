@@ -8,10 +8,22 @@ from maraich.settings import log
 from maraich import settings
 
 def getInt(d_line, name, default="0"):
-    return int(d_line.get(name, default).split(",")[0])
+    
+    try:
+        _i = default
+        _i = int(d_line.get(name, default).split(",")[0])
+        return _i
+    except:
+        log.error("%s %s"%(str(d_line), sys.exc_info()[1])) 
 
 def getFloat(d_line, name, default="0"):
-    return float(d_line.get(name, default).replace(",","."))
+    try:
+        _f = default
+        _f = float(d_line.get(name, default).replace(",","."))
+        return _f
+    except:
+        log.error("%s %s"%(str(d_line), sys.exc_info()[1])) 
+    
 
 
 class Command(BaseCommand):
@@ -84,7 +96,7 @@ class Command(BaseCommand):
                         log.info("Ajout %s"%nomEspece)
                         espece = Espece()
                         espece.nom = nomEspece
-                        espece.save()
+#                         espece.save()
                     
                     nomFam = d_line.get("Famille","").lower().strip()
                     if nomFam:
@@ -98,7 +110,7 @@ class Command(BaseCommand):
                         
                         ## maj famille de l'espèce
                         espece.famille_id = famille.id
-                        espece.save()
+#                         espece.save()
                     
                     ## recup infos
                     try:
@@ -119,20 +131,18 @@ class Command(BaseCommand):
                         espece.rendementGermination = getFloat(d_line, "Rendement germination", "0")
                         assert espece.rendementGermination != 0, "'Rendement germination' indéfini pour %s"%(espece.nom)            
 
-                        espece.rendementConservation = getFloat(d_line, "Rendement conservation", "0") 
-                        assert espece.rendementConservation !=0, "'Rendement conservation' indéfini pour %s"%(esp.nom)            
+                        espece.rendementConservation = getFloat(d_line, "Rendement pousse et  conservation", "0") 
+                        assert espece.rendementConservation !=0, "'Rendement pousse et  conservation' indéfini pour %s"%(esp.nom)            
 
                         ## maj conso
-                        espece.nbParts = getInt(d_line, "Nombre de pieds", "0")
-                        assert espece.nbParts != 0, "'Nombre de paniers' indéfini ou nul pour %s"%(espece.nom)  
+                        espece.nbParts = getInt(d_line, "Nombre de panniers", "0")
+                        assert espece.nbParts != 0, "'Nombre de panniers' indéfini ou nul pour %s"%(espece.nom)  
                  
-                        s_field = d_line.get("Conso hebdo par pannier", "").replace(",",".")
-                        assert s_field, "'Conso hebdo par pannier' indéfini pour %s"%(espece.nom)  
-                        espece.consoHebdoParPart = float(s_field)
+                        espece.consoHebdoParPart = getFloat(d_line, "Conso hebdo par pannier", "0")
+                        assert espece.consoHebdoParPart, "'Conso hebdo par pannier' indéfini pour %s"%(espece.nom)
                         
-                        s_field = d_line.get("Délai avant retour (an)", "")
-                        assert s_field, "'Délai avant retour (an)' indéfini pour %s"%(espece.nom)  
-                        espece.delai_avant_retour_an = int(s_field)
+                        espece.delai_avant_retour_an = getInt(d_line, "Délai avant retour (an)", "0")
+                        assert espece.delai_avant_retour_an, "'Délai avant retour (an)' indéfini pour %s"%(espece.nom)
                                                                  
                         s_field = d_line.get("Couleur", "brown").strip()
                         assert s_field, "'Couleur' indéfini pour %s"%(espece.nom)  
@@ -188,26 +198,20 @@ class Command(BaseCommand):
                        
                 ## recup infos légumes
                 try: 
-                    val = d_line.get("Intra rang (cm)","").split(",")[0]
-                    assert val, "Pas d'intra Rang défini pour %s"%(espece.nom)            
-                    leg.intra_rang_m = float(val)/100
-                    
-                    val = d_line.get("Inter rang (cm)","").split(",")[0]
-                    assert val, "Pas d'inter rang défini pour %s"%(espece.nom)
-                    leg.inter_rang_m = float(val)/100
-                    
-                    ## pas de controle car inutile si unité  = kg    
-                    s_poidsParPiece = d_line.get("Poids estimé par pièce (g)").split(",")[0] or "0" 
-                    leg.poidsParPiece_kg = float(s_poidsParPiece)/1000
+                    leg.intra_rang_m = getFloat(d_line, "Intra rang (cm)","0")/100
+                    assert leg.intra_rang_m, "'Intra rang (cm)' indéfini pour %s"%(espece.nom)            
 
-                    leg.rendementProduction_kg_m2 = getFloat(d_line, "Rendement (kg/m²)") 
-                    assert leg.rendementProduction_kg_m2, "Champs 'Rendement (kg/m²)' indéfini pour %s"%(espece.nom)            
+                    leg.prodParPied_kg = getFloat(d_line, "Production par pied (kg)") 
+                    assert leg.prodParPied_kg, "Production par pied (kg)' indéfini pour %s"%(espece.nom)   
+                             
+                    leg.poidsParPiece_kg = getFloat(d_line, "Poids par pièce (g)")/1000 
+                    assert leg.poidsParPiece_kg, "Poids par pièce (g)' indéfini pour %s"%(espece.nom)            
 
                     leg.save()
                     
                     ## maj série
                     s_dateEnTerre = d_line.get("Date en terre","")
-                    assert s_dateEnTerre, "Champ 'Date en terre' indéfini pour %s"%(leg.nom())
+                    assert s_dateEnTerre, "'Date en terre' indéfini pour %s"%(leg.nom())
                     dateEnTerre = datetime.datetime.strptime(s_dateEnTerre, constant.FORMAT_DATE)
                     try:
                         serie = Serie.objects.get(evt_debut__type = Evenement.TYPE_DEBUT,
@@ -220,14 +224,12 @@ class Command(BaseCommand):
                         serie.legume = leg
 
                     ## recup infos série                    
-                    serie.quantite = getInt(d_line, "Nombre de pieds", "0")
-                    assert serie.quantite, "Champ 'Nombre de pieds' indéfini pour %s "%(leg.nom())
                     
                     serie.nb_rangs = getInt(d_line, "Nombre de rangs retenus")
-                    assert serie.nb_rangs != 0, "Champ 'Nombre de rangs retenus' indéfini pour %s "%(leg.nom())
+                    assert serie.nb_rangs != 0, "'Nombre de rangs retenus' indéfini pour %s "%(leg.nom())
                     
                     val = d_line.get("lieu", "")
-                    assert val, "Champ 'lieu' indéfini pour %s "%(leg.nom())                    
+                    assert val, "'lieu' indéfini pour %s "%(leg.nom())                    
                     serie.bSerre = (val == "SERRE")
                     serie.intra_rang_m = leg.intra_rang_m
                     serie.remarque = d_line.get("Remarque", "")       
@@ -249,7 +251,9 @@ class Command(BaseCommand):
                         implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP).id
 
                     ## on place toute la série sur cette implantation par défaut
-                    implantation.quantite = serie.quantite
+                    implantation.nbPieds = getInt(d_line, "Nombre de pieds", "0")
+                    assert implantation.nbPieds, "'Nombre de pieds' indéfini pour %s "%(leg.nom())
+                     
                     implantation.save()
                     serie.implantations.add(implantation)
                     serie.save()

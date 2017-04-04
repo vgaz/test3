@@ -23,18 +23,17 @@
           <td><h2>{{leg.nom|title}}</h2>
             <p>famille : {{leg.espece.famille.nom|title}} ; espèce : {{leg.espece.nom|title}}</p>
             
-            Distance conseillée. Dans le rang (cm) <input style="width:40px" type="text" name="leg_{{leg.pk}}_intra_rang_cm" value="{{leg.intraRang_cm}}" />
-            Entre les rangs (cm) <input style="width:40px" type="text" name="leg_{{leg.pk}}_inter_rang_cm" value="{{leg.interRang_cm}}" /> <br/>
+            Distance dans le rang (cm) <input style="width:40px" type="text" name="leg_{{leg.pk}}_intra_rang_cm" value="{{leg.intraRang_cm}}" />
             Unité 
             <select id="leg_{{leg.pk}}_nomUniteProd" name="leg_{{leg.pk}}_nomUniteProd" >
                 {% for idUp, nomUp in d_up.items %}
                     <option value="{{id}}" id="leg_{{leg.pk}}_upid_{{idUp}}" name="leg_{{leg.pk}}_upid_{{idUp}}" {% if leg.espece.unite_prod == idUp %}selected{% endif %}>{{nomUp}}</option>
                 {% endfor %}
             </select>
-            poids par pièce(kg) si comptage en pièce <input style="width: 40px" type="text" name="leg_{{leg.pk}}_poidsParPiece_kg" value="{{leg.poidsParPiece_kg}}" /> <br/>
-            Si dispo, consommation hebdo par panier : <input style="width: 40px" type="text" name="leg_{{leg.pk}}_consoHebdo" value="{{leg.espece.consoHebdoParPart}}" /><br/>
+            Poids moyen par pièce(kg) si comptage en pièce <input style="width: 40px" type="text" name="leg_{{leg.pk}}_poidsParPiece_kg" value="{{leg.poidsParPiece_kg}}" /> <br/>
+            Production par pied(kg) <input style="width: 40px" type="text" name="leg_{{leg.pk}}_prodParPied_kg" value="{{leg.prodParPied_kg}}" /> <br/>
+            Consommation hebdo par panier : <input style="width: 40px" type="text" name="leg_{{leg.pk}}_consoHebdo" value="{{leg.espece.consoHebdoParPart}}" /><br/>
             Rendement germination <input style="width:40px" type="text" name="leg_{{leg.pk}}_rendementGermination" value="{{leg.espece.rendementGermination}}" />
-            Rendement production (kg/m2) <input style="width: 40px" type="text" name="leg_{{leg.pk}}_rendementProduction_kg_m2" value="{{leg.rendementProduction_kg_m2}}" /> <br/>
             Nb graines par pied <input style="width: 40px" type="text" name="leg_{{leg.pk}}_nbGrainesParPied" value="{{leg.espece.nbGrainesParPied}}" /> <br/>
 
             {% if leg.espece.avec.distinct %} <img src="{{ STATIC_URL }}images/smileyOK.jpg" width="32px" height="32px"  title="Avec"/> 
@@ -51,8 +50,6 @@
 
       </table>
       
-      
-
 	<hr />
 {% endfor %}
 </form>

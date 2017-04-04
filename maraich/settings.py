@@ -30,8 +30,6 @@ SECRET_KEY = 'im&j)8j1)mg4)o9gr#tk4d2_9qc_kf*0x7^$e@(#xzd#nc(9lk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-##MEDIA_ROOT = os.path.join(BASE_DIR, "maraich", "media")
-
 ALLOWED_HOSTS = []
 
 

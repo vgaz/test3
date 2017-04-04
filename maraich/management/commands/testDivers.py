@@ -20,15 +20,15 @@ class Command(BaseCommand):
         request = self.factory.post('/recolte/', 
                                     
                                     data={"periode":"specifique",
-                                          "date_debut_vue":"29/5/2017",
-                                          "date_fin_vue":"5/6/2017", 
+                                          "date_debut_vue":"03/04/2017",
+                                          "date_fin_vue":"15/4/2017", 
                                           "bSerres":"on"
                     
                                          
                                         }
                                     )
         views.recolte(request)    
-        
+        return
 #         
 #         testU_ProdSemaine.testU_ProdSemaine()
 #         
@@ -71,7 +71,7 @@ class Command(BaseCommand):
     
 
         date_debut_vue = MyTools.getDateFrom_d_m_y("1/4/2017")
-        date_fin_vue = MyTools.getDateFrom_d_m_y("31/7/2017")
+        date_fin_vue = MyTools.getDateFrom_d_m_y("11/4/2017")
 #         la_date = MyTools.getDateFrom_d_m_y("14/03/2016")
 #         l_implantations = Implantation.objects.filter(planche_id = 2)
 #         planche = Planche.objects.get(id=1)
