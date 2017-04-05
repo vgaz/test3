@@ -306,7 +306,7 @@ class Legume(djangoModels.Model):
     espece = djangoModels.ForeignKey(Espece)
     variete = djangoModels.ForeignKey(Variete)
     prodParPied_kg = djangoModels.FloatField("Production par pied (kg)")
-    poidsParPiece_kg = djangoModels.FloatField("Poids estimé par pièce (Kg)", default=0)  ## optionnel si unite_prod = kg
+    poidsParPiece_kg = djangoModels.FloatField("Poids estimé par pièce (Kg)", default=0)
     intra_rang_m = djangoModels.FloatField("distance dans le rang (m)", default=0)
     
     class Meta:
@@ -328,6 +328,9 @@ class Legume(djangoModels.Model):
             return (qte * self.poidsParPiece_kg)
         else:
             return (qte)
+
+    def poidsParPiece_g(self):
+        return int(self.poidsParPiece_kg*1000)
 
 
 class Implantation(djangoModels.Model):

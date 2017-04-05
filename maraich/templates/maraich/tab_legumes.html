@@ -1,9 +1,38 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Légumes, espèces et variétés{% endblock %}
 
 {% block javascript %}
-<script type="text/javascript">function  init() {}</script>
+<script type="text/javascript" src="{% static "javascripts/myTools.js" %}"></script>
+
+<script type="text/javascript">
+function  init() {}
+
+
+function sauveLegume(id)
+    {
+    s_request = "cde=sauveLegume&id=" + id
+    s_request += "&uniteProd="+ document.getElementById("leg_"+id+"_nomUniteProd").value
+    s_request += "&consoHebdoParPart="+ document.getElementById("leg_" + id + "_" + "consoHebdoParPart").value
+    s_request += "&rendementGermination="+ document.getElementById("leg_" + id + "_" + "rendementGermination").value
+    s_request += "&intraRang_cm="+ document.getElementById("leg_" + id + "_" + "intraRang_cm").value
+    s_request += "&poidsParPiece_g="+ document.getElementById("leg_" + id + "_" + "poidsParPiece_g").value
+    s_request += "&nbGrainesParPied="+ document.getElementById("leg_" + id + "_" + "nbGrainesParPied").value
+    s_request += "&prodParPied_kg="+ document.getElementById("leg_" + id + "_" + "prodParPied_kg").value
+
+    rep = requestServer(s_request)  
+    jsonRep = JSON.parse(rep)   
+    if (jsonRep.status == true)
+        {
+        window.location.reload()
+        }  
+    else        
+        alert(jsonRep.err)
+    }
+
+
+
+</script>
 {% endblock %}
 
 {% block content %}
@@ -22,19 +51,27 @@
           {% if leg.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
           <td><h2>{{leg.nom|title}}</h2>
             <p>famille : {{leg.espece.famille.nom|title}} ; espèce : {{leg.espece.nom|title}}</p>
-            
-            Distance dans le rang (cm) <input style="width:40px" type="text" name="leg_{{leg.pk}}_intra_rang_cm" value="{{leg.intraRang_cm}}" />
+            Consommation hebdo par pannier : 
+            <input style="width: 40px" type="text" id="leg_{{leg.pk}}_consoHebdoParPart" name="leg_{{leg.pk}}_consoHebdoParPart" value="{{leg.espece.consoHebdoParPart}}" />
             Unité 
             <select id="leg_{{leg.pk}}_nomUniteProd" name="leg_{{leg.pk}}_nomUniteProd" >
                 {% for idUp, nomUp in d_up.items %}
-                    <option value="{{id}}" id="leg_{{leg.pk}}_upid_{{idUp}}" name="leg_{{leg.pk}}_upid_{{idUp}}" {% if leg.espece.unite_prod == idUp %}selected{% endif %}>{{nomUp}}</option>
+                    <option value="{{idUp}}" id="leg_{{leg.pk}}_upid_{{idUp}}" name="leg_{{leg.pk}}_upid_{{idUp}}" {% if leg.espece.unite_prod == idUp %}selected{% endif %}>{{nomUp}}</option>
                 {% endfor %}
-            </select>
-            Poids moyen par pièce(kg) si comptage en pièce <input style="width: 40px" type="text" name="leg_{{leg.pk}}_poidsParPiece_kg" value="{{leg.poidsParPiece_kg}}" /> <br/>
-            Production par pied(kg) <input style="width: 40px" type="text" name="leg_{{leg.pk}}_prodParPied_kg" value="{{leg.prodParPied_kg}}" /> <br/>
-            Consommation hebdo par panier : <input style="width: 40px" type="text" name="leg_{{leg.pk}}_consoHebdo" value="{{leg.espece.consoHebdoParPart}}" /><br/>
-            Rendement germination <input style="width:40px" type="text" name="leg_{{leg.pk}}_rendementGermination" value="{{leg.espece.rendementGermination}}" />
-            Nb graines par pied <input style="width: 40px" type="text" name="leg_{{leg.pk}}_nbGrainesParPied" value="{{leg.espece.nbGrainesParPied}}" /> <br/>
+            </select> <br/>
+            Rendement germination 
+            <input style="width:40px" type="text" id="leg_{{leg.pk}}_rendementGermination" name="leg_{{leg.pk}}_rendementGermination" value="{{leg.espece.rendementGermination}}" />
+            
+            Distance dans le rang (cm) 
+            <input style="width:40px" type="text" id="leg_{{leg.pk}}_intraRang_cm" name="leg_{{leg.pk}}_intraRang_cm" value="{{leg.intraRang_cm}}" /><br/>
+            
+            Poids moyen par pièce(g) si comptage en pièce
+            <input style="width: 40px" type="text" id="leg_{{leg.pk}}_poidsParPiece_g" name="leg_{{leg.pk}}_poidsParPiece_g" value="{{leg.poidsParPiece_g}}" /> <br/>
+            
+            Production par pied(kg) 
+            <input style="width: 40px" type="text" id="leg_{{leg.pk}}_prodParPied_kg" name="leg_{{leg.pk}}_prodParPied_kg" value="{{leg.prodParPied_kg}}" /> <br/>
+
+            Nb graines par pied <input style="width: 40px" type="text" id="leg_{{leg.pk}}_nbGrainesParPied" name="leg_{{leg.pk}}_nbGrainesParPied" value="{{leg.espece.nbGrainesParPied}}" /> <br/>
 
             {% if leg.espece.avec.distinct %} <img src="{{ STATIC_URL }}images/smileyOK.jpg" width="32px" height="32px"  title="Avec"/> 
             {% for varAvec in leg.espece.avec.distinct %}{{varAvec.nom|title}}, {% endfor %} <br/>
@@ -44,7 +81,7 @@
             {% for varSans in leg.espece.sans.distinct %}{{varSans.nom|title}}, {% endfor %} <br/>
             {% endif %}
             <br/>
-            <input style="margin-left: 20px" type="submit" value="Sauver"/>
+            <input type="button" value="Sauver..." onclick="sauveLegume({{leg.pk}});return false;" />
             </td>
           </tr>
 

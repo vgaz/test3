@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand       
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory
 
 from maraich import serveRequest, views, constant
 import os
 from maraich import settings
 from maraich.models import *
+import MyHttpTools
 
-from UnitTests import testU_Series, testU_ProdSemaine
 
 class Command(BaseCommand):
     help = "test divers"
@@ -22,11 +22,16 @@ class Command(BaseCommand):
                                     data={"periode":"specifique",
                                           "date_debut_vue":"03/04/2017",
                                           "date_fin_vue":"15/4/2017", 
-                                          "bSerres":"on"
+                                          "bSerres":"on",
+                                          "faa":3.4
                     
                                          
                                         }
                                     )
+        ff = MyHttpTools.getFloatInPost(request, "faea", 1.2)
+        print (ff)
+        return
+    
         views.recolte(request)    
         return
 #         

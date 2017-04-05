@@ -11,7 +11,7 @@ import sys, traceback
 import datetime
 from django.core import serializers
 from maraich.settings import log
-
+from MyHttpTools import getFloatInPost
 
 def serveRequest(request):
     """Received a request and return specific response"""
@@ -83,8 +83,31 @@ def serveRequest(request):
              
         return HttpResponse(s_json, content_type="application/json")
             
-        
-        
+    
+    elif cde == "sauveLegume":
+        ## sauvegarde suite à modif de qté
+        try:
+            ## lié à l'espece
+            leg = Legume.objects.get(pk=int(request.POST.get("id")))
+            leg.espece.nbGrainesParPied = int(request.POST.get("nbGrainesParPied"))
+            leg.espece.consoHebdoParPart = getFloatInPost(request, "consoHebdoParPart")
+            leg.espece.rendementGermination = getFloatInPost(request, "rendementGermination")
+            leg.espece.save()
+            ## lié au légume
+            leg.poidsParPiece_kg = getFloatInPost(request, "poidsParPiece_g")/1000
+            leg.prodParPied_kg = getFloatInPost(request, "prodParPied_kg")
+            leg.rendement_plants_graines_pourcent = int(request.POST.get("rendement_plants_graines_pourcent", "100"))
+            leg.intra_rang_m = getFloatInPost(request, "intraRang_cm")/100
+            leg.save()    
+            print(leg)                     
+            s_json = '{"status":true}'
+        except:
+            log.info(__name__ + ': ' + str(sys.exc_info()[1]) )
+            traceback.log.info_tb(sys.exc_info())
+            s_json = '{"status":false,"err":"%s"}'%(sys.exc_info()[1])
+             
+        return HttpResponse(s_json, content_type="application/json")
+                    
     ## --------------- renvoi d'un evt à partir de son identifiant
     elif cde == "get_evt": 
         try:

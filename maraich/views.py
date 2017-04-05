@@ -10,12 +10,13 @@ import os, sys
 from maraich import forms, constant, settings
 from maraich.settings import log
 import MyTools
-
+from MyHttpTools import getFloatInPost
 import datetime
 
 from maraich.models import *
 from maraich.forms import PlancheForm
 
+ 
 def donnePeriodeVue(reqPost):
 
     date_aujourdhui = datetime.datetime.now()
@@ -183,84 +184,7 @@ def suiviImplantations(request):
                     "doc":constant.DOC_CHRONOVIEW
                   })
         
-#########################################################"
-#     
-# def placementSeries(request):
-# 
-#     try:    
-#         print(request.POST)
-#         s_msg = ""
-#         delta12h = datetime.timedelta(hours=12)
-#         date_du_jour = datetime.datetime.now()
-#     
-#         if request.POST.get("date_debut_vue",""):
-#             date_debut_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_debut_vue", ""))
-#             date_fin_vue = MyTools.getDateFrom_d_m_y(request.POST.get("date_fin_vue", "")) + delta12h
-#         else:
-#             delta = datetime.timedelta(days=60)
-#             date_debut_vue = date_du_jour - delta
-#             date_fin_vue = date_du_jour + delta + delta12h
-#             
-#         decalage_j = int(request.POST.get("decalage_j", 10))
-#         delta = datetime.timedelta(days = decalage_j)
-#         if request.POST.get("direction", "") == "avance":
-#             date_debut_vue += delta 
-#             date_fin_vue += delta
-#             
-#         if request.POST.get("direction", "") == "recul":
-#             date_debut_vue -= delta 
-#             date_fin_vue -= delta
-#         
-#         
-#         if not request.POST.get("date_debut_vue",""):
-#             bSerres = True
-#             bChamps = True
-#         else:
-#             bSerres = request.POST.get("serres", )=="on"
-#             bChamps = request.POST.get("champs", )=="on"
-#         
-#         if not bSerres and not bChamps: l_planches = Planche.objects.filter(id=0)
-#         elif bSerres and not bChamps: l_planches = Planche.objects.filter(bSerre = True)
-#         elif not bSerres and bChamps: l_planches = Planche.objects.filter(bSerre = False)
-#         else: l_planches = Planche.objects.all()
-#         
-#         l_planches = l_planches.order_by('nom')
-#         
-#         s_id_planches = request.POST.get("id_planches", request.GET.get("id_planches", ""))
-# 
-#     except:
-#         s_msg += str(sys.exc_info())
-#         return render(request, 'maraich/erreur.html',  
-#                       {"appVersion":constant.APP_VERSION, 
-#                        "appName":constant.APP_NAME, 
-#                        "message":s_msg}
-#                       )
-# 
-#     ## ajout des séries présentes pour chaque planche
-#     for laPlanche in l_planches:
-#         laPlanche.l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue, laPlanche)
-#         ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de serie par planche)
-#         for serie in laPlanche.l_series:
-#             serie.implantationPlanche = serie.implantations.get(planche_id=laPlanche.id)
-#             
-#     return render(request,
-#                  'maraich/placement_series.html',
-#                  {
-#                     "appVersion": constant.APP_VERSION,
-#                     "appName": constant.APP_NAME,
-#                     "l_planches": l_planches,
-#                     "selection_serres":bSerres,
-#                     "selection_champs":bChamps,
-#                     "d_evtTypes": Evenement.D_NOM_TYPES,
-#                     "codeEvtDivers":Evenement.TYPE_DIVERS,
-#                     "l_especes": Espece.objects.all(),
-#                     "l_vars": Variete.objects.all(),                  
-#                     "date_debut_vue": date_debut_vue,
-#                     "date_fin_vue": date_fin_vue,
-#                     "date_du_jour": date_du_jour,
-#                     "decalage_j": decalage_j,
-#                     "s_msg": s_msg
-#                   })
+
 
 def evenementsPlanches(request):
 
@@ -333,40 +257,6 @@ class CreationPlanche(CreateView):
     def dispatch(self, *args, **kwargs):
         return super(CreationPlanche, self).dispatch(*args, **kwargs)
 
-#################################################
-# 
-# def editionPlanche(request):
-# 
-#     planche = Planche.objects.get(id = int(request.GET.get("id_planche", 0)))
-#     s_date = request.POST.get("date", "")
-#     if s_date:
-#         dateVue = datetime.datetime.strptime(s_date, constant.FORMAT_DATE)
-#     else:
-#         dateVue = datetime.datetime.now()
-#         
-#     if request.POST.get("delta", "") == "+1":
-#         dateVue += datetime.timedelta(days=1)
-#     if request.POST.get("delta", "") == "-1":
-#         dateVue += datetime.timedelta(days=-1)
-#     if request.POST.get("delta", "") == "+10":
-#         dateVue += datetime.timedelta(days=10)
-#     if request.POST.get("delta", "") == "-10":
-#         dateVue += datetime.timedelta(days=-10)
-# 
-#     l_series = recupListeSeriesEnDateDu(dateVue, planche.id)
-# 
-#     return render(request,
-#                  'maraich/edition_planche.html',
-#                  {
-#                   "appVersion":constant.APP_VERSION,
-#                   "planche":planche,
-#                   "l_vars":Variete.objects.all(),
-#                   "l_evtTypes":Evenement.D_NOM_TYPES.items(),
-#                   "d_evtTypes":Evenement.D_NOM_TYPES,
-#                   "l_series":l_series,
-#                   "date":dateVue
-# 
-#                  })
 
 
 #################################################
@@ -501,23 +391,8 @@ def utilisationPlanches(request):
 #########################################################
 def tab_legumes(request):
     s_info = ""
-    try:
-        l_legumes = Legume.objects.all()
-        if request.POST:
-            for leg in l_legumes:
-                s_pk = "leg_%d_"%leg.pk
-                
-                ## lié à l'espece
-                leg.espece.nbGrainesParPied = int(request.POST.get(s_pk + "nbGrainesParPied", "1"))
-      
-                leg.poidsParPiece_kg = float(request.POST.get(s_pk + "poidsParPiece_kg", "0").replace(",","."))
-                leg.prodParPied_kg = float(request.POST.get(s_pk + "prodParPied_kg", "0").replace(",","."))
-                leg.rendement_plants_graines_pourcent = int(request.POST.get(s_pk + "rendement_plants_graines_pourcent", "100"))
-                leg.intra_rang_m = float(request.POST.get(s_pk + "intra_rang_cm", "0").replace(",","."))/100
-                leg.save()
 
-    except:
-        s_info += str(sys.exc_info()[1])
+    l_legumes = Legume.objects.all()
         
     return render(request,
                  'maraich/tab_legumes.html',
