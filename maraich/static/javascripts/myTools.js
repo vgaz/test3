@@ -143,7 +143,7 @@ function prepareDeplacementImplantation(id_serie, id_implantation, nbPieds, id_p
     document.getElementById("deplacement_id_planche_dest").value = id_plancheDest
     document.getElementById("deplacement_nb_rangs").value = hDivImpl.getAttribute("nb_rangs")
     document.getElementById("deplacement_intra_rang_cm").value = hDivImpl.getAttribute("intra_rang_cm")
-    document.getElementById("deplacement_quantite").value = nbPieds
+    document.getElementById("deplacement_nb_pieds").value = nbPieds
     deplaceImplantation()
     }
 
@@ -155,7 +155,7 @@ function  deplaceImplantation()
     s_request = "cde=deplacement_implantation&id_serie=" + document.getElementById("deplacement_id_serie").value
     s_request += "&id_implantation=" + document.getElementById("deplacement_id_implantation").value
     s_request += "&id_planche_dest=" + document.getElementById("deplacement_id_planche_dest").value
-    s_request += "&quantite=" + document.getElementById("deplacement_quantite").value
+    s_request += "&nb_pieds=" + document.getElementById("deplacement_nb_pieds").value
     s_request += "&nb_rangs=" + document.getElementById("deplacement_nb_rangs").value
     s_request += "&intra_rang_cm=" + document.getElementById("deplacement_intra_rang_cm").value
 

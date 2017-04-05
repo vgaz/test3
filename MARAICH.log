@@ -15502,3 +15502,494 @@ Espece matching query does not exist.
 'Date en terre' indéfini pour chou frisé cf1
 Variété indéfinie pour chou vert
 Variété indéfinie pour ciboulette
+[2017-04-04 14:57:07,928 MARAICH_INFO    ] updatedb       .creationPlanches: S_01 (360), 25 m x 1.2 m = 30 m2; sous serre
+[2017-04-04 14:57:08,240 MARAICH_INFO    ] updatedb       .creationPlanches: S_02 (361), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:08,509 MARAICH_INFO    ] updatedb       .creationPlanches: S_03 (362), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:08,900 MARAICH_INFO    ] updatedb       .creationPlanches: S_04 (363), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:09,223 MARAICH_INFO    ] updatedb       .creationPlanches: S_05 (364), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:09,436 MARAICH_INFO    ] updatedb       .creationPlanches: S_06 (365), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:09,681 MARAICH_INFO    ] updatedb       .creationPlanches: S_07 (366), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:09,982 MARAICH_INFO    ] updatedb       .creationPlanches: S_08 (367), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:10,271 MARAICH_INFO    ] updatedb       .creationPlanches: S_09 (368), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:10,617 MARAICH_INFO    ] updatedb       .creationPlanches: S_10 (369), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:10,851 MARAICH_INFO    ] updatedb       .creationPlanches: S_11 (370), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:11,085 MARAICH_INFO    ] updatedb       .creationPlanches: S_12 (371), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:11,286 MARAICH_INFO    ] updatedb       .creationPlanches: S_13 (372), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:11,467 MARAICH_INFO    ] updatedb       .creationPlanches: S_14 (373), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:11,756 MARAICH_INFO    ] updatedb       .creationPlanches: S_15 (374), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:12,035 MARAICH_INFO    ] updatedb       .creationPlanches: S_16 (375), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:12,225 MARAICH_INFO    ] updatedb       .creationPlanches: S_17 (376), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:12,392 MARAICH_INFO    ] updatedb       .creationPlanches: S_18 (377), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:12,637 MARAICH_INFO    ] updatedb       .creationPlanches: S_19 (378), 30 m x 1.2 m = 36 m2; sous serre
+[2017-04-04 14:57:12,839 MARAICH_INFO    ] updatedb       .creationPlanches: Bois_01 (379), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:13,062 MARAICH_INFO    ] updatedb       .creationPlanches: Bois_02 (380), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:13,296 MARAICH_INFO    ] updatedb       .creationPlanches: Bois_03 (381), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:13,552 MARAICH_INFO    ] updatedb       .creationPlanches: Bois_04 (382), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:13,753 MARAICH_INFO    ] updatedb       .creationPlanches: Bois_05 (383), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:13,976 MARAICH_INFO    ] updatedb       .creationPlanches: Bois_06 (384), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:14,222 MARAICH_INFO    ] updatedb       .creationPlanches: Bois_07 (385), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:14,513 MARAICH_INFO    ] updatedb       .creationPlanches: Bois_08 (386), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:14,692 MARAICH_INFO    ] updatedb       .creationPlanches: Bois_09 (387), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:14,870 MARAICH_INFO    ] updatedb       .creationPlanches: B_10 (388), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:15,049 MARAICH_INFO    ] updatedb       .creationPlanches: C_01 (389), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:15,250 MARAICH_INFO    ] updatedb       .creationPlanches: C_02 (390), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:15,440 MARAICH_INFO    ] updatedb       .creationPlanches: C_03 (391), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:15,630 MARAICH_INFO    ] updatedb       .creationPlanches: C_04 (392), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:15,897 MARAICH_INFO    ] updatedb       .creationPlanches: C_05 (393), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:16,131 MARAICH_INFO    ] updatedb       .creationPlanches: C_06 (394), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:16,288 MARAICH_INFO    ] updatedb       .creationPlanches: C_07 (395), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:16,422 MARAICH_INFO    ] updatedb       .creationPlanches: C_08 (396), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:16,646 MARAICH_INFO    ] updatedb       .creationPlanches: C_09 (397), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:16,815 MARAICH_INFO    ] updatedb       .creationPlanches: C_10 (398), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:16,994 MARAICH_INFO    ] updatedb       .creationPlanches: C_11 (399), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:17,206 MARAICH_INFO    ] updatedb       .creationPlanches: C_12 (400), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:17,428 MARAICH_INFO    ] updatedb       .creationPlanches: C_13 (401), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:17,607 MARAICH_INFO    ] updatedb       .creationPlanches: C_14 (402), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:17,819 MARAICH_INFO    ] updatedb       .creationPlanches: C_15 (403), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:18,009 MARAICH_INFO    ] updatedb       .creationPlanches: C_16 (404), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:18,165 MARAICH_INFO    ] updatedb       .creationPlanches: C_17 (405), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:18,366 MARAICH_INFO    ] updatedb       .creationPlanches: C_18 (406), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:18,578 MARAICH_INFO    ] updatedb       .creationPlanches: C_19 (407), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:18,790 MARAICH_INFO    ] updatedb       .creationPlanches: C_20 (408), 30 m x 1.2 m = 36 m2; plein champ
+[2017-04-04 14:57:18,792 MARAICH_INFO    ] updatedb       .handle: Ajout ail
+[2017-04-04 14:57:19,174 MARAICH_INFO    ] updatedb       .handle: Ajout artichaut
+[2017-04-04 14:57:19,384 MARAICH_ERROR   ] updatedb       .handle: 'Délai avant retour (an)' indéfini pour artichaut
+[2017-04-04 14:57:19,387 MARAICH_INFO    ] updatedb       .handle: Ajout aubergine
+[2017-04-04 14:57:19,753 MARAICH_INFO    ] updatedb       .handle: Ajout betterave rouge
+[2017-04-04 14:57:20,122 MARAICH_INFO    ] updatedb       .handle: Ajout blette
+[2017-04-04 14:57:20,335 MARAICH_INFO    ] updatedb       .handle: Ajout carotte de garde
+[2017-04-04 14:57:20,714 MARAICH_INFO    ] updatedb       .handle: Ajout carotte primeur
+[2017-04-04 14:57:20,982 MARAICH_INFO    ] updatedb       .handle: Ajout carotte saison
+[2017-04-04 14:57:21,105 MARAICH_INFO    ] updatedb       .handle: Ajout céleri branche
+[2017-04-04 14:57:21,418 MARAICH_INFO    ] updatedb       .handle: Ajout céleri rave
+[2017-04-04 14:57:21,586 MARAICH_INFO    ] updatedb       .handle: Ajout chou blanc
+[2017-04-04 14:57:22,026 MARAICH_INFO    ] updatedb       .handle: Ajout chou brocoli
+[2017-04-04 14:57:22,191 MARAICH_INFO    ] updatedb       .handle: Ajout chou fleur
+[2017-04-04 14:57:22,347 MARAICH_INFO    ] updatedb       .handle: Ajout chou frisé
+[2017-04-04 14:57:22,636 MARAICH_INFO    ] updatedb       .handle: Ajout chou rave
+[2017-04-04 14:57:22,891 MARAICH_INFO    ] updatedb       .handle: Ajout chou rouge
+[2017-04-04 14:57:23,173 MARAICH_INFO    ] updatedb       .handle: Ajout chou rutabaga
+[2017-04-04 14:57:23,318 MARAICH_INFO    ] updatedb       .handle: Ajout chou vert
+[2017-04-04 14:57:23,539 MARAICH_INFO    ] updatedb       .handle: Ajout ciboulette
+[2017-04-04 14:57:23,730 MARAICH_INFO    ] updatedb       .handle: Ajout concombre
+[2017-04-04 14:57:24,212 MARAICH_INFO    ] updatedb       .handle: Ajout courge
+[2017-04-04 14:57:24,477 MARAICH_INFO    ] updatedb       .handle: Ajout courgette
+[2017-04-04 14:57:24,667 MARAICH_INFO    ] updatedb       .handle: Ajout echalote
+[2017-04-04 14:57:24,946 MARAICH_INFO    ] updatedb       .handle: Ajout epinard
+[2017-04-04 14:57:25,192 MARAICH_INFO    ] updatedb       .handle: Ajout fenouil
+[2017-04-04 14:57:25,425 MARAICH_INFO    ] updatedb       .handle: Ajout fèves
+[2017-04-04 14:57:25,862 MARAICH_INFO    ] updatedb       .handle: Ajout haricot
+[2017-04-04 14:57:26,219 MARAICH_INFO    ] updatedb       .handle: Ajout laitue
+[2017-04-04 14:57:26,753 MARAICH_INFO    ] updatedb       .handle: Ajout mâche
+[2017-04-04 14:57:27,158 MARAICH_INFO    ] updatedb       .handle: Ajout melon
+[2017-04-04 14:57:27,380 MARAICH_INFO    ] updatedb       .handle: Ajout navet
+[2017-04-04 14:57:27,526 MARAICH_INFO    ] updatedb       .handle: Ajout oignon de printemps
+[2017-04-04 14:57:27,737 MARAICH_INFO    ] updatedb       .handle: Ajout oignon de garde
+[2017-04-04 14:57:27,950 MARAICH_INFO    ] updatedb       .handle: Ajout panais
+[2017-04-04 14:57:28,162 MARAICH_INFO    ] updatedb       .handle: Ajout persil
+[2017-04-04 14:57:28,352 MARAICH_INFO    ] updatedb       .handle: Ajout poireau
+[2017-04-04 14:57:28,587 MARAICH_INFO    ] updatedb       .handle: Ajout pois
+[2017-04-04 14:57:28,875 MARAICH_INFO    ] updatedb       .handle: Ajout poivron
+[2017-04-04 14:57:29,155 MARAICH_INFO    ] updatedb       .handle: Ajout pomme de terre de garde
+[2017-04-04 14:57:29,498 MARAICH_INFO    ] updatedb       .handle: Ajout pomme de terre primeur
+[2017-04-04 14:57:29,810 MARAICH_INFO    ] updatedb       .handle: Ajout pourpier
+[2017-04-04 14:57:30,382 MARAICH_INFO    ] updatedb       .handle: Ajout radis noir
+[2017-04-04 14:57:30,572 MARAICH_INFO    ] updatedb       .handle: Ajout radis rose
+[2017-04-04 14:57:30,749 MARAICH_INFO    ] updatedb       .handle: Ajout roquette
+[2017-04-04 14:57:30,996 MARAICH_INFO    ] updatedb       .handle: Ajout tomate
+[2017-04-04 14:57:31,254 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose flavor bio
+[2017-04-04 14:57:32,168 MARAICH_INFO    ] updatedb       .handle: Ajout légume ail rose flavor bio
+[2017-04-04 14:57:34,124 MARAICH_INFO    ] updatedb       .handle: Ajout variété blanc messidor
+[2017-04-04 14:57:34,946 MARAICH_INFO    ] updatedb       .handle: Ajout légume ail blanc messidor
+[2017-04-04 14:57:37,461 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 1, 526 pieds (13 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:57:37,467 MARAICH_INFO    ] updatedb       .handle: Ajout variété impérial black beauty
+[2017-04-04 14:57:38,105 MARAICH_INFO    ] updatedb       .handle: Ajout légume aubergine impérial black beauty
+[2017-04-04 14:57:41,210 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 2, 70 pieds (17 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 14:57:41,212 MARAICH_INFO    ] updatedb       .handle: Ajout variété ronde de valence
+[2017-04-04 14:57:41,877 MARAICH_INFO    ] updatedb       .handle: Ajout légume aubergine ronde de valence
+[2017-04-04 14:57:45,105 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 3, 70 pieds (17 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 14:57:45,109 MARAICH_INFO    ] updatedb       .handle: Ajout variété alvro-mono
+[2017-04-04 14:57:45,718 MARAICH_INFO    ] updatedb       .handle: Ajout légume betterave rouge alvro-mono
+[2017-04-04 14:57:48,162 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 4, 1851 pieds (46 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:57:48,166 MARAICH_INFO    ] updatedb       .handle: Ajout variété crapaudine
+[2017-04-04 14:57:48,741 MARAICH_INFO    ] updatedb       .handle: Ajout légume betterave rouge crapaudine
+[2017-04-04 14:57:51,088 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 5, 1851 pieds (46 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:57:51,091 MARAICH_INFO    ] updatedb       .handle: Ajout variété rouge cylindra
+[2017-04-04 14:57:51,756 MARAICH_INFO    ] updatedb       .handle: Ajout légume betterave rouge rouge cylindra
+[2017-04-04 14:57:54,317 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 6, 1851 pieds (46 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:57:54,321 MARAICH_INFO    ] updatedb       .handle: Ajout variété verte à carde blanche 2
+[2017-04-04 14:57:54,704 MARAICH_INFO    ] updatedb       .handle: Ajout légume blette verte à carde blanche 2
+[2017-04-04 14:57:57,575 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 7, 150 pieds (20 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 14:57:57,576 MARAICH_INFO    ] updatedb       .handle: Ajout variété verte à carde rouge
+[2017-04-04 14:57:58,080 MARAICH_INFO    ] updatedb       .handle: Ajout légume blette verte à carde rouge
+[2017-04-04 14:58:00,740 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 8, 150 pieds (20 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:03,631 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 9, 150 pieds (20 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:03,635 MARAICH_INFO    ] updatedb       .handle: Ajout variété verte à carde blanche 3
+[2017-04-04 14:58:04,465 MARAICH_INFO    ] updatedb       .handle: Ajout légume blette verte à carde blanche 3
+[2017-04-04 14:58:07,394 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 10, 150 pieds (20 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 14:58:07,396 MARAICH_INFO    ] updatedb       .handle: Ajout variété rodelika
+[2017-04-04 14:58:08,050 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte de garde rodelika
+[2017-04-04 14:58:11,016 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 11, 3367 pieds (42 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:11,017 MARAICH_INFO    ] updatedb       .handle: Ajout variété gniff
+[2017-04-04 14:58:11,787 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte de garde gniff
+[2017-04-04 14:58:14,880 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 12, 3367 pieds (42 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:14,883 MARAICH_INFO    ] updatedb       .handle: Ajout variété nantaise 2
+[2017-04-04 14:58:15,701 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte de garde nantaise 2
+[2017-04-04 14:58:18,792 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 13, 3367 pieds (42 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:18,793 MARAICH_INFO    ] updatedb       .handle: Ajout variété de carentan
+[2017-04-04 14:58:19,530 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte primeur de carentan
+[2017-04-04 14:58:22,040 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 14, 1875 pieds (23 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 14:58:22,042 MARAICH_INFO    ] updatedb       .handle: Ajout variété oxhella
+[2017-04-04 14:58:22,797 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte primeur oxhella
+[2017-04-04 14:58:26,121 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 15, 1875 pieds (23 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 14:58:26,122 MARAICH_INFO    ] updatedb       .handle: Ajout variété jaune du doubs
+[2017-04-04 14:58:26,969 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte saison jaune du doubs
+[2017-04-04 14:58:30,451 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 16, 740 pieds (9 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:30,452 MARAICH_INFO    ] updatedb       .handle: Ajout variété de la halle
+[2017-04-04 14:58:31,274 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte saison de la halle
+[2017-04-04 14:58:34,611 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 17, 740 pieds (9 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:34,615 MARAICH_INFO    ] updatedb       .handle: Ajout variété colmar à coeur rouge
+[2017-04-04 14:58:35,268 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte saison colmar à coeur rouge
+[2017-04-04 14:58:38,391 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 18, 740 pieds (9 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:38,392 MARAICH_INFO    ] updatedb       .handle: Ajout variété à côtes violettes
+[2017-04-04 14:58:39,103 MARAICH_INFO    ] updatedb       .handle: Ajout légume céleri branche à côtes violettes
+[2017-04-04 14:58:42,310 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 19, 100 pieds (13 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:42,315 MARAICH_INFO    ] updatedb       .handle: Ajout variété monarch
+[2017-04-04 14:58:43,033 MARAICH_INFO    ] updatedb       .handle: Ajout légume céleri rave monarch
+[2017-04-04 14:58:46,427 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 20, 222 pieds (29 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:46,431 MARAICH_INFO    ] updatedb       .handle: Ajout variété holsteiner platter
+[2017-04-04 14:58:47,139 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou blanc holsteiner platter
+[2017-04-04 14:58:50,686 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 21, 55 pieds (13 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 14:58:54,500 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 22, 55 pieds (13 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:54,501 MARAICH_INFO    ] updatedb       .handle: Ajout variété milan gros des vertus
+[2017-04-04 14:58:55,271 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou blanc milan gros des vertus
+[2017-04-04 14:58:58,573 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 23, 55 pieds (13 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:58:58,574 MARAICH_INFO    ] updatedb       .handle: Ajout variété calinaro
+[2017-04-04 14:58:59,175 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou brocoli calinaro
+[2017-04-04 14:59:02,626 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 24, 31 pieds (7 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:02,630 MARAICH_INFO    ] updatedb       .handle: Ajout variété cb2
+[2017-04-04 14:59:03,359 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou fleur cb2
+[2017-04-04 14:59:06,433 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 25, 111 pieds (27 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:06,436 MARAICH_INFO    ] updatedb       .handle: Ajout variété boule de neige
+[2017-04-04 14:59:07,253 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou fleur boule de neige
+[2017-04-04 14:59:10,794 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 26, 111 pieds (27 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:10,798 MARAICH_INFO    ] updatedb       .handle: Ajout variété gros des vertus
+[2017-04-04 14:59:11,604 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou frisé gros des vertus
+[2017-04-04 14:59:15,199 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 27, 41 pieds (10 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:15,200 MARAICH_INFO    ] updatedb       .handle: Ajout variété cf1
+[2017-04-04 14:59:15,968 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou frisé cf1
+[2017-04-04 14:59:16,237 MARAICH_INFO    ] updatedb       .handle: Ajout variété lanro
+[2017-04-04 14:59:17,017 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou rave lanro
+[2017-04-04 14:59:20,885 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 28, 166 pieds (22 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:20,887 MARAICH_INFO    ] updatedb       .handle: Ajout variété cabu rouge
+[2017-04-04 14:59:21,780 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou rouge cabu rouge
+[2017-04-04 14:59:25,880 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 29, 166 pieds (41 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:25,881 MARAICH_INFO    ] updatedb       .handle: Ajout variété héléonor
+[2017-04-04 14:59:26,683 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou rutabaga héléonor
+[2017-04-04 14:59:29,790 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 30, 83 pieds (11 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:33,093 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 31, 83 pieds (11 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:33,097 MARAICH_INFO    ] updatedb       .handle: Ajout variété cv2
+[2017-04-04 14:59:33,771 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou vert cv2
+[2017-04-04 14:59:37,043 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 32, 55 pieds (13 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:37,044 MARAICH_INFO    ] updatedb       .handle: Ajout variété rollison's telepraph
+[2017-04-04 14:59:37,697 MARAICH_INFO    ] updatedb       .handle: Ajout légume concombre rollison's telepraph
+[2017-04-04 14:59:40,793 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 33, 87 pieds (21 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 14:59:40,797 MARAICH_INFO    ] updatedb       .handle: Ajout variété le généreux
+[2017-04-04 14:59:41,482 MARAICH_INFO    ] updatedb       .handle: Ajout légume concombre le généreux
+[2017-04-04 14:59:44,985 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 34, 87 pieds (21 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 14:59:44,987 MARAICH_INFO    ] updatedb       .handle: Ajout variété olive
+[2017-04-04 14:59:45,757 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge olive
+[2017-04-04 14:59:49,506 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 35, 69 pieds (69 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:49,508 MARAICH_INFO    ] updatedb       .handle: Ajout variété butternut
+[2017-04-04 14:59:50,249 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge butternut
+[2017-04-04 14:59:53,976 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 36, 69 pieds (69 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:53,979 MARAICH_INFO    ] updatedb       .handle: Ajout variété pomme d'or
+[2017-04-04 14:59:54,589 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge pomme d'or
+[2017-04-04 14:59:58,105 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 37, 69 pieds (69 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 14:59:58,107 MARAICH_INFO    ] updatedb       .handle: Ajout variété muscade
+[2017-04-04 14:59:58,883 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge muscade
+[2017-04-04 15:00:02,358 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 38, 69 pieds (69 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:02,362 MARAICH_INFO    ] updatedb       .handle: Ajout variété patidou
+[2017-04-04 15:00:03,102 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge patidou
+[2017-04-04 15:00:06,665 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 39, 69 pieds (69 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:06,666 MARAICH_INFO    ] updatedb       .handle: Ajout variété longue de nice
+[2017-04-04 15:00:07,432 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge longue de nice
+[2017-04-04 15:00:11,102 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 40, 69 pieds (69 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:11,105 MARAICH_INFO    ] updatedb       .handle: Ajout variété potimaron red kuri
+[2017-04-04 15:00:11,880 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge potimaron red kuri
+[2017-04-04 15:00:15,131 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 41, 69 pieds (69 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:15,135 MARAICH_INFO    ] updatedb       .handle: Ajout variété kabocha
+[2017-04-04 15:00:15,885 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge kabocha
+[2017-04-04 15:00:19,231 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 42, 69 pieds (69 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:19,232 MARAICH_INFO    ] updatedb       .handle: Ajout variété sucrine du berry
+[2017-04-04 15:00:19,869 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge sucrine du berry
+[2017-04-04 15:00:23,584 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 43, 69 pieds (69 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:23,588 MARAICH_INFO    ] updatedb       .handle: Ajout variété pleine de napple
+[2017-04-04 15:00:24,273 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge pleine de napple
+[2017-04-04 15:00:27,730 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 44, 69 pieds (69 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:27,731 MARAICH_INFO    ] updatedb       .handle: Ajout variété partenon f1
+[2017-04-04 15:00:28,366 MARAICH_INFO    ] updatedb       .handle: Ajout légume courgette partenon f1
+[2017-04-04 15:00:31,872 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 45, 15 pieds (15 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:00:31,875 MARAICH_INFO    ] updatedb       .handle: Ajout variété gold rush
+[2017-04-04 15:00:32,525 MARAICH_INFO    ] updatedb       .handle: Ajout légume courgette gold rush
+[2017-04-04 15:00:36,792 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 46, 37 pieds (37 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:36,796 MARAICH_INFO    ] updatedb       .handle: Ajout variété black beauty
+[2017-04-04 15:00:37,465 MARAICH_INFO    ] updatedb       .handle: Ajout légume courgette black beauty
+[2017-04-04 15:00:41,036 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 47, 37 pieds (37 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:41,040 MARAICH_INFO    ] updatedb       .handle: Ajout variété cuisse de poulet longor
+[2017-04-04 15:00:41,698 MARAICH_INFO    ] updatedb       .handle: Ajout légume echalote cuisse de poulet longor
+[2017-04-04 15:00:44,859 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 48, 925 pieds (23 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:44,863 MARAICH_INFO    ] updatedb       .handle: Ajout variété ronde red sun
+[2017-04-04 15:00:45,704 MARAICH_INFO    ] updatedb       .handle: Ajout légume echalote ronde red sun
+[2017-04-04 15:00:48,849 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 49, 925 pieds (23 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:00:48,850 MARAICH_INFO    ] updatedb       .handle: Ajout variété monstrueux de viroflay
+[2017-04-04 15:00:49,608 MARAICH_INFO    ] updatedb       .handle: Ajout légume epinard monstrueux de viroflay
+[2017-04-04 15:00:53,278 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 50, 462 pieds (28 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:00:56,825 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 51, 462 pieds (28 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:00:56,827 MARAICH_INFO    ] updatedb       .handle: Ajout variété viking
+[2017-04-04 15:00:57,683 MARAICH_INFO    ] updatedb       .handle: Ajout légume epinard viking
+[2017-04-04 15:01:01,283 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 52, 462 pieds (28 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:01:01,285 MARAICH_INFO    ] updatedb       .handle: Ajout variété doux précoce d'été
+[2017-04-04 15:01:01,974 MARAICH_INFO    ] updatedb       .handle: Ajout légume fenouil doux précoce d'été
+[2017-04-04 15:01:05,869 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 53, 166 pieds (10 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:01:09,200 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 54, 166 pieds (10 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:01:12,795 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 55, 166 pieds (10 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:01:12,799 MARAICH_INFO    ] updatedb       .handle: Ajout variété express eleonora
+[2017-04-04 15:01:13,526 MARAICH_INFO    ] updatedb       .handle: Ajout légume fèves express eleonora
+[2017-04-04 15:01:16,398 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 56, 333 pieds (20 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:01:16,402 MARAICH_INFO    ] updatedb       .handle: Ajout variété super d'aguadulce
+[2017-04-04 15:01:17,253 MARAICH_INFO    ] updatedb       .handle: Ajout légume fèves super d'aguadulce
+[2017-04-04 15:01:20,633 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 57, 333 pieds (20 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:01:20,636 MARAICH_INFO    ] updatedb       .handle: Ajout variété rames cobra
+[2017-04-04 15:01:21,298 MARAICH_INFO    ] updatedb       .handle: Ajout légume haricot rames cobra
+[2017-04-04 15:01:24,158 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 58, 400 pieds (25 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:01:24,162 MARAICH_INFO    ] updatedb       .handle: Ajout variété nain beurre fructidor
+[2017-04-04 15:01:24,991 MARAICH_INFO    ] updatedb       .handle: Ajout légume haricot nain beurre fructidor
+[2017-04-04 15:01:27,983 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 59, 400 pieds (25 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:01:27,988 MARAICH_INFO    ] updatedb       .handle: Ajout variété feuille de chêne rouge
+[2017-04-04 15:01:28,771 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue feuille de chêne rouge
+[2017-04-04 15:01:32,561 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 60, 104 pieds (6 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:01:32,562 MARAICH_INFO    ] updatedb       .handle: Ajout variété romaine victorinus
+[2017-04-04 15:01:33,289 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue romaine victorinus
+[2017-04-04 15:01:36,934 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 61, 104 pieds (6 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:01:36,935 MARAICH_INFO    ] updatedb       .handle: Ajout variété batavia rouge
+[2017-04-04 15:01:37,604 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue batavia rouge
+[2017-04-04 15:01:41,331 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 62, 104 pieds (6 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:01:41,335 MARAICH_INFO    ] updatedb       .handle: Ajout variété batavia blonde
+[2017-04-04 15:01:42,185 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue batavia blonde
+[2017-04-04 15:01:45,958 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 63, 104 pieds (6 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:01:48,991 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 64, 104 pieds (6 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:01:48,995 MARAICH_INFO    ] updatedb       .handle: Ajout variété feuille de chêne bonde
+[2017-04-04 15:01:49,738 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue feuille de chêne bonde
+[2017-04-04 15:01:53,315 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 65, 104 pieds (6 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:01:57,228 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 66, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:00,786 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 67, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:03,558 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 68, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:06,412 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 69, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:10,015 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 70, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:10,017 MARAICH_INFO    ] updatedb       .handle: Ajout variété grosse blonde paresseuse
+[2017-04-04 15:02:10,586 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue grosse blonde paresseuse
+[2017-04-04 15:02:13,364 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 71, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:16,390 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 72, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:19,638 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 73, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:22,640 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 74, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:22,644 MARAICH_INFO    ] updatedb       .handle: Ajout variété sucrine
+[2017-04-04 15:02:23,338 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue sucrine
+[2017-04-04 15:02:26,654 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 75, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:29,666 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 76, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:32,578 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 77, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:35,727 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 78, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:39,115 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 79, 104 pieds (6 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:02:39,117 MARAICH_INFO    ] updatedb       .handle: Ajout variété vit
+[2017-04-04 15:02:39,641 MARAICH_INFO    ] updatedb       .handle: Ajout légume mâche vit
+[2017-04-04 15:02:42,464 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 80, 233 pieds (5 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:02:42,466 MARAICH_INFO    ] updatedb       .handle: Ajout variété verte de cambrai
+[2017-04-04 15:02:43,132 MARAICH_INFO    ] updatedb       .handle: Ajout légume mâche verte de cambrai
+[2017-04-04 15:02:45,902 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 81, 233 pieds (5 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:02:48,884 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 82, 233 pieds (5 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:02:52,371 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 83, 233 pieds (5 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:02:52,372 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose de milan
+[2017-04-04 15:02:52,995 MARAICH_INFO    ] updatedb       .handle: Ajout légume navet rose de milan
+[2017-04-04 15:02:55,452 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 84, 1594 pieds (13 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:02:58,344 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 85, 1594 pieds (13 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:01,067 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 86, 1594 pieds (13 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:01,071 MARAICH_INFO    ] updatedb       .handle: Ajout variété boule d'or
+[2017-04-04 15:03:01,687 MARAICH_INFO    ] updatedb       .handle: Ajout légume navet boule d'or
+[2017-04-04 15:03:04,524 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 87, 1594 pieds (13 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:04,526 MARAICH_INFO    ] updatedb       .handle: Ajout variété paille des vertus
+[2017-04-04 15:03:05,336 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de garde paille des vertus
+[2017-04-04 15:03:07,813 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 88, 2125 pieds (17 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:07,814 MARAICH_INFO    ] updatedb       .handle: Ajout variété doux de tarrassac
+[2017-04-04 15:03:08,595 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de garde doux de tarrassac
+[2017-04-04 15:03:12,086 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 89, 2125 pieds (17 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:12,090 MARAICH_INFO    ] updatedb       .handle: Ajout variété de mazé
+[2017-04-04 15:03:12,853 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de garde de mazé
+[2017-04-04 15:03:16,096 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 90, 2125 pieds (17 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:16,098 MARAICH_INFO    ] updatedb       .handle: Ajout variété blanc hatif de paris
+[2017-04-04 15:03:16,958 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de printemps blanc hatif de paris
+[2017-04-04 15:03:20,802 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 91, 2500 pieds (62 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:25,171 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 92, 2500 pieds (62 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:03:25,172 MARAICH_INFO    ] updatedb       .handle: Ajout variété aromata
+[2017-04-04 15:03:25,973 MARAICH_INFO    ] updatedb       .handle: Ajout légume panais aromata
+[2017-04-04 15:03:29,620 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 93, 1851 pieds (55 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:29,624 MARAICH_INFO    ] updatedb       .handle: Ajout variété commun2
+[2017-04-04 15:03:30,533 MARAICH_INFO    ] updatedb       .handle: Ajout légume persil commun2
+[2017-04-04 15:03:34,794 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 94, 750 pieds (18 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:34,795 MARAICH_INFO    ] updatedb       .handle: Ajout variété atlanta
+[2017-04-04 15:03:35,639 MARAICH_INFO    ] updatedb       .handle: Ajout légume poireau atlanta
+[2017-04-04 15:03:40,845 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 95, 5333 pieds (177 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:40,849 MARAICH_INFO    ] updatedb       .handle: Ajout variété mangetout héraut
+[2017-04-04 15:03:42,933 MARAICH_INFO    ] updatedb       .handle: Ajout légume pois mangetout héraut
+[2017-04-04 15:03:47,330 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 96, 250 pieds (33 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:03:50,464 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 97, 250 pieds (33 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:50,469 MARAICH_INFO    ] updatedb       .handle: Ajout variété corno di toro rouge
+[2017-04-04 15:03:51,288 MARAICH_INFO    ] updatedb       .handle: Ajout légume poivron corno di toro rouge
+[2017-04-04 15:03:53,715 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 98, 140 pieds (35 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:03:53,716 MARAICH_INFO    ] updatedb       .handle: Ajout variété yolo wonder
+[2017-04-04 15:03:54,127 MARAICH_INFO    ] updatedb       .handle: Ajout légume poivron yolo wonder
+[2017-04-04 15:03:56,064 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 99, 140 pieds (35 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:03:56,067 MARAICH_INFO    ] updatedb       .handle: Ajout variété alliance
+[2017-04-04 15:03:56,441 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre de garde alliance
+[2017-04-04 15:03:58,057 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 100, 4687 pieds (820 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:03:58,059 MARAICH_INFO    ] updatedb       .handle: Ajout variété nicola
+[2017-04-04 15:03:58,436 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre de garde nicola
+[2017-04-04 15:04:00,038 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 101, 4687 pieds (820 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:04:00,043 MARAICH_INFO    ] updatedb       .handle: Ajout variété charlotte
+[2017-04-04 15:04:00,428 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre primeur charlotte
+[2017-04-04 15:04:02,064 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 102, 666 pieds (41 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:02,067 MARAICH_INFO    ] updatedb       .handle: Ajout variété désirée
+[2017-04-04 15:04:02,433 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre primeur désirée
+[2017-04-04 15:04:04,245 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 103, 666 pieds (41 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:04,250 MARAICH_INFO    ] updatedb       .handle: Ajout variété claytone de cuba
+[2017-04-04 15:04:04,668 MARAICH_INFO    ] updatedb       .handle: Ajout légume pourpier claytone de cuba
+[2017-04-04 15:04:06,306 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 104, 312 pieds (7 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:06,312 MARAICH_INFO    ] updatedb       .handle: Ajout variété noir rond
+[2017-04-04 15:04:06,729 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis noir noir rond
+[2017-04-04 15:04:08,387 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 105, 1973 pieds (49 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:04:10,077 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 106, 1973 pieds (49 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:04:11,674 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 107, 1973 pieds (49 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:04:11,676 MARAICH_INFO    ] updatedb       .handle: Ajout variété flamboyant 3
+[2017-04-04 15:04:12,023 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose flamboyant 3
+[2017-04-04 15:04:13,592 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 108, 4687 pieds (14 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:13,597 MARAICH_INFO    ] updatedb       .handle: Ajout variété pernot clair
+[2017-04-04 15:04:13,949 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose pernot clair
+[2017-04-04 15:04:15,571 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 109, 4687 pieds (14 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:17,295 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 110, 4687 pieds (14 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:17,296 MARAICH_INFO    ] updatedb       .handle: Ajout variété rond écarlate sora
+[2017-04-04 15:04:17,739 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose rond écarlate sora
+[2017-04-04 15:04:19,652 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 111, 4687 pieds (14 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:04:21,235 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 112, 4687 pieds (14 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:04:21,239 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose de pâques
+[2017-04-04 15:04:21,568 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose rose de pâques
+[2017-04-04 15:04:23,260 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 113, 4687 pieds (14 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:04:24,717 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 114, 4687 pieds (14 m2) sur planche Virtuelle plein champ (358)
+[2017-04-04 15:04:26,329 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 115, 4687 pieds (14 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:26,331 MARAICH_INFO    ] updatedb       .handle: Ajout variété cultivée
+[2017-04-04 15:04:26,704 MARAICH_INFO    ] updatedb       .handle: Ajout légume roquette cultivée
+[2017-04-04 15:04:28,533 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 116, 416 pieds (10 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:30,401 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 117, 416 pieds (10 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:30,405 MARAICH_INFO    ] updatedb       .handle: Ajout variété glacier
+[2017-04-04 15:04:30,781 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate glacier
+[2017-04-04 15:04:32,698 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 118, 138 pieds (34 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:32,701 MARAICH_INFO    ] updatedb       .handle: Ajout variété merveille des marchés
+[2017-04-04 15:04:33,132 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate merveille des marchés
+[2017-04-04 15:04:35,159 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 119, 138 pieds (34 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:35,163 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose de berne
+[2017-04-04 15:04:35,548 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate rose de berne
+[2017-04-04 15:04:37,541 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 120, 138 pieds (34 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:37,544 MARAICH_INFO    ] updatedb       .handle: Ajout variété cur de boeuf anna russian
+[2017-04-04 15:04:37,918 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate cur de boeuf anna russian
+[2017-04-04 15:04:39,800 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 121, 138 pieds (34 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:39,802 MARAICH_INFO    ] updatedb       .handle: Ajout variété des andes
+[2017-04-04 15:04:40,183 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate des andes
+[2017-04-04 15:04:42,109 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 122, 138 pieds (34 m2) sur planche Virtuelle sous abris (359)
+[2017-04-04 15:04:42,110 MARAICH_INFO    ] updatedb       .handle: Fin de comande updatedb : mise à jour de la base à partir des tableaux CSV
+ nombre d'erreurs = 6
+'Délai avant retour (an)' indéfini pour artichaut
+'Nombre de pieds' indéfini pour ail rose flavor bio 
+Espece matching query does not exist.
+'Date en terre' indéfini pour chou frisé cf1
+Variété indéfinie pour chou vert
+Variété indéfinie pour ciboulette
+[2017-04-04 18:20:34,417 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-04 18:20:34,418 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['892'], 'cde': ['get_impls_serie']}>
+[2017-04-04 18:20:34,515 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 33, "fields": {"planche": 359, "nbPieds": 87}}]}
+[2017-04-04 18:20:34,525 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-04 18:20:34,526 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['892'], 'cde': ['get_evts_serie']}>
+[2017-04-04 18:20:34,549 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 3223, "fields": {"eRef": 3220, "delta_j": -21, "type": 4, "date": "2017-04-28T00:00:00", "date_creation": "2017-04-04T14:59:39.638", "duree_j": 1, "nom": "semi motte concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3220, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-05-19T00:00:00", "date_creation": "2017-04-04T14:59:38.155", "duree_j": 1, "nom": "d\u00e9but concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3222, "fields": {"eRef": 3220, "delta_j": 124, "type": 5, "date": "2017-09-20T00:00:00", "date_creation": "2017-04-04T14:59:39.148", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3221, "fields": {"eRef": 3220, "delta_j": 154, "type": 2, "date": "2017-10-20T00:00:00", "date_creation": "2017-04-04T14:59:38.635", "duree_j": 1, "nom": "fin concombre rollison's telepraph", "texte": "", "b_fini": false}}]}
+[2017-04-04 18:20:55,658 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-04-04 18:20:55,659 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_serie': ['892'], 'duree_j': [''], 'nom': ['fddgdfg'], 'id': ['0'], 'date': ['22/5'], 'cde': ['sauve_evt']}>
+[2017-04-04 18:20:55,659 MARAICH_INFO    ] serveRequest   .serveRequest: 2017-05-22 00:00:00
+[2017-04-04 18:20:55,913 MARAICH_INFO    ] serveRequest   .serveRequest: Evt Divers (3547) 2017-05-22 00:00:00 pour 1 j
+[2017-04-04 18:20:55,921 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-04 18:20:55,921 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['892'], 'cde': ['get_evts_serie']}>
+[2017-04-04 18:20:55,929 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 3223, "fields": {"eRef": 3220, "delta_j": -21, "type": 4, "date": "2017-04-28T00:00:00", "date_creation": "2017-04-04T14:59:39.638", "duree_j": 1, "nom": "semi motte concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3220, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-05-19T00:00:00", "date_creation": "2017-04-04T14:59:38.155", "duree_j": 1, "nom": "d\u00e9but concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3547, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-05-22T00:00:00", "date_creation": "2017-04-04T18:20:55.659", "duree_j": 1, "nom": "fddgdfg", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3222, "fields": {"eRef": 3220, "delta_j": 124, "type": 5, "date": "2017-09-20T00:00:00", "date_creation": "2017-04-04T14:59:39.148", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3221, "fields": {"eRef": 3220, "delta_j": 154, "type": 2, "date": "2017-10-20T00:00:00", "date_creation": "2017-04-04T14:59:38.635", "duree_j": 1, "nom": "fin concombre rollison's telepraph", "texte": "", "b_fini": false}}]}
+[2017-04-04 18:21:39,057 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-04 18:21:39,058 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'intra_rang_cm': ['50'], 'etalement_recolte_j': ['60'], 'duree_avant_recolte_j': ['124'], 'id_legume': ['32'], 'cde': ['sauve_serie'], 'b_serre': ['on'], 'date_debut': ['19/05/2017'], 'id_serie': ['892'], 'nb_rangs': ['2']}>
+[2017-04-04 18:21:39,823 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s892), concombre rollison's telepraph, 87 pieds, 96 graines, 43 m, 21 m2 de planche(s) [Virtuelle sous abris], du 19/05/2017 au 19/11/2017
+[2017-04-04 18:22:05,716 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-04 18:22:05,716 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['892'], 'cde': ['get_impls_serie']}>
+[2017-04-04 18:22:05,721 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 33, "fields": {"planche": 359, "nbPieds": 87}}]}
+[2017-04-04 18:22:05,776 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-04 18:22:05,777 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['892'], 'cde': ['get_evts_serie']}>
+[2017-04-04 18:22:05,792 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 3220, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-05-19T00:00:00", "date_creation": "2017-04-04T14:59:38.155", "duree_j": 1, "nom": "d\u00e9but concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3223, "fields": {"eRef": 3220, "delta_j": 0, "type": 4, "date": "2017-05-19T00:00:00", "date_creation": "2017-04-04T14:59:39.638", "duree_j": 1, "nom": "semi motte concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3547, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-05-22T00:00:00", "date_creation": "2017-04-04T18:20:55.659", "duree_j": 1, "nom": "fddgdfg", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3222, "fields": {"eRef": 3220, "delta_j": 124, "type": 5, "date": "2017-09-20T00:00:00", "date_creation": "2017-04-04T14:59:39.148", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3221, "fields": {"eRef": 3220, "delta_j": 184, "type": 2, "date": "2017-11-19T00:00:00", "date_creation": "2017-04-04T14:59:38.635", "duree_j": 1, "nom": "fin concombre rollison's telepraph", "texte": "", "b_fini": false}}]}
+[2017-04-04 18:22:52,767 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-04-04 18:22:52,767 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_serie': ['892'], 'duree_j': [''], 'nom': ['semi'], 'id': ['0'], 'date': ['19/4'], 'cde': ['sauve_evt']}>
+[2017-04-04 18:22:52,767 MARAICH_INFO    ] serveRequest   .serveRequest: 2017-04-19 00:00:00
+[2017-04-04 18:22:53,046 MARAICH_INFO    ] serveRequest   .serveRequest: Evt Divers (3548) 2017-04-19 00:00:00 pour 1 j
+[2017-04-04 18:22:53,056 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-04 18:22:53,056 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['892'], 'cde': ['get_evts_serie']}>
+[2017-04-04 18:22:53,062 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 3548, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-04-19T00:00:00", "date_creation": "2017-04-04T18:22:52.767", "duree_j": 1, "nom": "semi", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3220, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-05-19T00:00:00", "date_creation": "2017-04-04T14:59:38.155", "duree_j": 1, "nom": "d\u00e9but concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3223, "fields": {"eRef": 3220, "delta_j": 0, "type": 4, "date": "2017-05-19T00:00:00", "date_creation": "2017-04-04T14:59:39.638", "duree_j": 1, "nom": "semi motte concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3547, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-05-22T00:00:00", "date_creation": "2017-04-04T18:20:55.659", "duree_j": 1, "nom": "fddgdfg", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3222, "fields": {"eRef": 3220, "delta_j": 124, "type": 5, "date": "2017-09-20T00:00:00", "date_creation": "2017-04-04T14:59:39.148", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3221, "fields": {"eRef": 3220, "delta_j": 184, "type": 2, "date": "2017-11-19T00:00:00", "date_creation": "2017-04-04T14:59:38.635", "duree_j": 1, "nom": "fin concombre rollison's telepraph", "texte": "", "b_fini": false}}]}
+[2017-04-04 18:23:21,816 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-04 18:23:21,816 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['869'], 'cde': ['get_impls_serie']}>
+[2017-04-04 18:23:21,821 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 10, "fields": {"planche": 359, "nbPieds": 150}}]}
+[2017-04-04 18:23:21,845 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-04 18:23:21,845 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['869'], 'cde': ['get_evts_serie']}>
+[2017-04-04 18:23:21,861 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 3139, "fields": {"eRef": 3136, "delta_j": -31, "type": 4, "date": "2017-08-31T00:00:00", "date_creation": "2017-04-04T14:58:06.106", "duree_j": 1, "nom": "semi motte blette verte \u00e0 carde blanche 3", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3136, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-10-01T00:00:00", "date_creation": "2017-04-04T14:58:04.879", "duree_j": 1, "nom": "d\u00e9but blette verte \u00e0 carde blanche 3", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3138, "fields": {"eRef": 3136, "delta_j": 40, "type": 5, "date": "2017-11-10T00:00:00", "date_creation": "2017-04-04T14:58:05.604", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte blette verte \u00e0 carde blanche 3", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3137, "fields": {"eRef": 3136, "delta_j": 100, "type": 2, "date": "2018-01-09T00:00:00", "date_creation": "2017-04-04T14:58:05.256", "duree_j": 1, "nom": "fin blette verte \u00e0 carde blanche 3", "texte": "", "b_fini": false}}]}
+[2017-04-04 18:23:57,760 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-04 18:23:57,761 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['892'], 'cde': ['get_impls_serie']}>
+[2017-04-04 18:23:57,770 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 33, "fields": {"planche": 359, "nbPieds": 87}}]}
+[2017-04-04 18:23:57,797 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-04 18:23:57,797 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['892'], 'cde': ['get_evts_serie']}>
+[2017-04-04 18:23:57,811 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 3548, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-04-19T00:00:00", "date_creation": "2017-04-04T18:22:52.767", "duree_j": 1, "nom": "semi", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3220, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-05-19T00:00:00", "date_creation": "2017-04-04T14:59:38.155", "duree_j": 1, "nom": "d\u00e9but concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3223, "fields": {"eRef": 3220, "delta_j": 0, "type": 4, "date": "2017-05-19T00:00:00", "date_creation": "2017-04-04T14:59:39.638", "duree_j": 1, "nom": "semi motte concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3547, "fields": {"eRef": 0, "delta_j": 0, "type": 3, "date": "2017-05-22T00:00:00", "date_creation": "2017-04-04T18:20:55.659", "duree_j": 1, "nom": "fddgdfg", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3222, "fields": {"eRef": 3220, "delta_j": 124, "type": 5, "date": "2017-09-20T00:00:00", "date_creation": "2017-04-04T14:59:39.148", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte concombre rollison's telepraph", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3221, "fields": {"eRef": 3220, "delta_j": 184, "type": 2, "date": "2017-11-19T00:00:00", "date_creation": "2017-04-04T14:59:38.635", "duree_j": 1, "nom": "fin concombre rollison's telepraph", "texte": "", "b_fini": false}}]}
+[2017-04-05 09:31:44,885 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-05 09:31:44,919 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['920']}>
+[2017-04-05 09:31:45,161 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 61, "fields": {"planche": 359, "nbPieds": 104}}]}
+[2017-04-05 09:31:45,171 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-05 09:31:45,171 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['920']}>
+[2017-04-05 09:31:45,178 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 3329, "fields": {"eRef": 3326, "delta_j": -30, "type": 4, "date": "2017-01-04T00:00:00", "date_creation": "2017-04-04T15:01:35.403", "duree_j": 1, "nom": "semi motte laitue romaine victorinus", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3326, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-02-03T00:00:00", "date_creation": "2017-04-04T15:01:33.722", "duree_j": 1, "nom": "d\u00e9but laitue romaine victorinus", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3328, "fields": {"eRef": 3326, "delta_j": 35, "type": 5, "date": "2017-03-10T00:00:00", "date_creation": "2017-04-04T15:01:34.769", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte laitue romaine victorinus", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3327, "fields": {"eRef": 3326, "delta_j": 49, "type": 2, "date": "2017-03-24T00:00:00", "date_creation": "2017-04-04T15:01:34.245", "duree_j": 1, "nom": "fin laitue romaine victorinus", "texte": "", "b_fini": false}}]}
+[2017-04-05 09:32:49,744 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-05 09:32:49,744 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['930']}>
+[2017-04-05 09:32:49,748 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 71, "fields": {"planche": 358, "nbPieds": 104}}]}
+[2017-04-05 09:32:49,768 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-05 09:32:49,768 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['930']}>
+[2017-04-05 09:32:49,777 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 3369, "fields": {"eRef": 3366, "delta_j": -23, "type": 4, "date": "2017-06-15T00:00:00", "date_creation": "2017-04-04T15:02:12.245", "duree_j": 1, "nom": "semi motte laitue grosse blonde paresseuse", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3366, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-07-08T00:00:00", "date_creation": "2017-04-04T15:02:11.019", "duree_j": 1, "nom": "d\u00e9but laitue grosse blonde paresseuse", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3368, "fields": {"eRef": 3366, "delta_j": 24, "type": 5, "date": "2017-08-01T00:00:00", "date_creation": "2017-04-04T15:02:11.832", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte laitue grosse blonde paresseuse", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3367, "fields": {"eRef": 3366, "delta_j": 38, "type": 2, "date": "2017-08-15T00:00:00", "date_creation": "2017-04-04T15:02:11.397", "duree_j": 1, "nom": "fin laitue grosse blonde paresseuse", "texte": "", "b_fini": false}}]}
+[2017-04-05 09:34:48,259 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-05 09:34:48,259 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['926']}>
+[2017-04-05 09:34:48,263 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 67, "fields": {"planche": 358, "nbPieds": 104}}]}
+[2017-04-05 09:34:48,287 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-05 09:34:48,287 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['926']}>
+[2017-04-05 09:34:48,293 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 3353, "fields": {"eRef": 3350, "delta_j": -24, "type": 4, "date": "2017-04-15T00:00:00", "date_creation": "2017-04-04T15:01:59.435", "duree_j": 1, "nom": "semi motte laitue batavia rouge", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3350, "fields": {"eRef": 0, "delta_j": 0, "type": 1, "date": "2017-05-09T00:00:00", "date_creation": "2017-04-04T15:01:57.774", "duree_j": 1, "nom": "d\u00e9but laitue batavia rouge", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3352, "fields": {"eRef": 3350, "delta_j": 26, "type": 5, "date": "2017-06-04T00:00:00", "date_creation": "2017-04-04T15:01:59.022", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte laitue batavia rouge", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 3351, "fields": {"eRef": 3350, "delta_j": 40, "type": 2, "date": "2017-06-18T00:00:00", "date_creation": "2017-04-04T15:01:58.354", "duree_j": 1, "nom": "fin laitue batavia rouge", "texte": "", "b_fini": false}}]}
+[2017-04-05 09:43:14,317 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-05 09:43:14,318 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['373'], 'id_serie': ['925'], 'intra_rang_cm': ['25'], 'simulation': ['true'], 'cde': ['deplacement_implantation'], 'id_implantation': ['66'], 'nb_rangs': ['4'], 'nb_pieds': ['null']}>
+[2017-04-05 09:43:14,326 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : Attention, incompatibilité plein champ /sous serre entre série déplacée et planche de destination
+[2017-04-05 09:43:28,648 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-05 09:43:28,648 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['373'], 'id_serie': ['919'], 'intra_rang_cm': ['25'], 'simulation': ['true'], 'cde': ['deplacement_implantation'], 'id_implantation': ['60'], 'nb_rangs': ['4'], 'nb_pieds': ['null']}>
+[2017-04-05 09:43:28,653 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : int() argument must be a string, a bytes-like object or a number, not 'NoneType'
+[2017-04-05 09:50:41,512 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-05 09:50:41,512 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['363'], 'id_serie': ['925'], 'intra_rang_cm': ['25'], 'simulation': ['true'], 'cde': ['deplacement_implantation'], 'id_implantation': ['66'], 'nb_rangs': ['4'], 'nb_pieds': ['104']}>
+[2017-04-05 09:50:41,515 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : Attention, incompatibilité plein champ /sous serre entre série déplacée et planche de destination
+[2017-04-05 09:50:52,649 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-05 09:50:52,661 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['undefined'], 'id_serie': ['925'], 'intra_rang_cm': ['25'], 'simulation': ['true'], 'cde': ['deplacement_implantation'], 'id_implantation': ['66'], 'nb_rangs': ['4'], 'nb_pieds': ['104']}>
+[2017-04-05 09:50:52,663 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-04-05 09:51:02,340 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-05 09:51:02,340 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_planche_dest': ['415'], 'id_serie': ['925'], 'intra_rang_cm': ['25'], 'simulation': ['true'], 'cde': ['deplacement_implantation'], 'id_implantation': ['66'], 'nb_rangs': ['4'], 'nb_pieds': ['104']}>
+[2017-04-05 09:51:02,348 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : int() argument must be a string, a bytes-like object or a number, not 'NoneType'
+[2017-04-05 09:52:16,673 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-05 09:52:16,673 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'simulation': ['true'], 'id_planche_dest': ['414'], 'id_implantation': ['66'], 'nb_rangs': ['4'], 'id_serie': ['925'], 'intra_rang_cm': ['25'], 'nb_pieds': ['104']}>
+[2017-04-05 09:52:18,587 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-05 09:52:18,588 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'simulation': ['false'], 'id_planche_dest': ['414'], 'id_implantation': ['66'], 'nb_rangs': ['4'], 'id_serie': ['925'], 'intra_rang_cm': ['25'], 'nb_pieds': ['104']}>
+[2017-04-05 09:52:52,382 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-05 09:52:52,382 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'simulation': ['true'], 'id_planche_dest': ['414'], 'id_implantation': ['67'], 'nb_rangs': ['4'], 'id_serie': ['926'], 'intra_rang_cm': ['25'], 'nb_pieds': ['104']}>
+[2017-04-05 09:52:53,376 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-05 09:52:53,377 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'simulation': ['false'], 'id_planche_dest': ['414'], 'id_implantation': ['67'], 'nb_rangs': ['4'], 'id_serie': ['926'], 'intra_rang_cm': ['25'], 'nb_pieds': ['104']}>

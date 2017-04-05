@@ -118,7 +118,6 @@
 
     <script type="text/javascript" src="{% static "javascripts/myTools.js" %}"></script>
     <script type="text/javascript" src="{% static "javascripts/moment-with-locales.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "javascripts/planif.js" %}"></script>
 
     <script type="text/javascript">
     
@@ -511,7 +510,7 @@ function dragImplStart(event)
     event.dataTransfer.setData("id_implantation", event.target.id)
     event.dataTransfer.setData("id_serieDeplacee", event.target.getAttribute("id_serie"))
     event.dataTransfer.setData("id_planche_ori", event.target.getAttribute("id_planche"))
-    event.dataTransfer.setData("quantite_implantation", event.target.getAttribute("quantite_implantation"))
+    event.dataTransfer.setData("nbPieds", event.target.getAttribute("nb_pieds_implantation"))
     } 
 
 function dropImpl(event) 
@@ -523,7 +522,7 @@ function dropImpl(event)
     id_implantation = event.dataTransfer.getData("id_implantation")
     id_serie = event.dataTransfer.getData("id_serieDeplacee")
     id_plancheDest = event.target.id.split("__")[1]
-    quantite_implantation = event.dataTransfer.getData("quantite_implantation")
+    quantite_implantation = event.dataTransfer.getData("nbPieds")
     if (event.dataTransfer.getData("id_planche_ori") != id_plancheDest)
         prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
     }
@@ -711,7 +710,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
     série <input id="deplacement_id_serie" value="" type="text" readonly style="width: 30px;margin-left: 10px;display:inline" />
      <br/>
     </h3>
-    Nombre de pieds :           <input id="deplacement_nbPieds"           value="" type="text" style="width:40px;border: 5px solid brown" /><br/>
+    Nombre de pieds :           <input id="deplacement_nb_pieds"           value="" type="text" style="width:40px;border: 5px solid brown" /><br/>
     vers la planche N°          <input id="deplacement_id_planche_dest"    value="" type="text" readonly       style="width: 30px;margin-left: 10px"/><br/>
     dans le rang (cm)           <input id="deplacement_intra_rang_cm"      value="" type="text" style="margin-left: 10px;width: 30px"/><br/>
     Nombre de rangs             <input id="deplacement_nb_rangs"           value="" type="text" style="margin-left: 10px;width: 30px"/><br/>

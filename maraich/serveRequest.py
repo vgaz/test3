@@ -153,20 +153,6 @@ def serveRequest(request):
             s_json = '{"status":false,"err":"%s"}'%sys.exc_info()[1]
 
         return HttpResponse( s_json, content_type="application/json")
-
-
-#     elif cde == "sauve_impl": 
-#         try:
-#             impl = Implantation.objects.get(id=int(request.POST.get("id")))                
-#             impl.nbPieds = int(request.POST.get("quantite"))
-#             impl.save()
-#             s_json = '{"status":true}'
-#         except:
-#             ex_type, ex, tb = sys.exc_info()
-#             log.error (str(ex_type) + str(ex))
-#             s_json = '{"status":false,"err":"%s %s"}'%(__name__, sys.exc_info()[1])
-#            
-#         return HttpResponse(s_json)
     
     elif cde == 'supprime_impl':
         try:
@@ -251,10 +237,10 @@ def serveRequest(request):
                 implantationDejaLa = None
             
             
-            quantite = int(request.POST.get("quantite"))
-            assert quantite <= implantation.quantite, "Demande de quantité à déplacer (%d) plus importante que la quantité de l'implantation(%d)"%(quantite, implantation.quantite)
-            if  implantation.quantite != quantite:
-                aConserverSurPlace = implantation.quantite - quantite
+            nbPieds = int(request.POST.get("nb_pieds"))
+            assert nbPieds <= implantation.nbPieds, "Demande de quantité à déplacer (%d) plus importante que la quantité de l'implantation(%d)"%(nbPieds, implantation.nbPieds)
+            if  implantation.nbPieds != nbPieds:
+                aConserverSurPlace = implantation.nbPieds - nbPieds
             else:
                 aConserverSurPlace=0
             
@@ -262,20 +248,20 @@ def serveRequest(request):
             intra_rang_m = float(request.POST.get("intra_rang_cm", serie.intra_rang_m*100))/100
             b_simu = request.POST.get("simulation") == "true"
 
-            dispoApresPlacement_m2 = surfaceLibreSurPeriode(planche_dest, serie.evt_debut.date, serie.evt_fin.date) - surfacePourQuantite(planche_dest.largeur_m, quantite, nb_rangs, intra_rang_m)
+            dispoApresPlacement_m2 = surfaceLibreSurPeriode(planche_dest, serie.evt_debut.date, serie.evt_fin.date) - surfacePourQuantite(planche_dest.largeur_m, nbPieds, nb_rangs, intra_rang_m)
             if dispoApresPlacement_m2 >= 0: ##  assez de place
                 quantiteNonDeplacable = 0
-                quantiteDeplacable = quantite
+                quantiteDeplacable = nbPieds
             else:
                 quantiteNonDeplacable = quantitePourSurface(planche_dest.largeur_m, abs(dispoApresPlacement_m2), nb_rangs, intra_rang_m)
-                quantiteDeplacable = quantite - quantiteNonDeplacable
+                quantiteDeplacable = nbPieds - quantiteNonDeplacable
 
             if b_simu:
                 if dispoApresPlacement_m2 >= 0 : ## toute la quantité demandée est déplaçable
                     rep = "Les %d plants sont tous déplaçables sur la planche %s" % (quantiteDeplacable, planche_dest.nom)
                 else:
                     rep = "Il n'y a pas assez de place pour un déplacement total, seulement %d plants sur %d sont déplaçables sur la planche %s"%(quantiteDeplacable, 
-                                                                                                                                                   quantite,
+                                                                                                                                                   nbPieds,
                                                                                                                                                    planche_dest.nom)
 
             else:
@@ -283,7 +269,7 @@ def serveRequest(request):
                     ## si on peut et veut tout transférer sur une seule planche,
                     if implantationDejaLa:
                         ## l'implantation initiale dejà là absorbe l'arrivante
-                        implantationDejaLa.quantite += quantiteDeplacable
+                        implantationDejaLa.nbPieds += quantiteDeplacable
                         implantationDejaLa.save()
                         ## puis l'arrivante est détruite 
                         rep = "Implantation %d totalement déplacée et absorbée par la %d sur planche %s"%(implantation.id,
@@ -300,29 +286,29 @@ def serveRequest(request):
                 else:   ## déplacement partiel subi ou choisi
                     if implantationDejaLa:
                         ## l'implantation initiale dejà là absorbe l'arrivante sans suppression de cette dernière
-                        implantationDejaLa.quantite += quantiteDeplacable
+                        implantationDejaLa.nbPieds += quantiteDeplacable
                         implantationDejaLa.save()
-                        implantation.quantite -= quantiteDeplacable
+                        implantation.nbPieds -= quantiteDeplacable
                         implantation.save()
                         rep = "Implantation %d (x%d) partiellement déplacée et absorbée par la %d (x%d) sur planche %s"%(implantation.id,
-                                                                                                                         implantation.quantite,
+                                                                                                                         implantation.nbPieds,
                                                                                                                          implantationDejaLa.id,
-                                                                                                                         implantationDejaLa.quantite,
+                                                                                                                         implantationDejaLa.nbPieds,
                                                                                                                          planche_dest.nom )
                                     
                     else:
-                        ## Création d'une nouvelle implantation sur la planche de destination  => quantite
+                        ## Création d'une nouvelle implantation sur la planche de destination  => nbPieds
                         nelleImpl = Implantation()
                         nelleImpl.planche_id = planche_dest.id
-                        nelleImpl.quantite = quantiteDeplacable
+                        nelleImpl.nbPieds = quantiteDeplacable
                         nelleImpl.save()
                         serie.implantations.add(nelleImpl)
                         serie.save() 
                         ## mise à jour implantation d'origine
-                        implantation.quantite = quantiteNonDeplacable + aConserverSurPlace
+                        implantation.nbPieds = quantiteNonDeplacable + aConserverSurPlace
                         implantation.save()
                         rep = "Implantation déplacée partiellement sur planche %s (reste %d pieds sur l'implantation initiale)"%(planche_dest.nom, 
-                                                                                                                               implantation.quantite)
+                                                                                                                               implantation.nbPieds)
 
             s_json = '{"status":true, "msg":"%s"}'%rep
         except:

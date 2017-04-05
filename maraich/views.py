@@ -87,7 +87,7 @@ def creationPlanches(request):
             else:
                 champOuSerre = "C"
             pl = creationPlanche(int(request.POST.get("longueur_m")), 
-                                 int(request.POST.get("largeur_cm"))/100, 
+                                 float(request.POST.get("largeur_m").replace(",",".")), 
                                  bSerre,
                                  s_nom = "%s_%s_%s"%(champOuSerre,
                                                    request.POST.get("prefixe", "PL"),
