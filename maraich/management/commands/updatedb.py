@@ -7,22 +7,25 @@ from maraich.models import *
 from maraich.settings import log
 from maraich import settings
 
-def getInt(d_line, name, default="0"):
-    
+
+def getInt(d_in, name, default="0"):
+    """return an int value in a dictionary"""
     try:
         _i = default
-        _i = int(d_line.get(name, default).split(",")[0])
+        _i = int(d_in.get(name, default).split(",")[0])
         return _i
     except:
-        log.error("%s %s"%(str(d_line), sys.exc_info()[1])) 
+        log.error("%s %s"%(str(d_in), sys.exc_info()[1])) 
 
-def getFloat(d_line, name, default="0"):
+
+def getFloat(d_in, name, default="0"):
+    """return a float value in a dictionary"""
     try:
         _f = default
-        _f = float(d_line.get(name, default).replace(",","."))
+        _f = float(d_in.get(name, default).replace(",","."))
         return _f
     except:
-        log.error("%s %s"%(str(d_line), sys.exc_info()[1])) 
+        log.error("%s %s"%(str(d_in), sys.exc_info()[1])) 
     
 
 
@@ -32,27 +35,9 @@ class Command(BaseCommand):
 
     def creationPlanches(self):
         """Création des planches de base et celles du fichier"""
+        totalSerre_m2 = 0
+        totalChamp_m2 = 0
         
-        try:
-            p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
-        except:
-            p = Planche()
-            p.nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP
-            p.longueur_m = 10000
-            p.largeur_m = 1
-            p.bSerre = False
-            p.save()  
-
-        try:
-            p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS)
-        except:
-            p = Planche()
-            p.nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS
-            p.longueur_m = 10000
-            p.largeur_m = 1
-            p.bSerre = True
-            p.save()  
-
         try:
             with open(os.path.join(settings.BASE_DIR, "inputs", "Planches.csv"), "r+t", encoding="ISO-8859-1") as hF:
                 reader = csv.DictReader(hF)
@@ -67,16 +52,39 @@ class Command(BaseCommand):
                         p.largeur_m = getFloat(d_line, "largeur (m)")
                         p.bSerre = (p.nom[0]=="S")
                         p.save()
-                        log.info (p)               
+                        log.info (p)    
+                        if p.bSerre:
+                            totalSerre_m2 += p.surface_m2()
+                        else:
+                            totalChamp_m2 += p.surface_m2()           
         except:
             log.error(sys.exc_info()[1]) 
               
+        try:
+            p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
+        except:
+            p = Planche()
+            p.nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP
+            p.longueur_m = totalChamp_m2
+            p.largeur_m = 1
+            p.bSerre = False
+            p.save()  
+            log.info (p)    
 
+        try:
+            p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS)
+        except:
+            p = Planche()
+            p.nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS
+            p.longueur_m = totalSerre_m2
+            p.largeur_m = 1
+            p.bSerre = True
+            p.save()  
+            log.info (p)    
 
+           
             
     def handle(self, *args, **options):
-
-       
         l_err  = []
 
         ## maj planches
@@ -96,7 +104,6 @@ class Command(BaseCommand):
                         log.info("Ajout %s"%nomEspece)
                         espece = Espece()
                         espece.nom = nomEspece
-#                         espece.save()
                     
                     nomFam = d_line.get("Famille","").lower().strip()
                     if nomFam:
@@ -110,7 +117,6 @@ class Command(BaseCommand):
                         
                         ## maj famille de l'espèce
                         espece.famille_id = famille.id
-#                         espece.save()
                     
                     ## recup infos
                     try:
@@ -162,21 +168,17 @@ class Command(BaseCommand):
                 
                 try:
                     s_espece = d_line.get("Espèce", "").lower().strip()
-                    assert s_espece, "Espèce indéfinie"   
-                    
-#                     assert s_espece == "laitue",'on ne garde sque les laitues pour test'
-                    
-                            
-                    s_variet = d_line.get("Variété", "").lower().strip() 
-                    assert s_variet, "Variété indéfinie pour %s"%(s_espece)
                     espece = Espece.objects.get(nom=s_espece) 
                     assert espece, "objet Espèce non trouvé pour %s"%(s_espece)
                 except:
                     s_err = str(sys.exc_info()[1])
-                    l_err.append(s_err)
+                    l_err.append("%s %s"%(s_err, s_espece))
+                    log.error(s_err)
                     continue
                 
                 try:
+                    s_variet = d_line.get("Variété", "").lower().strip() 
+                    assert s_variet, "Variété indéfinie pour %s"%(s_espece)
                     ## mise à jour des variétés
                     var = Variete.objects.get(nom = s_variet)
                 except:

@@ -348,14 +348,26 @@ def utilisationPlanches(request):
 
         ## on retire les planches virtuelles
  #       l_planches = Planche.objects.filter(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
-#         l_planches = Planche.objects.exclude(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP, constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
-        l_planches = Planche.objects.all()
+        l_planches = Planche.objects.filter(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP, constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
+#         l_planches = Planche.objects.all()
         bSerres = request.POST.get("bSerres","")=="on"
         if not bSerres:
             l_planches = l_planches.exclude(bSerre = True)
         bChamps = request.POST.get("bChamps","")=="on"
         if not bChamps:
             l_planches = l_planches.exclude(bSerre = False)
+        
+        ## recup de tous les évenements de début ou fin de série 
+        l_evts = Evenement.objects.filter(type__in=[Evenement.TYPE_DEBUT, Evenement.TYPE_FIN])
+        l_evts = l_evts.filter(date__gte=date_debut_vue, date__lte=date_fin_vue)
+        print( len(l_evts))
+        
+#         l_dates= []
+#         for evt in l_evts:
+#             if evt.date not in l_dates:
+#                 l_dates.append(evt.date+datetime.timedelta(days=-1))
+# #                 l_dates.append(evt.date)
+#                 l_dates.append(evt.date+datetime.timedelta(days=1))
         
         for pl in l_planches:        
             ## Pour chaque semaine étudiée, on calcule la surface

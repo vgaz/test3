@@ -16,6 +16,7 @@ function sauveLegume(id)
     s_request += "&consoHebdoParPart="+ document.getElementById("leg_" + id + "_" + "consoHebdoParPart").value
     s_request += "&rendementGermination="+ document.getElementById("leg_" + id + "_" + "rendementGermination").value
     s_request += "&intraRang_cm="+ document.getElementById("leg_" + id + "_" + "intraRang_cm").value
+    s_request += "&nbRangs="+ document.getElementById("leg_" + id + "_" + "nbRangs").value
     s_request += "&poidsParPiece_g="+ document.getElementById("leg_" + id + "_" + "poidsParPiece_g").value
     s_request += "&nbGrainesParPied="+ document.getElementById("leg_" + id + "_" + "nbGrainesParPied").value
     s_request += "&prodParPied_kg="+ document.getElementById("leg_" + id + "_" + "prodParPied_kg").value
@@ -63,7 +64,10 @@ function sauveLegume(id)
             <input style="width:40px" type="text" id="leg_{{leg.pk}}_rendementGermination" name="leg_{{leg.pk}}_rendementGermination" value="{{leg.espece.rendementGermination}}" />
             
             Distance dans le rang (cm) 
-            <input style="width:40px" type="text" id="leg_{{leg.pk}}_intraRang_cm" name="leg_{{leg.pk}}_intraRang_cm" value="{{leg.intraRang_cm}}" /><br/>
+            <input style="width:40px" type="text" id="leg_{{leg.pk}}_intraRang_cm" name="leg_{{leg.pk}}_intraRang_cm" value="{{leg.intraRang_cm}}" />
+            
+            Nombre de rangs 
+            <input style="width:40px" type="text" id="leg_{{leg.pk}}_nbRangs" name="leg_{{leg.pk}}_nbRangs" value="{{leg.nbRangs}}" /><br/>
             
             Poids moyen par pièce(g) si comptage en pièce
             <input style="width: 40px" type="text" id="leg_{{leg.pk}}_poidsParPiece_g" name="leg_{{leg.pk}}_poidsParPiece_g" value="{{leg.poidsParPiece_g}}" /> <br/>

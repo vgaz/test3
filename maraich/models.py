@@ -263,7 +263,7 @@ class Espece(djangoModels.Model):
     sans = djangoModels.ManyToManyField("self", related_name="sans", blank=True)
     unite_prod = djangoModels.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     bStockable = djangoModels.BooleanField(default=False)
-    rendementConservation = djangoModels.FloatField("Rendement de pousse et conservation", default=0)
+    rendementPousseEtConservation = djangoModels.FloatField("Rendement de pousse et conservation", default=0)
     nbGrainesParPied = djangoModels.PositiveIntegerField("Nb graines par pied", default=0)
     rendementGermination = djangoModels.FloatField("Rendement germination", default=0)
     consoHebdoParPart = djangoModels.FloatField("quantité consommée par semaine par part", default=0)
@@ -334,9 +334,8 @@ class Legume(djangoModels.Model):
 
 
 class Implantation(djangoModels.Model):
+    """Implantation sur une planche donnée"""
     planche = djangoModels.ForeignKey("Planche")
-#     debut_m = djangoModels.FloatField("Début de la culture (m)", default=0)
-#     fin_m = djangoModels.FloatField("Début de la culture (m)", default=0)
     nbPieds = djangoModels.IntegerField("nombre de pieds", default=0)
 
     def longueur_m(self):
@@ -524,10 +523,7 @@ class Serie(djangoModels.Model):
             nb_rangs = self.nb_rangs
         assert intra_rang_m, Exception("intra_rang_m non défini")
         assert nb_rangs, Exception("nb_rangs non défini")
-        
-        if nb_rangs == 0:
-            return 0  
-                      
+
         return self.longueurRangTotal(intra_rang_m) / nb_rangs
     
     def surfaceOccupee_m2(self, planche=None):

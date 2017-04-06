@@ -274,8 +274,8 @@ function majListEvts(id_serie)
         for(ii=0;ii<jsonRep.l_evts.length;ii++)
             {
             d_evt = jsonRep.l_evts[ii].fields  
-            if (d_evt.type != {{codeEvtDivers}})
-                continue // que les evt divers
+            //if (d_evt.type != {{codeEvtDivers}})
+              //  continue // que les evt divers
             d_evt["pk"] =jsonRep.l_evts[ii].pk //la clé pk n'est pas dans les fields, on la rajoute        
             sj_evt = JSON.stringify(d_evt)
             s_evts += "<tr><td> " + getSdateFromTdate(d_evt.date) + " </td><td> " + d_evt.duree_j + "j </td><td> "  + d_evt.nom + " </td>"

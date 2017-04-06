@@ -41,7 +41,7 @@ def serveRequest(request):
 
     
     elif cde == "get_evts_serie": 
-        ## retour des évenements d'une série)
+        ## renvoie tous les évenements d'une série
         try:
             l_evts = Serie.objects.get(id = int(request.POST.get("id", 0))).evenements.all()
             rep = serializers.serialize("json", l_evts)      
