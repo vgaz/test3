@@ -402,6 +402,7 @@ def utilisationPlanches(request):
 
 #########################################################
 def tab_legumes(request):
+    """liste des légumes en base et parametres"""
     s_info = ""
 
     l_legumes = Legume.objects.all()

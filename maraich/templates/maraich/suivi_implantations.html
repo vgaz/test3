@@ -627,7 +627,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
                                         intra_rang_cm="{{impl.serie.intraRang_cm}}"
                                         draggable="true" 
                                         ondragstart="dragImplStart(event)" 
-                                        title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.quantite}}/{{impl.serie.quantiteTotale}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}"
+                                        title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.nbPieds}}/{{impl.serie.nbPieds}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}"
                                         >
             <div class="divTitreImplantation">
             {{impl.serie.legume.nom}}  {{impl.nbPieds}}/{{impl.serie.quantiteTotale}} {{impl.surface_m2}}m2
