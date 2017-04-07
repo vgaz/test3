@@ -2,7 +2,7 @@
 from django.core.management.base import BaseCommand       
 from django.test import RequestFactory
 
-from maraich import serveRequest, views, constant
+from maraich import serveRequest, views
 import os
 from maraich import settings
 from maraich.models import *
@@ -14,24 +14,26 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        self.factory = RequestFactory()
-
-        # Create an instance of a POST request.
-        request = self.factory.post('/recolte/', 
-                                    
-                                    data={"periode":"specifique",
-                                          "date_debut_vue":"03/04/2017",
-                                          "date_fin_vue":"15/4/2017", 
-                                          "bSerres":"on",
-                                          "faa":3.4
-                    
-                                         
-                                        }
-                                    )
-        ff = MyHttpTools.getFloatInPost(request, "faea", 1.2)
-        print (ff)
+        ser = Serie.objects.get(pk=1980)
+        ss = ser.quantiteEstimee_kg_ou_piece()
+        print (ser.descriptif())
+        prod =  ser.prodHebdo(MyTools.getDateFrom_d_m_y("14/8/2017"))
+        print(prod)
         return
-    
+        factory = RequestFactory()
+        
+        # Create an instance of a POST request.
+        request = factory.post('/recolte/', 
+                                     
+                                     data={"periode":"specifique",
+                                           "date_debut_vue":"07/08/2017",
+                                           "date_fin_vue":"08/01/2018", 
+                                           "bSerres":"on",                    
+        
+                                         }
+                                     )
+        
+        
         views.recolte(request)    
         return
 #         
@@ -75,17 +77,17 @@ class Command(BaseCommand):
 #         serveRequest.serveRequest(request)
     
 
-        date_debut_vue = MyTools.getDateFrom_d_m_y("1/4/2017")
-        date_fin_vue = MyTools.getDateFrom_d_m_y("11/4/2017")
+#         date_debut_vue = MyTools.getDateFrom_d_m_y("1/4/2017")
+#         date_fin_vue = MyTools.getDateFrom_d_m_y("11/4/2017")
 #         la_date = MyTools.getDateFrom_d_m_y("14/03/2016")
 #         l_implantations = Implantation.objects.filter(planche_id = 2)
 #         planche = Planche.objects.get(id=1)
-        l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue)
-        for ser in l_series:
-            print (ser)
-            pr = ser.prodHebdo(date_debut_vue)
-        
-        return
+#         l_series = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue)
+#         for ser in l_series:
+#             print (ser)
+#             pr = ser.prodHebdo(date_debut_vue)
+#         
+#         return
     
     
     

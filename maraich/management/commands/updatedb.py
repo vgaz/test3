@@ -168,6 +168,9 @@ class Command(BaseCommand):
                 
                 try:
                     s_espece = d_line.get("Espèce", "").lower().strip()
+                    
+#                     if "poivron" not in s_espece:continue
+                    
                     espece = Espece.objects.get(nom=s_espece) 
                     assert espece, "objet Espèce non trouvé pour %s"%(s_espece)
                 except:
@@ -263,8 +266,6 @@ class Command(BaseCommand):
 
                 except:
                     s_err = str(sys.exc_info()[1])
-                    if "could not convert string to float" in s_err:
-                        pass
                     l_err.append(s_err)
                     continue
 

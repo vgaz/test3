@@ -547,7 +547,8 @@ class Serie(djangoModels.Model):
     def prodHebdo(self, dateDebutSem):
         """ renvoie la production estimée de cette semaine lissée sur le nombre de semaines de consommation possible"""
         nbSemEcoulementStock = max([1, int(self.quantiteEstimee_kg_ou_piece() / self.legume.espece.consoHebdoTotale())])
-        dateFinStock = self.evt_fin.date + datetime.timedelta(weeks = nbSemEcoulementStock) 
+        dateFinStock = self.evenements.get(type=Evenement.TYPE_RECOLTE).date + datetime.timedelta(weeks = nbSemEcoulementStock) 
+#         dateFinStock = self.evt_fin.date + datetime.timedelta(weeks = nbSemEcoulementStock) 
         if dateDebutSem > self.evenements.get(type=Evenement.TYPE_RECOLTE).date and dateDebutSem < dateFinStock :
             return self.quantiteEstimee_kg_ou_piece()/nbSemEcoulementStock
         else:
@@ -583,7 +584,8 @@ class Serie(djangoModels.Model):
             l_rep.append(impl.__str__())
         
         l_rep.append("surface Occupée : %s m2"%(self.surfaceOccupee_m2()))
-        l_rep.append("quantité estimée : %d"%(self.quantiteEstimee_kg_ou_piece()))
+        l_rep.append("quantité estimée : %d %s"%(self.quantiteEstimee_kg_ou_piece(), self.legume.espece.nomUniteProd()))
+        
         return "\n".join(l_rep)
     
         

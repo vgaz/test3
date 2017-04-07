@@ -296,7 +296,7 @@ def recolte(request):
                 qteHebdo = 0
                 for serie in l_series:
                     qteHebdo += serie.prodHebdo(sem.date_debut)
-#                 print("sem %s ******************* leg %s, %s %f"%(sem.s_dm, leg.nom(), sem.date_debut, qteHebdo))
+                    print("sem %s ******************* leg %s, %s %f"%(sem.s_dm, leg.nom(), sem.date_debut, qteHebdo))
                   
                 if qteHebdo == 0:
                     couleur = "white"
