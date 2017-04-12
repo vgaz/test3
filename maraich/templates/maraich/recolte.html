@@ -47,12 +47,8 @@ function init()
     for (ll=0; ll<l_aVirer.length; ll++)
         tab.removeChild(l_aVirer[ll])
 
-    // par semaine
-    // maj poids par légume
-    // maj poids par espece 
-    // maj poids par pannier
+    // maj poids des legumes par semaine
     // maj constitution du pannier
-    
     poidsTotalTSTL = 0
     
     for (ss=0; ss<l_sems.length; ss++)
@@ -86,11 +82,8 @@ function init()
             cumul += parseFloat(document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll]).getAttribute("qte"))
         document.getElementById("tl_" + l_legs[ll]).innerHTML = parseInt(cumul)
         }
-
-
-    // total par semaine pour chaque espece (en kg ou pièce)
-    total_etets = 0
-    
+        
+    // total par semaine pour chaque espece (en kg ou pièce)    
     for (ss=0; ss<l_sems.length; ss++)
         {
         listePannier = ""
@@ -104,24 +97,34 @@ function init()
                     continue 
                 qte_cecs += parseInt(divLeg.getAttribute("qte"))
                 nomEsp = divLeg.getAttribute("esp_nom")
+                uniteEsp = divLeg.getAttribute("esp_unite")
                } 
             //alert(l_sems[ss] + " " + nomEsp)
             if (qte_cecs != 0)
                 {
                 document.getElementById("sem_" + l_sems[ss] + "__esp_" + l_especes[ee]).innerHTML= qte_cecs
-                listePannier += nomEsp + " : " + parseFloat(qte_cecs).toFixed(2)/nbPanniers + "<br/>"
-                //alert(listePannier)
-                }               
-                         
+                listePannier += nomEsp + " : " + parseFloat(qte_cecs).toFixed(2)/nbPanniers + " (" + uniteEsp + ")<br/>"
+                }  
             }
-        //document.getElementById("tets_" + l_sems[ss]).innerHTML = parseInt(qte_cets)
         document.getElementById("cont_pspp_" + l_sems[ss]).innerHTML = listePannier
-        //alert(listePannier)
-
-        //document.getElementById("tepspp_" + l_sems[ss]).innerHTML = parseFloat(poids_SPE / nbPanniers).toFixed(2) + " kg"
-        //total_etets += poids_SPE
         }           
-   //document.getElementById("total_etets").innerHTML = parseInt(total_etets)
+
+    // total par espece pour toutes les semaine
+    for (ee=0; ee<l_especes.length; ee++)
+        {
+        qteEsp = 0
+        for (ss=0; ss<l_sems.length; ss++)
+            {
+            for (ll=0;ll<l_legs.length;ll++)
+                {
+                divLeg = document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll])
+                if(l_especes[ee] != parseInt(divLeg.getAttribute("esp_id")))
+                    continue 
+                qteEsp += parseInt(divLeg.getAttribute("qte"))
+                } 
+            }
+        document.getElementById("tets_"+ l_especes[ee]).innerHTML = parseInt(qteEsp)
+        }
     }
                 
 
@@ -177,11 +180,11 @@ function init()
         
         {# ligne de recap par espece , seule la première ligne sera gardée via javascript #}
         <tr class="espece_{{leg.espece.id}}">
-            <td style="border:5px solid {{leg.espece.couleur}}">{{leg.espece.nom|title}}</td>
+            <td style="border:5px solid {{leg.espece.couleur}}">{{leg.espece.nom|title}} ({{leg.espece.nomUniteProd}})</td>
             {% for t_prod in leg.l_prod %}
                 <td><div id="sem_{{t_prod.0|date:'Y-m-d'}}__esp_{{leg.espece.id}}"  style="text-align: center;border:5px solid {{leg.espece.couleur}}" > </div></td>        
             {% endfor %}
-            <td class="tets_{{leg.espece.id}}">total par espece</td>
+            <td id="tets_{{leg.espece.id}}" style="font-weight:bold;text-align: center" >total par espece</td>
         </tr>
     
         <tr class="detail_legume">
@@ -191,6 +194,7 @@ function init()
                 <div id="sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
                         esp_id="{{leg.espece.id}}"
                         esp_nom="{{leg.espece.nom}}"
+                        esp_unite="{{leg.espece.nomUniteProd}}"
                         qte="{{t_prod.1}}" 
                         poids="{{t_prod.2}}" 
                         style="border:5px solid {{t_prod.4}}"
@@ -219,7 +223,7 @@ function init()
 
         {% endfor %}
 
-        <tr><th>Total (kg)</th>{# ligne de total des poids de legumes par semaine #}
+        <tr><th>Total</th>{# ligne de total des poids ou qté de legumes par semaine #}
         {% for semaine in l_semaines %}
             <td><div style="font-weight:bold;text-align:center" id="ts_{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
         {% endfor %}
