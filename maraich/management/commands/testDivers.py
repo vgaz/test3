@@ -14,10 +14,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        ser = Serie.objects.get(pk=1980)
+        ser = Serie.objects.get(pk=2102)
+        ss = ser.nbSemainesDeRecolte()
         ss = ser.quantiteEstimee_kg_ou_piece()
         print (ser.descriptif())
-        prod =  ser.prodHebdo(MyTools.getDateFrom_d_m_y("14/8/2017"))
+        prod =  ser.prodHebdo(MyTools.getDateFrom_d_m_y("15/10/2017"), 2)
         print(prod)
         return
         factory = RequestFactory()
@@ -26,10 +27,9 @@ class Command(BaseCommand):
         request = factory.post('/recolte/', 
                                      
                                      data={"periode":"specifique",
-                                           "date_debut_vue":"07/08/2017",
-                                           "date_fin_vue":"08/01/2018", 
-                                           "bSerres":"on",                    
-        
+                                           "date_debut_vue":"07/05/2017",
+                                           "date_fin_vue":"08/10/2017", 
+                                           "bSerres":"on",
                                          }
                                      )
         

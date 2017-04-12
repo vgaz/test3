@@ -265,38 +265,40 @@ def recolte(request):
     """affiche les previsions et récoltes réelles hebdo"""
     try:
         s_info = ""
-        bDetailVar = request.POST.get("detail_variete", "") != ""
         ## récup de la fenetre de temps
         periode, date_debut_vue, date_fin_vue, decalage_j = donnePeriodeVue(request.POST) 
-        bSerres = request.POST.get("bSerres","")=="on"
-        bChamps = request.POST.get("bChamps","")=="on"
+        s_filtre_espece = request.POST.get("s_filtre_espece","")
+        bDetailVar = request.POST.get("detail_variete", "") != ""
 
         nbPanniers = Espece.objects.get(nom="ail").nbParts
         l_semaines = MyTools.getListeSemaines(date_debut_vue, date_fin_vue)
 
         ## on ne garde que la fenetre de temps étudiée
         l_seriesActives = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue) 
-        ## recherche des productions par semaine regroupées par légume ou par espèce
+    
+        ## recherche des productions par semaine et par légume
+        l_especes = Espece.objects.all()
         l_legumes = Legume.objects.all()
+        if s_filtre_espece:
+            l_especes = l_especes.filter(nom__icontains = s_filtre_espece)
+            l_legumes = l_legumes.filter(espece__in = l_especes)
+        
         for leg in l_legumes:
  
             ## calcul des productions de légumes
             l_series = l_seriesActives.filter(legume_id = leg.id)
-            if bSerres and not bChamps:
-                l_series = l_series.filter(bSerre = True)
-            elif bChamps and not bSerres:
-                l_series = l_series.filter(bSerre = False)
 
-            ## Pour chaque semaine étudiée, on calcule le stock cumulé de chaque série 
-            ## le stock est lissé 
-            ## soit sur la conso hebdo pour les légumes stockables
-            ## ou sur la durée de récolte pour les légumes non stockables
+            ## Pour chaque semaine étudiée, on calcule la récolte possible de chaque série 
+            ## selon le stock et la conso hebdo
             leg.l_prod = []
             for sem in l_semaines:
                 qteHebdo = 0
+                l_seriesMemeEspece = l_seriesActives.filter(legume__espece_id=leg.espece.id)
+                nbSeriesMemeEspece = len(l_seriesMemeEspece)
                 for serie in l_series:
-                    qteHebdo += serie.prodHebdo(sem.date_debut)
-                    print("sem %s ******************* leg %s, %s %f"%(sem.s_dm, leg.nom(), sem.date_debut, qteHebdo))
+                    qteHebdo += serie.prodHebdo(sem.date_debut, nbSeriesMemeEspece)
+#                     if "pomme" in leg.nom():
+#                         print("sem %s ******************* leg %s, %s %f %d"%(sem.s_dm, leg.nom(), sem.date_debut, qteHebdo, nbSeriesMemeEspece))
                   
                 if qteHebdo == 0:
                     couleur = "white"
@@ -309,8 +311,8 @@ def recolte(request):
                     prodReelle = 0
                     
                 leg.l_prod.append((sem.date_debut, 
-                                   int(qteHebdo), 
-                                   int(leg.poids_kg(qteHebdo)),
+                                        qteHebdo, 
+                                   leg.poids_kg(qteHebdo),
                                    leg.espece.nomUniteProd(),
                                    couleur,
                                    prodReelle))
@@ -326,16 +328,92 @@ def recolte(request):
                     "decalage_j":decalage_j,
                     "date_debut_vue": date_debut_vue,
                     "date_fin_vue": date_fin_vue,
+                    "l_semaines":l_semaines,
+                    "l_legumes":l_legumes,
+                    "l_especes" : l_especes,
+                    "bDetailVar":bDetailVar,
+                    "nbPanniers":nbPanniers,
+                    "s_filtre_espece":s_filtre_espece,
+                    "info":s_info
+                    })
+#################################################
+
+def recolteEsp(request):
+    """affiche les previsions de récolte hebdo"""
+    try:
+        s_info = ""
+        ## récup de la fenetre de temps
+        periode, date_debut_vue, date_fin_vue, decalage_j = donnePeriodeVue(request.POST) 
+        bSerres = request.POST.get("bSerres","")=="on"
+        bChamps = request.POST.get("bChamps","")=="on"
+        
+        bDetailVar = request.POST.get("detail_variete", "") != ""
+
+        nbPanniers = Espece.objects.get(nom="ail").nbParts
+        l_semaines = MyTools.getListeSemaines(date_debut_vue, date_fin_vue)
+
+        ## on ne garde que la fenetre de temps étudiée
+        l_seriesActives = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue) 
+        ## recherche des productions par semaine regroupées par légume ou par espèce
+        l_especes = Espece.objects.all()
+        for esp in l_especes:
+ 
+            ## calcul des productions de légumes
+            l_series = l_seriesActives.filter(legume__espece_id = esp.id)
+            if bSerres and not bChamps:
+                l_series = l_series.filter(bSerre = True)
+            elif bChamps and not bSerres:
+                l_series = l_series.filter(bSerre = False)
+
+            ## Pour chaque semaine étudiée, on calcule le stock cumulé de chaque série 
+            ## le stock est lissé 
+            ## soit sur la conso hebdo pour les légumes stockables
+            ## ou sur la durée de récolte pour les légumes non stockables
+            esp.l_prod = []
+            for sem in l_semaines:
+                qteHebdo = 0
+                nbSeries =  len(l_series)
+                for serie in l_series:
+                    qteHebdo += serie.prodHebdo(sem.date_debut, nbSeries)
+#                     if "pomme" in leg.nom():
+#                         print("sem %s ******************* leg %s, %s %f %d"%(sem.s_dm, leg.nom(), sem.date_debut, qteHebdo, nbSeries))
+                  
+                if qteHebdo == 0:
+                    couleur = "white"
+                else:
+                    couleur = esp.couleur
+                
+                try: 
+                    prodReelle = Production.objects.get(espece_id=esp.id, dateDebutSemaine = sem.date_debut).qte
+                except:
+                    prodReelle = 0
+                    
+                esp.l_prod.append((sem.date_debut, 
+                                   qteHebdo, 
+                                   99,##leg.poids_kg(qteHebdo), 
+                                   couleur,
+                                   prodReelle))
+
+    except:
+        s_info += str(sys.exc_info()[1])
+        log.error(s_info)
+        
+    return render(request,'maraich/recolteEsp.html',
+                    {
+                    "appVersion":constant.APP_VERSION,
+                    "periode":periode,
+                    "decalage_j":decalage_j,
+                    "date_debut_vue": date_debut_vue,
+                    "date_fin_vue": date_fin_vue,
                     "bSerres":bSerres,
                     "bChamps":bChamps,
                     "l_semaines":l_semaines,
-                    "l_legumes":l_legumes,
-                    "l_especes" : Espece.objects.all(),
+                    "l_especes" : l_especes,
                     "bDetailVar":bDetailVar,
                     "nbPanniers":nbPanniers,
                     "info":s_info
                     })
-    
+       
 #################################################
 
 def utilisationPlanches(request):

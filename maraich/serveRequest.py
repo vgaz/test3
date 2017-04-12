@@ -92,6 +92,8 @@ def serveRequest(request):
             leg.espece.nbGrainesParPied = int(request.POST.get("nbGrainesParPied"))
             leg.espece.consoHebdoParPart = getFloatInPost(request, "consoHebdoParPart")
             leg.espece.rendementGermination = getFloatInPost(request, "rendementGermination")
+#             leg.espece.rendementPousseEtConservation = getFloatInPost(request, "rendementPousseEtConservation")   inutilisé pour l moment
+            
             leg.espece.save()
             ## lié au légume
             leg.poidsParPiece_kg = getFloatInPost(request, "poidsParPiece_g")/1000

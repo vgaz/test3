@@ -217,7 +217,7 @@ class Command(BaseCommand):
                     ## maj série
                     s_dateEnTerre = d_line.get("Date en terre","")
                     assert s_dateEnTerre, "'Date en terre' indéfini pour %s"%(leg.nom())
-                    dateEnTerre = datetime.datetime.strptime(s_dateEnTerre, constant.FORMAT_DATE)
+                    dateEnTerre = MyTools.getDateFrom_d_m_y(s_dateEnTerre)
                     try:
                         serie = Serie.objects.get(evt_debut__type = Evenement.TYPE_DEBUT,
                                                   evt_debut__date = dateEnTerre,
@@ -228,17 +228,22 @@ class Command(BaseCommand):
                         serie = Serie()
                         serie.legume = leg
 
-                    ## recup infos série                    
-                    
+                    ## recup infos série
                     serie.nb_rangs = getInt(d_line, "Nombre de rangs retenus")
                     assert serie.nb_rangs != 0, "'Nombre de rangs retenus' indéfini pour %s "%(leg.nom())
                     
                     val = d_line.get("lieu", "")
                     assert val, "'lieu' indéfini pour %s "%(leg.nom())                    
                     serie.bSerre = (val == "SERRE")
-                    serie.intra_rang_m = leg.intra_rang_m
+                    
+                    serie.intra_rang_m = getFloat(d_line, "Intra rang (cm)","0")/100
+                    assert serie.intra_rang_m, "'Intra rang (cm)' indéfini pour %s"%(leg.nom)    
+                    
                     serie.remarque = d_line.get("Remarque", "")       
                     dureeAvantRecolte_j = getInt(d_line, "Durée avant récolte (j)")
+                    
+#                     serie.prelevement_sd = d_line, "Mode de prélèvement","" == "SD"   ## calcul prelevement selon distrib
+                    
                     assert dureeAvantRecolte_j!=0, "Champ 'Durée avant récolte (j)' indéfini pour %s "%(leg.nom())
                     
                     etalementRecolte_j = getInt(d_line, "Étalement récolte (j)")

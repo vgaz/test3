@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+{% load static %}
 {% block javascript %}
-    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/myTools.js"></script>
+<script type="text/javascript" src="{% static 'javascripts/myTools.js' %}"> </script>
 {% endblock %}
 
 {% block title %}Création de planches {% endblock %}
@@ -26,7 +27,6 @@
 <br/>Les planches seront nommées X_PREFIXE_N°  avec X = C (pour champ) ou S (serre) 
 <br/>N° en partant du numéro fourni
 </div>
-
 <div class="BlueFrame"> 
 <h2>Planches déjà créées</h2>
     <table style="text-align: left; width: 100%;" border="1" cellpadding="2">
@@ -35,21 +35,17 @@
         <tr>
             <td>{{planche}}</td>
             <td>
-                
-                <a href="#" onclick="edite_planche({{planche.id}});return false;"
-                ><img  src="{{STATIC_URL}}images/editor.png" 
+                <a href="#" onclick="edite_planche({{planche.id}});return false;">
+                    <img  src="{% static 'images/editor.png' %}" 
                           title="Editer la planche"
                           style="online" ></a>
                 <a href="#" onclick="supprime_planche({{planche.id}});return false;">
-                    <img  src="{{STATIC_URL}}images/toDelete.jpeg" 
+                    <img  src="{% static 'images/toDelete.jpeg' %}" 
                           title="supprimer la planche et toutes les séries qu'elle accueille"
                           style="online" ></a>
-                
             </td>
         </tr/>
     {% endfor %}    
     </table>
-
 </div>
-
 {% endblock %}

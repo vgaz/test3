@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block pagetitle %}Récoltes estimées{% endblock %}
+{% block pagetitle %}Récoltes estimées (2){% endblock %}
 {% block javascript %}
 <script type="text/javascript" src="{% static 'javascripts/myTools.js' %}"> </script>
 <script type="text/javascript" >
@@ -18,115 +18,115 @@ function enregistreRecolte(ptDiv)
     rep = requestServer("cde=enregistre_recolte&date_sem=" + ptDiv.getAttribute("date") + "&id_leg=" + ptDiv.getAttribute("leg") + "&qte=" + divRecLeg.value)
     }
 
+function montre_legumes()
+    {
+    l_lignes = document.getElementsByClassName("detail_legume")
+    for (ll=0; ll<l_lignes.length; ll++)
+        l_lignes[ll].style.display='table-row'
+    }
+    
+function cache_legumes()
+    {
+    l_lignes = document.getElementsByClassName("detail_legume")
+    for (ll=0; ll<l_lignes.length; ll++)
+        l_lignes[ll].style.display = "none"
+    }
+
 function init()
     {
-    montre_especes()
-    
-    // maj tableau légumes 
-    cumulTotal = 0       
-    for (ii=0;ii<l_sems.length;ii++)
+    cache_legumes()
+    // nettoyage des lignes d'espece inutiles, juste la premiere à garder pour toutes les variétés
+    l_aVirer = []
+    tab = document.getElementById("tab_legumes")
+    for (ee=0; ee<l_especes.length; ee++)
         {
-        cumul = 0
-        for (jj=0;jj<l_legs.length;jj++)
-            {
-            poidsL = parseInt(document.getElementById("sem_" + l_sems[ii] + "__leg_" + l_legs[jj]).getAttribute("poids"))
-            cumul += poidsL
-            //alert("sem:" + l_sems[ii] + " leg:" + l_legs[jj] + " poidsL:" + poidsL +" cumul:" + cumul)
-            }
-        document.getElementById("ts_" + l_sems[ii]).innerHTML = cumul
-        document.getElementById("tlpp_" + l_sems[ii]).innerHTML = cumul/nbPanniers
-        cumulTotal += cumul
-        }   
-    document.getElementById("totalTotal").innerHTML = cumulTotal
+        l_lignes = document.getElementsByClassName("espece_" + l_especes[ee])
+        for (ll=1; ll<l_lignes.length; ll++)
+            l_aVirer.push(l_lignes[ll])
+        }
+    for (ll=0; ll<l_aVirer.length; ll++)
+        tab.removeChild(l_aVirer[ll])
+
+    // par semaine
+    // maj poids par légume
+    // maj poids par espece 
+    // maj poids par pannier
+    // maj constitution du pannier
     
-    // total par légume (kg)
+    poidsTotalTSTL = 0
+    
+    for (ss=0; ss<l_sems.length; ss++)
+        {
+        espCourante = 0
+        cumulPoidsLeg = 0
+        cumulPoidsEsp = 0
+        cumulEsp = 0
+        s_listeEsp = ""
+     
+        for (ll=0; ll<l_legs.length; ll++)
+            {
+            idLeg = "sem_" + l_sems[ss] + "__leg_" + l_legs[ll]
+            divLeg = document.getElementById(idLeg)
+            poidsLeg = parseFloat(divLeg.getAttribute("poids"))
+            cumulPoidsLeg += poidsLeg
+            
+            }
+        document.getElementById("ts_" + l_sems[ss]).innerHTML = parseInt(cumulPoidsLeg)
+        document.getElementById("tlpp_" + l_sems[ss]).innerHTML = parseFloat(cumulPoidsLeg/nbPanniers).toFixed(2)
+        poidsTotalTSTL += cumulPoidsLeg        
+        }
+        
+    document.getElementById("poidsTotalTSTL").innerHTML = parseInt(poidsTotalTSTL)
+        
+    // pour chaque légume, total des poids ou quantité de toutes les semaines 
     for (ll=0; ll<l_legs.length; ll++)
         {
         cumul = 0
         for (ss=0;ss<l_sems.length;ss++)
-            cumul += parseInt(document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll]).getAttribute("qte"))
-        document.getElementById("tl_" + l_legs[ll]).innerHTML = cumul
+            cumul += parseFloat(document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll]).getAttribute("qte"))
+        document.getElementById("tl_" + l_legs[ll]).innerHTML = parseInt(cumul)
         }
 
 
-    // total par espèce pour chaque semaine   
-    for (ee=0; ee<l_especes.length; ee++)
+    // total par semaine pour chaque espece (en kg ou pièce)
+    total_etets = 0
+    
+    for (ss=0; ss<l_sems.length; ss++)
         {
-        cumulTETS = 0 // 
-        for (ss=0;ss<l_sems.length;ss++)
+        listePannier = ""
+        for (ee=0; ee<l_especes.length; ee++)
             {
-            cumulEPS = 0
+            qte_cecs = 0 // qte chaque espece chaque semaine
             for (ll=0;ll<l_legs.length;ll++)
                 {
                 divLeg = document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll])
-                esp_id = parseInt(divLeg.getAttribute("esp_id"))
-                if( esp_id != l_especes[ee])
-                    continue
-                qte = parseInt(divLeg.getAttribute("qte"))
-                cumulEPS += qte
-                cumulTETS += qte
-                }
-
-            id =  document.getElementById("sem_" + l_sems[ss] + "__esp_" + l_especes[ee])
-            id.innerHTML = cumulEPS
-            if (cumulEPS >0)
-                { 
-                id.style.border = "5px solid " + l_couleur_esp[l_especes[ee]]
-                id.style.textAlign="center"
-                }
-            else
-                id.style.display = "none"    
-            }
-        document.getElementById("tets_" + l_especes[ee]).innerHTML = cumulTETS
-        }   
-        
-        // total par semaine pour chaque espece (en Kg) et liste des espèces dont le poids est non nul
-        total_etets = 0
-        for (ss=0; ss<l_sems.length; ss++)
-            {
-            s_listeEsp = ""
-            poids_SPE = 0 // total de chaque semaine
-            for (ee=0; ee<l_especes.length; ee++)
+                if(l_especes[ee] != parseInt(divLeg.getAttribute("esp_id")))
+                    continue 
+                qte_cecs += parseInt(divLeg.getAttribute("qte"))
+                nomEsp = divLeg.getAttribute("esp_nom")
+               } 
+            //alert(l_sems[ss] + " " + nomEsp)
+            if (qte_cecs != 0)
                 {
-                poidsLegs = 0
-                for (ll=0;ll<l_legs.length;ll++)
-                    {
-                    divLeg = document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll])
-                    esp_id = parseInt(divLeg.getAttribute("esp_id"))
-                    if( esp_id != l_especes[ee])
-                        continue
-                    poidsLeg = parseInt(divLeg.getAttribute("poids"))
-                    poidsLegs += poidsLeg
-                    if (poidsLeg != 0)
-                        {
-                        nom = divLeg.getAttribute("esp_nom")
-                        if (s_listeEsp.indexOf(nom) == -1)
-                            s_listeEsp += "<br/>" + nom
-                        }
-                   }        
-                poids_SPE += poidsLegs
-                }
-            document.getElementById("tets_" + l_sems[ss]).innerHTML = poids_SPE
-            document.getElementById("tepspp_" + l_sems[ss]).innerHTML = poids_SPE / nbPanniers + " kg"
-            document.getElementById("cont_pspp_" + l_sems[ss]).innerHTML = s_listeEsp
-            total_etets += poids_SPE
-            }           
-        document.getElementById("total_etets").innerHTML = total_etets
+                document.getElementById("sem_" + l_sems[ss] + "__esp_" + l_especes[ee]).innerHTML= qte_cecs
+                listePannier += nomEsp + " : " + parseFloat(qte_cecs).toFixed(2)/nbPanniers + "<br/>"
+                //alert(listePannier)
+                }               
+                         
+            }
+        //document.getElementById("tets_" + l_sems[ss]).innerHTML = parseInt(qte_cets)
+        document.getElementById("cont_pspp_" + l_sems[ss]).innerHTML = listePannier
+        //alert(listePannier)
+
+        //document.getElementById("tepspp_" + l_sems[ss]).innerHTML = parseFloat(poids_SPE / nbPanniers).toFixed(2) + " kg"
+        //total_etets += poids_SPE
+        }           
+   //document.getElementById("total_etets").innerHTML = parseInt(total_etets)
     }
+                
+
     
-    
-function montre_legumes()
-    {
-    document.getElementById('tab_legumes').style.display='block'
-    document.getElementById('tab_especes').style.display='none'   
-    }
-    
-function montre_especes()
-    {
-    document.getElementById('tab_legumes').style.display='none'
-    document.getElementById('tab_especes').style.display='block'
-    }
-    
+
 </script>
 
 {% endblock %}
@@ -141,7 +141,8 @@ function montre_especes()
     <form action="" method="POST" accept-charset="utf-8">
     {% csrf_token %}
     <div class="BlueFrame" style="width:90%;display:block">
-    
+        <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
+        <input type="submit" name="direction" value="avance" />   
         Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
         <button onclick="changelePas(-1);return(false)">-</button>
         <button onclick="changelePas(1);return(false)">+</button>
@@ -153,18 +154,18 @@ function montre_especes()
          du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
          au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
         <br/>
-        <input type="radio" name="detail" value="espece" onclick="montre_especes()" checked >Regroupé par espèce
-        <input type="radio" name="detail" value="legume" onclick="montre_legumes()" >Détaillé par légume
-        <input name="bSerres" type="checkbox" {% if bSerres %}checked{% endif %} /> Serres 
-        <input name="bChamps" type="checkbox" {% if bChamps %}checked{% endif %} /> Champs 
+         Filtre espèce:<input style="width:60px" type="text" name="s_filtre_espece" value="{{s_filtre_espece}}" />
+        <input type="radio" name="detail" value="espece" onclick="cache_legumes()" checked >Par espèce
+        <input type="radio" name="detail" value="legume" onclick="montre_legumes()" >Espèces + variété
+
         <input style="margin-left: 20px" type="submit" value="Envoyer" />
-        <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
-        <input type="submit" name="direction" value="avance" /> 
+
     </div>    
     </form>
     <br/>
     
-    <table border="1" id="tab_legumes" >
+    <table border="1" >
+        <tbody id="tab_legumes">
         <tr><th>Légumes/Semaines</th>
             {% for semaine in l_semaines %}
                 <td align="center">Semaine {{semaine.date_debut_sem_iso}}<br/>du {{semaine.date_debut|date:'d/m/Y'}}<br/>au {{semaine.date_fin|date:'d/m/Y'}}</td>
@@ -172,11 +173,19 @@ function montre_especes()
             <th align="center">Total (kg)</th>
         </tr>
         
-        <!-- tab légumes -->
         {% for leg in l_legumes %}
-        <tr>
-            <td><small>{{leg.nom|title}} ({{leg.espece.nomUniteProd}})</small></td>
-            
+        
+        {# ligne de recap par espece , seule la première ligne sera gardée via javascript #}
+        <tr class="espece_{{leg.espece.id}}">
+            <td style="border:5px solid {{leg.espece.couleur}}">{{leg.espece.nom|title}}</td>
+            {% for t_prod in leg.l_prod %}
+                <td><div id="sem_{{t_prod.0|date:'Y-m-d'}}__esp_{{leg.espece.id}}"  style="text-align: center;border:5px solid {{leg.espece.couleur}}" > </div></td>        
+            {% endfor %}
+            <td class="tets_{{leg.espece.id}}">total par espece</td>
+        </tr>
+    
+        <tr class="detail_legume">
+            <td><small>{{leg.nom|title}} ({{leg.espece.nomUniteProd}})</small></td>   
             {% for t_prod in leg.l_prod %}
             <td>{{t_prod.0|date:'d/m/Y'}}<br/>
                 <div id="sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
@@ -184,7 +193,10 @@ function montre_especes()
                         esp_nom="{{leg.espece.nom}}"
                         qte="{{t_prod.1}}" 
                         poids="{{t_prod.2}}" 
-                        style="border:5px solid {{t_prod.4}}">Estimé : {{t_prod.1}}</div>
+                        style="border:5px solid {{t_prod.4}}"
+                        class="divLeg">
+                        Estimé : {{t_prod.1|floatformat:2}}
+                </div>
                 
                 Réel<input  type="text"
                         name="reel"
@@ -204,16 +216,16 @@ function montre_especes()
             {% endfor %}
             <td><div style="font-weight:bold;text-align: center" id="tl_{{leg.id}}"> </div></td>
         </tr>
-        {% endfor %}
-        
 
-        <tr>
-            <th>Total estimé (kg)</th>{# ligne de total des qte de legumes par semaine #}
+        {% endfor %}
+
+        <tr><th>Total (kg)</th>{# ligne de total des poids de legumes par semaine #}
         {% for semaine in l_semaines %}
             <td><div style="font-weight:bold;text-align:center" id="ts_{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
         {% endfor %}
 
-        <td><div id="totalTotal" style="font-weight:bold;text-align:center"> </div></td>
+        {# cellule du total de tous les poids de légume de toutes les semaines #}
+        <td><div id="poidsTotalTSTL" style="font-weight:bold;text-align:center"> </div></td>
         </tr>
         
         <tr><th>Total (kg) par pannier</th>{# ligne de total des qte de legumes par semaine #}
@@ -221,57 +233,17 @@ function montre_especes()
         <td><div style="font-weight:bold;text-align:center" id="tlpp_{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
         {% endfor %}
 
-        <td><div id="totalTotal" style="font-weight:bold;text-align:center"> </div></td>
-        </tr>        
-    </table>
-    
-    <p> </p>
-    
-    <!------------------- tableau par especes -------------------------->
-    
-    <table border="1" id="tab_especes" >
-        <tr><th>Espèces/Semaines</th>
-            {% for semaine in l_semaines %}
-                <td align="center">Semaine {{semaine.date_debut_sem_iso}}<br/>du {{semaine.date_debut|date:'d/m/Y'}}<br/>au {{semaine.date_fin|date:'d/m/Y'}}</td>
-            {% endfor %}
-            <th align="center">Total (kg)</th>
-        </tr>
+        <td><div id="totalTotalPP" style="font-weight:bold;text-align:center"> </div></td>
+        </tr> 
         
-        {% for esp in l_especes %}
-        <tr>
-            <td style="width:200px"><small>{{esp.nom|title}} ({{esp.nomUniteProd}})</small></td>
-            
-            {% for semaine in l_semaines %}            
-            <td>{{semaine.date_debut|date:'d/m/Y'}}<br/>
-            <small><div id="sem_{{semaine.date_debut|date:'Y-m-d'}}__esp_{{esp.id}}"></div></small>    
-            </td>
-            {% endfor %}
-            <td><div style="font-weight:bold;text-align: center" id="tets_{{esp.id}}"> </div></td>
-        </tr>
-        {% endfor %}
-        
-
-        <tr><th>Total (kg)</th>{# ligne de total des quantités de l'espece par semaine #}
-        {% for semaine in l_semaines %}
-        <td><div style="font-weight:bold;text-align:center" id="tets_{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
-        {% endfor %}
-        <td id="total_etets" style="font-weight:bold;text-align:center"> </td>
-        </tr>
-        
-        <tr><th>Total (kg) par pannier</th>{# ligne de total des qte par pannier, par espece et par semaine #}
-        {% for semaine in l_semaines %}
-        <td style="font-weight:bold;text-align:center" id="tepspp_{{semaine.date_debut|date:'Y-m-d'}}" > </td>
-        {% endfor %}
-        <td id="total_etspp" style="font-weight:bold;text-align:center"> </td>
-        </tr>   
-        
-        <tr><th>Contenu des panniers</th>
+         <tr><th>Contenu des panniers</th>
         {% for semaine in l_semaines %}
         <td style="font-weight:bold;text-align:left" id="cont_pspp_{{semaine.date_debut|date:'Y-m-d'}}" > </td>
         {% endfor %}
         <td> </td>
         </tr>  
+    </tbody>          
     </table>
     
-        
+   
 {% endblock %}

@@ -244,13 +244,21 @@ class Planche(djangoModels.Model):
     def __str__(self):
         if self.bSerre: s_lieu = "sous serre"
         else:           s_lieu = "plein champ"
-        return "%s (%d), %d m x %.1f m = %d m2; %s" % ( self.nom, self.id, self.longueur_m, self.largeur_m,
-                                                     self.surface_m2(), s_lieu)
+        return "%s (%d), %d m x %.1f m = %d m2; %s" % ( self.nom, 
+                                                        self.id, 
+                                                        self.longueur_m, 
+                                                        self.largeur_m,
+                                                        self.surface_m2(), 
+                                                        s_lieu)
 
       
 class Variete(djangoModels.Model):
     """Variété"""
     nom = djangoModels.CharField(max_length=100)
+    
+    class Meta: 
+        ordering = ['nom']
+            
     def __str__(self):
         return self.nom
     
@@ -434,6 +442,7 @@ class Serie(djangoModels.Model):
 
     legume = djangoModels.ForeignKey(Legume)
     dureeAvantRecolte_j = djangoModels.IntegerField("durée min avant début de récolte (jours)", default=0)
+#     prelevement_sd = djangoModels.BooleanField("prélevement selon besoins de distrib", default=False)
     etalementRecolte_j = djangoModels.IntegerField("durée étalement possible de la récolte (jours)", default=0)
     nb_rangs = djangoModels.PositiveIntegerField("nombre de rangs", default=0)
     intra_rang_m = djangoModels.FloatField("distance dans le rang (m)", default=0)
@@ -544,16 +553,31 @@ class Serie(djangoModels.Model):
             else:
                 return poids_kg / self.legume.poidsParPiece_kg
     
-    def prodHebdo(self, dateDebutSem):
+    def prodHebdo(self, dateDebutSem, ratio=1):
         """ renvoie la production estimée de cette semaine lissée sur le nombre de semaines de consommation possible"""
-        nbSemEcoulementStock = max([1, int(self.quantiteEstimee_kg_ou_piece() / self.legume.espece.consoHebdoTotale())])
-        dateFinStock = self.evenements.get(type=Evenement.TYPE_RECOLTE).date + datetime.timedelta(weeks = nbSemEcoulementStock) 
-#         dateFinStock = self.evt_fin.date + datetime.timedelta(weeks = nbSemEcoulementStock) 
-        if dateDebutSem > self.evenements.get(type=Evenement.TYPE_RECOLTE).date and dateDebutSem < dateFinStock :
-            return self.quantiteEstimee_kg_ou_piece()/nbSemEcoulementStock
+        dateDebutRecolte = self.evenements.get(type=Evenement.TYPE_RECOLTE).date
+        dateFinSemaine = dateDebutSem + datetime.timedelta(days=6)
+        
+        if self.legume.espece.bStockable:
+            prelevHebdo = self.legume.espece.consoHebdoTotale()/ratio
+            ## prelevement continu selon besoin de livraison
+            nbSemEcoulementStock = max([1, int(self.quantiteEstimee_kg_ou_piece() / prelevHebdo)])
+            dateFinStock = self.evenements.get(type=Evenement.TYPE_RECOLTE).date + datetime.timedelta(weeks = nbSemEcoulementStock) 
+            if dateDebutSem > dateDebutRecolte and dateFinSemaine < dateFinStock :
+                return prelevHebdo
+            else:
+                return 0
         else:
-            return 0
+            ## repartition de la récolte possible depuis le debut de récolte à la fin du légume
+            if dateDebutSem > dateDebutRecolte and dateFinSemaine < self.evenements.get(type=Evenement.TYPE_FIN).date :
+                return self.quantiteEstimee_kg_ou_piece() / self.nbSemainesDeRecolte()
+            else:
+                return 0            
 
+    def nbSemainesDeRecolte(self):
+        dd = (self.evt_fin.date - self.evenements.get(type=Evenement.TYPE_RECOLTE).date).days
+        return dd/7
+        
     def nbPieds(self):
         """cumul de tous les pieds de toutes des implantations"""
         return sum(self.implantations.all().values_list("nbPieds",flat=True))
@@ -596,13 +620,14 @@ class Production(djangoModels.Model):
     """Enregisrement des productions réelles"""
     dateDebutSemaine = djangoModels.DateTimeField("Date de début de semaine")
     qte = djangoModels.PositiveIntegerField("Quantité produite", default=0)
-    legume = djangoModels.ForeignKey(Legume)
+#     legume = djangoModels.ForeignKey(Legume)
+    espece = djangoModels.ForeignKey(Espece)
     
     class Meta: 
         ordering = ['dateDebutSemaine']
         
     def __unicode__(self):
         return "Production de %s, semaine du %s, %d %s"%(self.dateDebutSemaine, 
-                                                         self.legume.nom(),
+                                                         self.espece.nom(),
                                                          self.qte, 
-                                                         self.legume.espece.nomUniteProd())
+                                                         self.espece.nomUniteProd())
