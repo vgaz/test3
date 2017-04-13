@@ -9,24 +9,29 @@ import MyTools
 ################################################################
 #### contrôle des models
 
-def creationEvt(e_ref, e_date_ou_delta_j, e_type, nom="", duree_j=1):
-    """création d'un evenement 
+def creationEvtAbs(e_date, e_type, nom="", duree_j=1):
+    """création d'un evenement avec une date absolue
     retourne l'instance de l'évènement""" 
-    
     evt = Evenement()
-    if not e_ref:
-        if isinstance(e_date_ou_delta_j, str): 
-            e_date_ou_delta_j = MyTools.getDateFrom_d_m_y(e_date_ou_delta_j)
-        evt.date = e_date_ou_delta_j
-    else:
-        ## evt de date relative à un autre evt
-        evt.eRef_id = e_ref.id
-        evt.delta_j = e_date_ou_delta_j
-        evt.date = e_ref.date + datetime.timedelta(days = e_date_ou_delta_j)  
-         
+    evt.date = e_date
+    evt.eRef_id = 0
     evt.type = e_type
     evt.duree_j = duree_j
-    if nom : evt.nom = nom
+    evt.nom = nom
+    evt.save()
+    return evt
+
+def creationEvtRel(eRef, delta_j, e_type, nom="", duree_j=1):
+    """création d'un evenement relatif
+    retourne l'instance de l'évènement""" 
+    
+    assert isinstance(eRef, Evenement) , "Pas de reference pour la création d'un evt relatif"
+    evt = Evenement()
+    evt.eRef_id = eRef.id
+    evt.delta_j = delta_j
+    evt.type = e_type
+    evt.duree_j = duree_j
+    evt.nom = nom
     evt.save()
     return evt
 
@@ -405,9 +410,9 @@ class Evenement(djangoModels.Model):
                    TYPE_PREPA_PLANTS:"Prépa plants en mottes",
                    TYPE_RECOLTE:"Début Récolte"
                    }
-    eRef = djangoModels.ForeignKey("Evenement", default=0) 
-    delta_j =  djangoModels.PositiveIntegerField("nb jours de decalage", default=0)
     type =  djangoModels.PositiveIntegerField()
+    eRef = djangoModels.ForeignKey("Evenement", default=0) 
+    delta_j =  djangoModels.PositiveIntegerField("nb jours de decalage pour les évenements relatifs", default=0)
     date = djangoModels.DateTimeField("date de l'évenement")
     date_creation = djangoModels.DateTimeField(default=timezone.now)
     duree_j = djangoModels.PositiveIntegerField("nb jours d'activité", default=1)
@@ -421,17 +426,24 @@ class Evenement(djangoModels.Model):
     def nomType(self):
         return self.D_NOM_TYPES[self.type]  
 
-    def majDelta_j(self, delta_j):
-        assert self.eRef != 0, "pas de mise a jour delta_j possible pour un évenement non relatif"
-        self.delta_j = delta_j
-        self.date = self.eRef.date + datetime.timedelta(days = delta_j) 
-        self.save()
+    def save(self,*args,**kwargs):
+        self.majDelta_j()
+        super(Evenement,self).save(*args,**kwargs)
+        
+    def majDelta_j(self, delta_j=None):
+        """Ajustement de la date par rapport à un decalage en jours pour les évenements relatifs"""
+        if self.eRef_id:
+            if delta_j:
+                self.delta_j = delta_j
+            self.date = self.eRef.date + datetime.timedelta(days = self.delta_j)
         
     def __str__(self):
-        return "Evt %s (%s) %s pour %d j"%(self.nomType(), 
-                                           self.id or "?", 
-                                           self.date, 
-                                           self.duree_j )
+        if self.eRef_id:
+            s_mode = "relatif"
+        else:
+            s_mode= "absolu"
+        
+        return "Evt %s %s (%s) %s pour %d j"%( s_mode, self.nomType(), self.id,  self.date, self.duree_j )
              
 
 
@@ -482,20 +494,20 @@ class Serie(djangoModels.Model):
         
         if  self.evt_debut_id == 0: 
             """création des evts de série seul l'evt de début est absolu, les autres sont calés sur evt_debut"""
-            evt_debut = creationEvt(None, dateDebut, Evenement.TYPE_DEBUT, "début %s"%(self.legume.nom()))
+            evt_debut = creationEvtAbs(dateDebut, Evenement.TYPE_DEBUT, "début %s"%(self.legume.nom()))
 
             self.evenements.add(evt_debut)
             self.evt_debut_id = evt_debut.id
             
-            evt_fin = creationEvt(evt_debut, dureeAvantRecolte_j + etalementRecolte_j, Evenement.TYPE_FIN, "fin %s"%(self.legume.nom()))
+            evt_fin = creationEvtRel(evt_debut, dureeAvantRecolte_j + etalementRecolte_j, Evenement.TYPE_FIN, "fin %s"%(self.legume.nom()))
             self.evt_fin_id = evt_fin.id
             self.evenements.add(evt_fin)   
             
-            evt_recolte = creationEvt(evt_debut, dureeAvantRecolte_j, Evenement.TYPE_RECOLTE, "début récolte %s"%(self.legume.nom()))
+            evt_recolte = creationEvtRel(evt_debut, dureeAvantRecolte_j, Evenement.TYPE_RECOLTE, "début récolte %s"%(self.legume.nom()))
             self.evenements.add(evt_recolte)
             
             if delaiCroissancePlants_j:     
-                evt_semisMotte = creationEvt(evt_debut, -1 * delaiCroissancePlants_j, Evenement.TYPE_PREPA_PLANTS, "semi motte %s"%(self.legume.nom()))
+                evt_semisMotte = creationEvtRel(evt_debut, -1 * delaiCroissancePlants_j, Evenement.TYPE_PREPA_PLANTS, "semi motte %s"%(self.legume.nom()))
                 self.evenements.add(evt_semisMotte)                
         else:
             ## mise à jour des evts

@@ -196,15 +196,13 @@ def serveRequest(request):
             e_id = int(request.POST.get("id", 0))
             id_serie = int(request.POST.get("id_serie",0))
             assert id_serie != 0, "bad id_serie in sauve_evt"
-            date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))
-            log.info (date)
+            serie = Serie.objects.get(id=id_serie)
+
             duree_j = request.POST.get("duree_j","")
             if not duree_j:
                 duree_j = 1
             else:
                 duree_j = int(duree_j)
-                
-            nom = request.POST.get("nom","")
 
             if e_id == 0:
                 ## nouvel evt
@@ -214,13 +212,19 @@ def serveRequest(request):
                 # maj d'un evt deja existant
                 evt = Evenement.objects.get(id=e_id)
 
-            evt.date = date
+            if evt.eRef:
+                evt.delta_j = int(request.POST.get("delta_j","0"))
+                log.debug("deltaj="+ str(evt.delta_j))
+            else:
+                evt.date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))
+
             evt.duree_j = duree_j
-            evt.nom = nom
+            evt.nom = request.POST.get("nom","")
             evt.save()
+#             evt.majDelta_j()
             
             if e_id == 0:
-                Serie.objects.get(id=id_serie).evenements.add(evt)
+                serie.evenements.add(evt)
             
             log.info(evt)
                 

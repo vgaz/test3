@@ -187,44 +187,46 @@ def suiviImplantations(request):
 
 
 def evenementsPlanches(request):
-
+    
+    s_info=""
     ## récup de la fenetre de temps
     try:
         periode, date_debut_vue, date_fin_vue, decalage_j = donnePeriodeVue(request.POST)
+ 
+       
+        ## recup des evenements
+        for k, v in request.POST.items():
+            print(k,v)
+            if "evt_fin_" in k:
+                pk_evt = int(k.split("evt_fin_")[1])
+                evt = Evenement.objects.get(pk = pk_evt)
+                evt.b_fini = True
+                evt.save()
+                
+        ## on prend tous les evts de l'encadrement
+        l_evts = Evenement.objects.filter(date__gte = date_debut_vue, date__lte = date_fin_vue)
+        
+        bEncours = request.POST.get("bEncours", "on")=="on"
+        if bEncours:
+            l_evts = l_evts.exclude(b_fini = True)
+        
+        ics_txt = constant.ICS_HEAD
+        
+        for evt in l_evts:
+            ## on ajoute le commentaire sur la série
+            serie = evt.serie_set.all()[0]
+            evt.txt = serie.__str__()
+            ics_txt += constant.ICS_ITEM%(evt.nom,
+                                          evt.txt, 
+                                          str(evt.date).split(" ")[0].replace("-","")+"T080000",
+                                          str(evt.date).split(" ")[0].replace("-","")+"T090000")
+        ics_txt += constant.ICS_QUEUE
+        
+        if request.POST.get("vers_fichier", ""):
+            MyTools.strToFic(os.path.join(settings.BASE_DIR, "cultures.ics"), ics_txt)
     except:
-        pass 
-   
-    ## recup des evenements
-    for k, v in request.POST.items():
-        print(k,v)
-        if "evt_fin_" in k:
-            pk_evt = int(k.split("evt_fin_")[1])
-            evt = Evenement.objects.get(pk = pk_evt)
-            evt.b_fini = True
-            evt.save()
+        s_info += str(sys.exc_info())
             
-    ## on prend tous les evts de l'encadrement
-    l_evts = Evenement.objects.filter(date__gte = date_debut_vue, date__lte = date_fin_vue)
-    
-    bEncours = request.POST.get("bEncours", "on")=="on"
-    if bEncours:
-        l_evts = l_evts.exclude(b_fini = True)
-    
-    ics_txt = constant.ICS_HEAD
-    
-    for evt in l_evts:
-        ## on ajoute le commentaire sur la série
-        serie = evt.serie_set.all()[0]
-        evt.txt = serie.__str__()
-        ics_txt += constant.ICS_ITEM%(evt.nom,
-                                      evt.txt, 
-                                      str(evt.date).split(" ")[0].replace("-","")+"T080000",
-                                      str(evt.date).split(" ")[0].replace("-","")+"T090000")
-    ics_txt += constant.ICS_QUEUE
-    
-    if request.POST.get("vers_fichier", ""):
-        MyTools.strToFic(os.path.join(settings.BASE_DIR, "cultures.ics"), ics_txt)
-    
     return render(request,
                  'maraich/evenements.html',
                  {
@@ -236,7 +238,9 @@ def evenementsPlanches(request):
                   "date_aujourdhui": datetime.datetime.now(),
                   "decalage_j": decalage_j,
                   "periode":periode,
-                  "bEncours":bEncours
+                  "bEncours":bEncours,
+                  "info":s_info
+
                 })
     
 #################################################
@@ -338,84 +342,6 @@ def recolte(request):
                     })
 #################################################
 
-def recolteEsp(request):
-    """affiche les previsions de récolte hebdo"""
-    try:
-        s_info = ""
-        ## récup de la fenetre de temps
-        periode, date_debut_vue, date_fin_vue, decalage_j = donnePeriodeVue(request.POST) 
-        bSerres = request.POST.get("bSerres","")=="on"
-        bChamps = request.POST.get("bChamps","")=="on"
-        
-        bDetailVar = request.POST.get("detail_variete", "") != ""
-
-        nbPanniers = Espece.objects.get(nom="ail").nbParts
-        l_semaines = MyTools.getListeSemaines(date_debut_vue, date_fin_vue)
-
-        ## on ne garde que la fenetre de temps étudiée
-        l_seriesActives = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue) 
-        ## recherche des productions par semaine regroupées par légume ou par espèce
-        l_especes = Espece.objects.all()
-        for esp in l_especes:
- 
-            ## calcul des productions de légumes
-            l_series = l_seriesActives.filter(legume__espece_id = esp.id)
-            if bSerres and not bChamps:
-                l_series = l_series.filter(bSerre = True)
-            elif bChamps and not bSerres:
-                l_series = l_series.filter(bSerre = False)
-
-            ## Pour chaque semaine étudiée, on calcule le stock cumulé de chaque série 
-            ## le stock est lissé 
-            ## soit sur la conso hebdo pour les légumes stockables
-            ## ou sur la durée de récolte pour les légumes non stockables
-            esp.l_prod = []
-            for sem in l_semaines:
-                qteHebdo = 0
-                nbSeries =  len(l_series)
-                for serie in l_series:
-                    qteHebdo += serie.prodHebdo(sem.date_debut, nbSeries)
-#                     if "pomme" in leg.nom():
-#                         print("sem %s ******************* leg %s, %s %f %d"%(sem.s_dm, leg.nom(), sem.date_debut, qteHebdo, nbSeries))
-                  
-                if qteHebdo == 0:
-                    couleur = "white"
-                else:
-                    couleur = esp.couleur
-                
-                try: 
-                    prodReelle = Production.objects.get(espece_id=esp.id, dateDebutSemaine = sem.date_debut).qte
-                except:
-                    prodReelle = 0
-                    
-                esp.l_prod.append((sem.date_debut, 
-                                   qteHebdo, 
-                                   99,##leg.poids_kg(qteHebdo), 
-                                   couleur,
-                                   prodReelle))
-
-    except:
-        s_info += str(sys.exc_info()[1])
-        log.error(s_info)
-        
-    return render(request,'maraich/recolteEsp.html',
-                    {
-                    "appVersion":constant.APP_VERSION,
-                    "periode":periode,
-                    "decalage_j":decalage_j,
-                    "date_debut_vue": date_debut_vue,
-                    "date_fin_vue": date_fin_vue,
-                    "bSerres":bSerres,
-                    "bChamps":bChamps,
-                    "l_semaines":l_semaines,
-                    "l_especes" : l_especes,
-                    "bDetailVar":bDetailVar,
-                    "nbPanniers":nbPanniers,
-                    "info":s_info
-                    })
-       
-#################################################
-
 def utilisationPlanches(request):
     """affiche les surfaces occupées par planche"""
     try:
@@ -425,9 +351,7 @@ def utilisationPlanches(request):
         l_jours = MyTools.getListeJours(date_debut_vue, date_fin_vue)
 
         ## on retire les planches virtuelles
- #       l_planches = Planche.objects.filter(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
         l_planches = Planche.objects.filter(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP, constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
-#         l_planches = Planche.objects.all()
         bSerres = request.POST.get("bSerres","")=="on"
         if not bSerres:
             l_planches = l_planches.exclude(bSerre = True)

@@ -14,28 +14,28 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        ser = Serie.objects.get(pk=2102)
-        ss = ser.nbSemainesDeRecolte()
-        ss = ser.quantiteEstimee_kg_ou_piece()
-        print (ser.descriptif())
-        prod =  ser.prodHebdo(MyTools.getDateFrom_d_m_y("15/10/2017"), 2)
-        print(prod)
-        return
-        factory = RequestFactory()
-        
-        # Create an instance of a POST request.
-        request = factory.post('/recolte/', 
-                                     
-                                     data={"periode":"specifique",
-                                           "date_debut_vue":"07/05/2017",
-                                           "date_fin_vue":"08/10/2017", 
-                                           "bSerres":"on",
-                                         }
-                                     )
-        
-        
-        views.recolte(request)    
-        return
+#         ser = Serie.objects.get(pk=2102)
+#         ss = ser.nbSemainesDeRecolte()
+#         ss = ser.quantiteEstimee_kg_ou_piece()
+#         print (ser.descriptif())
+#         prod =  ser.prodHebdo(MyTools.getDateFrom_d_m_y("15/10/2017"), 2)
+#         print(prod)
+#         return
+#         factory = RequestFactory()
+#         
+#         # Create an instance of a POST request.
+#         request = factory.post('/recolte/', 
+#                                      
+#                                      data={"periode":"specifique",
+#                                            "date_debut_vue":"07/05/2017",
+#                                            "date_fin_vue":"08/10/2017", 
+#                                            "bSerres":"on",
+#                                          }
+#                                      )
+#         
+#         
+#         views.recolte(request)    
+#         return
 #         
 #         testU_ProdSemaine.testU_ProdSemaine()
 #         
@@ -59,7 +59,27 @@ class Command(BaseCommand):
 #         print (s)
 #         return 0
 
-#         self.factory = RequestFactory()
+        print(Evenement.objects.get(id=7654).__str__())
+
+        self.factory = RequestFactory()
+         
+        # Create an instance of a POST request.   
+        request = self.factory.post('/serveRequest/', 
+                                        data={  'duree_j': '1', 
+                                                'delta_j': '-19', 
+                                                'id': '7654', 
+                                                'cde': 'sauve_evt', 
+                                                'date': '', 
+                                                'nom': 'semi motte blette verte à carde blanche 2', 
+                                                'id_serie':'8'                          
+                                                }
+                                    )        
+         
+ 
+
+        serveRequest.serveRequest(request)
+        print(Evenement.objects.get(id=7654))
+        return
 #         
 #         # Create an instance of a POST request.   
 #         request = self.factory.post('/utilisation_planches/', 
@@ -70,12 +90,6 @@ class Command(BaseCommand):
 #                                                 }
 #                                     )        
 #         views.utilisationPlanches(request)
-#         
-#         return
-# 
-#         
-#         serveRequest.serveRequest(request)
-    
 
 #         date_debut_vue = MyTools.getDateFrom_d_m_y("1/4/2017")
 #         date_fin_vue = MyTools.getDateFrom_d_m_y("11/4/2017")
