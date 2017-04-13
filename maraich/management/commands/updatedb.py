@@ -266,7 +266,7 @@ class Command(BaseCommand):
                      
                     implantation.save()
                     serie.implantations.add(implantation)
-                    serie.save()
+#                     serie.save()
                     log.info("Ajout %s", str(implantation))
 
                 except:

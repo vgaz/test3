@@ -193,35 +193,35 @@ def serveRequest(request):
     ## --------------- request to update database 
     elif cde == "sauve_evt": 
         try:
-            e_id = int(request.POST.get("id", 0))
+            e_id = int(request.POST.get("id", "0"))
             id_serie = int(request.POST.get("id_serie",0))
             assert id_serie != 0, "bad id_serie in sauve_evt"
             serie = Serie.objects.get(id=id_serie)
 
-            duree_j = request.POST.get("duree_j","")
-            if not duree_j:
-                duree_j = 1
-            else:
-                duree_j = int(duree_j)
+            duree_j = int(request.POST.get("duree_j") or 1)
+            delta_j = int(request.POST.get("delta_j") or 0)
+            s_date= request.POST.get("date","")
+            
 
             if e_id == 0:
                 ## nouvel evt
                 evt = Evenement()
                 evt.type = Evenement.TYPE_DIVERS
+                if delta_j:
+                    ## evt relatif
+                    evt.eRef_id = serie.evenements.get(type=Evenement.TYPE_DEBUT).id
+                else:
+                    evt.eRef_id = 0  
             else:
                 # maj d'un evt deja existant
                 evt = Evenement.objects.get(id=e_id)
 
-            if evt.eRef:
-                evt.delta_j = int(request.POST.get("delta_j","0"))
-                log.debug("deltaj="+ str(evt.delta_j))
-            else:
-                evt.date = MyTools.getDateFrom_d_m_y(request.POST.get("date",""))
-
+            if evt.eRef_id == 0:
+                evt.date = MyTools.getDateFrom_d_m_y(s_date)
+            evt.delta_j = delta_j
             evt.duree_j = duree_j
             evt.nom = request.POST.get("nom","")
             evt.save()
-#             evt.majDelta_j()
             
             if e_id == 0:
                 serie.evenements.add(evt)
