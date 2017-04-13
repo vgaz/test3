@@ -136,9 +136,10 @@ def serveRequest(request):
             serie = creationEditionSerie(
                                         int(request.POST.get("id_serie","0")),
                                         int(request.POST.get("id_legume")), 
-                                        request.POST.get("b_serre","off")=="on",
+                                        request.POST.get("b_serre","false")=="true",
                                         intra_rang_m, 
                                         nb_rangs,
+                                        int(request.POST.get("nb_pieds","0")),
                                         request.POST.get("date_debut"), 
                                         int(request.POST.get("duree_fab_plants_j","0")),
                                         int(request.POST.get("duree_avant_recolte_j","0")),

@@ -40,7 +40,8 @@ def creationEditionSerie(id_serie,
                          id_leg, 
                          bSerre,
                          intra_rang_m, 
-                         nb_rangs, 
+                         nb_rangs,
+                         nb_pieds, 
                          s_dateEnTerre, 
                          duree_fab_plants_j,
                          duree_avant_recolte_j,
@@ -72,7 +73,8 @@ def creationEditionSerie(id_serie,
         ## selon la planche sur laquelle on atterira, on fixera le nb de rangs en fonction 
         ## de l'inter rang du legume et de la largeur de planche
         serie.nb_rangs = 0
-
+    
+    serie.save()
     serie.fixeDates(s_dateEnTerre, duree_avant_recolte_j, etalement_recolte_j, duree_fab_plants_j)
     
     if id_serie == 0:
@@ -83,6 +85,7 @@ def creationEditionSerie(id_serie,
             impl.planche = Planche.objects.get(nom=constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS)
         else:
             impl.planche = Planche.objects.get(nom=constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
+        impl.nbPieds = nb_pieds
         impl.save()
         serie.implantations.add(impl)
         
@@ -454,7 +457,6 @@ class Serie(djangoModels.Model):
 
     legume = djangoModels.ForeignKey(Legume)
     dureeAvantRecolte_j = djangoModels.IntegerField("durée min avant début de récolte (jours)", default=0)
-#     prelevement_sd = djangoModels.BooleanField("prélevement selon besoins de distrib", default=False)
     etalementRecolte_j = djangoModels.IntegerField("durée étalement possible de la récolte (jours)", default=0)
     nb_rangs = djangoModels.PositiveIntegerField("nombre de rangs", default=0)
     intra_rang_m = djangoModels.FloatField("distance dans le rang (m)", default=0)

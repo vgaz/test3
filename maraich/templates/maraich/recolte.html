@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block pagetitle %}Récoltes estimées (2){% endblock %}
+{% block pagetitle %}Récoltes estimées{% endblock %}
 {% block javascript %}
 <script type="text/javascript" src="{% static 'javascripts/myTools.js' %}"> </script>
 <script type="text/javascript" >
@@ -109,7 +109,7 @@ function init()
         document.getElementById("cont_pspp_" + l_sems[ss]).innerHTML = listePannier
         }           
 
-    // total par espece pour toutes les semaine
+    // total des quantités par espece pour toutes les semaines
     for (ee=0; ee<l_especes.length; ee++)
         {
         qteEsp = 0
@@ -120,7 +120,7 @@ function init()
                 divLeg = document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll])
                 if(l_especes[ee] != parseInt(divLeg.getAttribute("esp_id")))
                     continue 
-                qteEsp += parseInt(divLeg.getAttribute("qte"))
+                qteEsp += parseFloat(divLeg.getAttribute("qte"))
                 } 
             }
         document.getElementById("tets_"+ l_especes[ee]).innerHTML = parseInt(qteEsp)
@@ -209,7 +209,7 @@ function init()
                         value="{{t_prod.5}}" />
     
                 <img    src="{% static 'images/ok.png' %}" 
-                        style="width:15px;heigth:15px;cursor:pointer"
+                        style="width:15px;height:15px;cursor:pointer"
                         date="{{t_prod.0|date:'Y-m-d'}}"
                         leg="{{leg.id}}"
                         title="Valider"

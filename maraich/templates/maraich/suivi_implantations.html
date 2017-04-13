@@ -356,7 +356,7 @@ function supprimeImplantation(oEvent)
         id_serie = document.getElementById("editSerie_id_serie").value
         majListImpls(id_serie)
         document.getElementById(pk).style.display="none"
-        document.getElementById("editSerie_nbPieds").value = document.getElementById("editSerie_quantite").value - nbPieds
+        document.getElementById("editSerie_nb_pieds").value = document.getElementById("editSerie_nb_pieds").value - nbPieds
        }
     else
         alert(jsonRep.err)
@@ -432,6 +432,7 @@ function prepareAjouteSerie()
     document.getElementById("editSerie_duree_avant_recolte_j").value = ""
     document.getElementById("editSerie_etalement_recolte_j").value = ""
     document.getElementById("editSerie_intra_rang_cm").value = ""
+    document.getElementById("editSerie_nb_pieds").value = 0
     document.getElementById("editSerie_titre").innerHTML = "Ajout d'une nouvelle série"
     document.getElementById("editeSerie_evts").innerHTML = ""
     document.getElementById("divEditeEvenement").innerHTML = ""
@@ -450,8 +451,8 @@ function prepareEditeSerie(id_impl)
     document.getElementById("editSerie_id_serie").innerHTML = "Série " +  id_serie + " sur la/les planche/s " + hImpl.getAttribute("s_liste_planches")
     document.getElementById("editSerie_nb_rangs").value = hImpl.getAttribute("nb_rangs")
     document.getElementById("editSerie_intra_rang_cm").value = hImpl.getAttribute("intra_rang_cm")
-    document.getElementById("editSerie_nbPieds").value = hImpl.getAttribute("nb_pieds_serie")
-    document.getElementById("editSerie_nbPieds").readOnly = true
+    document.getElementById("editSerie_nb_pieds").value = hImpl.getAttribute("nb_pieds_serie")
+    document.getElementById("editSerie_nb_pieds").readOnly = true
     document.getElementById("editSerie_date_debut").value = hImpl.getAttribute("date_debut_f")
     document.getElementById("editSerie_duree_avant_recolte_j").value = hImpl.getAttribute("duree_avant_recolte_j")
     document.getElementById("editSerie_etalement_recolte_j").value = hImpl.getAttribute("etalement_recolte_j")   
@@ -477,8 +478,9 @@ function sauveSerie()
     // sauvegardedes paramètres d'une serie
     s_request = "cde=sauve_serie&id_serie=" + document.getElementById("editSerie_id_serie").value
     s_request += "&id_legume=" + document.getElementById("editSerie_id_legume").value
-    s_request += "&b_serre=" + document.getElementById("editSerie_b_serre").value
+    s_request += "&b_serre=" + document.getElementById("editSerie_b_serre").checked
     s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
+    s_request += "&nb_pieds=" + document.getElementById("editSerie_nb_pieds").value
     s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
     s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
     s_request += "&duree_avant_recolte_j=" + document.getElementById("editSerie_duree_avant_recolte_j").value
@@ -681,7 +683,7 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
                 </select>
     <input type="checkbox" id="editSerie_b_serre" />sous Serre
     </p>
-    Nombre de pieds <input style="width: 40px" type='text' value="" id="editSerie_nbPieds"  name="editSerie_nbPieds" />
+    Nombre de pieds <input style="width: 40px" type='text' value="" id="editSerie_nb_pieds"  name="editSerie_nb_pieds" />
 
     <p>Nb rangs <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
        Dans le rang (cm) <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" />

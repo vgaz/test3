@@ -59,26 +59,37 @@ class Command(BaseCommand):
 #         print (s)
 #         return 0
 
-        print(Evenement.objects.get(id=7654).__str__())
+
+#         print(Evenement.objects.get(id=7654).__str__())
 
         self.factory = RequestFactory()
          
+        d1 = {'duree_avant_recolte_j': '100', 
+              'etalement_recolte_j': '6', 
+              'date_debut': '3/3', 
+              'intra_rang_cm': '15', 
+              'id_serie': '0',
+              'nb_rangs': '2', 
+              'id_legume': '1', 
+              'b_serre': 'off', 
+              'cde': 'sauve_serie'
+              } 
+         
+        _d2={   'duree_j': '1', 
+                'delta_j': '-19', 
+                'id': '7654', 
+                'cde': 'sauve_evt', 
+                'date': '', 
+                'nom': 'semi motte blette verte à carde blanche 2', 
+                'id_serie':'8'                          
+                }
         # Create an instance of a POST request.   
-        request = self.factory.post('/serveRequest/', 
-                                        data={  'duree_j': '1', 
-                                                'delta_j': '-19', 
-                                                'id': '7654', 
-                                                'cde': 'sauve_evt', 
-                                                'date': '', 
-                                                'nom': 'semi motte blette verte à carde blanche 2', 
-                                                'id_serie':'8'                          
-                                                }
-                                    )        
+        request = self.factory.post('/serveRequest/', data=d1 )        
          
  
 
         serveRequest.serveRequest(request)
-        print(Evenement.objects.get(id=7654))
+
         return
 #         
 #         # Create an instance of a POST request.   
