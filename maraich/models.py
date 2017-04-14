@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.db import models as djangoModels
-import datetime
-import sys
+import datetime, sys
 from django.utils import timezone
 from maraich import constant
 import MyTools
-
-################################################################
-#### contrôle des models
-
+ 
+###############################################################
+### contrôle des models
+ 
 def creationEvtAbs(e_date, e_type, nom="", duree_j=1):
     """création d'un evenement avec une date absolue
     retourne l'instance de l'évènement""" 
@@ -20,7 +19,7 @@ def creationEvtAbs(e_date, e_type, nom="", duree_j=1):
     evt.nom = nom
     evt.save()
     return evt
-
+ 
 def creationEvtRel(eRef, delta_j, e_type, nom="", duree_j=1):
     """création d'un evenement relatif
     retourne l'instance de l'évènement""" 
@@ -34,23 +33,34 @@ def creationEvtRel(eRef, delta_j, e_type, nom="", duree_j=1):
     evt.nom = nom
     evt.save()
     return evt
-
-
-def creationEditionSerie(id_serie, 
-                         id_leg, 
-                         bSerre,
-                         intra_rang_m, 
-                         nb_rangs,
-                         nb_pieds, 
-                         s_dateEnTerre, 
-                         duree_fab_plants_j,
-                         duree_avant_recolte_j,
-                         etalement_recolte_j):
+ 
+ 
+def creationEditionSerie(reqPost):
     """Création ou edition d'une série de plants sur planche virtuelle
     si id_serie == 0, c'est une demande de création, sinon , d'édition/modification
     """
+    intra_rang_cm = reqPost.get("intra_rang_cm","")
+    if not intra_rang_cm: 
+        intra_rang_m = 0
+    else:  
+        intra_rang_m = float(intra_rang_cm)/100
+    
+    nb_rangs = reqPost.get("nb_rangs", "")
+    if not nb_rangs: 
+        nb_rangs = 0
+    else: 
+        nb_rangs = int(nb_rangs) 
+    id_serie = int(reqPost.get("id_serie", "0"))
+    id_leg = int(reqPost.get("id_legume"))
     assert id_leg, '%s pas de valeur pour id_leg'
+    
+    bSerre = reqPost.get("b_serre","false")=="true"
+    nb_pieds = int(reqPost.get("nb_pieds","0"))
+    s_dateEnTerre = reqPost.get("date_debut")
+    duree_fab_plants_j = int(reqPost.get("duree_fab_plants_j","0"))
+    duree_avant_recolte_j = int(reqPost.get("duree_avant_recolte_j","0"))
     assert duree_avant_recolte_j != 0, 'duree avant recolte = 0'
+    etalement_recolte_j = int(reqPost.get("etalement_recolte_j", "0"))
     assert etalement_recolte_j != 0, 'étalement recolte = 0'
     
     leg = Legume.objects.get(id=id_leg)
@@ -90,12 +100,10 @@ def creationEditionSerie(id_serie,
         serie.implantations.add(impl)
         
     serie.save() 
- 
     print (serie.descriptif())
-
     return serie
 
-
+ 
 
 def creationPlanche(longueur_m, largeur_m, bSerre, s_nom=""): 
     """Création d'une planche"""
@@ -106,8 +114,7 @@ def creationPlanche(longueur_m, largeur_m, bSerre, s_nom=""):
     if s_nom:
         planche.nom = s_nom
     else:
-        planche.nom = "Planche"
-                
+        planche.nom = "Planche"              
     planche.save()
     return planche
            
@@ -259,10 +266,17 @@ class Planche(djangoModels.Model):
                                                         self.surface_m2(), 
                                                         s_lieu)
 
-      
+class VarieteManager(djangoModels.Manager):
+    
+    def create_variete(self, nom):
+        variete = self.create(nom=nom)
+        # do something if needed
+        return variete
+          
 class Variete(djangoModels.Model):
     """Variété"""
     nom = djangoModels.CharField(max_length=100)
+    objects = VarieteManager()
     
     class Meta: 
         ordering = ['nom']
@@ -363,10 +377,10 @@ class Implantation(djangoModels.Model):
     
     def surface_m2(self):
         serie = self.serie()
-        return surfacePourQuantite(self.planche.largeur_m, 
-                                   self.nbPieds, 
-                                   serie.nb_rangs, 
-                                   serie.intra_rang_m)
+        return surfacePourQuantite( self.planche.largeur_m, 
+                                                   self.nbPieds, 
+                                                   serie.nb_rangs, 
+                                                   serie.intra_rang_m)
     def __str__(self):
         return "Implantation %d, %d pieds (%d m2) sur planche %s (%d)"%( self.id, 
                                                                          self.nbPieds, 

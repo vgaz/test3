@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import csv
-import datetime, os
+import datetime, os, sys
 
 from django.core.management.base import BaseCommand
 from maraich.models import *
@@ -62,14 +62,15 @@ class Command(BaseCommand):
               
         try:
             p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
-        except:
-            p = Planche()
             p.nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP
             p.longueur_m = totalChamp_m2
             p.largeur_m = 1
             p.bSerre = False
-            p.save()  
-            log.info (p)    
+            p.save()          
+        except:
+            p = creationPlanche(totalChamp_m2, 1, False, constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
+#             p = Planche()
+        log.info (p)    
 
         try:
             p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS)
@@ -166,17 +167,11 @@ class Command(BaseCommand):
             reader = csv.DictReader(hF)
             for d_line in reader:
                 
+                s_espece = d_line.get("Espèce", "").lower().strip()                    
                 try:
-                    s_espece = d_line.get("Espèce", "").lower().strip()
-                    
-#                     if "poivron" not in s_espece:continue
-                    
                     espece = Espece.objects.get(nom=s_espece) 
-                    assert espece, "objet Espèce non trouvé pour %s"%(s_espece)
                 except:
-                    s_err = str(sys.exc_info()[1])
-                    l_err.append("%s %s"%(s_err, s_espece))
-                    log.error(s_err)
+                    l_err.append("Erreur; espèce %s non trouvée. abandon"%(s_espece))
                     continue
                 
                 try:
@@ -186,11 +181,8 @@ class Command(BaseCommand):
                     var = Variete.objects.get(nom = s_variet)
                 except:
                     log.info("Ajout variété %s"%s_variet)
-                    var = Variete()
-                    var.nom = s_variet
-                    var.save()
+                    var = Variete.objects.create_variete(s_variet)
                     espece.varietes.add(var)
-                    espece.save()
                         
                 ## mise à jour liste des légumes et planning de séries
                 try:

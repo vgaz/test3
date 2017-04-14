@@ -295,15 +295,15 @@ def recolte(request):
             ## Pour chaque semaine étudiée, on calcule la récolte possible de chaque série 
             ## selon le stock et la conso hebdo
             leg.l_prod = []
+
             for sem in l_semaines:
                 qteHebdo = 0
+              
                 l_seriesMemeEspece = l_seriesActives.filter(legume__espece_id=leg.espece.id)
                 nbSeriesMemeEspece = len(l_seriesMemeEspece)
                 for serie in l_series:
                     qteHebdo += serie.prodHebdo(sem.date_debut, nbSeriesMemeEspece)
-#                     if "pomme" in leg.nom():
-#                         print("sem %s ******************* leg %s, %s %f %d"%(sem.s_dm, leg.nom(), sem.date_debut, qteHebdo, nbSeriesMemeEspece))
-                  
+                
                 if qteHebdo == 0:
                     couleur = "white"
                 else:
@@ -315,11 +315,11 @@ def recolte(request):
                     prodReelle = 0
                     
                 leg.l_prod.append((sem.date_debut, 
-                                        qteHebdo, 
-                                   leg.poids_kg(qteHebdo),
-                                   leg.espece.nomUniteProd(),
-                                   couleur,
-                                   prodReelle))
+                                       qteHebdo, 
+                                       leg.poids_kg(qteHebdo),
+                                       leg.espece.nomUniteProd(),
+                                       couleur,
+                                       prodReelle))
 
     except:
         s_info += str(sys.exc_info()[1])

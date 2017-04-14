@@ -21,20 +21,20 @@ class Command(BaseCommand):
 #         prod =  ser.prodHebdo(MyTools.getDateFrom_d_m_y("15/10/2017"), 2)
 #         print(prod)
 #         return
-#         factory = RequestFactory()
-#         
-#         # Create an instance of a POST request.
-#         request = factory.post('/recolte/', 
-#                                      
-#                                      data={"periode":"specifique",
-#                                            "date_debut_vue":"07/05/2017",
-#                                            "date_fin_vue":"08/10/2017", 
-#                                            "bSerres":"on",
-#                                          }
-#                                      )
-#         
-#         
-#         views.recolte(request)    
+        factory = RequestFactory()
+         
+        # Create an instance of a POST request.
+        request = factory.post('/recolte/', 
+                                      
+                                     data={"periode":"specifique",
+                                           "date_debut_vue":"07/05/2017",
+                                           "date_fin_vue":"08/10/2017", 
+                                           "bSerres":"on",
+                                         }
+                                     )
+         
+         
+        views.recolte(request)    
 #         return
 #         
 #         testU_ProdSemaine.testU_ProdSemaine()
@@ -70,7 +70,7 @@ class Command(BaseCommand):
               'intra_rang_cm': '15', 
               'id_serie': '0',
               'nb_rangs': '2', 
-              'id_legume': '1', 
+              'id_legume': '6', 
               'b_serre': 'off', 
               'cde': 'sauve_serie'
               } 

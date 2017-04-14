@@ -112,15 +112,19 @@ function init()
     // total des quantités par espece pour toutes les semaines
     for (ee=0; ee<l_especes.length; ee++)
         {
+        idEsp = l_especes[ee]
+        //alert("esp " + idEsp)
         qteEsp = 0
+
         for (ss=0; ss<l_sems.length; ss++)
             {
             for (ll=0;ll<l_legs.length;ll++)
                 {
                 divLeg = document.getElementById("sem_" + l_sems[ss] + "__leg_" + l_legs[ll])
-                if(l_especes[ee] != parseInt(divLeg.getAttribute("esp_id")))
+                if(idEsp != parseInt(divLeg.getAttribute("esp_id")))
                     continue 
                 qteEsp += parseFloat(divLeg.getAttribute("qte"))
+                break // on a trouvé le legume pour cette semaine
                 } 
             }
         document.getElementById("tets_"+ l_especes[ee]).innerHTML = parseInt(qteEsp)
@@ -138,8 +142,7 @@ function init()
 
 {% block content %}
 
-    <p id="divInfoDebug"> </p>
-    
+    <p id="divInfoDebug">{{info}}</p>
     
     <form action="" method="POST" accept-charset="utf-8">
     {% csrf_token %}

@@ -9,17 +9,14 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-
 import os, sys
 import logging
 from maraich import constant    
 
 sys.path.insert(-1, "/home/vincent/Documents/donnees/DIVERS/DeveloppementLogiciel/python/MyPyTools")
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -31,7 +28,6 @@ SECRET_KEY = 'im&j)8j1)mg4)o9gr#tk4d2_9qc_kf*0x7^$e@(#xzd#nc(9lk'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
