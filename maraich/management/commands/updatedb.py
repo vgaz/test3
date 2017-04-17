@@ -15,8 +15,7 @@ def getInt(d_in, name, default="0"):
         _i = int(d_in.get(name, default).split(",")[0])
         return _i
     except:
-        log.error("%s %s"%(str(d_in), sys.exc_info()[1])) 
-
+        log.warning("finding %s %s %s"%(name, str(d_in), sys.exc_info()[1])) 
 
 def getFloat(d_in, name, default="0"):
     """return a float value in a dictionary"""
@@ -25,7 +24,7 @@ def getFloat(d_in, name, default="0"):
         _f = float(d_in.get(name, default).replace(",","."))
         return _f
     except:
-        log.error("%s %s"%(str(d_in), sys.exc_info()[1])) 
+        log.warning("finding %s %s %s"%(name, str(d_in), sys.exc_info()[1])) 
     
 
 
@@ -95,80 +94,82 @@ class Command(BaseCommand):
         with open(os.path.join(settings.BASE_DIR, "inputs", "production.csv"), "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
             for d_line in reader:
-                nomEspece = d_line.get("Espèce").lower().strip()
-                if nomEspece:
-                    try:
+                try:
+                    nomEspece = d_line.get("Espèce").lower().strip()
+                    if nomEspece:                        
                         ## déjà presente
                         espece = Espece.objects.get(nom = nomEspece)
-                    except: 
-                        ## absente : création
-                        log.info("Ajout %s"%nomEspece)
-                        espece = Espece()
-                        espece.nom = nomEspece
-                    
+                except: 
+                    ## absente : création
+                    log.info("Ajout %s"%nomEspece)
+                    espece = Espece()
+                    espece.nom = nomEspece
+                
+                try:
                     nomFam = d_line.get("Famille","").lower().strip()
                     if nomFam:
-                        try:
-                            famille = Famille.objects.get(nom = nomFam)
-                        except:
-                            ## besoin création
-                            famille = Famille()
-                            famille.nom = nomFam
-                            famille.save()
-                        
-                        ## maj famille de l'espèce
-                        espece.famille_id = famille.id
+                        famille = Famille.objects.get(nom = nomFam)
+                except:
+                    ## besoin création
+                    famille = Famille()
+                    famille.nom = nomFam
+                    famille.save()
                     
-                    ## recup infos
-                    try:
-                        s_unite = d_line.get("Unité","").lower().strip()
-                        assert s_unite, "Pas d'interRang défini pour %s"%(espece.nom)
-                        if s_unite == "kg":
-                            espece.unite_prod = constant.UNITE_PROD_KG
-                        else:
-                            espece.unite_prod = constant.UNITE_PROD_PIECE
+                ## maj famille de l'espèce
+                espece.famille_id = famille.id
+            
+                ## recup infos
+                try:
+                    s_unite = d_line.get("Unité","").lower().strip()
+                    assert s_unite, "Pas d'interRang défini pour %s"%(espece.nom)
+                    if s_unite == "kg":
+                        espece.unite_prod = constant.UNITE_PROD_KG
+                    else:
+                        espece.unite_prod = constant.UNITE_PROD_PIECE
 
-                        s_stockable = d_line.get("stockable","")
-                        assert s_stockable, "pas de valeur 'stockable' pour espèce : %s"%(espece.nom)
-                        espece.bStockable = (s_stockable == "oui")     
+                    s_stockable = d_line.get("stockable","")
+                    assert s_stockable, "pas de valeur 'stockable' pour espèce : %s"%(espece.nom)
+                    espece.bStockable = (s_stockable == "oui")     
 
-                        espece.nbGrainesParPied = getInt(d_line,"Nb graines par pied") 
-                        assert espece.nbGrainesParPied, "'Nb graines par pied' indéfini pour %s"%(espece.nom)
+                    espece.nbGrainesParPied = getInt(d_line,"Nb graines par pied") 
+                    assert espece.nbGrainesParPied, "'Nb graines par pied' indéfini pour %s"%(espece.nom)
 
-                        espece.rendementGermination = getFloat(d_line, "Rendement germination", "0")
-                        assert espece.rendementGermination != 0, "'Rendement germination' indéfini pour %s"%(espece.nom)            
+                    espece.rendementGermination = getFloat(d_line, "Rendement germination", "0")
+                    assert espece.rendementGermination != 0, "'Rendement germination' indéfini pour %s"%(espece.nom)            
 
-                        espece.rendementConservation = getFloat(d_line, "Rendement pousse et  conservation", "0") 
-                        assert espece.rendementConservation !=0, "'Rendement pousse et  conservation' indéfini pour %s"%(esp.nom)            
+                    espece.rendementConservation = getFloat(d_line, "Rendement pousse et  conservation", "0") 
+                    assert espece.rendementConservation !=0, "'Rendement pousse et  conservation' indéfini pour %s"%(esp.nom)            
 
-                        ## maj conso
-                        espece.nbParts = getInt(d_line, "Nombre de panniers", "0")
-                        assert espece.nbParts != 0, "'Nombre de panniers' indéfini ou nul pour %s"%(espece.nom)  
-                 
-                        espece.consoHebdoParPart = getFloat(d_line, "Conso hebdo par pannier", "0")
-                        assert espece.consoHebdoParPart, "'Conso hebdo par pannier' indéfini pour %s"%(espece.nom)
-                        
-                        espece.delai_avant_retour_an = getInt(d_line, "Délai avant retour (an)", "0")
-                        assert espece.delai_avant_retour_an, "'Délai avant retour (an)' indéfini pour %s"%(espece.nom)
-                                                                 
-                        s_field = d_line.get("Couleur", "brown").strip()
-                        assert s_field, "'Couleur' indéfini pour %s"%(espece.nom)  
-                        espece.couleur = s_field
-                                                                 
-                        espece.save()
+                    ## maj conso
+                    espece.nbParts = getInt(d_line, "Nombre de panniers", "0")
+                    assert espece.nbParts != 0, "'Nombre de panniers' indéfini ou nul pour %s"%(espece.nom)  
+             
+                    espece.consoHebdoParPart = getFloat(d_line, "Conso hebdo par pannier", "0")
+                    assert espece.consoHebdoParPart, "'Conso hebdo par pannier' indéfini pour %s"%(espece.nom)
                     
-                    except:
-                        log.error(sys.exc_info()[1])
-                        l_err.append(str(sys.exc_info()[1]))
-                        continue
+                    espece.delai_avant_retour_an = getInt(d_line, "Délai avant retour (an)", "0")
+                    assert espece.delai_avant_retour_an, "'Délai avant retour (an)' indéfini pour %s"%(espece.nom)
+                                                             
+                    espece.volume_motte_cm3 = getInt(d_line, "Volume alvéole (cm³)", "0")
+                                                             
+                    s_field = d_line.get("Couleur", "brown").strip()
+                    assert s_field, "'Couleur' indéfini pour %s"%(espece.nom)  
+                    espece.couleur = s_field
+                                                             
+                    espece.save()
+                
+                except:
+                    log.error(sys.exc_info()[1])
+                    l_err.append(str(sys.exc_info()[1]))
+                    continue
 
         ## maj variétés, légumes et séries
         with open(os.path.join(settings.BASE_DIR, "inputs", "planning.csv"), "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
             for d_line in reader:
                 
-                s_espece = d_line.get("Espèce", "").lower().strip()                    
                 try:
+                    s_espece = d_line.get("Espèce", "").lower().strip()                    
                     espece = Espece.objects.get(nom=s_espece) 
                 except:
                     l_err.append("Erreur; espèce %s non trouvée. abandon"%(s_espece))

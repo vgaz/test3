@@ -300,7 +300,8 @@ class Espece(djangoModels.Model):
     nbParts = djangoModels.PositiveIntegerField("Nb de parts à servir", default=0)
     couleur = djangoModels.CharField(max_length=16, default="yellow")
     delai_avant_retour_an = djangoModels.PositiveIntegerField("Délai avant retour de la même culture", default=3)
-   
+    volume_motte_cm3 = djangoModels.PositiveIntegerField("volume de la motte ou alvéole associée", default=0)
+    
     class Meta:
         ordering = ['nom']
  
@@ -388,29 +389,6 @@ class Implantation(djangoModels.Model):
                                                                          self.planche.nom,
                                                                          self.planche.id)
 
-class SerieManager(djangoModels.Manager):
-    
-    def activesEnDateDu(self, la_date, planche=None):
-        """Filtrage des séries présentes à telle date, sur telle planche"""
-        l_series = Serie.objects.filter(evt_debut__date__lte = la_date, evt_fin__date__gte = la_date).distinct()
-        if planche:
-            l_series = l_series.filter(implantations__planche_id = planche.id)
-        
-        return l_series
-
-    def activesSurPeriode(self, date_debut, date_fin, planche=None):
-        """Filtrage des séries présentes, au moins partiellement, dans un encadrement de dates
-        on ne renvoie que les implantations de cette planche"""
-        if planche:
-            l_series = Serie.objects.filter(implantations__planche_id = planche.id)
-        else:
-            l_series = Serie.objects.all()
-            
-        l_series = l_series.distinct() ## évite les séries reprises plusieurs fois car présentes sur plusieurs planches  
-        l_series = l_series.exclude(evt_debut__date__gt = date_fin)
-        l_series = l_series.exclude(evt_fin__date__lt = date_debut)
-        return l_series
-
 
 
         
@@ -462,6 +440,40 @@ class Evenement(djangoModels.Model):
         
         return "Evt %s %s (%s) %s pour %d j"%( s_mode, self.nomType(), self.id,  self.date, self.duree_j )
              
+class SerieManager(djangoModels.Manager):
+    
+    def activesEnDateDu(self, la_date, planche=None):
+        """Filtrage des séries présentes à telle date, sur telle planche"""
+        l_series = Serie.objects.filter(evt_debut__date__lte = la_date, evt_fin__date__gte = la_date).distinct()
+        if planche:
+            l_series = l_series.filter(implantations__planche_id = planche.id)
+        return l_series
+
+    def activesSurPeriode(self, date_debut, date_fin, planche=None):
+        """Filtrage des séries présentes, au moins partiellement, dans un encadrement de dates
+        on ne renvoie que les implantations de cette planche"""
+        if planche:
+            l_series = Serie.objects.filter(implantations__planche_id = planche.id)
+        else:
+            l_series = Serie.objects.all()
+            
+        l_series = l_series.distinct() ## évite les séries reprises plusieurs fois car présentes sur plusieurs planches  
+        l_series = l_series.exclude(evt_debut__date__gt = date_fin)
+        l_series = l_series.exclude(evt_fin__date__lt = date_debut)
+        return l_series
+
+    def enSerreAPlantsSurPeriode(self, date_debut_vue, date_fin_vue):
+        """Filtrage des séries en phase de semis en serre à plants"""
+        ## recup de toutes les séries ayant un evt "plants"
+        l_series = Serie.objects.filter(evenements__type = Evenement.TYPE_PREPA_PLANTS)
+        l_series = l_series.exclude(evt_debut__date__lt = date_debut_vue)
+        l_suppr = []
+        for serie in l_series: 
+            if serie.dateDebutPlants() > date_fin_vue:
+                l_suppr.append(serie.id)
+        l_series = l_series.exclude(id__in = l_suppr)   
+        return l_series
+
 
 
 class Serie(djangoModels.Model):
@@ -481,6 +493,13 @@ class Serie(djangoModels.Model):
     evt_fin = djangoModels.ForeignKey(Evenement, related_name="+", null=True, default=0)
     remarque = djangoModels.TextField(default="")
     objects = SerieManager()
+    
+    def dateDebutPlants(self):  
+        """retourne la date de debut de fab des planst ou None"""
+        try:
+            return self.evenements.get(type=Evenement.TYPE_PREPA_PLANTS).date
+        except:
+            return None
     
     def enPlaceEnDatedu(self, date):  
         """retourne True ou False si série encore en terre à telle date"""
@@ -605,7 +624,7 @@ class Serie(djangoModels.Model):
     def nbSemainesDeRecolte(self):
         dd = (self.evt_fin.date - self.evenements.get(type=Evenement.TYPE_RECOLTE).date).days
         return dd/7
-        
+    
     def nbPieds(self):
         """cumul de tous les pieds de toutes des implantations"""
         return sum(self.implantations.all().values_list("nbPieds",flat=True))
@@ -628,6 +647,8 @@ class Serie(djangoModels.Model):
         """retourne une desctriptioin complete de la série"""
         l_rep = []
         l_rep.append(self.__str__())
+        
+        l_rep.append("Fabrication plants : %s"%MyTools.getDMYFromDate(self.dateDebutPlants()))
 #         for field in self._meta.get_fields():
 #             l_rep.append("%s : %s"%(field.name, str(field)))
         for evt in self.evenements.all():
@@ -638,10 +659,10 @@ class Serie(djangoModels.Model):
         l_rep.append("surface Occupée : %s m2"%(self.surfaceOccupee_m2()))
         l_rep.append("quantité estimée : %d %s"%(self.quantiteEstimee_kg_ou_piece(), self.legume.espece.nomUniteProd()))
         
-        return "\n".join(l_rep)
+        return ",".join(l_rep)
     
         
-    def __unicode__(self):
+    def info(self):
         return(self.__str__())
 
 class Production(djangoModels.Model):

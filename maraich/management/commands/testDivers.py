@@ -21,20 +21,31 @@ class Command(BaseCommand):
 #         prod =  ser.prodHebdo(MyTools.getDateFrom_d_m_y("15/10/2017"), 2)
 #         print(prod)
 #         return
-        factory = RequestFactory()
-         
+
         # Create an instance of a POST request.
-        request = factory.post('/recolte/', 
-                                      
-                                     data={"periode":"specifique",
-                                           "date_debut_vue":"07/05/2017",
-                                           "date_fin_vue":"08/10/2017", 
-                                           "bSerres":"on",
-                                         }
-                                     )
+        factory = RequestFactory()       
+        request = factory.post('/suiviPlants/',      
+                                data={"periode":"specifique",
+                                       "date_debut_vue":"07/05/2017",
+                                       "date_fin_vue":"08/12/2017", 
+                                    }
+                                )
+        views.suiviPlants(request)
+        return
+    
+ 
+#         # Create an instance of a POST request.
+#         factory = RequestFactory()       
+#         request = factory.post('/recolte/',      
+#                                      data={"periode":"specifique",
+#                                            "date_debut_vue":"07/05/2017",
+#                                            "date_fin_vue":"08/10/2017", 
+#                                            "bSerres":"on",
+#                                          }
+#                                      )
+#         views.recolte(request)
+        
          
-         
-        views.recolte(request)    
 #         return
 #         
 #         testU_ProdSemaine.testU_ProdSemaine()

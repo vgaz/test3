@@ -7,7 +7,7 @@ from django.test import TestCase, RequestFactory
 from maraich.models import Evenement, Serie, Planche
 from maraich import constant
 import datetime
-
+import MyTools
 
 class Command(BaseCommand):
     help = "test evt"
@@ -17,8 +17,8 @@ class Command(BaseCommand):
         from maraich import planification
 
         delta20h = datetime.timedelta(hours=20)
-        date_debut_vue = datetime.datetime.strptime("18/5/2015", constant.FORMAT_DATE)
-        date_fin_vue = datetime.datetime.strptime("24/5/2015", constant.FORMAT_DATE) + delta20h
+        date_debut_vue = "18/5/2015")
+        date_fin_vue = MyTools.getDateFrom_d_m_y("24/5/2015" + delta20h
 
         planification.planif(date_debut_vue, date_fin_vue)
         return

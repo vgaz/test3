@@ -144,19 +144,33 @@ def suiviImplantations(request):
                 planchesAExclure.append(planche.id)
         l_planches = l_planches.exclude(pk__in=planchesAExclure)         
 
-        
         filtreLeg = request.POST.get("s_filtre_legumes","")
 
+        l_seriesActives = Serie.objects.activesSurPeriode(date_debut_vue, date_fin_vue)
+        if filtreLeg:
+            l_seriesActives = l_seriesActives.filter(legume__espece__nom__icontains = filtreLeg)
+        
         for planche in l_planches:
             planche.l_implantations = []
-            l_series = Serie.objects.activesSurPeriode(date_debut_vue, 
-                                                        date_fin_vue, 
-                                                        planche)
-            if filtreLeg:
-                l_series = l_series.filter(legume__espece__nom__icontains = filtreLeg)
+            
             ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de série par planche)
-            for serie in l_series:
-                planche.l_implantations.append(serie.implantations.get(planche_id=planche.id))
+            for serie in l_seriesActives:
+                try:
+                    impl = serie.implantations.get(planche_id=planche.id)
+                    planche.l_implantations.append(impl)
+                except:
+                    pass
+
+#         for planche in l_planches:
+#             planche.l_implantations = []
+#             l_series = Serie.objects.activesSurPeriode(date_debut_vue, 
+#                                                         date_fin_vue, 
+#                                                         planche)            
+#             if filtreLeg:
+#                 l_series = l_series.filter(legume__espece__nom__icontains = filtreLeg)
+#             ## ajout de l'implation spécifique à cette planche (il ne peut y avoir qu'une implantation de série par planche)
+#             for serie in l_series:
+#                 planche.l_implantations.append(serie.implantations.get(planche_id=planche.id))
 
     except:
         s_msg += str(sys.exc_info())
@@ -399,6 +413,65 @@ def utilisationPlanches(request):
                     "bSerres":bSerres,
                     "bChamps":bChamps,
                     "info":s_info
+                    })
+    
+#################################################
+
+def suiviPlants(request):
+    """affiche les périodes de semis"""
+    plaq24 = MyTools.MyEmptyObj()
+    plaq24.volume_cm3 = 230
+    plaq24.nbAlv = 24
+    plaq24.qte = 0
+    plaq77 = MyTools.MyEmptyObj()
+    plaq77.volume_cm3 = 55
+    plaq77.nbAlv = 77
+    plaq77.qte = 0
+    
+    l_plaques = [plaq24, plaq77 ]
+
+    try:
+        s_info = ""
+        ## récup de la fenetre de temps
+        periode, date_debut_vue, date_fin_vue, decalage_j = donnePeriodeVue(request.POST)  
+        l_seriesIds = []
+        l_semaines = []
+        for sem in MyTools.getListeSemaines(date_debut_vue, date_fin_vue):        
+            ## Pour chaque semaine étudiée, on calcule la surface
+            qte = 0
+            txt = "<hr/>"
+            for plaq in l_plaques: plaq.qte=0
+            
+            for serie in Serie.objects.enSerreAPlantsSurPeriode(sem.date_debut, sem.date_fin):
+                l_seriesIds.append(serie.id)
+                qte += serie.nbPieds()
+                txt += "P:%s<br/>T:%s <div class='serie' serie_id='%d' title=''>S%d</div><hr/>"%(MyTools.getDMYFromDate(serie.dateDebutPlants()),
+                                             MyTools.getDMYFromDate(serie.evt_debut.date),
+                                             serie.id, serie.id)
+                ## calcul qté alvéoles 
+                for plaq in l_plaques:
+                    if plaq.volume_cm3 == serie.legume.espece.volume_motte_cm3:
+                        plaq.qte += serie.nbPieds()
+
+            sem.l_plaquesSem = l_plaques
+            sem.qte = qte
+            sem.txt = txt
+            l_semaines.append(sem)
+            
+    except:
+        log.error(s_info)
+        s_info += str(sys.exc_info()[1])
+        
+    return render(request,'maraich/suivi_plants.html',
+                    {
+                    "appVersion":constant.APP_VERSION,
+                    "periode":periode,
+                    "decalage_j":decalage_j,
+                    "date_debut_vue":date_debut_vue,
+                    "date_fin_vue":date_fin_vue,
+                    "l_semaines":l_semaines,
+                    "l_series":Serie.objects.filter(id__in = list(set(l_seriesIds))),
+                    "info": s_info
                     })
     
 
