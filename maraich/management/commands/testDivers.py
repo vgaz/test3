@@ -14,8 +14,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-#         ser = Serie.objects.get(pk=2102)
-#         ss = ser.nbSemainesDeRecolte()
+#         ser = Serie.objects.get(pk=15)
+#         qt = ser.quantiteEstimee_kg_ou_piece()
 #         ss = ser.quantiteEstimee_kg_ou_piece()
 #         print (ser.descriptif())
 #         prod =  ser.prodHebdo(MyTools.getDateFrom_d_m_y("15/10/2017"), 2)
@@ -23,27 +23,29 @@ class Command(BaseCommand):
 #         return
 
         # Create an instance of a POST request.
-        factory = RequestFactory()       
-        request = factory.post('/suiviPlants/',      
-                                data={"periode":"specifique",
-                                       "date_debut_vue":"07/05/2017",
-                                       "date_fin_vue":"08/12/2017", 
-                                    }
-                                )
-        views.suiviPlants(request)
-        return
+#         factory = RequestFactory()       
+#         request = factory.post('/suiviPlants/',      
+#                                 data={"periode":"specifique",
+#                                        "date_debut_vue":"08/05/2017",
+#                                        "date_fin_vue":"29/05/2017", 
+#                                     }
+#                                 )
+#         views.suiviPlants(request)
+#         return
     
  
 #         # Create an instance of a POST request.
-#         factory = RequestFactory()       
-#         request = factory.post('/recolte/',      
-#                                      data={"periode":"specifique",
-#                                            "date_debut_vue":"07/05/2017",
-#                                            "date_fin_vue":"08/10/2017", 
-#                                            "bSerres":"on",
-#                                          }
-#                                      )
-#         views.recolte(request)
+        factory = RequestFactory()       
+        request = factory.post('/recolte/',      
+                                     data={"periode":"specifique",
+                                           "date_debut_vue":"8/05/2017",
+                                           "date_fin_vue":"29/5/2017", 
+                                           "bSerres":"on",
+                                           "s_filtre_espece":"car"
+
+                                         }
+                                     )
+        views.recolte(request)
         
          
 #         return

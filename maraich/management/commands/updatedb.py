@@ -137,8 +137,8 @@ class Command(BaseCommand):
                     espece.rendementGermination = getFloat(d_line, "Rendement germination", "0")
                     assert espece.rendementGermination != 0, "'Rendement germination' indéfini pour %s"%(espece.nom)            
 
-                    espece.rendementConservation = getFloat(d_line, "Rendement pousse et  conservation", "0") 
-                    assert espece.rendementConservation !=0, "'Rendement pousse et  conservation' indéfini pour %s"%(esp.nom)            
+                    espece.rendementPousseEtConservation = getFloat(d_line, "Rendement pousse et conservation", "0") 
+                    assert espece.rendementPousseEtConservation !=0, "'Rendement pousse et conservation' indéfini pour %s"%(espece.nom)            
 
                     ## maj conso
                     espece.nbParts = getInt(d_line, "Nombre de panniers", "0")

@@ -12,9 +12,10 @@ function  init() {}
 function sauveLegume(id)
     {
     s_request = "cde=sauveLegume&id=" + id
-    s_request += "&uniteProd="+ document.getElementById("leg_"+id+"_nomUniteProd").value
-    s_request += "&consoHebdoParPart="+ document.getElementById("leg_" + id + "_" + "consoHebdoParPart").value
-    s_request += "&rendementGermination="+ document.getElementById("leg_" + id + "_" + "rendementGermination").value
+    s_request += "&uniteProd=" + document.getElementById("leg_"+id+"_nomUniteProd").value
+    s_request += "&consoHebdoParPart=" + document.getElementById("leg_" + id + "_" + "consoHebdoParPart").value
+    s_request += "&rendementGermination=" + document.getElementById("leg_" + id + "_" + "rendementGermination").value
+    s_request += "&rendementPousseEtConservation=" + document.getElementById("leg_" + id + "_" + "rendementPousseEtConservation").value
     s_request += "&intraRang_cm="+ document.getElementById("leg_" + id + "_" + "intraRang_cm").value
     s_request += "&poidsParPiece_g="+ document.getElementById("leg_" + id + "_" + "poidsParPiece_g").value
     s_request += "&nbGrainesParPied="+ document.getElementById("leg_" + id + "_" + "nbGrainesParPied").value
@@ -46,10 +47,10 @@ function sauveLegume(id)
 <h2>Légumes</h2><hr />
 {% for leg in l_legumes %}
  
-      <table>
+      <table><tbody>
           <tr>
           {% if leg.image %}<td><img style="float:left;width: 80px;height: 80px;margin: 10px" src="{{MEDIA_URL}}{{var.image}}" title="{{var.nom}}" /></td>{% endif %}
-          <td><h2>{{leg.nom|title}}</h2>
+          <td><h2 id="esp_{{leg.espece.id}}">{{leg.nom|title}}</h2>
             <p>Famille : <b>{{leg.espece.famille.nom|title}}</b>. Espèce : <b>{{leg.espece.nom|title}}</b></p>
             Consommation hebdo par pannier : 
             <input style="width: 40px" type="text" id="leg_{{leg.pk}}_consoHebdoParPart" name="leg_{{leg.pk}}_consoHebdoParPart" value="{{leg.espece.consoHebdoParPart}}" />
@@ -64,11 +65,9 @@ function sauveLegume(id)
             <input style="width:40px" type="text" id="leg_{{leg.pk}}_rendementGermination" name="leg_{{leg.pk}}_rendementGermination" value="{{leg.espece.rendementGermination}}" />
             <br/>
             
-            {% comment %}
             Rendement pousse et conservation 
             <input style="width:40px" type="text" id="leg_{{leg.pk}}_rendementPousseEtConservation" name="leg_{{leg.pk}}_rendementPousseEtConservation" value="{{leg.espece.rendementPousseEtConservation}}" />
             <br/>
-            {% endcomment %}
             
             Distance dans le rang (cm) 
             <input style="width:40px" type="text" id="leg_{{leg.pk}}_intraRang_cm" name="leg_{{leg.pk}}_intraRang_cm" value="{{leg.intraRang_cm}}" />
@@ -94,7 +93,7 @@ function sauveLegume(id)
             </td>
           </tr>
 
-      </table>
+      </tbody></table>
       
 	<hr />
 {% endfor %}
@@ -108,7 +107,7 @@ function sauveLegume(id)
   <li><b>{{f.nom|title}}</b>
 	<ul>
 	{% for esp in f.especes %}
-	   <li>{{esp.nom|title}}</li>
+	   <li><a href="#esp_{{esp.id}}">{{esp.nom|title}}</a></li>
 	{% endfor %}
 	</ul>
   

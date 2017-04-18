@@ -53,19 +53,13 @@ function init()
     
     for (ss=0; ss<l_sems.length; ss++)
         {
-        espCourante = 0
         cumulPoidsLeg = 0
-        cumulPoidsEsp = 0
-        cumulEsp = 0
-        s_listeEsp = ""
-     
         for (ll=0; ll<l_legs.length; ll++)
             {
             idLeg = "sem_" + l_sems[ss] + "__leg_" + l_legs[ll]
             divLeg = document.getElementById(idLeg)
             poidsLeg = parseFloat(divLeg.getAttribute("poids"))
             cumulPoidsLeg += poidsLeg
-            
             }
         document.getElementById("ts_" + l_sems[ss]).innerHTML = parseInt(cumulPoidsLeg)
         document.getElementById("tlpp_" + l_sems[ss]).innerHTML = parseFloat(cumulPoidsLeg/nbPanniers).toFixed(2)
@@ -103,7 +97,7 @@ function init()
             if (qte_cecs != 0)
                 {
                 document.getElementById("sem_" + l_sems[ss] + "__esp_" + l_especes[ee]).innerHTML= qte_cecs
-                listePannier += nomEsp + " : " + parseFloat(qte_cecs).toFixed(2)/nbPanniers + " (" + uniteEsp + ")<br/>"
+                listePannier += "<div style='display:block'>" + nomEsp + ":" + parseFloat(qte_cecs).toFixed(2)/nbPanniers + "&nbsp;" + uniteEsp.substring(0, 2) + "</div>"
                 }  
             }
         document.getElementById("cont_pspp_" + l_sems[ss]).innerHTML = listePannier
@@ -113,7 +107,6 @@ function init()
     for (ee=0; ee<l_especes.length; ee++)
         {
         idEsp = l_especes[ee]
-        //alert("esp " + idEsp)
         qteEsp = 0
 
         for (ss=0; ss<l_sems.length; ss++)
@@ -124,7 +117,7 @@ function init()
                 if(idEsp != parseInt(divLeg.getAttribute("esp_id")))
                     continue 
                 qteEsp += parseFloat(divLeg.getAttribute("qte"))
-                break // on a trouvé le legume pour cette semaine
+                //break // on a trouvé le legume pour cette semaine
                 } 
             }
         document.getElementById("tets_"+ l_especes[ee]).innerHTML = parseInt(qteEsp)
@@ -196,7 +189,7 @@ function init()
             <td>{{t_prod.0|date:'d/m/Y'}}<br/>
                 <div id="sem_{{t_prod.0|date:'Y-m-d'}}__leg_{{leg.id}}"
                         esp_id="{{leg.espece.id}}"
-                        esp_nom="{{leg.espece.nom}}"
+                        esp_nom="{{leg.espece.nom|title}}"
                         esp_unite="{{leg.espece.nomUniteProd}}"
                         qte="{{t_prod.1}}" 
                         poids="{{t_prod.2}}" 
@@ -226,7 +219,7 @@ function init()
 
         {% endfor %}
 
-        <tr><th>Total</th>{# ligne de total des poids ou qté de legumes par semaine #}
+        <tr><th>Poids total (kg)</th>{# ligne de total des poids ou qté de legumes par semaine #}
         {% for semaine in l_semaines %}
             <td><div style="font-weight:bold;text-align:center" id="ts_{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
         {% endfor %}
@@ -235,7 +228,7 @@ function init()
         <td><div id="poidsTotalTSTL" style="font-weight:bold;text-align:center"> </div></td>
         </tr>
         
-        <tr><th>Total (kg) par pannier</th>{# ligne de total des qte de legumes par semaine #}
+        <tr><th>Poids par pannier (kg)</th>{# ligne de total des qte de legumes par semaine #}
         {% for semaine in l_semaines %}
         <td><div style="font-weight:bold;text-align:center" id="tlpp_{{semaine.date_debut|date:'Y-m-d'}}"> </div></td>
         {% endfor %}

@@ -7,6 +7,15 @@ Created on 15 févr. 2015
 
 APP_NAME = "MARAICH"
 
+
+# A faire
+# 
+# placement sur plusieusr planches consécutives 
+# 
+#  filtrage planches dans chrono planches avec set sans *<br/>
+#  
+#  
+ 
 APP_VERSION = "1.3"
 
 UNITE_PROD_KG = 1

@@ -540,6 +540,8 @@ function dropImpl(event)
     quantite_implantation = event.dataTransfer.getData("nbPieds")
     if (event.dataTransfer.getData("id_planche_ori") != id_plancheDest)
         prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
+    else
+        confirm("decalage a faire ?")
     }
     
 function surlignePlanche(event)
@@ -642,7 +644,8 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
                                         intra_rang_cm="{{impl.serie.intraRang_cm}}"
                                         draggable="true" 
                                         ondragstart="dragImplStart(event)" 
-                                        title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.nbPieds}}/{{impl.serie.nbPieds}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}"
+                                        oncontextmenu="prepareEditeSerie({{impl.id}});return false;"
+                                        title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.nbPieds}}/{{impl.serie.nbPieds}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}. Qté estimée : {{impl.serie.quantiteEstimee_kg_ou_piece|floatformat:0}} {{impl.serie.legume.espece.nomUniteProd}}"
                                         >
             <div class="divTitreImplantation">
             {{impl.serie.legume.nom}}  {{impl.nbPieds}}/{{impl.serie.quantiteTotale}} {{impl.surface_m2}}m2
@@ -684,7 +687,6 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
     <input type="checkbox" id="editSerie_b_serre" />sous Serre
     </p>
     Nombre de pieds <input style="width: 40px" type='text' value="" id="editSerie_nb_pieds"  name="editSerie_nb_pieds" />
-
     <p>Nb rangs <input style="width: 40px" type='text' value="" id="editSerie_nb_rangs"  name="editSerie_nb_rangs" />
        Dans le rang (cm) <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" />
            Rien si valeurs par défaut

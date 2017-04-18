@@ -293,14 +293,14 @@ class Espece(djangoModels.Model):
     sans = djangoModels.ManyToManyField("self", related_name="sans", blank=True)
     unite_prod = djangoModels.PositiveIntegerField(default=constant.UNITE_PROD_KG)
     bStockable = djangoModels.BooleanField(default=False)
-    rendementPousseEtConservation = djangoModels.FloatField("Rendement de pousse et conservation", default=0)
     nbGrainesParPied = djangoModels.PositiveIntegerField("Nb graines par pied", default=0)
+    rendementPousseEtConservation = djangoModels.FloatField("Rendement de pousse et conservation", default=0)
     rendementGermination = djangoModels.FloatField("Rendement germination", default=0)
     consoHebdoParPart = djangoModels.FloatField("quantité consommée par semaine par part", default=0)
     nbParts = djangoModels.PositiveIntegerField("Nb de parts à servir", default=0)
     couleur = djangoModels.CharField(max_length=16, default="yellow")
     delai_avant_retour_an = djangoModels.PositiveIntegerField("Délai avant retour de la même culture", default=3)
-    volume_motte_cm3 = djangoModels.PositiveIntegerField("volume de la motte ou alvéole associée", default=0)
+    volume_motte_cm3 = djangoModels.PositiveIntegerField("volume de la motte ou alvéole associée", default=0)           ### 0 = semis
     
     class Meta:
         ordering = ['nom']
@@ -594,7 +594,9 @@ class Serie(djangoModels.Model):
 
     def quantiteEstimee_kg_ou_piece(self):
             """Retourne la quantité totale escomptée (en kg ou pièces)""" 
-            poids_kg = self.legume.prodParPied_kg * self.nbPieds()
+            poids_kg = self.legume.prodParPied_kg * self.legume.espece.rendementPousseEtConservation * self.nbPieds()
+            if not self.legume.espece.volume_motte_cm3:
+                poids_kg = poids_kg * self.legume.espece.rendementGermination
             if self.legume.espece.unite_prod == constant.UNITE_PROD_KG:
                 return poids_kg
             else:
@@ -603,23 +605,34 @@ class Serie(djangoModels.Model):
     def prodHebdo(self, dateDebutSem, ratio=1):
         """ renvoie la production estimée de cette semaine lissée sur le nombre de semaines de consommation possible"""
         dateDebutRecolte = self.evenements.get(type=Evenement.TYPE_RECOLTE).date
-        dateFinSemaine = dateDebutSem + datetime.timedelta(days=6)
         
-        if self.legume.espece.bStockable:
-            prelevHebdo = self.legume.espece.consoHebdoTotale()/ratio
-            ## prelevement continu selon besoin de livraison
-            nbSemEcoulementStock = max([1, int(self.quantiteEstimee_kg_ou_piece() / prelevHebdo)])
-            dateFinStock = self.evenements.get(type=Evenement.TYPE_RECOLTE).date + datetime.timedelta(weeks = nbSemEcoulementStock) 
-            if dateDebutSem > dateDebutRecolte and dateFinSemaine < dateFinStock :
-                return prelevHebdo
-            else:
-                return 0
+        dateMilieuSemaine = dateDebutSem + datetime.timedelta(days=3)## pour gerer pb jours / sem
+        dateFinSemaine = dateDebutSem + datetime.timedelta(days=6)
+
+        prelevHebdo = self.legume.espece.consoHebdoTotale()/ratio
+        ## prelevement continu selon besoin de livraison
+        nbJoursEcoulementStock = max([1, int(self.quantiteEstimee_kg_ou_piece() / (prelevHebdo/7))])
+        dateFinStock = self.evenements.get(type=Evenement.TYPE_RECOLTE).date + datetime.timedelta(days = nbJoursEcoulementStock) 
+        if dateDebutRecolte <= dateMilieuSemaine and dateMilieuSemaine < dateFinStock :
+            return prelevHebdo
         else:
-            ## repartition de la récolte possible depuis le debut de récolte à la fin du légume
-            if dateDebutSem > dateDebutRecolte and dateFinSemaine < self.evenements.get(type=Evenement.TYPE_FIN).date :
-                return self.quantiteEstimee_kg_ou_piece() / self.nbSemainesDeRecolte()
-            else:
-                return 0            
+            return 0
+#                     
+#         if self.legume.espece.bStockable:
+#             prelevHebdo = self.legume.espece.consoHebdoTotale()/ratio
+#             ## prelevement continu selon besoin de livraison
+#             nbSemEcoulementStock = max([1, int(self.quantiteEstimee_kg_ou_piece() / prelevHebdo)])
+#             dateFinStock = self.evenements.get(type=Evenement.TYPE_RECOLTE).date + datetime.timedelta(weeks = nbSemEcoulementStock) 
+#             if dateDebutSem > dateDebutRecolte and dateFinSemaine <= dateFinStock :
+#                 return prelevHebdo
+#             else:
+#                 return 0
+#         else:
+#             ## repartition de la récolte possible depuis le debut de récolte à la fin du légume
+#             if dateDebutRecolte >= dateDebutSem and dateDebutRecolte < dateFinSemaine and dateFinSemaine <= self.evenements.get(type=Evenement.TYPE_FIN).date :
+#                 return self.quantiteEstimee_kg_ou_piece() / self.nbSemainesDeRecolte()
+#             else:
+#                 return 0            
 
     def nbSemainesDeRecolte(self):
         dd = (self.evt_fin.date - self.evenements.get(type=Evenement.TYPE_RECOLTE).date).days
@@ -634,7 +647,7 @@ class Serie(djangoModels.Model):
         return ",".join(impl.planche.nom for impl in self.implantations.all())
          
     def __str__(self):       
-        return "(s%d), %s, %d pieds, %d graines, %d m, %d m2 de planche(s) [%s], du %s au %s" %( self.id,
+        return "(s%d), %s, %d pieds, %d graines, %d m, %d m2 de planche(s) [%s], du %s au %s. Qté estimée : %d %s" %( self.id,
                                                                                         self.legume.nom(),
                                                                                         self.nbPieds(),
                                                                                         self.nbGraines(),
@@ -642,7 +655,9 @@ class Serie(djangoModels.Model):
                                                                                         self.surfaceOccupee_m2(), 
                                                                                         self.s_listeNomsPlanches(),
                                                                                         MyTools.getDMYFromDate(self.evt_debut.date),
-                                                                                        MyTools.getDMYFromDate(self.evt_fin.date))
+                                                                                        MyTools.getDMYFromDate(self.evt_fin.date),
+                                                                                        self.quantiteEstimee_kg_ou_piece(),
+                                                                                        self.legume.espece.nomUniteProd())
     def descriptif(self):
         """retourne une desctriptioin complete de la série"""
         l_rep = []

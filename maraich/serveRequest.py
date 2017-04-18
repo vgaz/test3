@@ -56,7 +56,7 @@ def serveRequest(request):
 
     
     elif cde == "get_impls_serie": 
-        ## retour des implantations d'une série)
+        ## retourne les implantations d'une série
         try:
             l_impls = Serie.objects.get(id = int(request.POST.get("id", 0))).implantations.all()
             rep = serializers.serialize("json", l_impls)      
