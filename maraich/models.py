@@ -99,7 +99,7 @@ def creationEditionSerie(reqPost):
         impl.save()
         serie.implantations.add(impl)
         
-    serie.save() 
+#     serie.save() 
     print (serie.descriptif())
     return serie
 
@@ -396,14 +396,14 @@ class Evenement(djangoModels.Model):
     """Evenement ayant une date relative ou absolue"""
     TYPE_DEBUT = 1
     TYPE_FIN = 2
-    TYPE_DIVERS = 3
-    TYPE_PREPA_PLANTS = 4
-    TYPE_RECOLTE = 5
+    TYPE_RECOLTE = 3
+    TYPE_DIVERS = 4
+    TYPE_PREPA_PLANTS = 5
     D_NOM_TYPES = {TYPE_DEBUT:"Début", 
                    TYPE_FIN:"Fin", 
+                   TYPE_RECOLTE:"Début Récolte",
                    TYPE_DIVERS:"Divers",
-                   TYPE_PREPA_PLANTS:"Prépa plants en mottes",
-                   TYPE_RECOLTE:"Début Récolte"
+                   TYPE_PREPA_PLANTS:"Prépa plants en mottes"
                    }
     type =  djangoModels.PositiveIntegerField()
     eRef = djangoModels.ForeignKey("Evenement", default=0) 
@@ -424,14 +424,14 @@ class Evenement(djangoModels.Model):
     def save(self,*args,**kwargs):
         self.majDelta_j()
         super(Evenement,self).save(*args,**kwargs)
-        
+
     def majDelta_j(self, delta_j=None):
         """Ajustement de la date par rapport à un decalage en jours pour les évenements relatifs"""
         if self.eRef_id:
             if delta_j:
                 self.delta_j = delta_j
             self.date = self.eRef.date + datetime.timedelta(days = self.delta_j)
-        
+
     def __str__(self):
         if self.eRef_id:
             s_mode = "relatif"
@@ -534,13 +534,13 @@ class Serie(djangoModels.Model):
             self.evenements.add(evt_debut)
             self.evt_debut_id = evt_debut.id
             
-            evt_fin = creationEvtRel(evt_debut, dureeAvantRecolte_j + etalementRecolte_j, Evenement.TYPE_FIN, "fin %s"%(self.legume.nom()))
-            self.evt_fin_id = evt_fin.id
-            self.evenements.add(evt_fin)   
-            
             evt_recolte = creationEvtRel(evt_debut, dureeAvantRecolte_j, Evenement.TYPE_RECOLTE, "début récolte %s"%(self.legume.nom()))
             self.evenements.add(evt_recolte)
-            
+                        
+            evt_fin = creationEvtRel(evt_recolte, etalementRecolte_j, Evenement.TYPE_FIN, "fin %s"%(self.legume.nom()))
+            self.evt_fin_id = evt_fin.id
+            self.evenements.add(evt_fin)   
+
             if delaiCroissancePlants_j:     
                 evt_semisMotte = creationEvtRel(evt_debut, -1 * delaiCroissancePlants_j, Evenement.TYPE_PREPA_PLANTS, "semi motte %s"%(self.legume.nom()))
                 self.evenements.add(evt_semisMotte)                
@@ -548,15 +548,24 @@ class Serie(djangoModels.Model):
             ## mise à jour des evts
             self.evt_debut.date = dateDebut
             self.evt_debut.save()
-            self.evenements.get(type=Evenement.TYPE_FIN).majDelta_j(dureeAvantRecolte_j + etalementRecolte_j)
-            self.evenements.get(type=Evenement.TYPE_RECOLTE).majDelta_j(dureeAvantRecolte_j)
+            
+            evt = self.evenements.get(type=Evenement.TYPE_RECOLTE)
+            evt.delta_j = dureeAvantRecolte_j
+            evt.save()  
+                      
+            evt = self.evenements.get(type=Evenement.TYPE_FIN)
+            evt.delta_j= etalementRecolte_j
+            evt.save()
+
             try:
-                self.evenements.get(type=Evenement.TYPE_PREPA_PLANTS).majDelta_j( -1 * delaiCroissancePlants_j)
-            except: pass ## pas forcement de plants 
+                evt = self.evenements.get(type=Evenement.TYPE_PREPA_PLANTS)
+                evt.delta_j = ( -1 * delaiCroissancePlants_j)
+                evt.save()
+            except: 
+                pass ## pas forcement de plants 
             
         self.dureeAvantRecolte_j = dureeAvantRecolte_j
-        self.etalementRecolte_j = etalementRecolte_j
-                        
+        self.etalementRecolte_j = etalementRecolte_j            
         self.save()
  
     def nbGraines(self):
@@ -662,8 +671,8 @@ class Serie(djangoModels.Model):
         """retourne une desctriptioin complete de la série"""
         l_rep = []
         l_rep.append(self.__str__())
-        
-        l_rep.append("Fabrication plants : %s"%MyTools.getDMYFromDate(self.dateDebutPlants()))
+        if  self.dateDebutPlants():
+            l_rep.append("Fabrication plants : %s"%MyTools.getDMYFromDate(self.dateDebutPlants()))
 #         for field in self._meta.get_fields():
 #             l_rep.append("%s : %s"%(field.name, str(field)))
         for evt in self.evenements.all():

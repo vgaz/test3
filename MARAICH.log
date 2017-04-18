@@ -6246,3 +6246,857 @@ Erreur; espèce melon non trouvée. abandon
 [2017-04-18 15:11:44,017 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
 [2017-04-18 15:11:44,017 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'b_serre': ['false'], 'cde': ['sauve_serie'], 'etalement_recolte_j': ['9'], 'date_debut': ['08/05/2017'], 'nb_pieds': ['1234'], 'intra_rang_cm': ['5'], 'nb_rangs': ['4'], 'id_legume': ['16'], 'duree_avant_recolte_j': ['121'], 'id_serie': ['17']}>
 [2017-04-18 15:11:44,604 MARAICH_ERROR   ] serveRequest   .serveRequest: <class 'AttributeError'>'NoneType' object has no attribute 'strftime'
+[2017-04-18 15:16:42,775 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 15:16:43,276 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'date_debut': ['3/3'], 'cde': ['sauve_serie'], 'duree_avant_recolte_j': ['100'], 'b_serre': ['off'], 'etalement_recolte_j': ['6'], 'intra_rang_cm': ['15'], 'nb_rangs': ['2'], 'id_serie': ['0'], 'id_legume': ['6']}>
+[2017-04-18 16:31:05,997 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 16:31:05,997 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'etalement_recolte_j': ['6'], 'cde': ['sauve_serie'], 'id_legume': ['6'], 'intra_rang_cm': ['15'], 'b_serre': ['off'], 'id_serie': ['0'], 'duree_avant_recolte_j': ['100'], 'nb_rangs': ['2'], 'date_debut': ['3/3']}>
+[2017-04-18 16:33:23,002 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 16:33:23,002 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'b_serre': ['off'], 'date_debut': ['3/3'], 'cde': ['sauve_serie'], 'etalement_recolte_j': ['6'], 'id_legume': ['6'], 'nb_rangs': ['2'], 'duree_avant_recolte_j': ['100'], 'intra_rang_cm': ['15'], 'id_serie': ['0']}>
+[2017-04-18 16:33:33,549 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s128), betterave rouge crapaudine, 0 pieds, 0 graines, 0 m, 0 m2 de planche(s) [Virtuelle plein champ], du 03/03/2017 au 17/06/2017. Qté estimée : 0 Kg
+[2017-04-18 16:34:03,045 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 16:34:03,045 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['17']}>
+[2017-04-18 16:34:03,055 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 17, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 16:34:03,090 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 16:34:03,091 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['17']}>
+[2017-04-18 16:34:03,100 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14736, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T00:00:00", "date_creation": "2017-04-18T13:11:51.566", "duree_j": 1, "nom": "d\u00e9but carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14738, "fields": {"type": 5, "eRef": 14736, "delta_j": 180, "date": "2017-11-04T00:00:00", "date_creation": "2017-04-18T13:11:52.067", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14737, "fields": {"type": 2, "eRef": 14736, "delta_j": 189, "date": "2017-11-13T00:00:00", "date_creation": "2017-04-18T13:11:51.799", "duree_j": 1, "nom": "fin carotte saison jaune du doubs", "texte": "", "b_fini": false}}]}
+[2017-04-18 16:34:11,806 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 16:34:11,807 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'intra_rang_cm': ['5'], 'duree_avant_recolte_j': ['100'], 'cde': ['sauve_serie'], 'id_serie': ['17'], 'date_debut': ['08/05/2017'], 'b_serre': ['false'], 'nb_rangs': ['4'], 'nb_pieds': ['1234'], 'id_legume': ['16'], 'etalement_recolte_j': ['9']}>
+[2017-04-18 16:34:12,391 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s17), carotte saison jaune du doubs, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 08/05/2017 au 13/11/2017. Qté estimée : 66 Kg
+[2017-04-18 16:34:26,301 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 16:34:26,301 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['17']}>
+[2017-04-18 16:34:26,305 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 17, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 16:34:26,352 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 16:34:26,352 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['17']}>
+[2017-04-18 16:34:26,357 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14736, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T00:00:00", "date_creation": "2017-04-18T13:11:51.566", "duree_j": 1, "nom": "d\u00e9but carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14738, "fields": {"type": 5, "eRef": 14736, "delta_j": 180, "date": "2017-11-04T00:00:00", "date_creation": "2017-04-18T13:11:52.067", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14737, "fields": {"type": 2, "eRef": 14736, "delta_j": 189, "date": "2017-11-13T00:00:00", "date_creation": "2017-04-18T13:11:51.799", "duree_j": 1, "nom": "fin carotte saison jaune du doubs", "texte": "", "b_fini": false}}]}
+[2017-04-18 16:34:35,172 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 16:34:35,173 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'intra_rang_cm': ['5'], 'duree_avant_recolte_j': ['10'], 'cde': ['sauve_serie'], 'id_serie': ['17'], 'date_debut': ['08/05/2017'], 'b_serre': ['false'], 'nb_rangs': ['4'], 'nb_pieds': ['1234'], 'id_legume': ['16'], 'etalement_recolte_j': ['9']}>
+[2017-04-18 16:34:35,770 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s17), carotte saison jaune du doubs, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 08/05/2017 au 13/11/2017. Qté estimée : 66 Kg
+[2017-04-18 17:04:28,171 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 17:04:28,567 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'date_debut': ['3/3'], 'duree_avant_recolte_j': ['100'], 'etalement_recolte_j': ['6'], 'id_serie': ['0'], 'nb_rangs': ['2'], 'cde': ['sauve_serie'], 'intra_rang_cm': ['15'], 'id_legume': ['6'], 'b_serre': ['off']}>
+[2017-04-18 17:18:26,930 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 17:18:26,930 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'b_serre': ['off'], 'nb_rangs': ['2'], 'duree_avant_recolte_j': ['100'], 'cde': ['sauve_serie'], 'id_legume': ['6'], 'etalement_recolte_j': ['6'], 'intra_rang_cm': ['15'], 'date_debut': ['3/3'], 'id_serie': ['0']}>
+[2017-04-18 17:20:38,236 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 17:20:38,237 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'etalement_recolte_j': ['6'], 'b_serre': ['off'], 'id_serie': ['0'], 'intra_rang_cm': ['15'], 'id_legume': ['6'], 'cde': ['sauve_serie'], 'nb_rangs': ['2'], 'date_debut': ['3/3'], 'duree_avant_recolte_j': ['100']}>
+[2017-04-18 17:21:32,816 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 17:21:32,816 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'b_serre': ['false'], 'nb_rangs': ['4'], 'etalement_recolte_j': ['9'], 'cde': ['sauve_serie'], 'date_debut': ['08/05/2017'], 'nb_pieds': ['1234'], 'duree_avant_recolte_j': ['121'], 'id_serie': ['17'], 'intra_rang_cm': ['5'], 'id_legume': ['16']}>
+[2017-04-18 17:26:51,200 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 17:26:51,200 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['17']}>
+[2017-04-18 17:26:51,205 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 17, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 17:26:51,244 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 17:26:51,244 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['17']}>
+[2017-04-18 17:26:51,250 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14736, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T00:00:00", "date_creation": "2017-04-18T13:11:51.566", "duree_j": 1, "nom": "d\u00e9but carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14738, "fields": {"type": 5, "eRef": 14736, "delta_j": 180, "date": "2017-11-04T00:00:00", "date_creation": "2017-04-18T13:11:52.067", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14737, "fields": {"type": 2, "eRef": 14736, "delta_j": 189, "date": "2017-11-13T00:00:00", "date_creation": "2017-04-18T13:11:51.799", "duree_j": 1, "nom": "fin carotte saison jaune du doubs", "texte": "", "b_fini": false}}]}
+[2017-04-18 17:27:51,974 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 17:27:51,975 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'nb_pieds': ['1234'], 'etalement_recolte_j': ['9'], 'b_serre': ['false'], 'id_legume': ['16'], 'cde': ['sauve_serie'], 'intra_rang_cm': ['5'], 'duree_avant_recolte_j': ['19'], 'date_debut': ['08/05/2017'], 'id_serie': ['17'], 'nb_rangs': ['4']}>
+[2017-04-18 17:28:13,218 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s17), carotte saison jaune du doubs, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 08/05/2017 au 13/11/2017. Qté estimée : 66 Kg
+[2017-04-18 17:28:55,254 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 17:28:55,255 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['17']}>
+[2017-04-18 17:28:55,264 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 17, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 17:28:55,293 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 17:28:55,294 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['17']}>
+[2017-04-18 17:28:55,302 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14736, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T00:00:00", "date_creation": "2017-04-18T13:11:51.566", "duree_j": 1, "nom": "d\u00e9but carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14738, "fields": {"type": 5, "eRef": 14736, "delta_j": 180, "date": "2017-11-04T00:00:00", "date_creation": "2017-04-18T13:11:52.067", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14737, "fields": {"type": 2, "eRef": 14736, "delta_j": 189, "date": "2017-11-13T00:00:00", "date_creation": "2017-04-18T13:11:51.799", "duree_j": 1, "nom": "fin carotte saison jaune du doubs", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:16:33,518 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-18 19:16:33,519 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'simulation': ['true'], 'cde': ['deplacement_implantation'], 'nb_rangs': ['4'], 'id_serie': ['16'], 'intra_rang_cm': ['5'], 'id_implantation': ['16'], 'nb_pieds': ['3174'], 'id_planche_dest': ['undefined']}>
+[2017-04-18 19:16:33,523 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-04-18 19:16:37,406 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-04-18 19:16:37,407 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['sauve_evt'], 'date': [''], 'id_serie': ['17'], 'nom': ['début récolte carotte saison jaune du doubs'], 'delta_j': ['12'], 'id': ['14738'], 'duree_j': ['1']}>
+[2017-04-18 19:16:37,565 MARAICH_INFO    ] serveRequest   .serveRequest: Evt relatif Début Récolte (14738) 2017-05-20 00:00:00 pour 1 j
+[2017-04-18 19:16:37,572 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:16:37,572 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['17']}>
+[2017-04-18 19:16:37,580 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14736, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T00:00:00", "date_creation": "2017-04-18T13:11:51.566", "duree_j": 1, "nom": "d\u00e9but carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14738, "fields": {"type": 5, "eRef": 14736, "delta_j": 12, "date": "2017-05-20T00:00:00", "date_creation": "2017-04-18T13:11:52.067", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14737, "fields": {"type": 2, "eRef": 14736, "delta_j": 189, "date": "2017-11-13T00:00:00", "date_creation": "2017-04-18T13:11:51.799", "duree_j": 1, "nom": "fin carotte saison jaune du doubs", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:20:48,265 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 19:20:48,266 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'etalement_recolte_j': ['9'], 'id_serie': ['17'], 'duree_avant_recolte_j': ['19'], 'nb_pieds': ['1234'], 'nb_rangs': ['4'], 'b_serre': ['false'], 'id_legume': ['16'], 'intra_rang_cm': ['5'], 'date_debut': ['08/05/2017'], 'cde': ['sauve_serie']}>
+[2017-04-18 19:23:18,592 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 19:23:18,593 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'intra_rang_cm': ['5'], 'cde': ['sauve_serie'], 'id_legume': ['16'], 'b_serre': ['false'], 'etalement_recolte_j': ['9'], 'duree_avant_recolte_j': ['19'], 'id_serie': ['17'], 'date_debut': ['08/05/2017'], 'nb_rangs': ['4'], 'nb_pieds': ['1234']}>
+[2017-04-18 19:24:32,187 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 19:24:32,188 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'intra_rang_cm': ['5'], 'duree_avant_recolte_j': ['19'], 'nb_rangs': ['4'], 'etalement_recolte_j': ['9'], 'cde': ['sauve_serie'], 'id_serie': ['17'], 'id_legume': ['16'], 'b_serre': ['false'], 'nb_pieds': ['1234'], 'date_debut': ['08/05/2017']}>
+[2017-04-18 19:38:18,245 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:38:18,246 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['17']}>
+[2017-04-18 19:38:18,254 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 17, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 19:38:18,268 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:38:18,268 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['17']}>
+[2017-04-18 19:38:18,272 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14736, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T00:00:00", "date_creation": "2017-04-18T13:11:51.566", "duree_j": 1, "nom": "d\u00e9but carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14738, "fields": {"type": 5, "eRef": 14736, "delta_j": 12, "date": "2017-05-20T00:00:00", "date_creation": "2017-04-18T13:11:52.067", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14737, "fields": {"type": 2, "eRef": 14736, "delta_j": 189, "date": "2017-11-13T00:00:00", "date_creation": "2017-04-18T13:11:51.799", "duree_j": 1, "nom": "fin carotte saison jaune du doubs", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:38:23,704 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 19:38:23,705 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_legume': ['16'], 'nb_pieds': ['1234'], 'nb_rangs': ['4'], 'b_serre': ['false'], 'id_serie': ['17'], 'etalement_recolte_j': ['9'], 'cde': ['sauve_serie'], 'intra_rang_cm': ['5'], 'date_debut': ['08/05/2017'], 'duree_avant_recolte_j': ['12']}>
+[2017-04-18 19:38:24,451 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s17), carotte saison jaune du doubs, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 08/05/2017 au 29/05/2017. Qté estimée : 66 Kg
+[2017-04-18 19:38:40,179 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:38:40,179 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['18']}>
+[2017-04-18 19:38:40,184 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 18, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 19:38:40,208 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:38:40,208 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['18']}>
+[2017-04-18 19:38:40,214 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14739, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-09T00:00:00", "date_creation": "2017-04-18T13:11:53.311", "duree_j": 1, "nom": "d\u00e9but carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14741, "fields": {"type": 5, "eRef": 14739, "delta_j": 180, "date": "2017-11-05T00:00:00", "date_creation": "2017-04-18T13:11:53.768", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14740, "fields": {"type": 2, "eRef": 14739, "delta_j": 189, "date": "2017-11-14T00:00:00", "date_creation": "2017-04-18T13:11:53.533", "duree_j": 1, "nom": "fin carotte saison de la halle", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:39:20,611 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-04-18 19:39:20,611 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'nom': ['début récolte carotte saison de la halle'], 'delta_j': ['100'], 'duree_j': ['1'], 'id_serie': ['18'], 'date': [''], 'cde': ['sauve_evt'], 'id': ['14741']}>
+[2017-04-18 19:39:20,772 MARAICH_INFO    ] serveRequest   .serveRequest: Evt relatif Début Récolte (14741) 2017-08-17 00:00:00 pour 1 j
+[2017-04-18 19:39:20,778 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:39:20,778 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['18']}>
+[2017-04-18 19:39:20,782 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14739, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-09T00:00:00", "date_creation": "2017-04-18T13:11:53.311", "duree_j": 1, "nom": "d\u00e9but carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14741, "fields": {"type": 5, "eRef": 14739, "delta_j": 100, "date": "2017-08-17T00:00:00", "date_creation": "2017-04-18T13:11:53.768", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14740, "fields": {"type": 2, "eRef": 14739, "delta_j": 189, "date": "2017-11-14T00:00:00", "date_creation": "2017-04-18T13:11:53.533", "duree_j": 1, "nom": "fin carotte saison de la halle", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:39:32,382 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:39:32,382 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['18']}>
+[2017-04-18 19:39:32,386 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 18, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 19:39:32,410 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:39:32,410 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['18']}>
+[2017-04-18 19:39:32,418 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14739, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-09T00:00:00", "date_creation": "2017-04-18T13:11:53.311", "duree_j": 1, "nom": "d\u00e9but carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14741, "fields": {"type": 5, "eRef": 14739, "delta_j": 100, "date": "2017-08-17T00:00:00", "date_creation": "2017-04-18T13:11:53.768", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14740, "fields": {"type": 2, "eRef": 14739, "delta_j": 189, "date": "2017-11-14T00:00:00", "date_creation": "2017-04-18T13:11:53.533", "duree_j": 1, "nom": "fin carotte saison de la halle", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:39:54,331 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 19:39:54,332 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_legume': ['17'], 'nb_pieds': ['1234'], 'nb_rangs': ['4'], 'b_serre': ['false'], 'id_serie': ['18'], 'etalement_recolte_j': ['9'], 'cde': ['sauve_serie'], 'intra_rang_cm': ['5'], 'date_debut': ['09/05/2017'], 'duree_avant_recolte_j': ['10']}>
+[2017-04-18 19:39:54,997 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s18), carotte saison de la halle, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 09/05/2017 au 28/05/2017. Qté estimée : 66 Kg
+[2017-04-18 19:40:06,019 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:40:06,019 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['18']}>
+[2017-04-18 19:40:06,022 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 18, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 19:40:06,047 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:40:06,048 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['18']}>
+[2017-04-18 19:40:06,056 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14739, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-09T00:00:00", "date_creation": "2017-04-18T13:11:53.311", "duree_j": 1, "nom": "d\u00e9but carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14741, "fields": {"type": 5, "eRef": 14739, "delta_j": 10, "date": "2017-05-19T00:00:00", "date_creation": "2017-04-18T13:11:53.768", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14740, "fields": {"type": 2, "eRef": 14739, "delta_j": 19, "date": "2017-05-28T00:00:00", "date_creation": "2017-04-18T13:11:53.533", "duree_j": 1, "nom": "fin carotte saison de la halle", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:40:13,175 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-04-18 19:40:13,176 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'nom': ['début récolte carotte saison de la halle'], 'delta_j': ['100'], 'duree_j': ['1'], 'id_serie': ['18'], 'date': [''], 'cde': ['sauve_evt'], 'id': ['14741']}>
+[2017-04-18 19:40:13,345 MARAICH_INFO    ] serveRequest   .serveRequest: Evt relatif Début Récolte (14741) 2017-08-17 00:00:00 pour 1 j
+[2017-04-18 19:40:13,351 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:40:13,351 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['18']}>
+[2017-04-18 19:40:13,357 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14739, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-09T00:00:00", "date_creation": "2017-04-18T13:11:53.311", "duree_j": 1, "nom": "d\u00e9but carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14740, "fields": {"type": 2, "eRef": 14739, "delta_j": 19, "date": "2017-05-28T00:00:00", "date_creation": "2017-04-18T13:11:53.533", "duree_j": 1, "nom": "fin carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14741, "fields": {"type": 5, "eRef": 14739, "delta_j": 100, "date": "2017-08-17T00:00:00", "date_creation": "2017-04-18T13:11:53.768", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison de la halle", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:40:33,783 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:40:33,783 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['18']}>
+[2017-04-18 19:40:33,787 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 18, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 19:40:33,833 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:40:33,834 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['18']}>
+[2017-04-18 19:40:33,838 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14739, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-09T00:00:00", "date_creation": "2017-04-18T13:11:53.311", "duree_j": 1, "nom": "d\u00e9but carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14740, "fields": {"type": 2, "eRef": 14739, "delta_j": 19, "date": "2017-05-28T00:00:00", "date_creation": "2017-04-18T13:11:53.533", "duree_j": 1, "nom": "fin carotte saison de la halle", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14741, "fields": {"type": 5, "eRef": 14739, "delta_j": 100, "date": "2017-08-17T00:00:00", "date_creation": "2017-04-18T13:11:53.768", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison de la halle", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:41:59,182 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 19:41:59,182 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_legume': ['17'], 'nb_pieds': ['1234'], 'nb_rangs': ['4'], 'b_serre': ['false'], 'id_serie': ['18'], 'etalement_recolte_j': ['9'], 'cde': ['sauve_serie'], 'intra_rang_cm': ['5'], 'date_debut': ['09/05/2017'], 'duree_avant_recolte_j': ['111']}>
+[2017-04-18 19:41:59,925 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s18), carotte saison de la halle, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 09/05/2017 au 06/09/2017. Qté estimée : 66 Kg
+[2017-04-18 19:42:25,482 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:42:25,482 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['17']}>
+[2017-04-18 19:42:25,489 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 17, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 19:42:25,518 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:42:25,518 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['17']}>
+[2017-04-18 19:42:25,524 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14736, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T00:00:00", "date_creation": "2017-04-18T13:11:51.566", "duree_j": 1, "nom": "d\u00e9but carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14738, "fields": {"type": 5, "eRef": 14736, "delta_j": 12, "date": "2017-05-20T00:00:00", "date_creation": "2017-04-18T13:11:52.067", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14737, "fields": {"type": 2, "eRef": 14736, "delta_j": 21, "date": "2017-05-29T00:00:00", "date_creation": "2017-04-18T13:11:51.799", "duree_j": 1, "nom": "fin carotte saison jaune du doubs", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:42:46,628 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-04-18 19:42:46,629 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'nom': ['début récolte carotte saison jaune du doubs'], 'delta_j': ['10'], 'duree_j': ['1'], 'id_serie': ['17'], 'date': [''], 'cde': ['sauve_evt'], 'id': ['14738']}>
+[2017-04-18 19:42:46,795 MARAICH_INFO    ] serveRequest   .serveRequest: Evt relatif Début Récolte (14738) 2017-05-18 00:00:00 pour 1 j
+[2017-04-18 19:42:46,803 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:42:46,803 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['17']}>
+[2017-04-18 19:42:46,809 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14736, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T00:00:00", "date_creation": "2017-04-18T13:11:51.566", "duree_j": 1, "nom": "d\u00e9but carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14738, "fields": {"type": 5, "eRef": 14736, "delta_j": 10, "date": "2017-05-18T00:00:00", "date_creation": "2017-04-18T13:11:52.067", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14737, "fields": {"type": 2, "eRef": 14736, "delta_j": 21, "date": "2017-05-29T00:00:00", "date_creation": "2017-04-18T13:11:51.799", "duree_j": 1, "nom": "fin carotte saison jaune du doubs", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:42:57,519 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:42:57,519 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['17']}>
+[2017-04-18 19:42:57,523 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 17, "fields": {"planche": 8736, "nbPieds": 1234}}]}
+[2017-04-18 19:42:57,544 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:42:57,544 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['17']}>
+[2017-04-18 19:42:57,548 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14736, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T00:00:00", "date_creation": "2017-04-18T13:11:51.566", "duree_j": 1, "nom": "d\u00e9but carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14738, "fields": {"type": 5, "eRef": 14736, "delta_j": 10, "date": "2017-05-18T00:00:00", "date_creation": "2017-04-18T13:11:52.067", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14737, "fields": {"type": 2, "eRef": 14736, "delta_j": 21, "date": "2017-05-29T00:00:00", "date_creation": "2017-04-18T13:11:51.799", "duree_j": 1, "nom": "fin carotte saison jaune du doubs", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:51:29,406 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-04-18 19:51:29,406 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'nom': ['début récolte carotte saison jaune du doubs'], 'delta_j': ['100'], 'duree_j': ['1'], 'id_serie': ['17'], 'date': [''], 'cde': ['sauve_evt'], 'id': ['14738']}>
+[2017-04-18 19:51:29,558 MARAICH_INFO    ] serveRequest   .serveRequest: Evt relatif Début Récolte (14738) 2017-08-16 00:00:00 pour 1 j
+[2017-04-18 19:51:29,565 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:51:29,566 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['17']}>
+[2017-04-18 19:51:29,572 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14736, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T00:00:00", "date_creation": "2017-04-18T13:11:51.566", "duree_j": 1, "nom": "d\u00e9but carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14737, "fields": {"type": 2, "eRef": 14736, "delta_j": 21, "date": "2017-05-29T00:00:00", "date_creation": "2017-04-18T13:11:51.799", "duree_j": 1, "nom": "fin carotte saison jaune du doubs", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14738, "fields": {"type": 5, "eRef": 14736, "delta_j": 100, "date": "2017-08-16T00:00:00", "date_creation": "2017-04-18T13:11:52.067", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte saison jaune du doubs", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:51:44,950 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:51:44,951 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['12']}>
+[2017-04-18 19:51:44,955 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 12, "fields": {"planche": 8736, "nbPieds": 5772}}]}
+[2017-04-18 19:51:44,978 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:51:44,978 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 19:51:44,984 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14721, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T13:11:43.313", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14723, "fields": {"type": 5, "eRef": 14721, "delta_j": 150, "date": "2017-10-12T00:00:00", "date_creation": "2017-04-18T13:11:43.791", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14722, "fields": {"type": 2, "eRef": 14721, "delta_j": 196, "date": "2017-11-27T00:00:00", "date_creation": "2017-04-18T13:11:43.556", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:51:55,134 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 19:51:55,134 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_legume': ['11'], 'nb_pieds': ['5772'], 'nb_rangs': ['4'], 'b_serre': ['false'], 'id_serie': ['12'], 'etalement_recolte_j': ['46'], 'cde': ['sauve_serie'], 'intra_rang_cm': ['5'], 'date_debut': ['15/05/2017'], 'duree_avant_recolte_j': ['100']}>
+[2017-04-18 19:51:55,834 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s12), carotte de garde rodelika, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 08/10/2017. Qté estimée : 333 Kg
+[2017-04-18 19:52:35,073 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:52:35,073 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['12']}>
+[2017-04-18 19:52:35,077 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 12, "fields": {"planche": 8736, "nbPieds": 5772}}]}
+[2017-04-18 19:52:35,106 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:52:35,106 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 19:52:35,112 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14721, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T13:11:43.313", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14723, "fields": {"type": 5, "eRef": 14721, "delta_j": 100, "date": "2017-08-23T00:00:00", "date_creation": "2017-04-18T13:11:43.791", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14722, "fields": {"type": 2, "eRef": 14721, "delta_j": 146, "date": "2017-10-08T00:00:00", "date_creation": "2017-04-18T13:11:43.556", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:52:45,436 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-04-18 19:52:45,437 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'nom': ['début récolte carotte de garde rodelika'], 'delta_j': ['80'], 'duree_j': ['1'], 'id_serie': ['12'], 'date': [''], 'cde': ['sauve_evt'], 'id': ['14723']}>
+[2017-04-18 19:52:45,588 MARAICH_INFO    ] serveRequest   .serveRequest: Evt relatif Début Récolte (14723) 2017-08-03 00:00:00 pour 1 j
+[2017-04-18 19:52:45,594 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:52:45,594 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 19:52:45,600 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14721, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T13:11:43.313", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14723, "fields": {"type": 5, "eRef": 14721, "delta_j": 80, "date": "2017-08-03T00:00:00", "date_creation": "2017-04-18T13:11:43.791", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14722, "fields": {"type": 2, "eRef": 14721, "delta_j": 146, "date": "2017-10-08T00:00:00", "date_creation": "2017-04-18T13:11:43.556", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:54:23,828 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:54:23,828 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['12']}>
+[2017-04-18 19:54:23,833 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 12, "fields": {"planche": 8736, "nbPieds": 5772}}]}
+[2017-04-18 19:54:23,862 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:54:23,862 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 19:54:23,870 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14721, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T13:11:43.313", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14723, "fields": {"type": 5, "eRef": 14721, "delta_j": 80, "date": "2017-08-03T00:00:00", "date_creation": "2017-04-18T13:11:43.791", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14722, "fields": {"type": 2, "eRef": 14721, "delta_j": 146, "date": "2017-10-08T00:00:00", "date_creation": "2017-04-18T13:11:43.556", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:54:58,245 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 19:54:58,245 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_legume': ['11'], 'nb_pieds': ['5772'], 'nb_rangs': ['4'], 'b_serre': ['false'], 'id_serie': ['12'], 'etalement_recolte_j': ['46'], 'cde': ['sauve_serie'], 'intra_rang_cm': ['5'], 'date_debut': ['15/05/2017'], 'duree_avant_recolte_j': ['33']}>
+[2017-04-18 19:54:58,990 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s12), carotte de garde rodelika, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 02/08/2017. Qté estimée : 333 Kg
+[2017-04-18 19:55:03,272 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:55:03,272 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['12']}>
+[2017-04-18 19:55:03,275 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 12, "fields": {"planche": 8736, "nbPieds": 5772}}]}
+[2017-04-18 19:55:03,295 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:55:03,295 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 19:55:03,300 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14721, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T13:11:43.313", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14723, "fields": {"type": 5, "eRef": 14721, "delta_j": 33, "date": "2017-06-17T00:00:00", "date_creation": "2017-04-18T13:11:43.791", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14722, "fields": {"type": 2, "eRef": 14721, "delta_j": 79, "date": "2017-08-02T00:00:00", "date_creation": "2017-04-18T13:11:43.556", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:55:29,124 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-04-18 19:55:29,125 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'nom': ['début récolte carotte de garde rodelika'], 'delta_j': ['22'], 'duree_j': ['1'], 'id_serie': ['12'], 'date': [''], 'cde': ['sauve_evt'], 'id': ['14723']}>
+[2017-04-18 19:55:29,260 MARAICH_INFO    ] serveRequest   .serveRequest: Evt relatif Début Récolte (14723) 2017-06-06 00:00:00 pour 1 j
+[2017-04-18 19:55:29,265 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:55:29,266 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 19:55:29,270 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14721, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T13:11:43.313", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14723, "fields": {"type": 5, "eRef": 14721, "delta_j": 22, "date": "2017-06-06T00:00:00", "date_creation": "2017-04-18T13:11:43.791", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14722, "fields": {"type": 2, "eRef": 14721, "delta_j": 79, "date": "2017-08-02T00:00:00", "date_creation": "2017-04-18T13:11:43.556", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:56:18,156 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:56:18,156 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['12']}>
+[2017-04-18 19:56:18,161 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 12, "fields": {"planche": 8736, "nbPieds": 5772}}]}
+[2017-04-18 19:56:18,183 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:56:18,184 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 19:56:18,193 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14721, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T13:11:43.313", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14723, "fields": {"type": 5, "eRef": 14721, "delta_j": 22, "date": "2017-06-06T00:00:00", "date_creation": "2017-04-18T13:11:43.791", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14722, "fields": {"type": 2, "eRef": 14721, "delta_j": 79, "date": "2017-08-02T00:00:00", "date_creation": "2017-04-18T13:11:43.556", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:56:47,495 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_evt
+[2017-04-18 19:56:47,495 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'nom': ['début récolte carotte de garde rodelika'], 'delta_j': ['11'], 'duree_j': ['1'], 'id_serie': ['12'], 'date': [''], 'cde': ['sauve_evt'], 'id': ['14723']}>
+[2017-04-18 19:56:47,638 MARAICH_INFO    ] serveRequest   .serveRequest: Evt relatif Début Récolte (14723) 2017-05-26 00:00:00 pour 1 j
+[2017-04-18 19:56:47,646 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:56:47,646 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 19:56:47,651 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14721, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T13:11:43.313", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14723, "fields": {"type": 5, "eRef": 14721, "delta_j": 11, "date": "2017-05-26T00:00:00", "date_creation": "2017-04-18T13:11:43.791", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14722, "fields": {"type": 2, "eRef": 14721, "delta_j": 79, "date": "2017-08-02T00:00:00", "date_creation": "2017-04-18T13:11:43.556", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 19:57:06,564 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 19:57:06,564 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['12']}>
+[2017-04-18 19:57:06,569 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 12, "fields": {"planche": 8736, "nbPieds": 5772}}]}
+[2017-04-18 19:57:06,591 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 19:57:06,591 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 19:57:06,595 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 14721, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T13:11:43.313", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14723, "fields": {"type": 5, "eRef": 14721, "delta_j": 11, "date": "2017-05-26T00:00:00", "date_creation": "2017-04-18T13:11:43.791", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 14722, "fields": {"type": 2, "eRef": 14721, "delta_j": 79, "date": "2017-08-02T00:00:00", "date_creation": "2017-04-18T13:11:43.556", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 20:04:15,903 MARAICH_INFO    ] updatedb       .creationPlanches: S_01 (8738), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:16,014 MARAICH_INFO    ] updatedb       .creationPlanches: S_02 (8739), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:16,138 MARAICH_INFO    ] updatedb       .creationPlanches: S_03 (8740), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:16,250 MARAICH_INFO    ] updatedb       .creationPlanches: S_04 (8741), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:16,373 MARAICH_INFO    ] updatedb       .creationPlanches: S_05 (8742), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:16,496 MARAICH_INFO    ] updatedb       .creationPlanches: S_06 (8743), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:16,619 MARAICH_INFO    ] updatedb       .creationPlanches: S_07 (8744), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:16,753 MARAICH_INFO    ] updatedb       .creationPlanches: S_08 (8745), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:16,888 MARAICH_INFO    ] updatedb       .creationPlanches: S_09 (8746), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:17,010 MARAICH_INFO    ] updatedb       .creationPlanches: S_10 (8747), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:17,134 MARAICH_INFO    ] updatedb       .creationPlanches: S_11 (8748), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:17,258 MARAICH_INFO    ] updatedb       .creationPlanches: S_12 (8749), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:17,381 MARAICH_INFO    ] updatedb       .creationPlanches: S_13 (8750), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:17,482 MARAICH_INFO    ] updatedb       .creationPlanches: S_14 (8751), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:17,583 MARAICH_INFO    ] updatedb       .creationPlanches: S_15 (8752), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:17,718 MARAICH_INFO    ] updatedb       .creationPlanches: S_16 (8753), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:17,874 MARAICH_INFO    ] updatedb       .creationPlanches: S_17 (8754), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:18,030 MARAICH_INFO    ] updatedb       .creationPlanches: S_18 (8755), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:18,153 MARAICH_INFO    ] updatedb       .creationPlanches: S_19 (8756), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:18,310 MARAICH_INFO    ] updatedb       .creationPlanches: S_20 (8757), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:18,433 MARAICH_INFO    ] updatedb       .creationPlanches: S_21 (8758), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:18,556 MARAICH_INFO    ] updatedb       .creationPlanches: S_22 (8759), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:18,679 MARAICH_INFO    ] updatedb       .creationPlanches: S_23 (8760), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:18,804 MARAICH_INFO    ] updatedb       .creationPlanches: S_24 (8761), 30 m x 1.0 m = 30 m2; sous serre
+[2017-04-18 20:04:18,905 MARAICH_INFO    ] updatedb       .creationPlanches: C_001 (8762), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:19,017 MARAICH_INFO    ] updatedb       .creationPlanches: C_002 (8763), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:19,129 MARAICH_INFO    ] updatedb       .creationPlanches: C_003 (8764), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:19,252 MARAICH_INFO    ] updatedb       .creationPlanches: C_004 (8765), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:19,375 MARAICH_INFO    ] updatedb       .creationPlanches: C_005 (8766), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:19,498 MARAICH_INFO    ] updatedb       .creationPlanches: C_006 (8767), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:19,621 MARAICH_INFO    ] updatedb       .creationPlanches: C_007 (8768), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:19,744 MARAICH_INFO    ] updatedb       .creationPlanches: C_008 (8769), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:19,867 MARAICH_INFO    ] updatedb       .creationPlanches: C_009 (8770), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:19,990 MARAICH_INFO    ] updatedb       .creationPlanches: C_010 (8771), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:20,113 MARAICH_INFO    ] updatedb       .creationPlanches: C_011 (8772), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:20,236 MARAICH_INFO    ] updatedb       .creationPlanches: C_012 (8773), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:20,359 MARAICH_INFO    ] updatedb       .creationPlanches: C_013 (8774), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:20,484 MARAICH_INFO    ] updatedb       .creationPlanches: C_014 (8775), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:20,596 MARAICH_INFO    ] updatedb       .creationPlanches: C_015 (8776), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:20,719 MARAICH_INFO    ] updatedb       .creationPlanches: C_016 (8777), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:20,842 MARAICH_INFO    ] updatedb       .creationPlanches: C_017 (8778), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:20,965 MARAICH_INFO    ] updatedb       .creationPlanches: C_018 (8779), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:21,099 MARAICH_INFO    ] updatedb       .creationPlanches: C_019 (8780), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:21,222 MARAICH_INFO    ] updatedb       .creationPlanches: C_020 (8781), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:21,346 MARAICH_INFO    ] updatedb       .creationPlanches: C_021 (8782), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:21,469 MARAICH_INFO    ] updatedb       .creationPlanches: C_022 (8783), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:21,592 MARAICH_INFO    ] updatedb       .creationPlanches: C_023 (8784), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:21,770 MARAICH_INFO    ] updatedb       .creationPlanches: C_024 (8785), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:21,893 MARAICH_INFO    ] updatedb       .creationPlanches: C_025 (8786), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:22,005 MARAICH_INFO    ] updatedb       .creationPlanches: C_026 (8787), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:22,119 MARAICH_INFO    ] updatedb       .creationPlanches: C_027 (8788), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:22,242 MARAICH_INFO    ] updatedb       .creationPlanches: C_028 (8789), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:22,365 MARAICH_INFO    ] updatedb       .creationPlanches: C_029 (8790), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:22,488 MARAICH_INFO    ] updatedb       .creationPlanches: C_030 (8791), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:22,600 MARAICH_INFO    ] updatedb       .creationPlanches: C_031 (8792), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:22,723 MARAICH_INFO    ] updatedb       .creationPlanches: C_032 (8793), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:22,846 MARAICH_INFO    ] updatedb       .creationPlanches: C_033 (8794), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:22,969 MARAICH_INFO    ] updatedb       .creationPlanches: C_034 (8795), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:23,092 MARAICH_INFO    ] updatedb       .creationPlanches: C_035 (8796), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:23,215 MARAICH_INFO    ] updatedb       .creationPlanches: C_036 (8797), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:23,339 MARAICH_INFO    ] updatedb       .creationPlanches: C_037 (8798), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:23,495 MARAICH_INFO    ] updatedb       .creationPlanches: C_038 (8799), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:23,629 MARAICH_INFO    ] updatedb       .creationPlanches: C_039 (8800), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:23,765 MARAICH_INFO    ] updatedb       .creationPlanches: C_040 (8801), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:23,877 MARAICH_INFO    ] updatedb       .creationPlanches: C_041 (8802), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:24,000 MARAICH_INFO    ] updatedb       .creationPlanches: C_042 (8803), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:24,123 MARAICH_INFO    ] updatedb       .creationPlanches: C_043 (8804), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:24,246 MARAICH_INFO    ] updatedb       .creationPlanches: C_044 (8805), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:24,369 MARAICH_INFO    ] updatedb       .creationPlanches: C_045 (8806), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:24,493 MARAICH_INFO    ] updatedb       .creationPlanches: C_046 (8807), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:24,615 MARAICH_INFO    ] updatedb       .creationPlanches: C_047 (8808), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:24,738 MARAICH_INFO    ] updatedb       .creationPlanches: C_048 (8809), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:24,884 MARAICH_INFO    ] updatedb       .creationPlanches: C_049 (8810), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:25,018 MARAICH_INFO    ] updatedb       .creationPlanches: C_050 (8811), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:25,152 MARAICH_INFO    ] updatedb       .creationPlanches: C_051 (8812), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:25,287 MARAICH_INFO    ] updatedb       .creationPlanches: C_052 (8813), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:25,400 MARAICH_INFO    ] updatedb       .creationPlanches: C_053 (8814), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:25,523 MARAICH_INFO    ] updatedb       .creationPlanches: C_054 (8815), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:25,635 MARAICH_INFO    ] updatedb       .creationPlanches: C_055 (8816), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:25,770 MARAICH_INFO    ] updatedb       .creationPlanches: C_056 (8817), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:25,892 MARAICH_INFO    ] updatedb       .creationPlanches: C_057 (8818), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:26,016 MARAICH_INFO    ] updatedb       .creationPlanches: C_058 (8819), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:26,139 MARAICH_INFO    ] updatedb       .creationPlanches: C_059 (8820), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:26,273 MARAICH_INFO    ] updatedb       .creationPlanches: C_060 (8821), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:26,407 MARAICH_INFO    ] updatedb       .creationPlanches: C_061 (8822), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:26,541 MARAICH_INFO    ] updatedb       .creationPlanches: C_062 (8823), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:26,675 MARAICH_INFO    ] updatedb       .creationPlanches: C_063 (8824), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:26,810 MARAICH_INFO    ] updatedb       .creationPlanches: C_064 (8825), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:26,922 MARAICH_INFO    ] updatedb       .creationPlanches: C_065 (8826), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:27,035 MARAICH_INFO    ] updatedb       .creationPlanches: C_066 (8827), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:27,147 MARAICH_INFO    ] updatedb       .creationPlanches: C_067 (8828), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:27,259 MARAICH_INFO    ] updatedb       .creationPlanches: C_068 (8829), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:27,382 MARAICH_INFO    ] updatedb       .creationPlanches: C_069 (8830), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:27,505 MARAICH_INFO    ] updatedb       .creationPlanches: C_070 (8831), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:27,640 MARAICH_INFO    ] updatedb       .creationPlanches: C_071 (8832), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:27,841 MARAICH_INFO    ] updatedb       .creationPlanches: C_072 (8833), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:28,077 MARAICH_INFO    ] updatedb       .creationPlanches: C_073 (8834), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:28,212 MARAICH_INFO    ] updatedb       .creationPlanches: C_074 (8835), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:28,404 MARAICH_INFO    ] updatedb       .creationPlanches: C_075 (8836), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:28,515 MARAICH_INFO    ] updatedb       .creationPlanches: C_076 (8837), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:28,638 MARAICH_INFO    ] updatedb       .creationPlanches: C_077 (8838), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:28,761 MARAICH_INFO    ] updatedb       .creationPlanches: C_078 (8839), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:28,896 MARAICH_INFO    ] updatedb       .creationPlanches: C_079 (8840), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:29,030 MARAICH_INFO    ] updatedb       .creationPlanches: C_080 (8841), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:29,164 MARAICH_INFO    ] updatedb       .creationPlanches: C_081 (8842), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:29,298 MARAICH_INFO    ] updatedb       .creationPlanches: C_082 (8843), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:29,432 MARAICH_INFO    ] updatedb       .creationPlanches: C_083 (8844), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:29,545 MARAICH_INFO    ] updatedb       .creationPlanches: C_084 (8845), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:29,656 MARAICH_INFO    ] updatedb       .creationPlanches: C_085 (8846), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:29,768 MARAICH_INFO    ] updatedb       .creationPlanches: C_086 (8847), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:29,880 MARAICH_INFO    ] updatedb       .creationPlanches: C_087 (8848), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:30,015 MARAICH_INFO    ] updatedb       .creationPlanches: C_088 (8849), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:30,139 MARAICH_INFO    ] updatedb       .creationPlanches: C_089 (8850), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:30,273 MARAICH_INFO    ] updatedb       .creationPlanches: C_090 (8851), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:30,408 MARAICH_INFO    ] updatedb       .creationPlanches: C_091 (8852), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:30,575 MARAICH_INFO    ] updatedb       .creationPlanches: C_092 (8853), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:30,710 MARAICH_INFO    ] updatedb       .creationPlanches: C_093 (8854), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:30,833 MARAICH_INFO    ] updatedb       .creationPlanches: C_094 (8855), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:30,945 MARAICH_INFO    ] updatedb       .creationPlanches: C_095 (8856), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:31,057 MARAICH_INFO    ] updatedb       .creationPlanches: C_096 (8857), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:31,214 MARAICH_INFO    ] updatedb       .creationPlanches: C_097 (8858), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:31,337 MARAICH_INFO    ] updatedb       .creationPlanches: C_098 (8859), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:31,471 MARAICH_INFO    ] updatedb       .creationPlanches: C_099 (8860), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:31,640 MARAICH_INFO    ] updatedb       .creationPlanches: C_100 (8861), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:31,853 MARAICH_INFO    ] updatedb       .creationPlanches: C_101 (8862), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:31,998 MARAICH_INFO    ] updatedb       .creationPlanches: C_102 (8863), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:32,143 MARAICH_INFO    ] updatedb       .creationPlanches: C_103 (8864), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:32,333 MARAICH_INFO    ] updatedb       .creationPlanches: C_104 (8865), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:32,467 MARAICH_INFO    ] updatedb       .creationPlanches: C_105 (8866), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:32,657 MARAICH_INFO    ] updatedb       .creationPlanches: C_106 (8867), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:32,769 MARAICH_INFO    ] updatedb       .creationPlanches: C_107 (8868), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:32,892 MARAICH_INFO    ] updatedb       .creationPlanches: C_108 (8869), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:33,060 MARAICH_INFO    ] updatedb       .creationPlanches: C_109 (8870), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:33,205 MARAICH_INFO    ] updatedb       .creationPlanches: C_110 (8871), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:33,350 MARAICH_INFO    ] updatedb       .creationPlanches: C_111 (8872), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:33,507 MARAICH_INFO    ] updatedb       .creationPlanches: C_112 (8873), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:33,665 MARAICH_INFO    ] updatedb       .creationPlanches: C_113 (8874), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:33,833 MARAICH_INFO    ] updatedb       .creationPlanches: C_114 (8875), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:33,989 MARAICH_INFO    ] updatedb       .creationPlanches: C_115 (8876), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:34,135 MARAICH_INFO    ] updatedb       .creationPlanches: C_116 (8877), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:34,324 MARAICH_INFO    ] updatedb       .creationPlanches: C_117 (8878), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:34,459 MARAICH_INFO    ] updatedb       .creationPlanches: C_118 (8879), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:34,626 MARAICH_INFO    ] updatedb       .creationPlanches: C_119 (8880), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:34,761 MARAICH_INFO    ] updatedb       .creationPlanches: C_120 (8881), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:34,906 MARAICH_INFO    ] updatedb       .creationPlanches: C_121 (8882), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:35,062 MARAICH_INFO    ] updatedb       .creationPlanches: C_122 (8883), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:35,219 MARAICH_INFO    ] updatedb       .creationPlanches: C_123 (8884), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:35,364 MARAICH_INFO    ] updatedb       .creationPlanches: C_124 (8885), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:35,522 MARAICH_INFO    ] updatedb       .creationPlanches: C_125 (8886), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:35,645 MARAICH_INFO    ] updatedb       .creationPlanches: C_126 (8887), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:35,746 MARAICH_INFO    ] updatedb       .creationPlanches: C_127 (8888), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:35,869 MARAICH_INFO    ] updatedb       .creationPlanches: C_128 (8889), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:35,981 MARAICH_INFO    ] updatedb       .creationPlanches: C_129 (8890), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:36,116 MARAICH_INFO    ] updatedb       .creationPlanches: C_130 (8891), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:36,294 MARAICH_INFO    ] updatedb       .creationPlanches: C_131 (8892), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:36,406 MARAICH_INFO    ] updatedb       .creationPlanches: C_132 (8893), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:36,551 MARAICH_INFO    ] updatedb       .creationPlanches: C_133 (8894), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:36,752 MARAICH_INFO    ] updatedb       .creationPlanches: C_134 (8895), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:36,897 MARAICH_INFO    ] updatedb       .creationPlanches: C_135 (8896), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:37,109 MARAICH_INFO    ] updatedb       .creationPlanches: C_136 (8897), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:37,244 MARAICH_INFO    ] updatedb       .creationPlanches: C_137 (8898), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:37,446 MARAICH_INFO    ] updatedb       .creationPlanches: C_138 (8899), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:37,558 MARAICH_INFO    ] updatedb       .creationPlanches: C_139 (8900), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:37,681 MARAICH_INFO    ] updatedb       .creationPlanches: C_140 (8901), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:37,827 MARAICH_INFO    ] updatedb       .creationPlanches: C_141 (8902), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:38,017 MARAICH_INFO    ] updatedb       .creationPlanches: C_142 (8903), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:38,162 MARAICH_INFO    ] updatedb       .creationPlanches: C_143 (8904), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:38,385 MARAICH_INFO    ] updatedb       .creationPlanches: C_144 (8905), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:38,542 MARAICH_INFO    ] updatedb       .creationPlanches: C_145 (8906), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:38,709 MARAICH_INFO    ] updatedb       .creationPlanches: C_146 (8907), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:38,932 MARAICH_INFO    ] updatedb       .creationPlanches: C_147 (8908), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:39,088 MARAICH_INFO    ] updatedb       .creationPlanches: C_148 (8909), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:39,290 MARAICH_INFO    ] updatedb       .creationPlanches: C_149 (8910), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:39,425 MARAICH_INFO    ] updatedb       .creationPlanches: C_150 (8911), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:39,615 MARAICH_INFO    ] updatedb       .creationPlanches: C_151 (8912), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:39,750 MARAICH_INFO    ] updatedb       .creationPlanches: C_152 (8913), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:39,906 MARAICH_INFO    ] updatedb       .creationPlanches: C_153 (8914), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:40,107 MARAICH_INFO    ] updatedb       .creationPlanches: C_154 (8915), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:40,263 MARAICH_INFO    ] updatedb       .creationPlanches: C_155 (8916), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:40,398 MARAICH_INFO    ] updatedb       .creationPlanches: C_156 (8917), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:40,543 MARAICH_INFO    ] updatedb       .creationPlanches: C_157 (8918), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:40,733 MARAICH_INFO    ] updatedb       .creationPlanches: C_158 (8919), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:40,867 MARAICH_INFO    ] updatedb       .creationPlanches: C_159 (8920), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:41,001 MARAICH_INFO    ] updatedb       .creationPlanches: C_160 (8921), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:41,158 MARAICH_INFO    ] updatedb       .creationPlanches: C_161 (8922), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:41,281 MARAICH_INFO    ] updatedb       .creationPlanches: C_162 (8923), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:41,405 MARAICH_INFO    ] updatedb       .creationPlanches: C_163 (8924), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:41,540 MARAICH_INFO    ] updatedb       .creationPlanches: C_164 (8925), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:41,685 MARAICH_INFO    ] updatedb       .creationPlanches: C_165 (8926), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:41,830 MARAICH_INFO    ] updatedb       .creationPlanches: C_166 (8927), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:41,975 MARAICH_INFO    ] updatedb       .creationPlanches: C_167 (8928), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:42,132 MARAICH_INFO    ] updatedb       .creationPlanches: C_168 (8929), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:42,288 MARAICH_INFO    ] updatedb       .creationPlanches: C_169 (8930), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:42,445 MARAICH_INFO    ] updatedb       .creationPlanches: C_170 (8931), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:42,601 MARAICH_INFO    ] updatedb       .creationPlanches: C_171 (8932), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:42,747 MARAICH_INFO    ] updatedb       .creationPlanches: C_172 (8933), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:42,903 MARAICH_INFO    ] updatedb       .creationPlanches: C_173 (8934), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:43,037 MARAICH_INFO    ] updatedb       .creationPlanches: C_174 (8935), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:43,173 MARAICH_INFO    ] updatedb       .creationPlanches: C_175 (8936), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:43,308 MARAICH_INFO    ] updatedb       .creationPlanches: C_176 (8937), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:43,453 MARAICH_INFO    ] updatedb       .creationPlanches: C_177 (8938), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:43,598 MARAICH_INFO    ] updatedb       .creationPlanches: C_178 (8939), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:43,755 MARAICH_INFO    ] updatedb       .creationPlanches: C_179 (8940), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:43,889 MARAICH_INFO    ] updatedb       .creationPlanches: C_180 (8941), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:44,023 MARAICH_INFO    ] updatedb       .creationPlanches: C_181 (8942), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:44,179 MARAICH_INFO    ] updatedb       .creationPlanches: C_182 (8943), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:44,325 MARAICH_INFO    ] updatedb       .creationPlanches: C_183 (8944), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:44,526 MARAICH_INFO    ] updatedb       .creationPlanches: C_184 (8945), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:44,660 MARAICH_INFO    ] updatedb       .creationPlanches: C_185 (8946), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:44,783 MARAICH_INFO    ] updatedb       .creationPlanches: C_186 (8947), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:44,906 MARAICH_INFO    ] updatedb       .creationPlanches: C_187 (8948), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:45,053 MARAICH_INFO    ] updatedb       .creationPlanches: C_188 (8949), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:45,210 MARAICH_INFO    ] updatedb       .creationPlanches: C_189 (8950), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:45,355 MARAICH_INFO    ] updatedb       .creationPlanches: C_190 (8951), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:45,512 MARAICH_INFO    ] updatedb       .creationPlanches: C_191 (8952), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:45,645 MARAICH_INFO    ] updatedb       .creationPlanches: C_192 (8953), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:45,859 MARAICH_INFO    ] updatedb       .creationPlanches: C_193 (8954), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:45,971 MARAICH_INFO    ] updatedb       .creationPlanches: C_194 (8955), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:46,151 MARAICH_INFO    ] updatedb       .creationPlanches: C_195 (8956), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:46,285 MARAICH_INFO    ] updatedb       .creationPlanches: C_196 (8957), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:46,432 MARAICH_INFO    ] updatedb       .creationPlanches: C_197 (8958), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:46,577 MARAICH_INFO    ] updatedb       .creationPlanches: C_198 (8959), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:46,700 MARAICH_INFO    ] updatedb       .creationPlanches: C_199 (8960), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:46,824 MARAICH_INFO    ] updatedb       .creationPlanches: C_200 (8961), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:46,958 MARAICH_INFO    ] updatedb       .creationPlanches: C_201 (8962), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:47,103 MARAICH_INFO    ] updatedb       .creationPlanches: C_202 (8963), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:47,226 MARAICH_INFO    ] updatedb       .creationPlanches: C_203 (8964), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:47,350 MARAICH_INFO    ] updatedb       .creationPlanches: C_204 (8965), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:47,473 MARAICH_INFO    ] updatedb       .creationPlanches: C_205 (8966), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:47,618 MARAICH_INFO    ] updatedb       .creationPlanches: C_206 (8967), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:47,764 MARAICH_INFO    ] updatedb       .creationPlanches: C_207 (8968), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:47,909 MARAICH_INFO    ] updatedb       .creationPlanches: C_208 (8969), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:48,054 MARAICH_INFO    ] updatedb       .creationPlanches: C_209 (8970), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:48,212 MARAICH_INFO    ] updatedb       .creationPlanches: C_210 (8971), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:48,358 MARAICH_INFO    ] updatedb       .creationPlanches: C_211 (8972), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:48,503 MARAICH_INFO    ] updatedb       .creationPlanches: C_212 (8973), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:48,626 MARAICH_INFO    ] updatedb       .creationPlanches: C_213 (8974), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:48,772 MARAICH_INFO    ] updatedb       .creationPlanches: C_214 (8975), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:48,895 MARAICH_INFO    ] updatedb       .creationPlanches: C_215 (8976), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:49,017 MARAICH_INFO    ] updatedb       .creationPlanches: C_216 (8977), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:49,152 MARAICH_INFO    ] updatedb       .creationPlanches: C_217 (8978), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:49,297 MARAICH_INFO    ] updatedb       .creationPlanches: C_218 (8979), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:49,465 MARAICH_INFO    ] updatedb       .creationPlanches: C_219 (8980), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:49,666 MARAICH_INFO    ] updatedb       .creationPlanches: C_220 (8981), 30 m x 1.0 m = 30 m2; plein champ
+[2017-04-18 20:04:49,811 MARAICH_INFO    ] updatedb       .creationPlanches: Virtuelle plein champ (8982), 6600 m x 1.0 m = 6600 m2; plein champ
+[2017-04-18 20:04:49,958 MARAICH_INFO    ] updatedb       .creationPlanches: Virtuelle sous abris (8983), 720 m x 1.0 m = 720 m2; sous serre
+[2017-04-18 20:04:49,962 MARAICH_INFO    ] updatedb       .handle: Ajout ail
+[2017-04-18 20:04:50,207 MARAICH_INFO    ] updatedb       .handle: Ajout artichaut
+[2017-04-18 20:04:50,350 MARAICH_ERROR   ] updatedb       .handle: 'Nombre de panniers' indéfini ou nul pour artichaut
+[2017-04-18 20:04:50,351 MARAICH_INFO    ] updatedb       .handle: Ajout aubergine
+[2017-04-18 20:04:50,621 MARAICH_INFO    ] updatedb       .handle: Ajout betterave rouge
+[2017-04-18 20:04:50,753 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '1500', 'Nb mottes/m': '0', 'Total à distribuer': '750', "montant sur l'année par panier (\x80)": '30', 'Longueur de  rang par livraison (m)': '46,2962962962963', 'Nombre de distributions': '15', 'Espèce': 'Betterave rouge', 'mottes ou semis': 'semis', 'Rendement / calculs': '4,11428571428572', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '173,611111111111', 'nb de planches standard': '5,78703703703704', 'Unité': 'kg', 'Total par pannier': '15', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,15', 'stockable': 'oui', 'prix/kg (\x80)': '2', 'Conso hebdo par distrib': '50', 'Température idéale (°C)': '', 'Nombre de pieds': '6944,44444444444', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '150', 'Rendement germination': '0,9', 'Longueur de  rang totale (m)': '694,444444444444', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': '', 'Conso hebdo par pannier': '1', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '10', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '7716,04938271605', 'Nombre de rangs retenus': '4', 'Poids total à distribuer (kg)': '750', 'Délai avant retour (an)': '4', 'Couleur': 'darkred', 'Famille': 'chénopodiacée', 'Nb pieds/m²': '40', 'surface (m²)': '182,291666666667', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '11,1111111111111', 'Rendement pousse et conservation': '0,8', 'Nb mottes': '0', 'Intra rang (cm)': '10', 'Période de distribution': 'janv / dec', 'Rendement théorique (kg/m²)': '2,5'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:50,911 MARAICH_INFO    ] updatedb       .handle: Ajout blette
+[2017-04-18 20:04:51,111 MARAICH_INFO    ] updatedb       .handle: Ajout carotte de garde
+[2017-04-18 20:04:51,256 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '2000', 'Nb mottes/m': '0', 'Total à distribuer': '1000', "montant sur l'année par panier (\x80)": '40', 'Longueur de  rang par livraison (m)': '43,2900432900433', 'Nombre de distributions': '20', 'Espèce': 'Carotte de garde', 'mottes ou semis': 'semis', 'Rendement / calculs': '4,4', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '216,450216450216', 'nb de planches standard': '7,21500721500721', 'Unité': 'kg', 'Total par pannier': '20', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,11', 'stockable': 'oui', 'prix/kg (\x80)': '2', 'Conso hebdo par distrib': '50', 'Température idéale (°C)': '', 'Nombre de pieds': '17316,0173160173', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '110', 'Rendement germination': '0,75', 'Longueur de  rang totale (m)': '865,800865800866', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': 'haricot, laitue, oignon, pois, poireau, radis, salade', 'Conso hebdo par pannier': '1', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '20', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '23088,0230880231', 'Nombre de rangs retenus': '4', 'Poids total à distribuer (kg)': '1000', 'Délai avant retour (an)': '4', 'Couleur': 'orange', 'Famille': 'apiacée', 'Nb pieds/m²': '80', 'surface (m²)': '227,272727272727', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '26,6666666666667', 'Rendement pousse et conservation': '0,7', 'Nb mottes': '0', 'Intra rang (cm)': '5', 'Période de distribution': 'oct / avril', 'Rendement théorique (kg/m²)': '3'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:51,404 MARAICH_INFO    ] updatedb       .handle: Ajout carotte primeur
+[2017-04-18 20:04:51,406 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '900', 'Nb mottes/m': '0', 'Total à distribuer': '300', "montant sur l'année par panier (\x80)": '18', 'Longueur de  rang par livraison (m)': '52,9100529100529', 'Nombre de distributions': '6', 'Espèce': 'Carotte primeur', 'mottes ou semis': 'semis', 'Rendement / calculs': '3,6', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '79,3650793650794', 'nb de planches standard': '2,64550264550265', 'Unité': 'kg', 'Total par pannier': '6', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,07', 'stockable': 'non', 'prix/kg (\x80)': '3', 'Conso hebdo par distrib': '50', 'Température idéale (°C)': '', 'Nombre de pieds': '6349,20634920635', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '70', 'Rendement germination': '0,75', 'Longueur de  rang totale (m)': '317,460317460317', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': 'haricot, laitue, oignon, pois, poireau, radis, salade', 'Conso hebdo par pannier': '1', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '20', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '8465,60846560846', 'Nombre de rangs retenus': '4', 'Poids total à distribuer (kg)': '300', 'Délai avant retour (an)': '4', 'Couleur': 'orange', 'Famille': 'apiacée', 'Nb pieds/m²': '80', 'surface (m²)': '83,3333333333333', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '26,6666666666667', 'Rendement pousse et conservation': '0,9', 'Nb mottes': '0', 'Intra rang (cm)': '5', 'Période de distribution': 'avril / mai', 'Rendement théorique (kg/m²)': '3,5'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:51,558 MARAICH_INFO    ] updatedb       .handle: Ajout carotte saison
+[2017-04-18 20:04:51,559 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '400', 'Nb mottes/m': '0', 'Total à distribuer': '200', "montant sur l'année par panier (\x80)": '8', 'Longueur de  rang par livraison (m)': '46,2962962962963', 'Nombre de distributions': '4', 'Espèce': 'Carotte saison', 'mottes ou semis': 'semis', 'Rendement / calculs': '4,11428571428572', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '46,2962962962963', 'nb de planches standard': '1,54320987654321', 'Unité': 'kg', 'Total par pannier': '4', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,09', 'stockable': 'non', 'prix/kg (\x80)': '2', 'Conso hebdo par distrib': '50', 'Température idéale (°C)': '', 'Nombre de pieds': '3703,7037037037', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '90', 'Rendement germination': '0,75', 'Longueur de  rang totale (m)': '185,185185185185', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': 'haricot, laitue, oignon, pois, poireau, radis, salade', 'Conso hebdo par pannier': '1', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '20', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '4938,27160493827', 'Nombre de rangs retenus': '4', 'Poids total à distribuer (kg)': '200', 'Délai avant retour (an)': '4', 'Couleur': 'orange', 'Famille': 'apiacée', 'Nb pieds/m²': '80', 'surface (m²)': '48,6111111111111', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '26,6666666666667', 'Rendement pousse et conservation': '0,8', 'Nb mottes': '0', 'Intra rang (cm)': '5', 'Période de distribution': 'juin / sept', 'Rendement théorique (kg/m²)': '3'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:51,729 MARAICH_INFO    ] updatedb       .handle: Ajout céleri branche
+[2017-04-18 20:04:51,841 MARAICH_INFO    ] updatedb       .handle: Ajout céleri rave
+[2017-04-18 20:04:51,953 MARAICH_INFO    ] updatedb       .handle: Ajout chou blanc
+[2017-04-18 20:04:52,222 MARAICH_INFO    ] updatedb       .handle: Ajout chou brocoli
+[2017-04-18 20:04:52,365 MARAICH_INFO    ] updatedb       .handle: Ajout chou chinois
+[2017-04-18 20:04:52,499 MARAICH_INFO    ] updatedb       .handle: Ajout chou de milan
+[2017-04-18 20:04:52,635 MARAICH_INFO    ] updatedb       .handle: Ajout chou fleur
+[2017-04-18 20:04:52,780 MARAICH_INFO    ] updatedb       .handle: Ajout chou rave
+[2017-04-18 20:04:52,925 MARAICH_INFO    ] updatedb       .handle: Ajout chou rouge
+[2017-04-18 20:04:53,059 MARAICH_INFO    ] updatedb       .handle: Ajout chou rutabaga
+[2017-04-18 20:04:53,184 MARAICH_INFO    ] updatedb       .handle: Ajout ciboulette
+[2017-04-18 20:04:53,340 MARAICH_INFO    ] updatedb       .handle: Ajout concombre
+[2017-04-18 20:04:53,708 MARAICH_INFO    ] updatedb       .handle: Ajout courge
+[2017-04-18 20:04:53,844 MARAICH_INFO    ] updatedb       .handle: Ajout courgette
+[2017-04-18 20:04:53,990 MARAICH_INFO    ] updatedb       .handle: Ajout echalote
+[2017-04-18 20:04:53,992 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '202,5', 'Nb mottes/m': '0', 'Total à distribuer': '75', "montant sur l'année par panier (\x80)": '4,05', 'Longueur de  rang par livraison (m)': '61,7283950617284', 'Nombre de distributions': '5', 'Espèce': 'Echalote', 'mottes ou semis': 'semis', 'Rendement / calculs': '1,38857142857143', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '51,440329218107', 'nb de planches standard': '1,71467764060357', 'Unité': 'kg', 'Total par pannier': '1,5', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,045', 'stockable': 'oui', 'prix/kg (\x80)': '2,7', 'Conso hebdo par distrib': '15', 'Température idéale (°C)': '', 'Nombre de pieds': '2057,61316872428', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '15', 'Rendement germination': '0,9', 'Longueur de  rang totale (m)': '308,641975308642', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': '', 'Conso hebdo par pannier': '0,3', 'Nombre de pièces par pied': '3', 'Nb pieds/m': '6,66666666666667', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '2286,23685413809', 'Nombre de rangs retenus': '6', 'Poids total à distribuer (kg)': '75', 'Délai avant retour (an)': '4', 'Couleur': 'darkgoldenrod', 'Famille': 'amaryllidacée', 'Nb pieds/m²': '40', 'surface (m²)': '54,0123456790123', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '7,40740740740741', 'Rendement pousse et conservation': '0,9', 'Nb mottes': '0', 'Intra rang (cm)': '15', 'Période de distribution': 'juil / avril', 'Rendement théorique (kg/m²)': '1,2'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:54,155 MARAICH_INFO    ] updatedb       .handle: Ajout epinard
+[2017-04-18 20:04:54,314 MARAICH_INFO    ] updatedb       .handle: Ajout fenouil
+[2017-04-18 20:04:54,469 MARAICH_INFO    ] updatedb       .handle: Ajout fèves
+[2017-04-18 20:04:54,602 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '1000', 'Nb mottes/m': '0', 'Total à distribuer': '200', "montant sur l'année par panier (\x80)": '20', 'Longueur de  rang par livraison (m)': '51,440329218107', 'Nombre de distributions': '4', 'Espèce': 'Fèves', 'mottes ou semis': 'semis', 'Rendement / calculs': '3,70285714285714', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '51,440329218107', 'nb de planches standard': '1,71467764060357', 'Unité': 'kg', 'Total par pannier': '4', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,3', 'stockable': 'non', 'prix/kg (\x80)': '5', 'Conso hebdo par distrib': '50', 'Température idéale (°C)': '', 'Nombre de pieds': '823,045267489712', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '10', 'Rendement germination': '0,9', 'Longueur de  rang totale (m)': '205,761316872428', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '2', 'avec': 'aneth', 'Conso hebdo par pannier': '1', 'Nombre de pièces par pied': '30', 'Nb pieds/m': '4', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '1828,98948331047', 'Nombre de rangs retenus': '4', 'Poids total à distribuer (kg)': '200', 'Délai avant retour (an)': '4', 'Couleur': 'gray', 'Famille': 'fabacée', 'Nb pieds/m²': '16', 'surface (m²)': '54,0123456790123', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '8,88888888888889', 'Rendement pousse et conservation': '0,9', 'Nb mottes': '0', 'Intra rang (cm)': '25', 'Période de distribution': 'mai / juin', 'Rendement théorique (kg/m²)': '2'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:54,727 MARAICH_INFO    ] updatedb       .handle: Ajout haricot
+[2017-04-18 20:04:54,729 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '1400', 'Nb mottes/m': '0', 'Total à distribuer': '200', "montant sur l'année par panier (\x80)": '28', 'Longueur de  rang par livraison (m)': '49,3827160493827', 'Nombre de distributions': '5', 'Espèce': 'Haricot', 'mottes ou semis': 'semis', 'Rendement / calculs': '3,08571428571429', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '61,7283950617284', 'nb de planches standard': '2,05761316872428', 'Unité': 'kg', 'Total par pannier': '4', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,25', 'stockable': 'non', 'prix/kg (\x80)': '7', 'Conso hebdo par distrib': '40', 'Température idéale (°C)': '', 'Nombre de pieds': '987,654320987654', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '5', 'Rendement germination': '0,9', 'Longueur de  rang totale (m)': '246,913580246914', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '5', 'avec': '', 'Conso hebdo par pannier': '0,8', 'Nombre de pièces par pied': '50', 'Nb pieds/m': '4', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '5486,96844993141', 'Nombre de rangs retenus': '4', 'Poids total à distribuer (kg)': '200', 'Délai avant retour (an)': '4', 'Couleur': 'forestgreen\xa0', 'Famille': 'fabacée', 'Nb pieds/m²': '16', 'surface (m²)': '64,8148148148148', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '22,2222222222222', 'Rendement pousse et conservation': '0,9', 'Nb mottes': '0', 'Intra rang (cm)': '25', 'Période de distribution': 'juin / sept', 'Rendement théorique (kg/m²)': '1'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:54,862 MARAICH_INFO    ] updatedb       .handle: Ajout laitue
+[2017-04-18 20:04:54,983 MARAICH_INFO    ] updatedb       .handle: Ajout mâche
+[2017-04-18 20:04:55,299 MARAICH_INFO    ] updatedb       .handle: Ajout melon
+[2017-04-18 20:04:55,301 MARAICH_ERROR   ] updatedb       .handle: 'Nombre de panniers' indéfini ou nul pour melon
+[2017-04-18 20:04:55,302 MARAICH_INFO    ] updatedb       .handle: Ajout navet
+[2017-04-18 20:04:55,304 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '1500', 'Nb mottes/m': '0', 'Total à distribuer': '500', "montant sur l'année par panier (\x80)": '30', 'Longueur de  rang par livraison (m)': '43,4027777777778', 'Nombre de distributions': '10', 'Espèce': 'Navet', 'mottes ou semis': 'semis', 'Rendement / calculs': '6,58285714285714', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '72,337962962963', 'nb de planches standard': '2,41126543209876', 'Unité': 'kg', 'Total par pannier': '10', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,08', 'stockable': 'oui', 'prix/kg (\x80)': '3', 'Conso hebdo par distrib': '50', 'Température idéale (°C)': '', 'Nombre de pieds': '8680,55555555556', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '80', 'Rendement germination': '0,8', 'Longueur de  rang totale (m)': '434,027777777778', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': '', 'Conso hebdo par pannier': '1', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '20', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '10850,6944444444', 'Nombre de rangs retenus': '6', 'Poids total à distribuer (kg)': '500', 'Délai avant retour (an)': '4', 'Couleur': 'fuchsia', 'Famille': 'brassicacée', 'Nb pieds/m²': '120', 'surface (m²)': '75,9548611111111', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '25', 'Rendement pousse et conservation': '0,9', 'Nb mottes': '0', 'Intra rang (cm)': '5', 'Période de distribution': 'print / hiver', 'Rendement théorique (kg/m²)': '2'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:55,444 MARAICH_INFO    ] updatedb       .handle: Ajout oignon de printemps
+[2017-04-18 20:04:55,444 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '525', 'Nb mottes/m': '0', 'Total à distribuer': '150', "montant sur l'année par panier (\x80)": '10,5', 'Longueur de  rang par livraison (m)': '154,320987654321', 'Nombre de distributions': '6', 'Espèce': 'Oignon de printemps', 'mottes ou semis': 'semis', 'Rendement / calculs': '0,925714285714286', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '154,320987654321', 'nb de planches standard': '5,1440329218107', 'Unité': 'kg', 'Total par pannier': '3', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,03', 'stockable': 'non', 'prix/kg (\x80)': '3,5', 'Conso hebdo par distrib': '25', 'Température idéale (°C)': '', 'Nombre de pieds': '6172,83950617284', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '30', 'Rendement germination': '0,9', 'Longueur de  rang totale (m)': '925,925925925925', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': 'blette', 'Conso hebdo par pannier': '0,5', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '6,66666666666667', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '6858,71056241427', 'Nombre de rangs retenus': '6', 'Poids total à distribuer (kg)': '150', 'Délai avant retour (an)': '4', 'Couleur': 'goldenrod', 'Famille': 'amaryllidacée', 'Nb pieds/m²': '40', 'surface (m²)': '162,037037037037', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '7,40740740740741', 'Rendement pousse et conservation': '0,9', 'Nb mottes': '0', 'Intra rang (cm)': '15', 'Période de distribution': 'mars / mai', 'Rendement théorique (kg/m²)': '2'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:55,613 MARAICH_INFO    ] updatedb       .handle: Ajout oignon de garde
+[2017-04-18 20:04:55,615 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '1400', 'Nb mottes/m': '0', 'Total à distribuer': '400', "montant sur l'année par panier (\x80)": '28', 'Longueur de  rang par livraison (m)': '37,037037037037', 'Nombre de distributions': '20', 'Espèce': 'Oignon de garde', 'mottes ou semis': 'semis', 'Rendement / calculs': '3,08571428571429', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '123,456790123457', 'nb de planches standard': '4,11522633744856', 'Unité': 'kg', 'Total par pannier': '8', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,1', 'stockable': 'oui', 'prix/kg (\x80)': '3,5', 'Conso hebdo par distrib': '20', 'Température idéale (°C)': '', 'Nombre de pieds': '4938,27160493827', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '100', 'Rendement germination': '0,9', 'Longueur de  rang totale (m)': '740,74074074074', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': '', 'Conso hebdo par pannier': '0,4', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '6,66666666666667', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '5486,96844993141', 'Nombre de rangs retenus': '6', 'Poids total à distribuer (kg)': '400', 'Délai avant retour (an)': '4', 'Couleur': 'goldenrod', 'Famille': 'amaryllidacée', 'Nb pieds/m²': '40', 'surface (m²)': '129,62962962963', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '7,40740740740741', 'Rendement pousse et conservation': '0,9', 'Nb mottes': '0', 'Intra rang (cm)': '15', 'Période de distribution': 'juil / avril semi de fev à avril)', 'Rendement théorique (kg/m²)': '2'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:55,790 MARAICH_INFO    ] updatedb       .handle: Ajout panais
+[2017-04-18 20:04:55,791 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '500', 'Nb mottes/m': '0', 'Total à distribuer': '250', "montant sur l'année par panier (\x80)": '10', 'Longueur de  rang par livraison (m)': '138,888888888889', 'Nombre de distributions': '5', 'Espèce': 'Panais', 'mottes ou semis': 'semis', 'Rendement / calculs': '1,71428571428572', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '138,888888888889', 'nb de planches standard': '4,62962962962963', 'Unité': 'kg', 'Total par pannier': '5', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,15', 'stockable': 'oui', 'prix/kg (\x80)': '2', 'Conso hebdo par distrib': '50', 'Température idéale (°C)': '', 'Nombre de pieds': '4629,62962962963', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '150', 'Rendement germination': '0,4', 'Longueur de  rang totale (m)': '694,444444444444', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': '', 'Conso hebdo par pannier': '1', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '6,66666666666667', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '11574,0740740741', 'Nombre de rangs retenus': '5', 'Poids total à distribuer (kg)': '250', 'Délai avant retour (an)': '4', 'Couleur': 'khaki', 'Famille': 'apiacée', 'Nb pieds/m²': '33,3333333333333', 'surface (m²)': '145,833333333333', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '16,6666666666667', 'Rendement pousse et conservation': '0,9', 'Nb mottes': '0', 'Intra rang (cm)': '15', 'Période de distribution': 'nov / mars', 'Rendement théorique (kg/m²)': '1,4'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:55,937 MARAICH_INFO    ] updatedb       .handle: Ajout persil
+[2017-04-18 20:04:56,094 MARAICH_INFO    ] updatedb       .handle: Ajout poireau
+[2017-04-18 20:04:56,096 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '2000', 'Nb mottes/m': '0', 'Total à distribuer': '800', "montant sur l'année par panier (\x80)": '40', 'Longueur de  rang par livraison (m)': '47,0588235294117', 'Nombre de distributions': '20', 'Espèce': 'Poireau', 'mottes ou semis': 'semis', 'Rendement / calculs': '2,42857142857143', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '313,725490196078', 'nb de planches standard': '10,4575163398693', 'Unité': 'kg', 'Total par pannier': '16', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,15', 'stockable': 'non', 'prix/kg (\x80)': '2,5', 'Conso hebdo par distrib': '40', 'Température idéale (°C)': '', 'Nombre de pieds': '6274,50980392157', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '150', 'Rendement germination': '1', 'Longueur de  rang totale (m)': '941,176470588235', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': '', 'Conso hebdo par pannier': '0,8', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '6,66666666666667', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '6274,50980392157', 'Nombre de rangs retenus': '3', 'Poids total à distribuer (kg)': '800', 'Délai avant retour (an)': '4', 'Couleur': 'DarkCyan', 'Famille': 'amaryllidacée', 'Nb pieds/m²': '20', 'surface (m²)': '329,411764705882', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '6,66666666666667', 'Rendement pousse et conservation': '0,85', 'Nb mottes': '0', 'Intra rang (cm)': '15', 'Période de distribution': 'oct / avril', 'Rendement théorique (kg/m²)': '3,5'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:56,260 MARAICH_INFO    ] updatedb       .handle: Ajout pois
+[2017-04-18 20:04:56,261 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '500', 'Nb mottes/m': '0', 'Total à distribuer': '100', "montant sur l'année par panier (\x80)": '10', 'Longueur de  rang par livraison (m)': '65,359477124183', 'Nombre de distributions': '4', 'Espèce': 'Pois', 'mottes ou semis': 'semis', 'Rendement / calculs': '1,09285714285714', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '87,1459694989106', 'nb de planches standard': '2,90486564996369', 'Unité': 'kg', 'Total par pannier': '2', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,2', 'stockable': 'non', 'prix/kg (\x80)': '5', 'Conso hebdo par distrib': '25', 'Température idéale (°C)': '', 'Nombre de pieds': '653,59477124183', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '200', 'Rendement germination': '0,9', 'Longueur de  rang totale (m)': '261,437908496732', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '3', 'avec': '', 'Conso hebdo par pannier': '0,5', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '2,5', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '2178,64923747277', 'Nombre de rangs retenus': '3', 'Poids total à distribuer (kg)': '100', 'Délai avant retour (an)': '4', 'Couleur': 'lightgreen', 'Famille': 'fabacée', 'Nb pieds/m²': '7,5', 'surface (m²)': '91,5032679738562', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '8,33333333333333', 'Rendement pousse et conservation': '0,85', 'Nb mottes': '0', 'Intra rang (cm)': '40', 'Période de distribution': 'print', 'Rendement théorique (kg/m²)': '0,7'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:56,383 MARAICH_INFO    ] updatedb       .handle: Ajout poivron
+[2017-04-18 20:04:56,529 MARAICH_INFO    ] updatedb       .handle: Ajout pomme de terre de garde
+[2017-04-18 20:04:56,531 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '5400', 'Nb mottes/m': '0', 'Total à distribuer': '2700', "montant sur l'année par panier (\x80)": '108', 'Longueur de  rang par livraison (m)': '101,586687306501', 'Nombre de distributions': '36', 'Espèce': 'Pomme de terre de garde', 'mottes ou semis': 'semis', 'Rendement / calculs': '1,40625850340136', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '1828,56037151703', 'nb de planches standard': '60,9520123839009', 'Unité': 'kg', 'Total par pannier': '54', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,32', 'stockable': 'oui', 'prix/kg (\x80)': '2', 'Conso hebdo par distrib': '75', 'Température idéale (°C)': '', 'Nombre de pieds': '10448,9164086687', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '80', 'Rendement germination': '0,95', 'Longueur de  rang totale (m)': '3657,12074303405', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': '', 'Conso hebdo par pannier': '1,5', 'Nombre de pièces par pied': '4', 'Nb pieds/m': '2,85714285714286', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '10998,859377546', 'Nombre de rangs retenus': '2', 'Poids total à distribuer (kg)': '2700', 'Délai avant retour (an)': '4', 'Couleur': 'gold', 'Famille': 'solanacée', 'Nb pieds/m²': '5,71428571428571', 'surface (m²)': '1919,98839009288', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '3,00751879699248', 'Rendement pousse et conservation': '0,85', 'Nb mottes': '0', 'Intra rang (cm)': '35', 'Période de distribution': 'août/ avril', 'Rendement théorique (kg/m²)': '1,8'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:56,675 MARAICH_INFO    ] updatedb       .handle: Ajout pomme de terre primeur
+[2017-04-18 20:04:56,677 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '500', 'Nb mottes/m': '0', 'Total à distribuer': '200', "montant sur l'année par panier (\x80)": '10', 'Longueur de  rang par livraison (m)': '108,932461873638', 'Nombre de distributions': '4', 'Espèce': 'Pomme de terre primeur', 'mottes ou semis': 'semis', 'Rendement / calculs': '1,74857142857143', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '108,932461873638', 'nb de planches standard': '3,63108206245461', 'Unité': 'kg', 'Total par pannier': '4', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,15', 'stockable': 'non', 'prix/kg (\x80)': '2,5', 'Conso hebdo par distrib': '50', 'Température idéale (°C)': '', 'Nombre de pieds': '1742,91938997821', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '50', 'Rendement germination': '0,9', 'Longueur de  rang totale (m)': '435,729847494553', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': '', 'Conso hebdo par pannier': '1', 'Nombre de pièces par pied': '3', 'Nb pieds/m': '4', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '1936,57709997579', 'Nombre de rangs retenus': '4', 'Poids total à distribuer (kg)': '200', 'Délai avant retour (an)': '4', 'Couleur': 'gold', 'Famille': 'solanacée', 'Nb pieds/m²': '16', 'surface (m²)': '114,37908496732', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '4,44444444444444', 'Rendement pousse et conservation': '0,85', 'Nb mottes': '0', 'Intra rang (cm)': '25', 'Période de distribution': ' juin / juil', 'Rendement théorique (kg/m²)': '1,8'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:56,842 MARAICH_INFO    ] updatedb       .handle: Ajout pourpier
+[2017-04-18 20:04:57,102 MARAICH_INFO    ] updatedb       .handle: Ajout radis noir
+[2017-04-18 20:04:57,104 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '900', 'Nb mottes/m': '0', 'Total à distribuer': '450', "montant sur l'année par panier (\x80)": '18', 'Longueur de  rang par livraison (m)': '78,125', 'Nombre de distributions': '15', 'Espèce': 'Radis noir', 'mottes ou semis': 'semis', 'Rendement / calculs': '2,19428571428572', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '195,3125', 'nb de planches standard': '6,51041666666666', 'Unité': 'kg', 'Total par pannier': '9', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,08', 'stockable': 'oui', 'prix/kg (\x80)': '2', 'Conso hebdo par distrib': '30', 'Température idéale (°C)': '', 'Nombre de pieds': '7812,5', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '80', 'Rendement germination': '0,9', 'Longueur de  rang totale (m)': '1171,875', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': '', 'Conso hebdo par pannier': '0,6', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '6,66666666666667', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '8680,55555555556', 'Nombre de rangs retenus': '6', 'Poids total à distribuer (kg)': '450', 'Délai avant retour (an)': '2', 'Couleur': 'black', 'Famille': 'brassicacée', 'Nb pieds/m²': '40', 'surface (m²)': '205,078125', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '7,40740740740741', 'Rendement pousse et conservation': '0,8', 'Nb mottes': '0', 'Intra rang (cm)': '15', 'Période de distribution': 'oct / avril', 'Rendement théorique (kg/m²)': '2'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:57,236 MARAICH_INFO    ] updatedb       .handle: Ajout radis rose
+[2017-04-18 20:04:57,238 MARAICH_WARNING ] updatedb       .getInt: finding Volume alvéole (cm³) {"montant sur l'année (\x80)": '750', 'Nb mottes/m': '0', 'Total à distribuer': '375', "montant sur l'année par panier (\x80)": '15', 'Longueur de  rang par livraison (m)': '92,5925925925927', 'Nombre de distributions': '15', 'Espèce': 'Radis rose', 'mottes ou semis': 'semis', 'Rendement / calculs': '2,57142857142857', 'Nombre de panniers': '50', 'Longueur de planche nécessaire (m)': '138,888888888889', 'nb de planches standard': '4,62962962962963', 'Unité': 'kg', 'Total par pannier': '7,5', 'Volume alvéole (cm³)': '', 'Production par pied (kg)': '0,01', 'stockable': 'non', 'prix/kg (\x80)': '2', 'Conso hebdo par distrib': '25', 'Température idéale (°C)': '', 'Nombre de pieds': '46296,2962962963', 'Surface théorique nécessaire selon rendement (m²)': '0', 'Total à  produire (kg)': '', 'Poids par pièce (g)': '10', 'Rendement germination': '0,9', 'Longueur de  rang totale (m)': '1388,88888888889', "nombre d'alvéoles par plaque": '', 'Nb graines par pied': '1', 'avec': '', 'Conso hebdo par pannier': '0,5', 'Nombre de pièces par pied': '1', 'Nb pieds/m': '33,3333333333333', 'Volume total alvéoles (cm3)': '0', 'Nombre de graines': '51440,329218107', 'Nombre de rangs retenus': '10', 'Poids total à distribuer (kg)': '375', 'Délai avant retour (an)': '2', 'Couleur': 'magenta', 'Famille': 'brassicacée', 'Nb pieds/m²': '333,333333333333', 'surface (m²)': '145,833333333333', 'Hygrométrie idéale (%)': '', 'Nb graines semis direct/m': '37,037037037037', 'Rendement pousse et conservation': '0,9', 'Nb mottes': '0', 'Intra rang (cm)': '3', 'Période de distribution': 'mars /oct', 'Rendement théorique (kg/m²)': '1,4'} invalid literal for int() with base 10: ''
+[2017-04-18 20:04:57,457 MARAICH_INFO    ] updatedb       .handle: Ajout roquette
+[2017-04-18 20:04:57,603 MARAICH_INFO    ] updatedb       .handle: Ajout tomate
+[2017-04-18 20:04:57,741 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose flavor bio
+[2017-04-18 20:04:58,008 MARAICH_INFO    ] updatedb       .handle: Ajout légume ail rose flavor bio
+[2017-04-18 20:04:59,689 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 1, 526 pieds (13 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:04:59,693 MARAICH_INFO    ] updatedb       .handle: Ajout variété blanc messidor
+[2017-04-18 20:04:59,965 MARAICH_INFO    ] updatedb       .handle: Ajout légume ail blanc messidor
+[2017-04-18 20:05:01,575 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 2, 526 pieds (13 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:01,576 MARAICH_INFO    ] updatedb       .handle: Ajout variété impérial black beauty
+[2017-04-18 20:05:01,876 MARAICH_INFO    ] updatedb       .handle: Ajout légume aubergine impérial black beauty
+[2017-04-18 20:05:03,861 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 3, 87 pieds (26 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:05:03,864 MARAICH_INFO    ] updatedb       .handle: Ajout variété ronde de valence
+[2017-04-18 20:05:04,139 MARAICH_INFO    ] updatedb       .handle: Ajout légume aubergine ronde de valence
+[2017-04-18 20:05:05,909 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 4, 87 pieds (26 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:05:05,914 MARAICH_INFO    ] updatedb       .handle: Ajout variété alvro-mono
+[2017-04-18 20:05:06,177 MARAICH_INFO    ] updatedb       .handle: Ajout légume betterave rouge alvro-mono
+[2017-04-18 20:05:07,870 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 5, 2314 pieds (57 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:07,875 MARAICH_INFO    ] updatedb       .handle: Ajout variété crapaudine
+[2017-04-18 20:05:08,159 MARAICH_INFO    ] updatedb       .handle: Ajout légume betterave rouge crapaudine
+[2017-04-18 20:05:09,827 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 6, 2314 pieds (57 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:09,832 MARAICH_INFO    ] updatedb       .handle: Ajout variété rouge cylindra
+[2017-04-18 20:05:10,160 MARAICH_INFO    ] updatedb       .handle: Ajout légume betterave rouge rouge cylindra
+[2017-04-18 20:05:11,725 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 7, 2314 pieds (57 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:11,726 MARAICH_INFO    ] updatedb       .handle: Ajout variété verte à carde blanche 2
+[2017-04-18 20:05:11,993 MARAICH_INFO    ] updatedb       .handle: Ajout légume blette verte à carde blanche 2
+[2017-04-18 20:05:13,733 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 8, 166 pieds (22 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:05:13,737 MARAICH_INFO    ] updatedb       .handle: Ajout variété verte à carde rouge
+[2017-04-18 20:05:14,033 MARAICH_INFO    ] updatedb       .handle: Ajout légume blette verte à carde rouge
+[2017-04-18 20:05:15,692 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 9, 166 pieds (22 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:17,838 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 10, 166 pieds (22 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:17,841 MARAICH_INFO    ] updatedb       .handle: Ajout variété verte à carde blanche 3
+[2017-04-18 20:05:18,105 MARAICH_INFO    ] updatedb       .handle: Ajout légume blette verte à carde blanche 3
+[2017-04-18 20:05:19,842 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 11, 166 pieds (22 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:05:19,846 MARAICH_INFO    ] updatedb       .handle: Ajout variété rodelika
+[2017-04-18 20:05:20,074 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte de garde rodelika
+[2017-04-18 20:05:21,510 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 12, 5772 pieds (72 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:21,514 MARAICH_INFO    ] updatedb       .handle: Ajout variété gniff
+[2017-04-18 20:05:21,809 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte de garde gniff
+[2017-04-18 20:05:23,334 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 13, 5772 pieds (72 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:23,335 MARAICH_INFO    ] updatedb       .handle: Ajout variété nantaise 2
+[2017-04-18 20:05:23,577 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte de garde nantaise 2
+[2017-04-18 20:05:24,913 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 14, 5772 pieds (72 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:24,917 MARAICH_INFO    ] updatedb       .handle: Ajout variété de carentan
+[2017-04-18 20:05:25,234 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte primeur de carentan
+[2017-04-18 20:05:26,583 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 15, 3174 pieds (39 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:05:26,586 MARAICH_INFO    ] updatedb       .handle: Ajout variété oxhella
+[2017-04-18 20:05:26,860 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte primeur oxhella
+[2017-04-18 20:05:28,218 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 16, 3174 pieds (39 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:05:28,222 MARAICH_INFO    ] updatedb       .handle: Ajout variété jaune du doubs
+[2017-04-18 20:05:28,452 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte saison jaune du doubs
+[2017-04-18 20:05:29,875 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 17, 1234 pieds (15 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:29,880 MARAICH_INFO    ] updatedb       .handle: Ajout variété de la halle
+[2017-04-18 20:05:30,128 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte saison de la halle
+[2017-04-18 20:05:31,562 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 18, 1234 pieds (15 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:31,563 MARAICH_INFO    ] updatedb       .handle: Ajout variété colmar à coeur rouge
+[2017-04-18 20:05:31,777 MARAICH_INFO    ] updatedb       .handle: Ajout légume carotte saison colmar à coeur rouge
+[2017-04-18 20:05:33,135 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 19, 1234 pieds (15 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:33,138 MARAICH_INFO    ] updatedb       .handle: Ajout variété à côtes violettes
+[2017-04-18 20:05:33,345 MARAICH_INFO    ] updatedb       .handle: Ajout légume céleri branche à côtes violettes
+[2017-04-18 20:05:34,994 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 20, 111 pieds (14 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:34,997 MARAICH_INFO    ] updatedb       .handle: Ajout variété monarch
+[2017-04-18 20:05:35,248 MARAICH_INFO    ] updatedb       .handle: Ajout légume céleri rave monarch
+[2017-04-18 20:05:37,008 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 21, 222 pieds (29 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:37,011 MARAICH_INFO    ] updatedb       .handle: Ajout variété holsteiner platter
+[2017-04-18 20:05:37,241 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou blanc holsteiner platter
+[2017-04-18 20:05:38,808 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 22, 55 pieds (16 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:05:40,547 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 23, 55 pieds (16 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:40,551 MARAICH_INFO    ] updatedb       .handle: Ajout variété nagels frühweiss
+[2017-04-18 20:05:40,813 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou blanc nagels frühweiss
+[2017-04-18 20:05:42,484 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 24, 55 pieds (16 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:42,486 MARAICH_INFO    ] updatedb       .handle: Ajout variété calinaro
+[2017-04-18 20:05:42,828 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou brocoli calinaro
+[2017-04-18 20:05:44,532 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 25, 31 pieds (9 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:44,537 MARAICH_INFO    ] updatedb       .handle: Ajout variété atsuko
+[2017-04-18 20:05:44,754 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou chinois atsuko
+[2017-04-18 20:05:46,694 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 26, 70 pieds (9 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:46,698 MARAICH_INFO    ] updatedb       .handle: Ajout variété gros des vertus
+[2017-04-18 20:05:47,027 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou de milan gros des vertus
+[2017-04-18 20:05:48,932 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 27, 41 pieds (12 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:48,936 MARAICH_INFO    ] updatedb       .handle: Ajout variété paresa f1
+[2017-04-18 20:05:49,209 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou de milan paresa f1
+[2017-04-18 20:05:50,921 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 28, 41 pieds (12 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:50,922 MARAICH_INFO    ] updatedb       .handle: Ajout variété whiterock
+[2017-04-18 20:05:51,246 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou fleur whiterock
+[2017-04-18 20:05:53,306 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 29, 111 pieds (33 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:53,310 MARAICH_INFO    ] updatedb       .handle: Ajout variété boule de neige
+[2017-04-18 20:05:53,583 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou fleur boule de neige
+[2017-04-18 20:05:55,276 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 30, 111 pieds (33 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:55,278 MARAICH_INFO    ] updatedb       .handle: Ajout variété lanro
+[2017-04-18 20:05:55,554 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou rave lanro
+[2017-04-18 20:05:57,347 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 31, 166 pieds (22 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:57,351 MARAICH_INFO    ] updatedb       .handle: Ajout variété cabu rouge
+[2017-04-18 20:05:57,667 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou rouge cabu rouge
+[2017-04-18 20:05:59,396 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 32, 166 pieds (49 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:05:59,400 MARAICH_INFO    ] updatedb       .handle: Ajout variété wilhelmsburger
+[2017-04-18 20:05:59,737 MARAICH_INFO    ] updatedb       .handle: Ajout légume chou rutabaga wilhelmsburger
+[2017-04-18 20:06:01,499 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 33, 83 pieds (11 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:03,221 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 34, 83 pieds (11 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:03,225 MARAICH_INFO    ] updatedb       .handle: Ajout variété commune
+[2017-04-18 20:06:03,478 MARAICH_INFO    ] updatedb       .handle: Ajout légume ciboulette commune
+[2017-04-18 20:06:05,505 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 35, 592 pieds (14 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:05,509 MARAICH_INFO    ] updatedb       .handle: Ajout variété rollison's telepraph
+[2017-04-18 20:06:05,804 MARAICH_INFO    ] updatedb       .handle: Ajout légume concombre rollison's telepraph
+[2017-04-18 20:06:07,798 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 36, 109 pieds (32 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:06:07,802 MARAICH_INFO    ] updatedb       .handle: Ajout variété le généreux
+[2017-04-18 20:06:08,030 MARAICH_INFO    ] updatedb       .handle: Ajout légume concombre le généreux
+[2017-04-18 20:06:09,779 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 37, 109 pieds (32 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:06:09,782 MARAICH_INFO    ] updatedb       .handle: Ajout variété olive
+[2017-04-18 20:06:10,058 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge olive
+[2017-04-18 20:06:11,784 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 38, 69 pieds (69 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:11,788 MARAICH_INFO    ] updatedb       .handle: Ajout variété butternut
+[2017-04-18 20:06:12,061 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge butternut
+[2017-04-18 20:06:13,866 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 39, 69 pieds (69 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:13,867 MARAICH_INFO    ] updatedb       .handle: Ajout variété pomme d'or
+[2017-04-18 20:06:14,109 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge pomme d'or
+[2017-04-18 20:06:15,745 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 40, 69 pieds (69 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:15,746 MARAICH_INFO    ] updatedb       .handle: Ajout variété muscade
+[2017-04-18 20:06:16,025 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge muscade
+[2017-04-18 20:06:17,918 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 41, 69 pieds (69 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:17,922 MARAICH_INFO    ] updatedb       .handle: Ajout variété patidou
+[2017-04-18 20:06:18,184 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge patidou
+[2017-04-18 20:06:19,988 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 42, 69 pieds (69 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:19,991 MARAICH_INFO    ] updatedb       .handle: Ajout variété longue de nice
+[2017-04-18 20:06:20,245 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge longue de nice
+[2017-04-18 20:06:21,870 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 43, 69 pieds (69 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:21,871 MARAICH_INFO    ] updatedb       .handle: Ajout variété potimaron red kuri
+[2017-04-18 20:06:22,113 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge potimaron red kuri
+[2017-04-18 20:06:24,029 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 44, 69 pieds (69 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:24,031 MARAICH_INFO    ] updatedb       .handle: Ajout variété kabocha
+[2017-04-18 20:06:24,297 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge kabocha
+[2017-04-18 20:06:25,953 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 45, 69 pieds (69 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:25,955 MARAICH_INFO    ] updatedb       .handle: Ajout variété sucrine du berry
+[2017-04-18 20:06:26,189 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge sucrine du berry
+[2017-04-18 20:06:27,860 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 46, 69 pieds (69 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:27,865 MARAICH_INFO    ] updatedb       .handle: Ajout variété pleine de napple
+[2017-04-18 20:06:28,126 MARAICH_INFO    ] updatedb       .handle: Ajout légume courge pleine de napple
+[2017-04-18 20:06:29,930 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 47, 69 pieds (69 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:29,931 MARAICH_INFO    ] updatedb       .handle: Ajout variété partenon f1
+[2017-04-18 20:06:30,263 MARAICH_INFO    ] updatedb       .handle: Ajout légume courgette partenon f1
+[2017-04-18 20:06:32,078 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 48, 15 pieds (15 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:06:32,082 MARAICH_INFO    ] updatedb       .handle: Ajout variété gold rush
+[2017-04-18 20:06:32,300 MARAICH_INFO    ] updatedb       .handle: Ajout légume courgette gold rush
+[2017-04-18 20:06:33,915 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 49, 37 pieds (37 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:33,919 MARAICH_INFO    ] updatedb       .handle: Ajout variété black beauty
+[2017-04-18 20:06:34,216 MARAICH_INFO    ] updatedb       .handle: Ajout légume courgette black beauty
+[2017-04-18 20:06:35,883 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 50, 37 pieds (37 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:35,885 MARAICH_INFO    ] updatedb       .handle: Ajout variété cuisse de poulet longor
+[2017-04-18 20:06:36,151 MARAICH_INFO    ] updatedb       .handle: Ajout légume echalote cuisse de poulet longor
+[2017-04-18 20:06:37,484 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 51, 1028 pieds (25 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:37,485 MARAICH_INFO    ] updatedb       .handle: Ajout variété ronde red sun
+[2017-04-18 20:06:37,732 MARAICH_INFO    ] updatedb       .handle: Ajout légume echalote ronde red sun
+[2017-04-18 20:06:39,068 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 52, 1028 pieds (25 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:39,072 MARAICH_INFO    ] updatedb       .handle: Ajout variété monstrueux de viroflay
+[2017-04-18 20:06:39,323 MARAICH_INFO    ] updatedb       .handle: Ajout légume epinard monstrueux de viroflay
+[2017-04-18 20:06:41,056 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 53, 462 pieds (28 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:06:42,774 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 54, 462 pieds (28 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:06:42,776 MARAICH_INFO    ] updatedb       .handle: Ajout variété viking
+[2017-04-18 20:06:43,073 MARAICH_INFO    ] updatedb       .handle: Ajout légume epinard viking
+[2017-04-18 20:06:44,754 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 55, 462 pieds (28 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:06:44,755 MARAICH_INFO    ] updatedb       .handle: Ajout variété doux précoce d'été
+[2017-04-18 20:06:45,010 MARAICH_INFO    ] updatedb       .handle: Ajout légume fenouil doux précoce d'été
+[2017-04-18 20:06:46,725 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 56, 185 pieds (11 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:06:48,426 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 57, 185 pieds (11 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:50,251 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 58, 185 pieds (11 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:50,255 MARAICH_INFO    ] updatedb       .handle: Ajout variété express eleonora
+[2017-04-18 20:06:50,549 MARAICH_INFO    ] updatedb       .handle: Ajout légume fèves express eleonora
+[2017-04-18 20:06:51,986 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 59, 411 pieds (25 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:06:51,990 MARAICH_INFO    ] updatedb       .handle: Ajout variété super d'aguadulce
+[2017-04-18 20:06:52,229 MARAICH_INFO    ] updatedb       .handle: Ajout légume fèves super d'aguadulce
+[2017-04-18 20:06:53,777 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 60, 411 pieds (25 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:53,779 MARAICH_INFO    ] updatedb       .handle: Ajout variété rames cobra
+[2017-04-18 20:06:54,010 MARAICH_INFO    ] updatedb       .handle: Ajout légume haricot rames cobra
+[2017-04-18 20:06:55,480 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 61, 493 pieds (30 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:06:55,482 MARAICH_INFO    ] updatedb       .handle: Ajout variété nain beurre fructidor
+[2017-04-18 20:06:55,701 MARAICH_INFO    ] updatedb       .handle: Ajout légume haricot nain beurre fructidor
+[2017-04-18 20:06:57,237 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 62, 493 pieds (30 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:06:57,241 MARAICH_INFO    ] updatedb       .handle: Ajout variété feuille de chêne rouge
+[2017-04-18 20:06:57,459 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue feuille de chêne rouge
+[2017-04-18 20:06:59,385 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 63, 104 pieds (6 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:06:59,387 MARAICH_INFO    ] updatedb       .handle: Ajout variété dorée de printemps
+[2017-04-18 20:06:59,651 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue dorée de printemps
+[2017-04-18 20:07:01,465 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 64, 104 pieds (6 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:01,466 MARAICH_INFO    ] updatedb       .handle: Ajout variété pommée apia
+[2017-04-18 20:07:01,779 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue pommée apia
+[2017-04-18 20:07:03,450 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 65, 104 pieds (6 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:03,451 MARAICH_INFO    ] updatedb       .handle: Ajout variété batavia blonde de paris
+[2017-04-18 20:07:03,705 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue batavia blonde de paris
+[2017-04-18 20:07:05,395 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 66, 104 pieds (6 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:07,044 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 67, 104 pieds (6 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:07,048 MARAICH_INFO    ] updatedb       .handle: Ajout variété batavia gloire du dauphiné
+[2017-04-18 20:07:07,344 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue batavia gloire du dauphiné
+[2017-04-18 20:07:09,057 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 68, 104 pieds (6 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:10,926 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 69, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:12,850 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 70, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:12,854 MARAICH_INFO    ] updatedb       .handle: Ajout variété reine de juillet
+[2017-04-18 20:07:13,149 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue reine de juillet
+[2017-04-18 20:07:14,922 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 71, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:16,935 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 72, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:18,745 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 73, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:18,749 MARAICH_INFO    ] updatedb       .handle: Ajout variété grosse blonde paresseuse
+[2017-04-18 20:07:18,969 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue grosse blonde paresseuse
+[2017-04-18 20:07:20,784 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 74, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:22,464 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 75, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:24,299 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 76, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:25,989 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 77, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:25,993 MARAICH_INFO    ] updatedb       .handle: Ajout variété sucrine
+[2017-04-18 20:07:26,235 MARAICH_INFO    ] updatedb       .handle: Ajout légume laitue sucrine
+[2017-04-18 20:07:28,072 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 78, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:29,985 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 79, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:31,694 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 80, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:33,544 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 81, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:35,179 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 82, 104 pieds (6 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:35,183 MARAICH_INFO    ] updatedb       .handle: Ajout variété vit
+[2017-04-18 20:07:35,423 MARAICH_INFO    ] updatedb       .handle: Ajout légume mâche vit
+[2017-04-18 20:07:37,072 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 83, 274 pieds (6 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:37,075 MARAICH_INFO    ] updatedb       .handle: Ajout variété verte de cambrai
+[2017-04-18 20:07:37,282 MARAICH_INFO    ] updatedb       .handle: Ajout légume mâche verte de cambrai
+[2017-04-18 20:07:39,009 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 84, 274 pieds (6 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:40,721 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 85, 274 pieds (6 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:42,534 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 86, 274 pieds (6 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:42,536 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose de milan
+[2017-04-18 20:07:42,799 MARAICH_INFO    ] updatedb       .handle: Ajout légume navet rose de milan
+[2017-04-18 20:07:44,279 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 87, 2170 pieds (18 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:45,803 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 88, 2170 pieds (18 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:47,312 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 89, 2170 pieds (18 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:47,317 MARAICH_INFO    ] updatedb       .handle: Ajout variété boule d'or
+[2017-04-18 20:07:47,625 MARAICH_INFO    ] updatedb       .handle: Ajout légume navet boule d'or
+[2017-04-18 20:07:49,234 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 90, 2170 pieds (18 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:49,236 MARAICH_INFO    ] updatedb       .handle: Ajout variété paille des vertus
+[2017-04-18 20:07:49,538 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de garde paille des vertus
+[2017-04-18 20:07:51,158 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 91, 2893 pieds (24 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:51,159 MARAICH_INFO    ] updatedb       .handle: Ajout variété doux de tarrassac
+[2017-04-18 20:07:51,461 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de garde doux de tarrassac
+[2017-04-18 20:07:53,009 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 92, 2893 pieds (24 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:53,011 MARAICH_INFO    ] updatedb       .handle: Ajout variété de mazé
+[2017-04-18 20:07:53,308 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de garde de mazé
+[2017-04-18 20:07:54,944 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 93, 2893 pieds (24 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:54,948 MARAICH_INFO    ] updatedb       .handle: Ajout variété blanc hatif de paris
+[2017-04-18 20:07:55,266 MARAICH_INFO    ] updatedb       .handle: Ajout légume oignon de printemps blanc hatif de paris
+[2017-04-18 20:07:57,032 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 94, 3086 pieds (77 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:07:58,914 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 95, 3086 pieds (77 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:07:58,915 MARAICH_INFO    ] updatedb       .handle: Ajout variété aromata
+[2017-04-18 20:07:59,192 MARAICH_INFO    ] updatedb       .handle: Ajout légume panais aromata
+[2017-04-18 20:08:00,724 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 96, 4629 pieds (138 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:00,725 MARAICH_INFO    ] updatedb       .handle: Ajout variété commun2
+[2017-04-18 20:08:00,961 MARAICH_INFO    ] updatedb       .handle: Ajout légume persil commun2
+[2017-04-18 20:08:02,754 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 97, 833 pieds (20 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:02,755 MARAICH_INFO    ] updatedb       .handle: Ajout variété atlanta
+[2017-04-18 20:08:03,021 MARAICH_INFO    ] updatedb       .handle: Ajout légume poireau atlanta
+[2017-04-18 20:08:04,523 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 98, 6274 pieds (313 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:04,527 MARAICH_INFO    ] updatedb       .handle: Ajout variété mangetout héraut
+[2017-04-18 20:08:04,820 MARAICH_INFO    ] updatedb       .handle: Ajout légume pois mangetout héraut
+[2017-04-18 20:08:06,291 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 99, 326 pieds (43 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:07,675 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 100, 326 pieds (43 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:07,676 MARAICH_INFO    ] updatedb       .handle: Ajout variété corno di toro rouge
+[2017-04-18 20:08:08,109 MARAICH_INFO    ] updatedb       .handle: Ajout légume poivron corno di toro rouge
+[2017-04-18 20:08:09,926 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 101, 164 pieds (49 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:09,930 MARAICH_INFO    ] updatedb       .handle: Ajout variété yolo wonder
+[2017-04-18 20:08:10,248 MARAICH_INFO    ] updatedb       .handle: Ajout légume poivron yolo wonder
+[2017-04-18 20:08:12,070 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 102, 164 pieds (49 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:12,071 MARAICH_INFO    ] updatedb       .handle: Ajout variété alliance
+[2017-04-18 20:08:12,372 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre de garde alliance
+[2017-04-18 20:08:13,858 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 103, 5224 pieds (914 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:13,860 MARAICH_INFO    ] updatedb       .handle: Ajout variété nicola
+[2017-04-18 20:08:14,106 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre de garde nicola
+[2017-04-18 20:08:15,782 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 104, 5224 pieds (914 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:15,783 MARAICH_INFO    ] updatedb       .handle: Ajout variété charlotte
+[2017-04-18 20:08:16,028 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre primeur charlotte
+[2017-04-18 20:08:17,507 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 105, 871 pieds (54 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:17,512 MARAICH_INFO    ] updatedb       .handle: Ajout variété désirée
+[2017-04-18 20:08:17,764 MARAICH_INFO    ] updatedb       .handle: Ajout légume pomme de terre primeur désirée
+[2017-04-18 20:08:19,286 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 106, 871 pieds (54 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:19,290 MARAICH_INFO    ] updatedb       .handle: Ajout variété claytone de cuba
+[2017-04-18 20:08:19,543 MARAICH_INFO    ] updatedb       .handle: Ajout légume pourpier claytone de cuba
+[2017-04-18 20:08:20,987 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 107, 347 pieds (8 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:20,992 MARAICH_INFO    ] updatedb       .handle: Ajout variété noir rond
+[2017-04-18 20:08:21,252 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis noir noir rond
+[2017-04-18 20:08:22,673 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 108, 2604 pieds (65 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:24,121 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 109, 2604 pieds (65 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:25,665 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 110, 2604 pieds (65 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:25,669 MARAICH_INFO    ] updatedb       .handle: Ajout variété flamboyant 3
+[2017-04-18 20:08:25,920 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose flamboyant 3
+[2017-04-18 20:08:27,466 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 111, 5787 pieds (17 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:27,469 MARAICH_INFO    ] updatedb       .handle: Ajout variété pernot clair
+[2017-04-18 20:08:27,799 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose pernot clair
+[2017-04-18 20:08:29,456 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 112, 5787 pieds (17 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:31,053 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 113, 5787 pieds (17 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:31,057 MARAICH_INFO    ] updatedb       .handle: Ajout variété rond écarlate sora
+[2017-04-18 20:08:31,410 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose rond écarlate sora
+[2017-04-18 20:08:33,055 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 114, 5787 pieds (17 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:34,531 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 115, 5787 pieds (17 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:34,536 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose de pâques
+[2017-04-18 20:08:34,787 MARAICH_INFO    ] updatedb       .handle: Ajout légume radis rose rose de pâques
+[2017-04-18 20:08:36,366 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 116, 5787 pieds (17 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:37,775 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 117, 5787 pieds (17 m2) sur planche Virtuelle plein champ (8982)
+[2017-04-18 20:08:39,726 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 118, 5787 pieds (17 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:39,727 MARAICH_INFO    ] updatedb       .handle: Ajout variété cultivée
+[2017-04-18 20:08:40,298 MARAICH_INFO    ] updatedb       .handle: Ajout légume roquette cultivée
+[2017-04-18 20:08:44,134 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 119, 416 pieds (10 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:48,694 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 120, 416 pieds (10 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:48,698 MARAICH_INFO    ] updatedb       .handle: Ajout variété glacier
+[2017-04-18 20:08:49,383 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate glacier
+[2017-04-18 20:08:53,653 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 121, 156 pieds (46 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:53,658 MARAICH_INFO    ] updatedb       .handle: Ajout variété merveille des marchés
+[2017-04-18 20:08:54,029 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate merveille des marchés
+[2017-04-18 20:08:56,990 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 122, 156 pieds (46 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:08:56,994 MARAICH_INFO    ] updatedb       .handle: Ajout variété rose de berne
+[2017-04-18 20:08:57,520 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate rose de berne
+[2017-04-18 20:09:00,515 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 123, 156 pieds (46 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:09:00,519 MARAICH_INFO    ] updatedb       .handle: Ajout variété cur de boeuf anna russian
+[2017-04-18 20:09:00,882 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate cur de boeuf anna russian
+[2017-04-18 20:09:03,826 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 124, 156 pieds (46 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:09:03,828 MARAICH_INFO    ] updatedb       .handle: Ajout variété des andes
+[2017-04-18 20:09:04,294 MARAICH_INFO    ] updatedb       .handle: Ajout légume tomate des andes
+[2017-04-18 20:09:08,882 MARAICH_INFO    ] updatedb       .handle: Ajout Implantation 125, 156 pieds (46 m2) sur planche Virtuelle sous abris (8983)
+[2017-04-18 20:09:08,882 MARAICH_INFO    ] updatedb       .handle: Fin de comande updatedb : mise à jour de la base à partir des tableaux CSV
+ nombre d'erreurs = 4
+'Nombre de panniers' indéfini ou nul pour artichaut
+'Nombre de panniers' indéfini ou nul pour melon
+Erreur; espèce artichaut non trouvée. abandon
+Erreur; espèce melon non trouvée. abandon
+[2017-04-18 20:09:48,048 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 20:09:48,048 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['12']}>
+[2017-04-18 20:09:48,057 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 12, "fields": {"planche": 8982, "nbPieds": 5772}}]}
+[2017-04-18 20:09:48,074 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 20:09:48,074 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 20:09:48,078 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 15184, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T20:05:20.322", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15185, "fields": {"type": 3, "eRef": 15184, "delta_j": 150, "date": "2017-10-12T00:00:00", "date_creation": "2017-04-18T20:05:20.563", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15186, "fields": {"type": 2, "eRef": 15185, "delta_j": 46, "date": "2017-11-27T00:00:00", "date_creation": "2017-04-18T20:05:20.833", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 20:10:03,176 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 20:10:03,176 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_legume': ['11'], 'nb_rangs': ['4'], 'cde': ['sauve_serie'], 'b_serre': ['false'], 'etalement_recolte_j': ['46'], 'nb_pieds': ['5772'], 'duree_avant_recolte_j': ['111'], 'date_debut': ['15/05/2017'], 'id_serie': ['12'], 'intra_rang_cm': ['5']}>
+[2017-04-18 20:10:04,386 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s12), carotte de garde rodelika, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 19/10/2017. Qté estimée : 333 Kg
+[2017-04-18 20:10:10,255 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 20:10:10,255 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['12']}>
+[2017-04-18 20:10:10,259 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 12, "fields": {"planche": 8982, "nbPieds": 5772}}]}
+[2017-04-18 20:10:10,280 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 20:10:10,281 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 20:10:10,287 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 15184, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T20:05:20.322", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15185, "fields": {"type": 3, "eRef": 15184, "delta_j": 111, "date": "2017-09-03T00:00:00", "date_creation": "2017-04-18T20:05:20.563", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15186, "fields": {"type": 2, "eRef": 15185, "delta_j": 46, "date": "2017-10-19T00:00:00", "date_creation": "2017-04-18T20:05:20.833", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 20:10:16,569 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 20:10:16,569 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_legume': ['11'], 'nb_rangs': ['4'], 'cde': ['sauve_serie'], 'b_serre': ['false'], 'etalement_recolte_j': ['46'], 'nb_pieds': ['5772'], 'duree_avant_recolte_j': ['11'], 'date_debut': ['15/05/2017'], 'id_serie': ['12'], 'intra_rang_cm': ['5']}>
+[2017-04-18 20:10:17,789 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s12), carotte de garde rodelika, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 11/07/2017. Qté estimée : 333 Kg
+[2017-04-18 20:10:27,098 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-18 20:10:27,099 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_impls_serie'], 'id': ['12']}>
+[2017-04-18 20:10:27,104 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 12, "fields": {"planche": 8982, "nbPieds": 5772}}]}
+[2017-04-18 20:10:27,125 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-18 20:10:27,125 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['get_evts_serie'], 'id': ['12']}>
+[2017-04-18 20:10:27,129 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 15184, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-15T00:00:00", "date_creation": "2017-04-18T20:05:20.322", "duree_j": 1, "nom": "d\u00e9but carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15185, "fields": {"type": 3, "eRef": 15184, "delta_j": 11, "date": "2017-05-26T00:00:00", "date_creation": "2017-04-18T20:05:20.563", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte carotte de garde rodelika", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15186, "fields": {"type": 2, "eRef": 15185, "delta_j": 46, "date": "2017-07-11T00:00:00", "date_creation": "2017-04-18T20:05:20.833", "duree_j": 1, "nom": "fin carotte de garde rodelika", "texte": "", "b_fini": false}}]}
+[2017-04-18 20:10:34,666 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........sauve_serie
+[2017-04-18 20:10:34,666 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_legume': ['11'], 'nb_rangs': ['4'], 'cde': ['sauve_serie'], 'b_serre': ['false'], 'etalement_recolte_j': ['46'], 'nb_pieds': ['5772'], 'duree_avant_recolte_j': ['111'], 'date_debut': ['15/05/2017'], 'id_serie': ['12'], 'intra_rang_cm': ['5']}>
+[2017-04-18 20:10:35,685 MARAICH_INFO    ] serveRequest   .serveRequest: Nouvelle série créée(s12), carotte de garde rodelika, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 19/10/2017. Qté estimée : 333 Kg

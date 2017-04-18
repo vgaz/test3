@@ -35,17 +35,17 @@ class Command(BaseCommand):
     
  
 #         # Create an instance of a POST request.
-        factory = RequestFactory()       
-        request = factory.post('/recolte/',      
-                                     data={"periode":"specifique",
-                                           "date_debut_vue":"8/05/2017",
-                                           "date_fin_vue":"29/5/2017", 
-                                           "bSerres":"on",
-                                           "s_filtre_espece":"car"
-
-                                         }
-                                     )
-        views.recolte(request)
+#         factory = RequestFactory()       
+#         request = factory.post('/recolte/',      
+#                                      data={"periode":"specifique",
+#                                            "date_debut_vue":"8/05/2017",
+#                                            "date_fin_vue":"29/5/2017", 
+#                                            "bSerres":"on",
+#                                            "s_filtre_espece":"car"
+# 
+#                                          }
+#                                      )
+#         views.recolte(request)
         
          
 #         return
@@ -76,6 +76,18 @@ class Command(BaseCommand):
 #         print(Evenement.objects.get(id=7654).__str__())
 
         self.factory = RequestFactory()
+        d0 = { 'b_serre': 'false', 
+                'cde': 'sauve_serie', 
+                'etalement_recolte_j': '9', 
+                'date_debut': '08/05/2017', 
+                'nb_pieds': '1234', 
+                'intra_rang_cm': '5', 
+                'nb_rangs': '4', 
+                'id_legume': '16', 
+                'duree_avant_recolte_j': '19', 
+                'id_serie': '17'}
+         
+         
          
         d1 = {'duree_avant_recolte_j': '100', 
               'etalement_recolte_j': '6', 
@@ -97,7 +109,7 @@ class Command(BaseCommand):
                 'id_serie':'8'                          
                 }
         # Create an instance of a POST request.   
-        request = self.factory.post('/serveRequest/', data=d1 )        
+        request = self.factory.post('/serveRequest/', data=d0 )        
          
  
 
