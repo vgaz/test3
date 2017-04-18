@@ -419,16 +419,19 @@ def utilisationPlanches(request):
 
 def suiviPlants(request):
     """affiche les périodes de semis"""
-    plaq24 = MyTools.MyEmptyObj()
-    plaq24.volume_cm3 = 230
-    plaq24.nbAlv = 24
-    plaq24.qte = 0
-    plaq77 = MyTools.MyEmptyObj()
-    plaq77.volume_cm3 = 55
-    plaq77.nbAlv = 77
-    plaq77.qte = 0
+
     
-    l_plaques = [plaq24, plaq77 ]
+    class ModelePlaque(object):
+        def __init__(self, t_nbAlvMax__volumeAlv_cm3):
+            self.nbAlvMax = t_nbAlvMax__volumeAlv_cm3[0]
+            self.volume_cm3 = t_nbAlvMax__volumeAlv_cm3[1]
+            self.nbAlv = 0
+        def qte(self):
+            qte = self.nbAlv/self.nbAlvMax
+            i_qte = int(qte)
+            if qte > i_qte: 
+                return i_qte+1
+            return i_qte
 
     try:
         s_info = ""
@@ -440,20 +443,23 @@ def suiviPlants(request):
             ## Pour chaque semaine étudiée, on calcule la surface
             qte = 0
             txt = "<hr/>"
-            for plaq in l_plaques: plaq.qte=0
+            plaq24 = ModelePlaque(constant.PLAQUE_24_230)
+            plaq77 = ModelePlaque(constant.PLAQUE_77_55)
+            l_plaques = [plaq24, plaq77]
             
             for serie in Serie.objects.enSerreAPlantsSurPeriode(sem.date_debut, sem.date_fin):
                 l_seriesIds.append(serie.id)
                 qte += serie.nbPieds()
-                txt += "P:%s<br/>T:%s <div class='serie' serie_id='%d' title=''>S%d</div><hr/>"%(MyTools.getDMYFromDate(serie.dateDebutPlants()),
+                txt += "P:%s<br/>T:%s <div class='serie' serie_id='%d' title=''>%s (S%d)</div><hr/>"%(MyTools.getDMYFromDate(serie.dateDebutPlants()),
                                              MyTools.getDMYFromDate(serie.evt_debut.date),
-                                             serie.id, serie.id)
+                                             serie.id, serie.legume.espece.nom, serie.id)
                 ## calcul qté alvéoles 
                 for plaq in l_plaques:
                     if plaq.volume_cm3 == serie.legume.espece.volume_motte_cm3:
-                        plaq.qte += serie.nbPieds()
+                        plaq.nbAlv += serie.nbPieds()
 
             sem.l_plaquesSem = l_plaques
+            sem.totalPlaques = sum([plaque.qte() for plaque in l_plaques])
             sem.qte = qte
             sem.txt = txt
             l_semaines.append(sem)

@@ -16,6 +16,8 @@ D_NOM_UNITE_PROD = { UNITE_PROD_KG:"Kg", UNITE_PROD_PIECE:"Pièce"}
 NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP = "Virtuelle plein champ"
 NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS = "Virtuelle sous abris"
 
+PLAQUE_24_230 = (24,230)
+PLAQUE_77_55 = (77,55)
 
 DOC_CHRONOVIEW = """Voila la doc de chrono planches<br/>
 Il s'agit de placer les séries sur les planches dans le temps"""

@@ -4065,3 +4065,7 @@ unsupported operand type(s) for /: 'NoneType' and 'int'
 'Conso hebdo par pannier' indéfini pour artichaut
 Erreur; espèce artichaut non trouvée. abandon
 unsupported operand type(s) for /: 'NoneType' and 'int'
+[2017-04-17 17:30:38,646 MARAICH_ERROR   ] views          .suiviPlants: 
+[2017-04-18 08:02:26,290 MARAICH_ERROR   ] views          .suiviPlants: 
+[2017-04-18 08:10:53,845 MARAICH_ERROR   ] views          .suiviPlants: 
+[2017-04-18 08:33:45,769 MARAICH_ERROR   ] views          .suiviPlants: 
