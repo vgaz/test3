@@ -14,8 +14,8 @@ body
 
 .divTitreImplantation
 {
-    display:block;
-    font-weight:bold;
+    display:inline-block;//:block;
+    //font-weight:bold;
     z-index:3;
 }
 
@@ -52,14 +52,11 @@ body
     max-width:500px;
     max-height:500px;    
     }
-    
-
 
 
 h1
 {
     color: #5beeb2;
-
 	font-size:20pt;
 	font-weight:bold;
 	margin-top:5px; 

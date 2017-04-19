@@ -20,8 +20,6 @@
 
 }
 
-
-
 #editeSerie_evts
 {
     text-align:left;
@@ -70,10 +68,10 @@
 .divImplantation
     {
     width: 30%;
-    padding-bottom:15px;
+    //padding-bottom:15px;
     background: white;
     color: black;
-    border: 5px solid green;
+    border: 5px solid black;
     position:relative;
     }
     
@@ -81,8 +79,9 @@
 {
     background: red;
     position:absolute;
-    height:15px; 
+    height:5px; 
     display:inline;
+    //margin-top: -5px;
 }
 
 .planche
@@ -94,11 +93,11 @@
     margin-top: 5px;
     padding-top: 5px;
     background:#F0FFF0;
-    font-weight:bold;
 
 }
 .divTitrePlanche
 {
+    font-weight:bold;
     display:inline-block;
     color: black;
     text-align:center;
@@ -485,8 +484,6 @@ function sauveSerie()
     s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
     s_request += "&duree_avant_recolte_j=" + document.getElementById("editSerie_duree_avant_recolte_j").value
     s_request += "&etalement_recolte_j=" + document.getElementById("editSerie_etalement_recolte_j").value
-    //s_request += "&id_implantation=" + document.getElementById("editSerie_id_implantation").value
-    //s_request += "&quantite_implantation=" + document.getElementById("editSerie_quantite_implantation").value
     document.getElementById("divEditSerie").style.display="none"
     debutPatienter()
     rep = requestServer(s_request)
@@ -568,7 +565,7 @@ function unfocusPlanche(event)
 {% block title %}Implantation des séries sur les planches{% endblock %}
 
 {% block content %}
-{{s_msg}}
+{{s_msg|linebreaksbr}}
 
 <p id="divInfoDebug"> </p>
 <p id="divInfoDate"> qqq</p>
@@ -647,26 +644,29 @@ Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage
                                         oncontextmenu="prepareEditeSerie({{impl.id}});return false;"
                                         title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.nbPieds}}/{{impl.serie.nbPieds}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}. Qté estimée : {{impl.serie.quantiteEstimee_kg_ou_piece|floatformat:0}} {{impl.serie.legume.espece.nomUniteProd}}"
                                         >
-            <div class="divTitreImplantation">
-            {{impl.serie.legume.nom}}  {{impl.nbPieds}}/{{impl.serie.quantiteTotale}} {{impl.surface_m2}}m2
-            <img src='{% static 'images/editor.png'%}' title='Editer la série' onclick="prepareEditeSerie({{impl.id}});return(false)">
-            </div>
+
             {% for evt in impl.serie.evenements.all%}
-                <div class='evt' 
-                        id="evt__{{evt.id}}"
-                        id_evt="{{evt.id}}" 
-                        date="{{evt.date|date:'Y-m-d'}}" 
-                        duree_j="{{evt.duree_j}}" 
-                        nom="{{evt.nom}}" 
-                        texte ="{{evt.texte}}" 
-                        title="{{evt.nom}} le {{evt.date|date:'d/m/Y'}}"
-                        draggable="true"
-                        ondragstart="dragEvtStart(event)"
-                        ondrag="dragEvt(event)"
-                        ondragend="dragEvtStop(event)"
-                        > 
-                        </div>            
-            {% endfor %}
+            <div    class='evt' 
+                    id="evt__{{evt.id}}"
+                    id_evt="{{evt.id}}" 
+                    date="{{evt.date|date:'Y-m-d'}}" 
+                    duree_j="{{evt.duree_j}}" 
+                    nom="{{evt.nom}}" 
+                    texte ="{{evt.texte}}" 
+                    title="{{evt.nom}} le {{evt.date|date:'d/m/Y'}}"
+                    draggable="true"
+                    ondragstart="dragEvtStart(event)"
+                    ondrag="dragEvt(event)"
+                    ondragend="dragEvtStop(event)"
+                    > 
+            </div>   
+                     
+            {% endfor %}                                        
+            <div class="divTitreImplantation">
+            {{impl.serie.legume.nom|capfirst}}  {{impl.nbPieds}}/{{impl.serie.nbPieds}} {{impl.surface_m2}}m2
+            <!-- img src='{% static 'images/editor.png'%}' title='Editer la série' onclick="prepareEditeSerie({{impl.id}});return(false)" -->
+            </div>
+
         </div>
         {% endfor %}
     </div>
