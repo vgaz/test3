@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% block pagetitle %}Suivi évènements{% endblock %}
+{% load static %}
 
 {% block javascript %}
 
@@ -25,21 +27,19 @@
     date_du_jour = "{{date_aujourdhui|safe}}"
     decalage_j = {{decalage_j|safe}}
     NomEvtDeId = {  {% for evtType in l_typesEvt %} '{{evtType.id}}':'{{evtType.nom}}',{% endfor %}  }
-    
-    
+
 function    init()
     {
-    
     document.getElementById("decalage_j").value = decalage_j
+    // personalisation du menu
+    document.getElementById("menu_periode_option_serres_champs").style.display="none"
+    document.getElementById("menu_periode_option_filtre_planche").style.display="none"
     }
     
-
 </script>
-
 {% endblock %}
 
 {% block title %}Liste des événements{% endblock %}
-
 {% block content %}
 
 <p id="divInfoDebug"> </p>
@@ -47,16 +47,13 @@ function    init()
 <form action="" method="post" accept-charset="utf-8">
 {% csrf_token %}
 
-<input style="margin-left: 20px" type="radio" name="periode" value="aujourdhui" {% if periode == "aujourdhui" %}checked{%endif%} /> Aujourd'hui ({{date_aujourdhui|date:'d/m/Y'}})
-<input style="margin-left: 20px" type="radio" name="periode" value="cette_semaine"  {% if periode == "cette_semaine" %}checked{%endif%} />Cette semaine
-<input style="margin-left: 20px" type="radio" name="periode" value="specifique"  {% if periode == "specifique" %}checked{%endif%} />Spécifique du 
-<input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
+{% include "blockMenuPeriode.html" %}
 
+<br/>
 <input  type="radio" name="bEncours" value="on" {% if bEncours %}checked{%endif%} />Juste les évenements non terminés 
 <input  type="radio" name="bEncours" value="off" {% if not bEncours %}checked{%endif%} />Tous
-<br/>
+
 <input  type="checkbox" name="vers_fichier"/>Enregistrer
-<input style="margin-left: 20px" type="submit" value="Envoyer"/>
 
 <div id="main" style="text-align: center" >
 
@@ -67,7 +64,7 @@ function    init()
         {% for evt in l_evts %}
            
                 <tr id="{{evt.id}}">
-                {% if evt.date|date:'d/m/Y' ==  date_aujourdhui|date:'d/m/Y' %}
+                {% if evt.date|date:'d/m/Y' ==  infoPeriode.date_aujourdhui|date:'d/m/Y' %}
                     <td class="tdEvt2">{{evt.date|date:'d/m/Y'}}</td>
                     <td class="tdEvt2">{{evt.nom|title}}</td>
                     <td class="tdEvt2">{{evt.txt}}</td>

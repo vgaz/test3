@@ -34,6 +34,9 @@ function cache_legumes()
 
 function init()
     {
+    document.getElementById("menu_periode_option_filtre_legume").style.display="none"
+    document.getElementById("menu_periode_option_filtre_planche").style.display="none"
+
     cache_legumes()
     // nettoyage des lignes d'espece inutiles, juste la premiere à garder pour toutes les variétés
     l_aVirer = []
@@ -139,25 +142,14 @@ function init()
     
     <form action="" method="POST" accept-charset="utf-8">
     {% csrf_token %}
+    
     <div class="BlueFrame" style="width:90%;display:block">
-        <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
-        <input type="submit" name="direction" value="avance" />   
-        Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
-        <button onclick="changelePas(-1);return(false)">-</button>
-        <button onclick="changelePas(1);return(false)">+</button>
-        <br/>
-         <input type="radio" name="periode" value="annee" {% if periode == "annee" %}checked{% endif %}>Cette année
-         <input type="radio" name="periode" value="mois" {% if periode == 'mois' %}checked{% endif %}>Ce mois
-         <input type="radio" name="periode" value="semaine" {% if periode == 'semaine' %}checked{% endif %}>Cette semaine
-         <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
-         du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
-         au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
-        <br/>
-         Filtre espèce:<input style="width:60px" type="text" name="s_filtre_espece" value="{{s_filtre_espece}}" />
-        <input type="radio" name="detail" value="espece" onclick="cache_legumes()" checked >Par espèce
-        <input type="radio" name="detail" value="legume" onclick="montre_legumes()" >Espèces + variété
+    Filtre espèce:<input style="width:60px" type="text" name="s_filtre_espece" value="{{s_filtre_espece}}" />
+    <input type="radio" name="detail" value="espece" onclick="cache_legumes()" checked >Par espèce
+    <input type="radio" name="detail" value="legume" onclick="montre_legumes()" >Espèces + variété
 
-        <input style="margin-left: 20px" type="submit" value="Envoyer" />
+    {% include "blockMenuPeriode.html" %}
+
 
     </div>    
     </form>

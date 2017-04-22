@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+{% block pagetitle %}Serre à plants{% endblock %}
+{% block javascript %}
+<script type="text/javascript" src="{% static 'javascripts/myTools.js' %}"> </script>
+<script type="text/javascript" src="{% static 'javascripts/colorScores.js' %}"> </script>
+<script type="text/javascript" >
+
+l_seriesTitles = { {%  for serie in l_series  %}{{serie.id}}:"{{serie.info}}"{% if not forloop.last %},{% endif %}{% endfor %}}
+
+function init()
+    {
+    l_divSeries = document.getElementsByClassName("serie")
+    for (index=0;index<l_divSeries.length; index++)
+        {
+        l_divSeries[index].style.fontWeight = "bold"
+        idSerie = l_divSeries[index].getAttribute("serie_id")
+        l_divSeries[index].setAttribute("title", l_seriesTitles[idSerie]) 
+        }
+    }
+    
+</script>
+
+{% endblock %}
+
+{% block title %}Suivi des séries dans la serre à plants{% endblock %}
+
+{% block content %}
+
+    <p id="divInfoDebug">{{info}} </p>
+    
+    
+    <form action="" method="POST" accept-charset="utf-8">
+    {% csrf_token %}
+    <div class="BlueFrame" style="width:100%">
+
+        <input type="submit" name="direction" value="avance" /> 
+        <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
+        
+        Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
+        <button onclick="changelePas(-1);return(false)">-</button>
+        <button onclick="changelePas(1);return(false)">+</button>
+        <br/>
+         <input type="radio" name="periode" value="annee" {% if periode == "annee" %}checked{% endif %}>Cette année
+         <input type="radio" name="periode" value="mois" {% if periode == 'mois' %}checked{% endif %}>Ce mois
+         <input type="radio" name="periode" value="semaine" {% if periode == 'semaine' %}checked{% endif %}>Cette semaine
+         <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
+         du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
+         au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
+
+        <input style="margin-left: 20px" type="submit" value="Envoyer" />
+
+    </div>    
+    </form>
+    <p>
+    
+        
+    <table border="1"><tbody>
+        <tr>
+        <th>Séries en préparation dans la serre à plants/j</th>
+            {%  for sem in l_semaines  %}
+                <th align="center">{{sem.s_date_debut}}</th>
+            {% endfor %}
+        </tr>
+        <tr><td>Quantité de plants</td>     
+        {% for sem in l_semaines %}
+            <td>{{sem.qte}}</td>
+        {% endfor %}
+        </tr>  
+        <tr><td>Plaques alvéolées</td>     
+        {% for sem in l_semaines %}
+            <td>
+                {% for plaq in sem.l_plaquesSem %}
+                   Alv{{plaq.nbAlvMax}}x{{plaq.volume_cm3}}:{{plaq.nbAlv}}<br/>Nb_plaques:{{plaq.qte}}<br/>
+                {% endfor %}
+                Total_plaques:<b>{{sem.totalPlaques}}</b>
+            </td>
+        {% endfor %}
+        </tr>          
+         <tr><td>Détail des séries</td>     
+        {% for sem in l_semaines %}
+            <td>{{sem.txt|safe}}</td>
+        {% endfor %}
+        </tr>              
+    </tbody></table>
+    
+     
+{% endblock %}

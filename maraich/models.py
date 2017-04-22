@@ -12,7 +12,8 @@ def creationEvtAbs(e_date, e_type, nom="", duree_j=1):
     """création d'un evenement avec une date absolue
     retourne l'instance de l'évènement""" 
     evt = Evenement()
-    evt.date = e_date
+    ## on ajoute 12 h à l'evt de debut pour eviter les pbs d'encadrement
+    evt.date = e_date + datetime.timedelta(hours=12)
     evt.eRef_id = 0
     evt.type = e_type
     evt.duree_j = duree_j
@@ -528,7 +529,8 @@ class Serie(djangoModels.Model):
             dateDebut = MyTools.getDateFrom_d_m_y(dateDebut)
         
         if  self.evt_debut_id == 0: 
-            """création des evts de série seul l'evt de début est absolu, les autres sont calés sur evt_debut"""
+            """création des evts de série seul l'evt de début est absolu, les autres sont calés sur evt_debut
+            """
             evt_debut = creationEvtAbs(dateDebut, Evenement.TYPE_DEBUT, "début %s"%(self.legume.nom()))
 
             self.evenements.add(evt_debut)

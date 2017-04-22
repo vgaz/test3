@@ -9,10 +9,29 @@ from maraich.models import *
 import MyHttpTools
 
 
+def     testViewImplantations():
+        # Create an instance of a POST request.
+        factory = RequestFactory()       
+        request = factory.post('/suiviImplantations/',      
+                                     data=        {'decalage_j':'30', 
+                                                 'date_debut_vue': '01/04/2017', 
+                                                 'serres': 'on', 
+                                                 'date_fin_vue': '01/05/2017', 
+                                                 's_filtre_legume': 'aub', 
+                                                 's_filtre_planches': 'Vir', 
+                                                 'periode': 'mois'}
+                                     )
+        views.suiviImplantations(request)
+
+
 class Command(BaseCommand):
     help = "test divers"
 
     def handle(self, *args, **options):
+
+        testViewImplantations()
+        return
+    
 
 #         ser = Serie.objects.get(pk=15)
 #         qt = ser.quantiteEstimee_kg_ou_piece()
@@ -21,8 +40,8 @@ class Command(BaseCommand):
 #         prod =  ser.prodHebdo(MyTools.getDateFrom_d_m_y("15/10/2017"), 2)
 #         print(prod)
 #         return
-
-        # Create an instance of a POST request.
+ 
+#         ## Create an instance of a POST request.
 #         factory = RequestFactory()       
 #         request = factory.post('/suiviPlants/',      
 #                                 data={"periode":"specifique",
@@ -32,8 +51,22 @@ class Command(BaseCommand):
 #                                 )
 #         views.suiviPlants(request)
 #         return
-    
+#      
+
+        # Create an instance of a POST request.
+        factory = RequestFactory()       
+        request = factory.post('/evenementsPlanches/',      
+                                     data={"periode":"specifique",
+                                           "date_debut_vue":"20/4/2017",
+                                           "date_fin_vue":"20/4/2017", 
+                                           "periode":"aujourdhui"
  
+                                         }
+                                     )
+        views.evenementsPlanches(request)
+        
+# 
+#  
 #         # Create an instance of a POST request.
 #         factory = RequestFactory()       
 #         request = factory.post('/recolte/',      
@@ -42,11 +75,11 @@ class Command(BaseCommand):
 #                                            "date_fin_vue":"29/5/2017", 
 #                                            "bSerres":"on",
 #                                            "s_filtre_espece":"car"
-# 
+#  
 #                                          }
 #                                      )
 #         views.recolte(request)
-        
+#         
          
 #         return
 #         
@@ -74,48 +107,48 @@ class Command(BaseCommand):
 
 
 #         print(Evenement.objects.get(id=7654).__str__())
-
-        self.factory = RequestFactory()
-        d0 = { 'b_serre': 'false', 
-                'cde': 'sauve_serie', 
-                'etalement_recolte_j': '9', 
-                'date_debut': '08/05/2017', 
-                'nb_pieds': '1234', 
-                'intra_rang_cm': '5', 
-                'nb_rangs': '4', 
-                'id_legume': '16', 
-                'duree_avant_recolte_j': '19', 
-                'id_serie': '17'}
-         
-         
-         
-        d1 = {'duree_avant_recolte_j': '100', 
-              'etalement_recolte_j': '6', 
-              'date_debut': '3/3', 
-              'intra_rang_cm': '15', 
-              'id_serie': '0',
-              'nb_rangs': '2', 
-              'id_legume': '6', 
-              'b_serre': 'off', 
-              'cde': 'sauve_serie'
-              } 
-         
-        _d2={   'duree_j': '1', 
-                'delta_j': '-19', 
-                'id': '7654', 
-                'cde': 'sauve_evt', 
-                'date': '', 
-                'nom': 'semi motte blette verte à carde blanche 2', 
-                'id_serie':'8'                          
-                }
-        # Create an instance of a POST request.   
-        request = self.factory.post('/serveRequest/', data=d0 )        
-         
- 
-
-        serveRequest.serveRequest(request)
-
-        return
+# 
+#         self.factory = RequestFactory()
+#         d0 = { 'b_serre': 'false', 
+#                 'cde': 'sauve_serie', 
+#                 'etalement_recolte_j': '9', 
+#                 'date_debut': '08/05/2017', 
+#                 'nb_pieds': '1234', 
+#                 'intra_rang_cm': '5', 
+#                 'nb_rangs': '4', 
+#                 'id_legume': '16', 
+#                 'duree_avant_recolte_j': '19', 
+#                 'id_serie': '17'}
+#          
+#          
+#          
+#         d1 = {'duree_avant_recolte_j': '100', 
+#               'etalement_recolte_j': '6', 
+#               'date_debut': '3/3', 
+#               'intra_rang_cm': '15', 
+#               'id_serie': '0',
+#               'nb_rangs': '2', 
+#               'id_legume': '6', 
+#               'b_serre': 'off', 
+#               'cde': 'sauve_serie'
+#               } 
+#          
+#         _d2={   'duree_j': '1', 
+#                 'delta_j': '-19', 
+#                 'id': '7654', 
+#                 'cde': 'sauve_evt', 
+#                 'date': '', 
+#                 'nom': 'semi motte blette verte à carde blanche 2', 
+#                 'id_serie':'8'                          
+#                 }
+#         # Create an instance of a POST request.   
+#         request = self.factory.post('/serveRequest/', data=d0 )        
+#          
+#  
+# 
+#         serveRequest.serveRequest(request)
+# 
+#         return
 #         
 #         # Create an instance of a POST request.   
 #         request = self.factory.post('/utilisation_planches/', 

@@ -117,21 +117,19 @@
 
     <script type="text/javascript" src="{% static "javascripts/myTools.js" %}"></script>
     <script type="text/javascript" src="{% static "javascripts/moment-with-locales.min.js" %}"></script>
-
     <script type="text/javascript">
     
     s_info = ""
-    date_debut_vue = "{{date_debut_vue|safe}}"
-    date_fin_vue = "{{date_fin_vue|safe}}"
-    date_du_jour = "{{date_du_jour|safe}}"
-    decalage_j = {{decalage_j|safe}}
+    date_debut_vue = "{{infoPeriode.date_debut_vue|safe}}"
+    date_fin_vue = "{{infoPeriode.date_fin_vue|safe}}"
+    date_du_jour = "{{infoPeriode.date_du_jour|safe}}"
+    decalage_j = {{infoPeriode.decalage_j}}
 
 function    init()
     {
     o_nomTypeEvt = {{d_evtTypes|safe}}
     draggingImpl = false
     draggingEvt = false
-
 
     changelePas(0) // juste pour affichage 1 ere fois
 
@@ -565,36 +563,16 @@ function unfocusPlanche(event)
 {% block title %}Implantation des séries sur les planches{% endblock %}
 
 {% block content %}
-{{s_msg|linebreaksbr}}
 
-<p id="divInfoDebug"> </p>
-<p id="divInfoDate"> qqq</p>
+<p id="divInfoDebug">{{s_msg|linebreaksbr}} </p>
+<p id="divInfoDate"> </p>
 <div id="doc" class="BlueFrame" style="display:none" onclick="this.style.display='none';return false">{{doc}}</div>
 
 <form action="" method="POST" accept-charset="utf-8">
 {% csrf_token %}
-<input name="serres" type="checkbox" {% if selection_serres %}checked{% endif %} /> Serres 
-<input name="champs" type="checkbox" {% if selection_champs %}checked{% endif %} /> Champs 
-&nbsp;&nbsp;
-Filtre  planche:<input style="width:50px" type="text" name="s_filtre_planches" value="{{s_filtre_planches}}" />
- Filtre légume:<input style="width:60px" type="text" name="s_filtre_legumes" value="{{s_filtre_legumes}}" />
-<input style="margin-left: 10px" type="submit" name="direction" value="recul" />
-<input type="submit" name="direction" value="avance" /> 
-Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
-<button onclick="changelePas(-1);return(false)">-</button>
-<button onclick="changelePas(1);return(false)">+</button>
-<br/>
- <input type="radio" name="periode" value="annee" {% if periode == "annee" %}checked{% endif %}>Cette année
- <input type="radio" name="periode" value="mois" {% if periode == 'mois' %}checked{% endif %}>Ce mois
- <input type="radio" name="periode" value="semaine" {% if periode == 'semaine' %}checked{% endif %}>Cette semaine
- <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
- du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
- au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
-
-<input style="margin-left: 20px" type="submit" value="Envoyer" />
-<img src="{% static 'images/plus.png' %}" title="Ajouter une série" onclick="prepareAjouteSerie();return false"> 
-<img src="{% static 'images/Help.png' %}" title="Documentation" onclick="document.getElementById('doc').style.display='block';return(false)" style="width:30px;heigth:30px" > 
+{% include "blockMenuPeriode.html" %}
 </form>
+<img src="{% static 'images/plus.png' %}" title="Ajouter une série" onclick="prepareAjouteSerie();return false"> 
 
 <div id="main" style="text-align:center" >
 
