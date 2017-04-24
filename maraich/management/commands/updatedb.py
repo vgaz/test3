@@ -7,7 +7,6 @@ from maraich.models import *
 from maraich.settings import log
 from maraich import settings
 
-
 def getInt(d_in, name, default="0"):
     """return an int value in a dictionary"""
     try:
@@ -25,8 +24,6 @@ def getFloat(d_in, name, default="0"):
         return _f
     except:
         log.warning("finding %s %s %s"%(name, str(d_in), sys.exc_info()[1])) 
-    
-
 
 class Command(BaseCommand):
     """updatedb : mise à jour de la base à partir des tableaux CSV"""
@@ -234,9 +231,7 @@ class Command(BaseCommand):
                     
                     serie.remarque = d_line.get("Remarque", "")       
                     dureeAvantRecolte_j = getInt(d_line, "Durée avant récolte (j)")
-                    
-#                     serie.prelevement_sd = d_line, "Mode de prélèvement","" == "SD"   ## calcul prelevement selon distrib
-                    
+                                        
                     assert dureeAvantRecolte_j!=0, "Champ 'Durée avant récolte (j)' indéfini pour %s "%(leg.nom())
                     
                     etalementRecolte_j = getInt(d_line, "Étalement récolte (j)")

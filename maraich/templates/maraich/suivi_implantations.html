@@ -68,7 +68,7 @@
 .divImplantation
     {
     width: 30%;
-    //padding-bottom:15px;
+    font-size:10pt;
     background: white;
     color: black;
     border: 5px solid black;
@@ -493,6 +493,29 @@ function sauveSerie()
         alert(jsonRep.err)
     }
     
+    
+function cloneSerie()
+    {
+    // sauvegardedes paramètres d'une serie
+    s_request = "cde=clone_serie&id_serie=" + document.getElementById("editSerie_id_serie").value
+    s_request += "&id_legume=" + document.getElementById("editSerie_id_legume").value
+    s_request += "&b_serre=" + document.getElementById("editSerie_b_serre").checked
+    s_request += "&nb_rangs=" + document.getElementById("editSerie_nb_rangs").value
+    s_request += "&nb_pieds=" + document.getElementById("editSerie_nb_pieds").value
+    s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
+    s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
+    s_request += "&duree_avant_recolte_j=" + document.getElementById("editSerie_duree_avant_recolte_j").value
+    s_request += "&etalement_recolte_j=" + document.getElementById("editSerie_etalement_recolte_j").value
+    document.getElementById("divEditSerie").style.display="none"
+    debutPatienter()
+    rep = requestServer(s_request)
+    finPatienter() 
+    jsonRep = JSON.parse(rep)
+    if (jsonRep.status == true)
+        window.location.reload()
+    else
+        alert(jsonRep.err)
+    }
 
 function dragEvtStart(event) {
     //event.stopPropagation()
@@ -678,6 +701,7 @@ function unfocusPlanche(event)
     <input type='button' value='Supprimer' name='supprime' onclick="supprime_serie(document.getElementById('editSerie_id_serie').value)" />
     <input type='button' value='Fermer' name='annule' onclick="document.getElementById('divEditSerie').style.display='none';return false" />
     <input type='button' value='Sauver' onclick="sauveSerie();return false" />
+    <input type='button' value='Cloner' onclick="cloneSerie();return false" />
     </p>    
     <hr/>
     <p><b>Implantations</b></p>

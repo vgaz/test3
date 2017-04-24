@@ -137,9 +137,23 @@ def serveRequest(request):
 
         return HttpResponse( s_json, content_type="application/json")
     
+    elif cde =="clone_serie":
+        try:
+            # gestion de la création ou édition d'une série de plants
+            serie = creationEditionSerie(request.POST)
+                                       
+            log.info("Nouvelle série créée" + serie.__str__())
+            s_json = '{"status":true,"msg":"%s"}'%serie
+        except:
+            ex_type, ex, tb = sys.exc_info()
+            log.error (str(ex_type) + str(ex))
+            s_json = '{"status":false,"msg":"%s"}'%sys.exc_info()[1]
+
+        return HttpResponse( s_json, content_type="application/json")
+ 
     elif cde == 'supprime_serie':
         try:
-            models.supprimeSerie(int(request.POST.get("id")))
+            Serie.objects.supprime(int(request.POST.get("id")))
             s_json = '{"status":true}'
         except:
             traceback.log.info_tb(sys.exc_info())

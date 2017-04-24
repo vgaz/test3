@@ -66,7 +66,7 @@ class Command(BaseCommand):
             assert dateDest > dateOrig, "Années d'origine et de destination incohérentes"
             
             for serie in Serie.objects.activesSurPeriode(dateOrig, dateDest):
-                serieDest = cloneSerie(serie)
+                serieDest = Serie.objects.clone(serie.id)
                 ## changement des dates des évèmenents + 365j
                 for evt in serieDest.evenements.all():
                     evt.date += datetime.timedelta(days = 365) 

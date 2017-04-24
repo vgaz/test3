@@ -40,7 +40,8 @@ def creationEditionSerie(reqPost):
     """Création ou edition d'une série de plants sur planche virtuelle
     si id_serie == 0, c'est une demande de création, sinon , d'édition/modification
     """
-    intra_rang_cm = reqPost.get("intra_rang_cm","")
+    id_serie = int(reqPost.get("id_serie", "0"))
+    intra_rang_cm = reqPost.get("intra_rang_cm", "")
     if not intra_rang_cm: 
         intra_rang_m = 0
     else:  
@@ -51,7 +52,6 @@ def creationEditionSerie(reqPost):
         nb_rangs = 0
     else: 
         nb_rangs = int(nb_rangs) 
-    id_serie = int(reqPost.get("id_serie", "0"))
     id_leg = int(reqPost.get("id_legume"))
     assert id_leg, '%s pas de valeur pour id_leg'
     
@@ -67,6 +67,8 @@ def creationEditionSerie(reqPost):
     leg = Legume.objects.get(id=id_leg)
     if id_serie == 0:
         serie = Serie() ## nelle serie
+    elif reqPost.get("cde","")=="clone_serie":
+        serie = Serie.objects.clone(id_serie)
     else:
         serie = Serie.objects.get(id=id_serie)
     
@@ -161,47 +163,6 @@ def quantitePourSurface(largeurPlanche_m, surface_m2, nbRangs, intraRang_m):
 def surfacePourQuantite(largeurPlanche_m, quantite, nbRangs, intraRang_m):
     """ estimation de la surface pour une quantité de pieds implantables sur une planche """
     return int(quantite * intraRang_m / nbRangs * largeurPlanche_m)
-
-def cloneSerie(serie):
-    """clonage d'une série"""
-    serie2 = Serie.objects.get(id=serie.id)
-    serie2.id = None
-    serie2.save() ## mode de création d'une nouvelle serie, tous les champs non relatifs sont copiés
-    
-    for evt in serie.evenements.all():
-        evt.id = None   ## crée un clone
-        evt.save()      ## """"""""""""
-        serie2.evenements.add(evt)
-        if evt.type == Evenement.TYPE_DEBUT: serie2.evt_debut = evt
-        if evt.type == Evenement.TYPE_FIN: serie2.evt_fin = evt
-        
-    ## duplication des implantations au même endroit
-    for imp in serie.implantations.all():
-        imp.id = None   ## crée un clone
-        imp.save()      ## """"""""""
-        serie2.implantations.add(imp)
-    return serie2
-
-def supprimeSerie(_id):
-    """ supression de la série et de ses champs liés"""
-    try:
-        serie = Serie.objects.get(id=_id)
-        ##print("Demande de suppression série %s"%serie.__str__())
-        ## supression des évenements associés
-        for obj in serie.evenements.all():
-            print ("Suppression ", obj)
-            obj.delete()
-        ## supression des implantations
-        for obj in serie.implantations.all():
-            print ("Suppression ", obj)
-            obj.delete()
-         
-        serie.delete()      
-        print ("Série supprimée")
-        return True
-    except:
-        print(str(sys.exc_info()))
-        return False
     
     
 def derniereDateFamilleSurPlanche(idFamille, idPlanche):
@@ -476,6 +437,53 @@ class SerieManager(djangoModels.Manager):
         return l_series
 
 
+    def supprime(self, id_serie):
+        """ supression de la série et de ses champs liés"""
+        try:
+            serie = Serie.objects.get(id=id_serie)
+            ## supression des évenements associés
+            for obj in serie.evenements.all():
+                print ("Suppression ", obj)
+                obj.delete()
+            ## supression des implantations
+            for obj in serie.implantations.all():
+                print ("Suppression ", obj)
+                obj.delete()
+             
+            serie.delete()      
+            print ("Série supprimée")
+            return True
+        except:
+            print(str(sys.exc_info()))
+            return False
+            
+
+    def clone(self, id_serie):
+        """clonage d'une série"""
+        serie = Serie.objects.get(id=id_serie)
+        serie2 = Serie.objects.get(id=serie.id)
+        serie2.id = None
+        serie2.save() ## mode de création d'une nouvelle serie, tous les champs non relatifs sont copiés
+    
+        # maj des champs relatifs
+        for evt in serie.evenements.all():
+            evt.id = None   ## crée un clone
+            evt.save()      ## """"""""""""
+            serie2.evenements.add(evt)
+            if evt.type == Evenement.TYPE_DEBUT: 
+                serie2.evt_debut_id = evt.id
+            if evt.type == Evenement.TYPE_FIN: 
+                serie2.evt_fin_id = evt.id
+            
+        ## duplication des implantations au même endroit
+        for imp in serie.implantations.all():
+            imp.id = None   ## crée un clone
+            imp.save()      ## """"""""""
+            serie2.implantations.add(imp)
+            
+        return serie2
+
+        
 
 class Serie(djangoModels.Model):
     
@@ -488,11 +496,11 @@ class Serie(djangoModels.Model):
     nb_rangs = djangoModels.PositiveIntegerField("nombre de rangs", default=0)
     intra_rang_m = djangoModels.FloatField("distance dans le rang (m)", default=0)
     bSerre = djangoModels.BooleanField("sous serre", default=False)
+    remarque = djangoModels.TextField(default="")
     implantations = djangoModels.ManyToManyField(Implantation)
     evenements = djangoModels.ManyToManyField(Evenement)
     evt_debut = djangoModels.ForeignKey(Evenement, related_name="+", null=True, default=0)
     evt_fin = djangoModels.ForeignKey(Evenement, related_name="+", null=True, default=0)
-    remarque = djangoModels.TextField(default="")
     objects = SerieManager()
     
     def dateDebutPlants(self):  
