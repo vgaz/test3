@@ -350,9 +350,6 @@ class Implantation(djangoModels.Model):
                                                                          self.surface_m2(), 
                                                                          self.planche.nom,
                                                                          self.planche.id)
-
-
-
         
 class Evenement(djangoModels.Model):
     """Evenement ayant une date relative ou absolue"""

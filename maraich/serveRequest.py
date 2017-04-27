@@ -90,16 +90,16 @@ def serveRequest(request):
             ## lié à l'espece
             leg = Legume.objects.get(pk=int(request.POST.get("id")))
             leg.espece.nbGrainesParPied = int(request.POST.get("nbGrainesParPied"))
-            leg.espece.consoHebdoParPart = getFloatInPost(request, "consoHebdoParPart")
-            leg.espece.rendementGermination = getFloatInPost(request, "rendementGermination")
-#             leg.espece.rendementPousseEtConservation = getFloatInPost(request, "rendementPousseEtConservation")   inutilisé pour l moment
+            leg.espece.consoHebdoParPart = getFloatInPost(request.POST, "consoHebdoParPart")
+            leg.espece.rendementGermination = getFloatInPost(request.POST, "rendementGermination")
+#             leg.espece.rendementPousseEtConservation = getFloatInPost(request.POST, "rendementPousseEtConservation")   inutilisé pour l moment
             
             leg.espece.save()
             ## lié au légume
-            leg.poidsParPiece_kg = getFloatInPost(request, "poidsParPiece_g")/1000
-            leg.prodParPied_kg = getFloatInPost(request, "prodParPied_kg")
+            leg.poidsParPiece_kg = getFloatInPost(request.POST, "poidsParPiece_g")/1000
+            leg.prodParPied_kg = getFloatInPost(request.POST, "prodParPied_kg")
             leg.rendement_plants_graines_pourcent = int(request.POST.get("rendement_plants_graines_pourcent", "100"))
-            leg.intra_rang_m = getFloatInPost(request, "intraRang_cm")/100
+            leg.intra_rang_m = getFloatInPost(request.POST, "intraRang_cm")/100
             leg.save()    
             print(leg)                     
             s_json = '{"status":true}'

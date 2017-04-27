@@ -5,20 +5,6 @@
 {% block javascript %}
 
 <style>
-#divPlanchesVirtuelles
-{
-    border: 5px solid yellow;
-    width:20%;
-    display: inline-block;
-
-}
-#divPlanchesReelles
-{
-    border: 5px solid red;
-    display: inline-block;
-    width:70%;
-
-}
 
 #editeSerie_evts
 {
@@ -107,10 +93,10 @@
 {
     display:none; 
     position:fixed;   
-    width: 100px;
+    width: 300px;
     height:100px; 
     z-index:5;
-
+    background:#F0F7F0;
 }
 
 </style>
@@ -122,19 +108,19 @@
     s_info = ""
     date_debut_vue = "{{infoPeriode.date_debut_vue|safe}}"
     date_fin_vue = "{{infoPeriode.date_fin_vue|safe}}"
-    date_du_jour = "{{infoPeriode.date_du_jour|safe}}"
+    date_du_jour = "{{infoPeriode.date_aujourdhui|safe}}"
     decalage_j = {{infoPeriode.decalage_j}}
 
 function    init()
     {
     o_nomTypeEvt = {{d_evtTypes|safe}}
-    draggingImpl = false
-    draggingEvt = false
+    document.draggingImpl = false
+    document.draggingEvt = false
 
     changelePas(0) // juste pour affichage 1 ere fois
 
-    // nb px par jour en fonction des bornes , on ajoute 1 pour inclure le dernier jour plein 
-    pxParH = window.getComputedStyle(document.getElementsByClassName("planche")[0]).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours')
+    // nb px par heure en fonction des bornes 
+    document.pxParH = window.getComputedStyle(document.getElementsByClassName("planche")[0]).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours')
 
     balisage()
     
@@ -146,7 +132,7 @@ function    init()
     	{
     	hBarreJour = l_planches[ii].getElementsByClassName("barre_du_jour")[0]
 	    hBarreJour.style.height = window.getComputedStyle(l_planches[ii]).height
-	    hBarreJour.style.marginLeft = delta_h * pxParH + "px" 
+	    hBarreJour.style.marginLeft = delta_h * document.pxParH + "px" 
 	    }
 	// décalage vertical si besoin 
     document.ondragover = scrollIfNeeded
@@ -371,11 +357,11 @@ function  balisage()
         // decalage debut
         debut = l_series[ii].getAttribute("date_debut")
         deltaHD = moment(debut).diff(moment(date_debut_vue), 'hours')
-        l_series[ii].style.marginLeft = deltaHD * pxParH + "px" 
+        l_series[ii].style.marginLeft = deltaHD * document.pxParH + "px" 
         // decalage fin
         fin = l_series[ii].getAttribute("date_fin")
         deltaHF = moment(fin).diff(moment(debut), "hours")
-        l_series[ii].style.width = deltaHF * pxParH  + "px"
+        l_series[ii].style.width = deltaHF * document.pxParH + "px"
         
         l_series[ii].style.borderColor = l_series[ii].getAttribute("couleur")
         
@@ -384,8 +370,10 @@ function  balisage()
         for (jj=0;jj<l_evts.length;jj++)
             {
             deltaH = moment(l_evts[jj].getAttribute("date")).diff(moment(debut), 'hours')
-            l_evts[jj].style.left = deltaH * pxParH +"px"
-            l_evts[jj].style.width = l_evts[jj].getAttribute("duree_j") * 24 * pxParH + "px"
+            l_evts[jj].style.left = deltaH * document.pxParH +"px"
+            l_evts[jj].style.width = l_evts[jj].getAttribute("duree_j") * 24 * document.pxParH + "px"
+            if(l_evts[jj].getAttribute("type_evt") == "1")
+                l_evts[jj].style.background="blue"
             }
         }
     }
@@ -518,28 +506,40 @@ function cloneSerie()
     }
 
 function dragEvtStart(event) {
-    //event.stopPropagation()
-    draggingEvt = true
+    if (document.draggingEvt)
+        return
+    document.draggingEvt = true
     event.dataTransfer.setData("date_ori", event.target.getAttribute("date"))
+    event.dataTransfer.setData("offsetX", document.getElementById(event.target.id).offsetLeft)
     document.getElementById("divInfoDate").style.display="block"
 }
-function dragEvt(event) {
-    //event.stopPropagation()
-    x = document.getElementById(event.target.id).offsetLeft
-    //offsetLeft
-    document.getElementById("divInfoDate").innerHTML = "X " + x 
-}
 
-function dragEvtStop(event) {
-    draggingEvt = false
+
+function afficheDateDebutSerie(event) 
+    {
+    if (document.draggingEvt == false)   
+        return
+    //x = event.clientX //- event.dataTransfer.getData("offsetX")
+    x = document.getElementById("evt__15980").style.marginLeft
+    dateDepartSerie = ""
+    //decalageJ = parseFloat(x / document.pxParH / 24).toFixed(0) 
+    document.getElementById("divInfoDate").innerHTML = "decalage de début de série au : " + x
+    //dateNouvelle = moment(dateDepartSerie).diff(moment(date_debut_vue), 'hours')
+    return false
+    }
+                    
+function dragEvtStop(event) 
+    {
+    
+    document.draggingEvt = false
     document.getElementById("divInfoDate").style.display="none"
-}
+    }
 
 function dragImplStart(event) 
     {
-    if(draggingEvt)
+    if(document.draggingEvt)
         return
-    draggingImpl = true
+    document.draggingImpl = true
     event.dataTransfer.setData("id_implantation", event.target.id)
     event.dataTransfer.setData("id_serieDeplacee", event.target.getAttribute("id_serie"))
     event.dataTransfer.setData("id_planche_ori", event.target.getAttribute("id_planche"))
@@ -548,10 +548,10 @@ function dragImplStart(event)
 
 function dropImpl(event) 
     {
-    if (draggingImpl == false)
+    if (document.draggingImpl == false)
         return
-    draggingImpl = false
-    event.preventDefault()
+    document.draggingImpl = false
+    //event.defaultPrevented()
     id_implantation = event.dataTransfer.getData("id_implantation")
     id_serie = event.dataTransfer.getData("id_serieDeplacee")
     id_plancheDest = event.target.id.split("__")[1]
@@ -559,15 +559,14 @@ function dropImpl(event)
     if (event.dataTransfer.getData("id_planche_ori") != id_plancheDest)
         prepareDeplacementImplantation(id_serie, id_implantation, quantite_implantation, id_plancheDest)
     else
-        confirm("decalage a faire ?")
+        confirm("decalage a faire ? pour serie " + id_serie)
     }
     
 function surlignePlanche(event)
     {    
-    if (draggingImpl == false)
+    if (document.draggingImpl == false)
         return
     
-    event.preventDefault();
     // chgt de couleur si atterissage possible suite à deplacement implantation
     if (event.target.className == "planche")
         event.target.style.background = "green"
@@ -575,7 +574,6 @@ function surlignePlanche(event)
 
 function unfocusPlanche(event)
     {
-    event.preventDefault();
     if (event.target.className == "planche" )
         event.target.style.background = 'white'
     }
@@ -601,11 +599,10 @@ function unfocusPlanche(event)
 
 <br/><br/>
     {% for planche in l_planches %}
-
     <div    class="planche"
             id="pl__{{planche.id}}"
             ondragover="surlignePlanche(event);return false"
-            ondragleave="unfocusPlanche(event);return false"
+            ondragleave="unfocusPlanche(event);return false"   
             ondrop="dropImpl(event)">
         
         <div class="barre_du_jour"> </div>  
@@ -629,7 +626,7 @@ function unfocusPlanche(event)
                                         couleur="{{impl.serie.legume.espece.couleur}}" 
                                         nb_pieds_implantation="{{impl.nbPieds}}"
                                         surface_implantation="{{impl.surface_m2}}"
-                                        b_serre = "{{planche.bSerre}}"
+                                        b_serre="{{planche.bSerre}}"
                                         nb_pieds_serie="{{impl.serie.nbPieds}}"
                                         s_liste_planches = "{{impl.serie.s_listeNomsPlanches}}"
                                         date_debut="{{impl.serie.evt_debut.date|safe}}" 
@@ -642,6 +639,7 @@ function unfocusPlanche(event)
                                         intra_rang_cm="{{impl.serie.intraRang_cm}}"
                                         draggable="true" 
                                         ondragstart="dragImplStart(event)" 
+                                        ondragend="document.draggingImpl=false"
                                         oncontextmenu="prepareEditeSerie({{impl.id}});return false;"
                                         title="Impl {{impl.id}} de série {{impl.serie.id}} ({{impl.nbPieds}}/{{impl.serie.nbPieds}}), {{impl.serie.legume.nom}}, {{impl.serie.nb_rangs}} rangs, intra_rang_cm={{impl.serie.intraRang_cm}} &#13;{{impl}} &#13; Du {{impl.serie.evt_debut.date|date:'d/m/Y'}} au {{impl.serie.evt_fin.date|date:'d/m/Y'}}. Qté estimée : {{impl.serie.quantiteEstimee_kg_ou_piece|floatformat:0}} {{impl.serie.legume.espece.nomUniteProd}}"
                                         >
@@ -649,24 +647,23 @@ function unfocusPlanche(event)
             {% for evt in impl.serie.evenements.all%}
             <div    class='evt' 
                     id="evt__{{evt.id}}"
-                    id_evt="{{evt.id}}" 
+                    id_evt="{{evt.id}}"
+                    type_evt="{{evt.type}}" 
                     date="{{evt.date|date:'Y-m-d'}}" 
                     duree_j="{{evt.duree_j}}" 
                     nom="{{evt.nom}}" 
-                    texte ="{{evt.texte}}" 
+                    texte="{{evt.texte}}" 
                     title="{{evt.nom}} le {{evt.date|date:'d/m/Y'}}"
-                    draggable="true"
-                    ondragstart="dragEvtStart(event)"
-                    ondrag="dragEvt(event)"
-                    ondragend="dragEvtStop(event)"
-                    > 
-            </div>   
-                     
-            {% endfor %}                                        
-            <div class="divTitreImplantation">
-            {{impl.serie.legume.nom|capfirst}}  {{impl.nbPieds}}/{{impl.serie.nbPieds}} {{impl.surface_m2}}m2
-            <!-- img src='{% static 'images/editor.png'%}' title='Editer la série' onclick="prepareEditeSerie({{impl.id}});return(false)" -->
-            </div>
+                    {% if evt.type == 1 %}
+                        draggable="true"
+                        ondragstart="dragEvtStart(event)"
+                        ondrag="afficheDateDebutSerie(event)" 
+                        ondragend="dragEvtStop(event)"
+                    {% endif %}
+                    > </div>   
+            {% endfor %}
+                                            
+            <div class="divTitreImplantation">{{impl.serie.legume.nom|capfirst}}  {{impl.nbPieds}}/{{impl.serie.nbPieds}} {{impl.surface_m2}}m2</div>
 
         </div>
         {% endfor %}
@@ -710,7 +707,7 @@ function unfocusPlanche(event)
     <p><b>Evenements </b> <input type='button' value='+' onclick="ajouteEvenement()" title="Ajouter un évènement"/></p>
     <div id="editeSerie_evts"> </div>
     <div id="divEditeEvenement">
-        <table>
+        <table><tbody>
         <input type="hidden" id="edit_evt_id" value=""/>
         <tr><td>Nom : <input type="text" value="" id="edit_evt_nom"/></td></tr>
         <tr id="edit_evt_tr_date"><td>Date (jj/mm/aaaa): <input style="width: 100px" type="text" value="" id="edit_evt_date"/></td></tr>
@@ -718,7 +715,7 @@ function unfocusPlanche(event)
         <tr><td>Durée (j): <input style="width: 60px" type="text" value="1" id="edit_evt_duree_j"/> 1 par défaut si vide</td></tr>
         <tr><td><input type="button" value="Fermer" onclick="document.getElementById('divEditeEvenement').style.display = 'none'" />
         <input type="button" value="Sauver" onclick="sauveEvenement();return false;" /></td></tr>	            
-        </table>
+        </tbody></table>
     </div>
 
 </div>

@@ -14,8 +14,7 @@ body
 
 .divTitreImplantation
 {
-    display:inline-block;//:block;
-    //font-weight:bold;
+    display:inline-block;
     z-index:3;
 }
 

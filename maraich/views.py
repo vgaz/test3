@@ -9,7 +9,7 @@ import os, sys
 
 from maraich import forms, constant, settings
 from maraich.settings import log
-import MyTools
+import MyTools, MyHttpTools
 from MyHttpTools import getFloatInPost
 import datetime
 
@@ -21,47 +21,45 @@ def donnePeriodeVue(reqPost):
     
     infoPeriode = MyTools.MyEmptyObj()
     infoPeriode.date_aujourdhui = datetime.datetime.now()
-    
     infoPeriode.periode = reqPost.get("periode","mois")
+    infoPeriode.decalage_j = MyHttpTools.getIntInPost(reqPost, "decalage_j", 15)
+    delta = datetime.timedelta(days = 0)    
+    direc = reqPost.get("direction", "")
+    
+    if direc == "avance":
+        infoPeriode.periode = "specifique"
+        delta = datetime.timedelta(days = infoPeriode.decalage_j)    
+    elif direc == "recul":
+        infoPeriode.periode = "specifique"
+        delta = datetime.timedelta(days = -1 * infoPeriode.decalage_j)    
+   
     if infoPeriode.periode == "specifique":
-        infoPeriode.date_debut_vue = MyTools.getDateFrom_d_m_y(reqPost.get("date_debut_vue", ""))
-        infoPeriode.date_fin_vue = MyTools.getDateFrom_d_m_y(reqPost.get("date_fin_vue", ""))
+        infoPeriode.date_debut_vue = MyTools.getDateFrom_d_m_y(reqPost.get("date_debut_vue", "")) +  delta
+        infoPeriode.date_fin_vue = MyTools.getDateFrom_d_m_y(reqPost.get("date_fin_vue", "")) + delta
     elif infoPeriode.periode == "annee":
         date_premierJour = MyTools.getDateFrom_d_m_y("1/1/%s"%infoPeriode.date_aujourdhui.year)
         delta = datetime.timedelta(days=365)
         infoPeriode.date_debut_vue = date_premierJour
         infoPeriode.date_fin_vue = date_premierJour + delta
+        infoPeriode.decalage_j = 365
     elif infoPeriode.periode == "mois":
         date_premierJour = MyTools.getDateFrom_d_m_y("1/%s/%s"%(infoPeriode.date_aujourdhui.month, infoPeriode.date_aujourdhui.year))
         delta = datetime.timedelta(days=30)
         infoPeriode.date_debut_vue = date_premierJour
         infoPeriode.date_fin_vue = date_premierJour + delta
+        infoPeriode.decalage_j = 30
     elif infoPeriode.periode == "semaine":
         delta = datetime.timedelta(days=6)
         infoPeriode.date_debut_vue =  infoPeriode.date_aujourdhui - datetime.timedelta(days=infoPeriode.date_aujourdhui.weekday())
         infoPeriode.date_fin_vue = infoPeriode.date_debut_vue + delta
+        infoPeriode.decalage_j = 7
     elif infoPeriode.periode == "aujourdhui":
         infoPeriode.date_debut_vue =  infoPeriode.date_aujourdhui
         infoPeriode.date_fin_vue = infoPeriode.date_aujourdhui + datetime.timedelta(hours=12)  ## car on part de 0h
     else:
         assert False, "pas de periode trouvee"
         
-    infoPeriode.decalage_j = None ##reqPost.get("decalage_j","")
-    if not infoPeriode.decalage_j:
-        infoPeriode.decalage_j = 30
-    else:
-        infoPeriode.decalage_j = int(infoPeriode.decalage_j)
-    delta = datetime.timedelta(days = infoPeriode.decalage_j)
-    
-    if reqPost.get("direction", "") == "avance":
-        infoPeriode.date_debut_vue += delta 
-        infoPeriode.date_fin_vue += delta
-        infoPeriode.periode = "specifique"
-        
-    if reqPost.get("direction", "") == "recul":
-        infoPeriode.date_debut_vue -= delta 
-        infoPeriode.date_fin_vue -= delta   
-        infoPeriode.periode = "specifique"
+  
     
     return(infoPeriode)  
 

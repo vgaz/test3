@@ -23,12 +23,31 @@ def     testViewImplantations():
                                      )
         views.suiviImplantations(request)
 
+def     testdonnePeriodeVue():
+        # Create an instance of a POST request.
+        factory = RequestFactory()       
+        request = factory.post('/suiviImplantations/',      
+                                     data=        {'decalage_j':'7', 
+                                                 'date_debut_vue': '01/04/2017', 
+                                                 'date_fin_vue': '01/05/2017', 
+                                                 'serres': 'on', 
+                                                 'direction': 'recul',
+                                                 's_filtre_legume': 'aub', 
+                                                 's_filtre_planches': 'Vir', 
+                                                 'periode': 'mois'}
+                                     )
+        views.donnePeriodeVue(request.POST)
+
 
 class Command(BaseCommand):
     help = "test divers"
 
     def handle(self, *args, **options):
 
+
+        testdonnePeriodeVue()
+        return
+    
         testViewImplantations()
         return
     
