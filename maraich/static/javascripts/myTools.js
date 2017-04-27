@@ -2,12 +2,6 @@
 // All functions used for payy ci web pages
 //
 	
-function changelePas(delta)
-{
-    decalage_j += delta
-    if (decalage_j < 1) decalage_j = 1
-    document.getElementById("decalage_j").value = decalage_j
-}
 
 function debutPatienter()
     {

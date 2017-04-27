@@ -58,8 +58,6 @@ def donnePeriodeVue(reqPost):
         infoPeriode.date_fin_vue = infoPeriode.date_aujourdhui + datetime.timedelta(hours=12)  ## car on part de 0h
     else:
         assert False, "pas de periode trouvee"
-        
-  
     
     return(infoPeriode)  
 

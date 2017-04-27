@@ -45,9 +45,7 @@ function    init()
 
 <form action="" method="post" accept-charset="utf-8">
 {% csrf_token %}
-
 {% include "blockMenuPeriode.html" %}
-
 <br/>
 <input  type="radio" name="bEncours" value="on" {% if bEncours %}checked{%endif%} />Juste les évenements non terminés 
 <input  type="radio" name="bEncours" value="off" {% if not bEncours %}checked{%endif%} />Tous

@@ -117,8 +117,6 @@ function    init()
     document.draggingImpl = false
     document.draggingEvt = false
 
-    changelePas(0) // juste pour affichage 1 ere fois
-
     // nb px par heure en fonction des bornes 
     document.pxParH = window.getComputedStyle(document.getElementsByClassName("planche")[0]).width.split('px')[0] / moment(date_fin_vue).diff(moment(date_debut_vue), 'hours')
 

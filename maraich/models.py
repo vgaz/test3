@@ -623,7 +623,7 @@ class Serie(djangoModels.Model):
         dateDebutRecolte = self.evenements.get(type=Evenement.TYPE_RECOLTE).date
         
         dateMilieuSemaine = dateDebutSem + datetime.timedelta(days=3)## pour gerer pb jours / sem
-        dateFinSemaine = dateDebutSem + datetime.timedelta(days=6)
+#         dateFinSemaine = dateDebutSem + datetime.timedelta(days=6)
 
         prelevHebdo = self.legume.espece.consoHebdoTotale()/ratio
         ## prelevement continu selon besoin de livraison
@@ -632,23 +632,7 @@ class Serie(djangoModels.Model):
         if dateDebutRecolte <= dateMilieuSemaine and dateMilieuSemaine < dateFinStock :
             return prelevHebdo
         else:
-            return 0
-#                     
-#         if self.legume.espece.bStockable:
-#             prelevHebdo = self.legume.espece.consoHebdoTotale()/ratio
-#             ## prelevement continu selon besoin de livraison
-#             nbSemEcoulementStock = max([1, int(self.quantiteEstimee_kg_ou_piece() / prelevHebdo)])
-#             dateFinStock = self.evenements.get(type=Evenement.TYPE_RECOLTE).date + datetime.timedelta(weeks = nbSemEcoulementStock) 
-#             if dateDebutSem > dateDebutRecolte and dateFinSemaine <= dateFinStock :
-#                 return prelevHebdo
-#             else:
-#                 return 0
-#         else:
-#             ## repartition de la récolte possible depuis le debut de récolte à la fin du légume
-#             if dateDebutRecolte >= dateDebutSem and dateDebutRecolte < dateFinSemaine and dateFinSemaine <= self.evenements.get(type=Evenement.TYPE_FIN).date :
-#                 return self.quantiteEstimee_kg_ou_piece() / self.nbSemainesDeRecolte()
-#             else:
-#                 return 0            
+            return 0        
 
     def nbSemainesDeRecolte(self):
         dd = (self.evt_fin.date - self.evenements.get(type=Evenement.TYPE_RECOLTE).date).days
@@ -680,8 +664,6 @@ class Serie(djangoModels.Model):
         l_rep.append(self.__str__())
         if  self.dateDebutPlants():
             l_rep.append("Fabrication plants : %s"%MyTools.getDMYFromDate(self.dateDebutPlants()))
-#         for field in self._meta.get_fields():
-#             l_rep.append("%s : %s"%(field.name, str(field)))
         for evt in self.evenements.all():
             l_rep.append(evt.__str__())
         for impl in self.implantations.all():

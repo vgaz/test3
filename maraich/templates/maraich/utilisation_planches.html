@@ -10,7 +10,9 @@
 function init()
     {
     colorScores()
-    
+        // personalisation du menu
+    document.getElementById("menu_periode_option_serres_champs").style.display="none"
+    document.getElementById("menu_periode_option_filtre_planche").style.display="none"
     }
 
 </script>
@@ -26,33 +28,11 @@ function init()
     
     <form action="" method="POST" accept-charset="utf-8">
     {% csrf_token %}
-    <div class="BlueFrame" style="width:100%">
-
-        <input type="submit" name="direction" value="avance" /> 
-        <input style="margin-left: 10px" type="submit" name="direction" value="recul" />
-        
-        Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{decalage_j}}" /> jours 
-        <button onclick="changelePas(-1);return(false)">-</button>
-        <button onclick="changelePas(1);return(false)">+</button>
-        <br/>
-         <input type="radio" name="periode" value="annee" {% if periode == "annee" %}checked{% endif %}>Cette année
-         <input type="radio" name="periode" value="mois" {% if periode == 'mois' %}checked{% endif %}>Ce mois
-         <input type="radio" name="periode" value="semaine" {% if periode == 'semaine' %}checked{% endif %}>Cette semaine
-         <input type="radio" name="periode" value="specifique" {% if periode == 'specifique' %}checked{% endif %}>Spécifique
-         du <input style="width: 100px" type="text" name="date_debut_vue" value="{{date_debut_vue|date:'d/m/Y'}}" /> 
-         au <input style="width: 100px" type="text" name="date_fin_vue" value="{{date_fin_vue|date:'d/m/Y'}}" />
-    
-        <input name="bSerres" type="checkbox" {% if bSerres %}checked{% endif %} /> Serres 
-        <input name="bChamps" type="checkbox" {% if bChamps %}checked{% endif %} /> Champs 
-        <input style="margin-left: 20px" type="submit" value="Envoyer" />
-
-    </div>    
+    {% include "blockMenuPeriode.html" %}
     </form>
-    <p>
     
-
-        
-    <table border="1">
+    <p>      
+    <table border="1"><tbody>
         <tr><th>Planches/j</th>
             {% for jour in l_jours %}
                 <td align="center">{{jour|date:'d/m/Y'}}</td>
@@ -72,7 +52,7 @@ function init()
         </tr>
         {% endfor %}
         
-    </table>
+    </tbody></table>
     
     
         
