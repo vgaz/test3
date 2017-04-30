@@ -7,23 +7,6 @@ from maraich.models import *
 from maraich.settings import log
 from maraich import settings
 
-def getInt(d_in, name, default="0"):
-    """return an int value in a dictionary"""
-    try:
-        _i = default
-        _i = int(d_in.get(name, default).split(",")[0])
-        return _i
-    except:
-        log.warning("finding %s %s %s"%(name, str(d_in), sys.exc_info()[1])) 
-
-def getFloat(d_in, name, default="0"):
-    """return a float value in a dictionary"""
-    try:
-        _f = default
-        _f = float(d_in.get(name, default).replace(",","."))
-        return _f
-    except:
-        log.warning("finding %s %s %s"%(name, str(d_in), sys.exc_info()[1])) 
 
 class Command(BaseCommand):
     """updatedb : mise à jour de la base à partir des tableaux CSV"""
@@ -44,11 +27,11 @@ class Command(BaseCommand):
                     except:
                         p = Planche()
                         p.nom = nomPlanche
-                        p.longueur_m = getInt(d_line, "longueur (m)")
-                        p.largeur_m = getFloat(d_line, "largeur (m)")
+                        p.longueur_m = MyTools.getIntInDict(d_line, "longueur (m)", 0, log)
+                        p.largeur_m = MyTools.getFloatInDict(d_line, "largeur (m)", 0, log)
                         p.bSerre = (p.nom[0]=="S")
                         p.save()
-                        log.info (p)    
+                        log.info(p)    
                         if p.bSerre:
                             totalSerre_m2 += p.surface_m2()
                         else:
@@ -128,26 +111,26 @@ class Command(BaseCommand):
                     assert s_stockable, "pas de valeur 'stockable' pour espèce : %s"%(espece.nom)
                     espece.bStockable = (s_stockable == "oui")     
 
-                    espece.nbGrainesParPied = getInt(d_line,"Nb graines par pied") 
+                    espece.nbGrainesParPied = MyTools.getIntInDict(d_line,"Nb graines par pied", 0, log) 
                     assert espece.nbGrainesParPied, "'Nb graines par pied' indéfini pour %s"%(espece.nom)
 
-                    espece.rendementGermination = getFloat(d_line, "Rendement germination", "0")
+                    espece.rendementGermination = MyTools.getFloatInDict(d_line, "Rendement germination", "0", log)
                     assert espece.rendementGermination != 0, "'Rendement germination' indéfini pour %s"%(espece.nom)            
 
-                    espece.rendementPousseEtConservation = getFloat(d_line, "Rendement pousse et conservation", "0") 
+                    espece.rendementPousseEtConservation = MyTools.getFloatInDict(d_line, "Rendement pousse et conservation", "0", log) 
                     assert espece.rendementPousseEtConservation !=0, "'Rendement pousse et conservation' indéfini pour %s"%(espece.nom)            
 
                     ## maj conso
-                    espece.nbParts = getInt(d_line, "Nombre de panniers", "0")
+                    espece.nbParts = MyTools.getIntInDict(d_line, "Nombre de panniers", "0", log)
                     assert espece.nbParts != 0, "'Nombre de panniers' indéfini ou nul pour %s"%(espece.nom)  
              
-                    espece.consoHebdoParPart = getFloat(d_line, "Conso hebdo par pannier", "0")
+                    espece.consoHebdoParPart = MyTools.getFloatInDict(d_line, "Conso hebdo par pannier", "0", log)
                     assert espece.consoHebdoParPart, "'Conso hebdo par pannier' indéfini pour %s"%(espece.nom)
                     
-                    espece.delai_avant_retour_an = getInt(d_line, "Délai avant retour (an)", "0")
+                    espece.delai_avant_retour_an = MyTools.getIntInDict(d_line, "Délai avant retour (an)",  "0", log)
                     assert espece.delai_avant_retour_an, "'Délai avant retour (an)' indéfini pour %s"%(espece.nom)
                                                              
-                    espece.volume_motte_cm3 = getInt(d_line, "Volume alvéole (cm³)", "0")
+                    espece.volume_motte_cm3 = MyTools.getIntInDict(d_line, "Volume alvéole (cm³)",  "0", log)
                                                              
                     s_field = d_line.get("Couleur", "brown").strip()
                     assert s_field, "'Couleur' indéfini pour %s"%(espece.nom)  
@@ -193,13 +176,13 @@ class Command(BaseCommand):
                        
                 ## recup infos légumes
                 try: 
-                    leg.intra_rang_m = getFloat(d_line, "Intra rang (cm)","0")/100
+                    leg.intra_rang_m = MyTools.getFloatInDict(d_line, "Intra rang (cm)","0", log)/100
                     assert leg.intra_rang_m, "'Intra rang (cm)' indéfini pour %s"%(espece.nom)            
 
-                    leg.prodParPied_kg = getFloat(d_line, "Production par pied (kg)") 
+                    leg.prodParPied_kg = MyTools.getFloatInDict(d_line, "Production par pied (kg)", "0", log) 
                     assert leg.prodParPied_kg, "Production par pied (kg)' indéfini pour %s"%(espece.nom)   
                              
-                    leg.poidsParPiece_kg = getFloat(d_line, "Poids par pièce (g)")/1000 
+                    leg.poidsParPiece_kg = MyTools.getFloatInDict(d_line, "Poids par pièce (g)", "0", log)/1000 
                     assert leg.poidsParPiece_kg, "Poids par pièce (g)' indéfini pour %s"%(espece.nom)            
 
                     leg.save()
@@ -219,24 +202,24 @@ class Command(BaseCommand):
                         serie.legume = leg
 
                     ## recup infos série
-                    serie.nb_rangs = getInt(d_line, "Nombre de rangs retenus")
+                    serie.nb_rangs = MyTools.getIntInDict(d_line, "Nombre de rangs retenus", "0", log)
                     assert serie.nb_rangs != 0, "'Nombre de rangs retenus' indéfini pour %s "%(leg.nom())
                     
                     val = d_line.get("lieu", "")
                     assert val, "'lieu' indéfini pour %s "%(leg.nom())                    
                     serie.bSerre = (val == "SERRE")
                     
-                    serie.intra_rang_m = getFloat(d_line, "Intra rang (cm)","0")/100
+                    serie.intra_rang_m = MyTools.getFloatInDict(d_line, "Intra rang (cm)", "0", log)/100
                     assert serie.intra_rang_m, "'Intra rang (cm)' indéfini pour %s"%(leg.nom)    
                     
                     serie.remarque = d_line.get("Remarque", "")       
-                    dureeAvantRecolte_j = getInt(d_line, "Durée avant récolte (j)")
+                    dureeAvantRecolte_j = MyTools.getIntInDict(d_line, "Durée avant récolte (j)")
                                         
                     assert dureeAvantRecolte_j!=0, "Champ 'Durée avant récolte (j)' indéfini pour %s "%(leg.nom())
                     
-                    etalementRecolte_j = getInt(d_line, "Étalement récolte (j)")
+                    etalementRecolte_j = MyTools.getIntInDict(d_line, "Étalement récolte (j)", "0", log)
                     assert etalementRecolte_j!=0, "Champ 'Étalement récolte (j)' indéfini pour %s "%(leg.nom())                    
-                    delaiCroissancePlants_j = getInt(d_line, "Délai croissance plants (j)")
+                    delaiCroissancePlants_j = MyTools.getIntInDict(d_line, "Délai croissance plants (j)", "0", log)
                     
                     serie.save() 
                     serie.fixeDates(dateEnTerre, dureeAvantRecolte_j, etalementRecolte_j, delaiCroissancePlants_j)
@@ -249,7 +232,7 @@ class Command(BaseCommand):
                         implantation.planche_id = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP).id
 
                     ## on place toute la série sur cette implantation par défaut
-                    implantation.nbPieds = getInt(d_line, "Nombre de pieds", "0")
+                    implantation.nbPieds = MyTools.getIntInDict(d_line, "Nombre de pieds", "0", log)
                     assert implantation.nbPieds, "'Nombre de pieds' indéfini pour %s "%(leg.nom())
                      
                     implantation.save()

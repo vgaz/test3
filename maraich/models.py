@@ -3,6 +3,7 @@ from django.db import models as djangoModels
 import datetime, sys
 from django.utils import timezone
 from maraich import constant
+from maraich.settings import log
 import MyTools
  
 ###############################################################
@@ -36,39 +37,29 @@ def creationEvtRel(eRef, delta_j, e_type, nom="", duree_j=1):
     return evt
  
  
-def creationEditionSerie(reqPost):
+def creationEditionSerie(d_req):
     """Création ou edition d'une série de plants sur planche virtuelle
     si id_serie == 0, c'est une demande de création, sinon , d'édition/modification
     """
-    id_serie = int(reqPost.get("id_serie", "0"))
-    intra_rang_cm = reqPost.get("intra_rang_cm", "")
-    if not intra_rang_cm: 
-        intra_rang_m = 0
-    else:  
-        intra_rang_m = float(intra_rang_cm)/100
-    
-    nb_rangs = reqPost.get("nb_rangs", "")
-    if not nb_rangs: 
-        nb_rangs = 0
-    else: 
-        nb_rangs = int(nb_rangs) 
-    id_leg = int(reqPost.get("id_legume"))
+    id_serie = MyTools.getIntInDict(d_req, "id_serie", "0", log)
+    intra_rang_m = MyTools.getFloatInDict(d_req, "intra_rang_cm", "0", log)/100
+    nb_rangs = MyTools.getIntInDict(d_req, "nb_rangs", "0", log)
+    id_leg = MyTools.getIntInDict(d_req, "id_legume", "0", log)
     assert id_leg, '%s pas de valeur pour id_leg'
-    
-    bSerre = reqPost.get("b_serre","false")=="true"
-    nb_pieds = int(reqPost.get("nb_pieds","0"))
-    s_dateEnTerre = reqPost.get("date_debut")
-    duree_fab_plants_j = int(reqPost.get("duree_fab_plants_j","0"))
-    duree_avant_recolte_j = int(reqPost.get("duree_avant_recolte_j","0"))
+    bSerre = d_req.get("b_serre","false")=="true"
+    nb_pieds = MyTools.getIntInDict(d_req, "nb_pieds", "0", log)
+    s_dateEnTerre = d_req.get("date_debut")
+    duree_fab_plants_j = MyTools.getIntInDict(d_req, "duree_fab_plants_j","0", log)
+    duree_avant_recolte_j = MyTools.getIntInDict(d_req, "duree_avant_recolte_j","0", log)
     assert duree_avant_recolte_j != 0, 'duree avant recolte = 0'
-    etalement_recolte_j = int(reqPost.get("etalement_recolte_j", "0"))
+    etalement_recolte_j = MyTools.getIntInDict(d_req, "etalement_recolte_j", "0", log)
     assert etalement_recolte_j != 0, 'étalement recolte = 0'
     
     leg = Legume.objects.get(id=id_leg)
-    if id_serie == 0:
+    if id_serie == 0 or d_req.get("cde","")=="clone_serie":
         serie = Serie() ## nelle serie
-    elif reqPost.get("cde","")=="clone_serie":
-        serie = Serie.objects.clone(id_serie)
+#     elif :
+#         serie = Serie.objects.clone(id_serie)
     else:
         serie = Serie.objects.get(id=id_serie)
     
@@ -102,8 +93,6 @@ def creationEditionSerie(reqPost):
         impl.save()
         serie.implantations.add(impl)
         
-#     serie.save() 
-    print (serie.descriptif())
     return serie
 
  
@@ -121,14 +110,13 @@ def creationPlanche(longueur_m, largeur_m, bSerre, s_nom=""):
     planche.save()
     return planche
            
+           
 def surfaceLibreSurPeriode(planche, date_debut, date_fin): 
     """retourne la surface dispo de telle date à telle date
     est retenue la plus grande surface dispo sur TOUT l'intervale
     """
     ## recherche de toutes les séries de cette planche présentes sur la même période
-    l_series_presentes = Serie.objects.activesSurPeriode(   date_debut,
-                                                            date_fin, 
-                                                            planche)
+    l_series_presentes = Serie.objects.activesSurPeriode(date_debut, date_fin, planche)
     
     ## recherche des dates de tous les changements potentiels de surface dispo
     ## on stocke les dates concernées
@@ -381,15 +369,23 @@ class Evenement(djangoModels.Model):
         return self.D_NOM_TYPES[self.type]  
 
     def save(self,*args,**kwargs):
-        self.majDelta_j()
+        self._majDelta_j()
         super(Evenement,self).save(*args,**kwargs)
 
-    def majDelta_j(self, delta_j=None):
+    def _majDelta_j(self, delta_j=None):
         """Ajustement de la date par rapport à un decalage en jours pour les évenements relatifs"""
         if self.eRef_id:
             if delta_j:
                 self.delta_j = delta_j
             self.date = self.eRef.date + datetime.timedelta(days = self.delta_j)
+
+    def decale(self, delta_j):
+        """decalage de la date de l'evt absolu ou relatif"""
+        if self.eRef_id:
+            self.delta_j += delta_j
+        else:
+            self.date += datetime.timedelta(days = delta_j)
+        self.save()
 
     def __str__(self):
         if self.eRef_id:
@@ -453,34 +449,7 @@ class SerieManager(djangoModels.Manager):
         except:
             print(str(sys.exc_info()))
             return False
-            
 
-    def clone(self, id_serie):
-        """clonage d'une série"""
-        serie = Serie.objects.get(id=id_serie)
-        serie2 = Serie.objects.get(id=serie.id)
-        serie2.id = None
-        serie2.save() ## mode de création d'une nouvelle serie, tous les champs non relatifs sont copiés
-    
-        # maj des champs relatifs
-        for evt in serie.evenements.all():
-            evt.id = None   ## crée un clone
-            evt.save()      ## """"""""""""
-            serie2.evenements.add(evt)
-            if evt.type == Evenement.TYPE_DEBUT: 
-                serie2.evt_debut_id = evt.id
-            if evt.type == Evenement.TYPE_FIN: 
-                serie2.evt_fin_id = evt.id
-            
-        ## duplication des implantations au même endroit
-        for imp in serie.implantations.all():
-            imp.id = None   ## crée un clone
-            imp.save()      ## """"""""""
-            serie2.implantations.add(imp)
-            
-        return serie2
-
-        
 
 class Serie(djangoModels.Model):
     
@@ -647,7 +616,7 @@ class Serie(djangoModels.Model):
         return ",".join(impl.planche.nom for impl in self.implantations.all())
          
     def __str__(self):       
-        return "(s%d), %s, %d pieds, %d graines, %d m, %d m2 de planche(s) [%s], du %s au %s. Qté estimée : %d %s" %( self.id,
+        return "(s%d), %s, %d pieds, %d graines, %d m, %d m2 de planche(s) [%s], du %s au %s. Qté estimée : %d %ss" %( self.id,
                                                                                         self.legume.nom(),
                                                                                         self.nbPieds(),
                                                                                         self.nbGraines(),
@@ -659,7 +628,7 @@ class Serie(djangoModels.Model):
                                                                                         self.quantiteEstimee_kg_ou_piece(),
                                                                                         self.legume.espece.nomUniteProd())
     def descriptif(self):
-        """retourne une desctriptioin complete de la série"""
+        """retourne une descriptioin complète de la série"""
         l_rep = []
         l_rep.append(self.__str__())
         if  self.dateDebutPlants():
@@ -671,8 +640,8 @@ class Serie(djangoModels.Model):
         
         l_rep.append("surface Occupée : %s m2"%(self.surfaceOccupee_m2()))
         l_rep.append("quantité estimée : %d %s"%(self.quantiteEstimee_kg_ou_piece(), self.legume.espece.nomUniteProd()))
-        
-        return ",".join(l_rep)
+        l_rep.append("remarque : %s"%self.remarque)
+        return "\n".join(l_rep)
     
         
     def info(self):

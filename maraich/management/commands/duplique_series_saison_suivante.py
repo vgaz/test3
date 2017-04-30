@@ -11,68 +11,46 @@ import sys
 class Command(BaseCommand):
     """Duplication de toutes les séries d'une année N vers l'année N+1"""
     help = "Tapper python manage.py duplique_series_saison_suivante"
-# 
-#     def creationPlanches(self):
-#         """Création des planches de base et celles du fichier"""
-#         
-#         try:
-#             p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
-#         except:
-#             p = Planche()
-#             p.nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP
-#             p.longueur_m = 10000
-#             p.largeur_m = 1
-#             p.bSerre = False
-#             p.save()  
-# 
-#         try:
-#             p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS)
-#         except:
-#             p = Planche()
-#             p.nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS
-#             p.longueur_m = 10000
-#             p.largeur_m = 1
-#             p.bSerre = True
-#             p.save()  
-# 
-#         try:
-#             with open(os.path.join(BASE_DIR, "inputs", "Planches.csv"), "r+t", encoding="ISO-8859-1") as hF:
-#                 reader = csv.DictReader(hF)
-#                 for d_line in reader:                
-#                     nomPlanche = d_line.get("nom")
-#                     try:
-#                         p = Planche.objects.get(nom = nomPlanche)
-#                     except:
-#                         p = Planche()
-#                         p.nom = nomPlanche
-#                         print(nomPlanche)
-#                         p.longueur_m = int(d_line.get("longueur (m)", "0"))
-#                         p.largeur_m = float(d_line.get("largeur (m)", "0").replace(",","."))
-#                         p.bSerre = (p.nom[0]=="S")
-#                         p.save()
-#                         print (p)               
-#         except:
-#             print(sys.exc_info()[1]) 
-#               
 
+
+    def add_arguments(self, parser):
+        parser.add_argument('--orig', nargs='+', type=int)
+        parser.add_argument('--dest', nargs='+', type=int)
+              
     def handle(self, *args, **options):
-        """Duplique toutes les séries lancées telle année vers telle autre année"""
+        """Duplique toutes les séries lancées telle année vers telle autre année
+        passer l'année de départ et l'année de fin ex 'manage.py duplique_series_saison_suivante 2017 2019'"""
         s_err = ""
         try:
-            anneeOrigine = 2017
-            anneeDestination = 2018
+            ## recup anne origine
+            ## recup année à créer
+            anneeOrigine = options["orig"][0]
+            anneeDestination = options["dest"][0]
             dateOrig = MyTools.getDateFrom_d_m_y("1/1/%d"%anneeOrigine)
-            dateDest =  MyTools.getDateFrom_d_m_y("31/12/%d"%anneeDestination)
+            dateDest =  MyTools.getDateFrom_d_m_y("31/12/%d"%anneeOrigine)
+            decalageJours = ((anneeDestination - anneeOrigine)*365)-1
             assert dateDest > dateOrig, "Années d'origine et de destination incohérentes"
             
             for serie in Serie.objects.activesSurPeriode(dateOrig, dateDest):
-                serieDest = Serie.objects.clone(serie.id)
-                ## changement des dates des évèmenents + 365j
-                for evt in serieDest.evenements.all():
-                    evt.date += datetime.timedelta(days = 365) 
-                    evt.save()
+                dateFabPlants = serie.dateDebutPlants()
+                if dateFabPlants:
+                    dureeFabPlants_j = (serie.evt_debut.date - dateFabPlants).days
+                else:
+                    dureeFabPlants_j = 0
+    
+                serieDest = creationEditionSerie({"id_serie":"0",
+                                                  "intra_rang_cm":serie.intra_rang_m*100,
+                                                  "nb_rangs":serie.nb_rangs,
+                                                  "id_legume":serie.legume_id,
+                                                  "nb_pieds":serie.nbPieds(),
+                                                  "b_serre":serie.bSerre,
+                                                  "date_debut":serie.evt_debut.date + datetime.timedelta(days = decalageJours),
+                                                  "duree_fab_plants_j":dureeFabPlants_j,
+                                                  "duree_avant_recolte_j":serie.dureeAvantRecolte_j,
+                                                  "etalement_recolte_j":serie.etalementRecolte_j
+                                                  })
 
-                serieDest.save()
+                log.info("%s\nsérie dupliquée : %s\n\n"%(serie.__str__(), serieDest.__str__()))
         except:
             s_err = str(sys.exc_info()[1])
 

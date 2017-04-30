@@ -2,6 +2,7 @@ eclipse.preferences.version=1
 encoding//maraich/XXcontroleModels.py=utf-8
 encoding//maraich/admin.py=utf-8
 encoding//maraich/constant.py=utf-8
+encoding//maraich/filters.py=utf-8
 encoding//maraich/forms.py=utf-8
 encoding//maraich/management/commands/duplique_series_saison_suivante.py=utf-8
 encoding//maraich/management/commands/maj_planches.py=utf-8

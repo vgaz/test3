@@ -778,3 +778,302 @@ Erreur; espèce melon non trouvée. abandon
 [2017-04-26 08:29:13,941 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
 [2017-04-26 08:29:13,941 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'cde': ['deplacement_implantation'], 'simulation': ['true'], 'id_implantation': ['22'], 'id_serie': ['22'], 'nb_rangs': ['2'], 'nb_pieds': ['55'], 'intra_rang_cm': ['60'], 'id_planche_dest': ['undefined']}>
 [2017-04-26 08:29:13,944 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-04-27 14:13:27,629 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-27 14:13:27,629 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['23'], 'cde': ['get_impls_serie']}>
+[2017-04-27 14:13:27,872 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 23, "fields": {"planche": 9228, "nbPieds": 55}}]}
+[2017-04-27 14:13:27,882 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-27 14:13:27,882 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['23'], 'cde': ['get_evts_serie']}>
+[2017-04-27 14:13:27,900 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 15677, "fields": {"type": 5, "eRef": 15674, "delta_j": -30, "date": "2017-03-12T12:00:00", "date_creation": "2017-04-20T09:35:59.765", "duree_j": 1, "nom": "semi motte chou blanc holsteiner platter", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15674, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-04-11T12:00:00", "date_creation": "2017-04-20T09:35:58.905", "duree_j": 1, "nom": "d\u00e9but chou blanc holsteiner platter", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15675, "fields": {"type": 3, "eRef": 15674, "delta_j": 95, "date": "2017-07-15T12:00:00", "date_creation": "2017-04-20T09:35:59.139", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte chou blanc holsteiner platter", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15676, "fields": {"type": 2, "eRef": 15675, "delta_j": 7, "date": "2017-07-22T12:00:00", "date_creation": "2017-04-20T09:35:59.462", "duree_j": 1, "nom": "fin chou blanc holsteiner platter", "texte": "", "b_fini": false}}]}
+[2017-04-27 14:13:47,858 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-27 14:13:47,858 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['23'], 'cde': ['get_impls_serie']}>
+[2017-04-27 14:13:47,863 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 23, "fields": {"planche": 9228, "nbPieds": 55}}]}
+[2017-04-27 14:13:47,910 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-27 14:13:47,910 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['23'], 'cde': ['get_evts_serie']}>
+[2017-04-27 14:13:47,917 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 15677, "fields": {"type": 5, "eRef": 15674, "delta_j": -30, "date": "2017-03-12T12:00:00", "date_creation": "2017-04-20T09:35:59.765", "duree_j": 1, "nom": "semi motte chou blanc holsteiner platter", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15674, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-04-11T12:00:00", "date_creation": "2017-04-20T09:35:58.905", "duree_j": 1, "nom": "d\u00e9but chou blanc holsteiner platter", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15675, "fields": {"type": 3, "eRef": 15674, "delta_j": 95, "date": "2017-07-15T12:00:00", "date_creation": "2017-04-20T09:35:59.139", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte chou blanc holsteiner platter", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15676, "fields": {"type": 2, "eRef": 15675, "delta_j": 7, "date": "2017-07-22T12:00:00", "date_creation": "2017-04-20T09:35:59.462", "duree_j": 1, "nom": "fin chou blanc holsteiner platter", "texte": "", "b_fini": false}}]}
+[2017-04-27 14:14:04,967 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-27 14:14:04,968 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_implantation': ['23'], 'id_planche_dest': ['9205'], 'cde': ['deplacement_implantation'], 'nb_rangs': ['2'], 'nb_pieds': ['55'], 'intra_rang_cm': ['60'], 'id_serie': ['23'], 'simulation': ['true']}>
+[2017-04-27 14:14:07,488 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-27 14:14:07,489 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_implantation': ['23'], 'id_planche_dest': ['9205'], 'cde': ['deplacement_implantation'], 'nb_rangs': ['2'], 'nb_pieds': ['55'], 'intra_rang_cm': ['60'], 'id_serie': ['23'], 'simulation': ['false']}>
+[2017-04-27 14:14:47,668 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-27 14:14:47,669 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_implantation': ['24'], 'id_planche_dest': ['9206'], 'cde': ['deplacement_implantation'], 'nb_rangs': ['2'], 'nb_pieds': ['55'], 'intra_rang_cm': ['60'], 'id_serie': ['24'], 'simulation': ['true']}>
+[2017-04-27 14:14:50,085 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-27 14:14:50,085 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_implantation': ['24'], 'id_planche_dest': ['9206'], 'cde': ['deplacement_implantation'], 'nb_rangs': ['2'], 'nb_pieds': ['55'], 'intra_rang_cm': ['60'], 'id_serie': ['24'], 'simulation': ['false']}>
+[2017-04-27 14:18:23,365 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-27 14:18:23,366 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['38'], 'cde': ['get_impls_serie']}>
+[2017-04-27 14:18:23,370 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 38, "fields": {"planche": 9228, "nbPieds": 69}}]}
+[2017-04-27 14:18:23,431 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-27 14:18:23,432 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['38'], 'cde': ['get_evts_serie']}>
+[2017-04-27 14:18:23,440 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 15737, "fields": {"type": 5, "eRef": 15734, "delta_j": -29, "date": "2017-04-09T12:00:00", "date_creation": "2017-04-20T09:36:29.565", "duree_j": 1, "nom": "semi motte courge olive", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15734, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T12:00:00", "date_creation": "2017-04-20T09:36:28.707", "duree_j": 1, "nom": "d\u00e9but courge olive", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15735, "fields": {"type": 3, "eRef": 15734, "delta_j": 119, "date": "2017-09-04T12:00:00", "date_creation": "2017-04-20T09:36:28.982", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte courge olive", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15736, "fields": {"type": 2, "eRef": 15735, "delta_j": 7, "date": "2017-09-11T12:00:00", "date_creation": "2017-04-20T09:36:29.317", "duree_j": 1, "nom": "fin courge olive", "texte": "", "b_fini": false}}]}
+[2017-04-27 14:18:44,853 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-27 14:18:44,854 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['35'], 'cde': ['get_impls_serie']}>
+[2017-04-27 14:18:44,861 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 35, "fields": {"planche": 9228, "nbPieds": 592}}]}
+[2017-04-27 14:18:44,900 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-27 14:18:44,900 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['35'], 'cde': ['get_evts_serie']}>
+[2017-04-27 14:18:44,905 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 15725, "fields": {"type": 5, "eRef": 15722, "delta_j": -21, "date": "2017-02-27T12:00:00", "date_creation": "2017-04-20T09:36:23.641", "duree_j": 1, "nom": "semi motte ciboulette commune", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15722, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-03-20T12:00:00", "date_creation": "2017-04-20T09:36:22.886", "duree_j": 1, "nom": "d\u00e9but ciboulette commune", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15723, "fields": {"type": 3, "eRef": 15722, "delta_j": 90, "date": "2017-06-18T12:00:00", "date_creation": "2017-04-20T09:36:23.138", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte ciboulette commune", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15724, "fields": {"type": 2, "eRef": 15723, "delta_j": 90, "date": "2017-09-16T12:00:00", "date_creation": "2017-04-20T09:36:23.395", "duree_j": 1, "nom": "fin ciboulette commune", "texte": "", "b_fini": false}}]}
+[2017-04-27 14:19:00,808 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_impls_serie
+[2017-04-27 14:19:00,808 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['38'], 'cde': ['get_impls_serie']}>
+[2017-04-27 14:19:00,813 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_impls": [{"model": "maraich.implantation", "pk": 38, "fields": {"planche": 9228, "nbPieds": 69}}]}
+[2017-04-27 14:19:00,853 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........get_evts_serie
+[2017-04-27 14:19:00,853 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['38'], 'cde': ['get_evts_serie']}>
+[2017-04-27 14:19:00,857 MARAICH_INFO    ] serveRequest   .serveRequest: {"status":true, "l_evts": [{"model": "maraich.evenement", "pk": 15737, "fields": {"type": 5, "eRef": 15734, "delta_j": -29, "date": "2017-04-09T12:00:00", "date_creation": "2017-04-20T09:36:29.565", "duree_j": 1, "nom": "semi motte courge olive", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15734, "fields": {"type": 1, "eRef": 0, "delta_j": 0, "date": "2017-05-08T12:00:00", "date_creation": "2017-04-20T09:36:28.707", "duree_j": 1, "nom": "d\u00e9but courge olive", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15735, "fields": {"type": 3, "eRef": 15734, "delta_j": 119, "date": "2017-09-04T12:00:00", "date_creation": "2017-04-20T09:36:28.982", "duree_j": 1, "nom": "d\u00e9but r\u00e9colte courge olive", "texte": "", "b_fini": false}}, {"model": "maraich.evenement", "pk": 15736, "fields": {"type": 2, "eRef": 15735, "delta_j": 7, "date": "2017-09-11T12:00:00", "date_creation": "2017-04-20T09:36:29.317", "duree_j": 1, "nom": "fin courge olive", "texte": "", "b_fini": false}}]}
+[2017-04-27 14:19:52,229 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........deplacement_implantation
+[2017-04-27 14:19:52,229 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id_implantation': ['38'], 'id_planche_dest': ['undefined'], 'cde': ['deplacement_implantation'], 'nb_rangs': ['1'], 'nb_pieds': ['69'], 'intra_rang_cm': ['100'], 'id_serie': ['38'], 'simulation': ['true']}>
+[2017-04-27 14:19:52,231 MARAICH_ERROR   ] serveRequest   .serveRequest: Erreur : invalid literal for int() with base 10: 'undefined'
+[2017-04-30 09:03:25,366 MARAICH_INFO    ] duplique_series_saison_suivante.handle: Fin de comande Duplication de toutes les séries d'une année N vers l'année N+1
+
+[2017-04-30 09:26:49,544 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s255), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/02/2018 au 09/08/2017. Qté estimée : 554 Pièce
+[2017-04-30 09:26:51,392 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s256), ail blanc messidor, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/01/2018 au 09/07/2017. Qté estimée : 554 Pièce
+[2017-04-30 09:26:53,726 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s257), aubergine impérial black beauty, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [S_12], du 15/04/2018 au 27/09/2017. Qté estimée : 348 Pièce
+[2017-04-30 09:26:55,913 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s258), aubergine ronde de valence, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [S_23], du 15/04/2018 au 27/09/2017. Qté estimée : 348 Pièce
+[2017-04-30 09:26:57,652 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s259), betterave rouge alvro-mono, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 02/04/2018 au 08/09/2017. Qté estimée : 249 Kg
+[2017-04-30 09:26:59,537 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s260), betterave rouge crapaudine, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 10/05/2018 au 11/12/2017. Qté estimée : 249 Kg
+[2017-04-30 09:27:01,402 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s261), betterave rouge rouge cylindra, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 15/05/2018 au 16/12/2017. Qté estimée : 249 Kg
+[2017-04-30 09:27:03,593 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s262), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle sous abris], du 20/02/2018 au 10/06/2017. Qté estimée : 149 Kg
+[2017-04-30 09:29:40,799 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s264), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/02/2018 au 09/08/2017. Qté estimée : 554 Pièce
+[2017-04-30 09:30:31,469 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s265), ail blanc messidor, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/01/2018 au 09/07/2017. Qté estimée : 554 Pièce
+[2017-04-30 09:31:42,877 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s266), aubergine impérial black beauty, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [S_12], du 15/04/2017 au 27/09/2017. Qté estimée : 348 Pièce
+[2017-04-30 10:59:32,492 MARAICH_WARNING ] MyTools        .getFloatInDict: finding intra_rang_cm {'duree_fab_plants_j': 0, 'id_serie': '0', 'nb_pieds': 584, 'id_legume': 1, 'etalement_recolte_j': 5, 'date_debut': datetime.datetime(2017, 2, 5, 12, 0), 'duree_avant_recolte_j': 180, 'intra_rang_cm': 15.0, 'b_serre': False, 'nb_rangs': 6} 'float' object has no attribute 'replace'
+[2017-04-30 11:00:33,045 MARAICH_WARNING ] MyTools        .getFloatInDict: finding intra_rang_cm {'nb_pieds': 584, 'nb_rangs': 6, 'etalement_recolte_j': 5, 'date_debut': datetime.datetime(2017, 2, 5, 12, 0), 'id_serie': '0', 'intra_rang_cm': 15.0, 'duree_fab_plants_j': 0, 'id_legume': 1, 'b_serre': False, 'duree_avant_recolte_j': 180} 'float' object has no attribute 'replace'
+[2017-04-30 11:00:33,149 MARAICH_WARNING ] MyTools        .getFloatInDict: finding intra_rang_cm {'nb_pieds': 584, 'nb_rangs': 6, 'etalement_recolte_j': 5, 'date_debut': datetime.datetime(2017, 2, 5, 12, 0), 'id_serie': '0', 'intra_rang_cm': 15.0, 'duree_fab_plants_j': 0, 'id_legume': 1, 'b_serre': False, 'duree_avant_recolte_j': 180} 'float' object has no attribute 'replace'
+[2017-04-30 11:00:42,359 MARAICH_WARNING ] MyTools        .getFloatInDict: finding intra_rang_cm {'nb_pieds': 584, 'nb_rangs': 6, 'etalement_recolte_j': 5, 'date_debut': datetime.datetime(2017, 2, 5, 12, 0), 'id_serie': '0', 'intra_rang_cm': 15.0, 'duree_fab_plants_j': 0, 'id_legume': 1, 'b_serre': False, 'duree_avant_recolte_j': 180} 'float' object has no attribute 'replace'
+[2017-04-30 11:00:42,463 MARAICH_WARNING ] MyTools        .getFloatInDict: finding intra_rang_cm {'nb_pieds': 584, 'nb_rangs': 6, 'etalement_recolte_j': 5, 'date_debut': datetime.datetime(2017, 2, 5, 12, 0), 'id_serie': '0', 'intra_rang_cm': 15.0, 'duree_fab_plants_j': 0, 'id_legume': 1, 'b_serre': False, 'duree_avant_recolte_j': 180} 'float' object has no attribute 'replace'
+[2017-04-30 11:16:25,751 MARAICH_WARNING ] MyTools        .getIntInDict: finding nb_rangs {'intra_rang_cm': 15.0, 'id_serie': '0', 'b_serre': False, 'nb_rangs': 6, 'nb_pieds': 584, 'id_legume': 1, 'duree_avant_recolte_j': 180, 'etalement_recolte_j': 5, 'date_debut': datetime.datetime(2017, 2, 5, 12, 0), 'duree_fab_plants_j': 0} 'int' object has no attribute 'split'
+[2017-04-30 11:16:28,054 MARAICH_WARNING ] MyTools        .getIntInDict: finding id_legume {'intra_rang_cm': 15.0, 'id_serie': '0', 'b_serre': False, 'nb_rangs': 6, 'nb_pieds': 584, 'id_legume': 1, 'duree_avant_recolte_j': 180, 'etalement_recolte_j': 5, 'date_debut': datetime.datetime(2017, 2, 5, 12, 0), 'duree_fab_plants_j': 0} 'int' object has no attribute 'split'
+[2017-04-30 11:22:52,288 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s268), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 06/02/2017 au 10/08/2017. Qté estimée : 554 Pièce
+[2017-04-30 11:34:09,993 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s271), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 06/02/2017 au 10/08/2017. Qté estimée : 554 Pièce
+[2017-04-30 11:43:51,875 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s273), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 06/02/2017 au 10/08/2017. Qté estimée : 554 Pièce
+[2017-04-30 11:44:44,762 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s274), ail blanc messidor, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 06/01/2017 au 10/07/2017. Qté estimée : 554 Pièce
+[2017-04-30 11:44:47,189 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s275), aubergine impérial black beauty, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [Virtuelle plein champ], du 16/04/2017 au 28/09/2017. Qté estimée : 348 Pièce
+[2017-04-30 11:44:49,449 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s276), aubergine ronde de valence, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [Virtuelle plein champ], du 16/04/2017 au 28/09/2017. Qté estimée : 348 Pièce
+[2017-04-30 11:44:51,347 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s277), betterave rouge alvro-mono, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 02/04/2017 au 08/09/2017. Qté estimée : 249 Kg
+[2017-04-30 11:44:53,309 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s278), betterave rouge crapaudine, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 11/05/2017 au 12/12/2017. Qté estimée : 249 Kg
+[2017-04-30 11:44:55,272 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s279), betterave rouge rouge cylindra, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 16/05/2017 au 17/12/2017. Qté estimée : 249 Kg
+[2017-04-30 11:44:57,544 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s280), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 21/02/2017 au 11/06/2017. Qté estimée : 149 Kg
+[2017-04-30 11:45:00,158 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s281), blette verte à carde rouge, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 16/04/2017 au 04/08/2017. Qté estimée : 149 Kg
+[2017-04-30 11:45:02,715 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s282), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 16/06/2017 au 04/10/2017. Qté estimée : 149 Kg
+[2017-04-30 11:45:05,502 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s283), blette verte à carde blanche 3, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 02/10/2017 au 10/01/2018. Qté estimée : 149 Kg
+[2017-04-30 11:45:07,575 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s284), carotte de garde rodelika, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 16/05/2017 au 28/11/2017. Qté estimée : 333 Kg
+[2017-04-30 11:45:09,578 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s285), carotte de garde gniff, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 31/05/2017 au 13/12/2017. Qté estimée : 333 Kg
+[2017-04-30 11:45:11,696 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s286), carotte de garde nantaise 2, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 01/07/2017 au 13/01/2018. Qté estimée : 333 Kg
+[2017-04-30 11:45:13,797 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s287), carotte primeur de carentan, 3174 pieds, 4232 graines, 158 m, 39 m2 de planche(s) [Virtuelle plein champ], du 16/02/2017 au 07/06/2017. Qté estimée : 149 Kg
+[2017-04-30 11:45:15,721 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s288), carotte primeur oxhella, 3174 pieds, 4232 graines, 158 m, 39 m2 de planche(s) [Virtuelle plein champ], du 16/02/2017 au 07/06/2017. Qté estimée : 149 Kg
+[2017-04-30 11:45:17,652 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s289), carotte saison jaune du doubs, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 09/05/2017 au 15/09/2017. Qté estimée : 66 Kg
+[2017-04-30 11:45:19,610 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s290), carotte saison de la halle, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 10/05/2017 au 16/09/2017. Qté estimée : 66 Kg
+[2017-04-30 11:45:21,602 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s291), carotte saison colmar à coeur rouge, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 10/05/2017 au 16/09/2017. Qté estimée : 66 Kg
+[2017-04-30 11:45:24,325 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s292), céleri branche à côtes violettes, 111 pieds, 123 graines, 44 m, 14 m2 de planche(s) [Virtuelle plein champ], du 11/05/2017 au 21/11/2017. Qté estimée : 99 Pièce
+[2017-04-30 11:45:26,891 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s293), céleri rave monarch, 222 pieds, 246 graines, 88 m, 29 m2 de planche(s) [Virtuelle plein champ], du 21/04/2017 au 15/11/2017. Qté estimée : 199 Pièce
+[2017-04-30 11:45:29,304 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s294), chou blanc holsteiner platter, 55 pieds, 61 graines, 33 m, 16 m2 de planche(s) [Virtuelle plein champ], du 22/03/2017 au 27/07/2017. Qté estimée : 49 Pièce
+[2017-04-30 11:45:31,620 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s295), chou blanc holsteiner platter, 55 pieds, 61 graines, 33 m, 16 m2 de planche(s) [Virtuelle plein champ], du 12/04/2017 au 23/07/2017. Qté estimée : 49 Pièce
+[2017-04-30 11:45:34,236 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s296), chou blanc nagels frühweiss, 55 pieds, 61 graines, 33 m, 16 m2 de planche(s) [Virtuelle plein champ], du 03/05/2017 au 07/09/2017. Qté estimée : 49 Pièce
+[2017-04-30 11:45:36,699 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s297), chou brocoli calinaro, 31 pieds, 34 graines, 18 m, 9 m2 de planche(s) [Virtuelle plein champ], du 21/06/2017 au 31/08/2017. Qté estimée : 49 Pièce
+[2017-04-30 11:45:39,128 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s298), chou chinois atsuko, 70 pieds, 77 graines, 28 m, 9 m2 de planche(s) [Virtuelle plein champ], du 31/10/2017 au 23/01/2018. Qté estimée : 63 Pièce
+[2017-04-30 11:45:41,532 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s299), chou de milan gros des vertus, 41 pieds, 45 graines, 24 m, 12 m2 de planche(s) [Virtuelle plein champ], du 16/05/2017 au 23/10/2017. Qté estimée : 36 Pièce
+[2017-04-30 11:45:44,043 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s300), chou de milan paresa f1, 41 pieds, 45 graines, 24 m, 12 m2 de planche(s) [Virtuelle plein champ], du 16/06/2017 au 03/12/2017. Qté estimée : 36 Pièce
+[2017-04-30 11:45:46,525 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s301), chou fleur whiterock, 111 pieds, 123 graines, 66 m, 33 m2 de planche(s) [Virtuelle plein champ], du 11/04/2017 au 08/08/2017. Qté estimée : 99 Pièce
+[2017-04-30 11:45:49,021 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s302), chou fleur boule de neige, 111 pieds, 123 graines, 66 m, 33 m2 de planche(s) [Virtuelle plein champ], du 16/05/2017 au 27/09/2017. Qté estimée : 99 Pièce
+[2017-04-30 11:45:51,446 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s303), chou rave lanro, 166 pieds, 184 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 02/06/2017 au 22/08/2017. Qté estimée : 149 Pièce
+[2017-04-30 11:45:53,892 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s304), chou rouge cabu rouge, 166 pieds, 184 graines, 99 m, 49 m2 de planche(s) [Virtuelle plein champ], du 16/05/2017 au 04/10/2017. Qté estimée : 149 Pièce
+[2017-04-30 11:45:56,617 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s305), chou rutabaga wilhelmsburger, 83 pieds, 92 graines, 33 m, 11 m2 de planche(s) [Virtuelle plein champ], du 13/04/2017 au 12/07/2017. Qté estimée : 74 Pièce
+[2017-04-30 11:45:59,314 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s306), chou rutabaga wilhelmsburger, 83 pieds, 92 graines, 33 m, 11 m2 de planche(s) [Virtuelle plein champ], du 20/04/2017 au 19/07/2017. Qté estimée : 74 Pièce
+[2017-04-30 11:46:01,921 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s307), ciboulette commune, 592 pieds, 16444 graines, 88 m, 14 m2 de planche(s) [Virtuelle plein champ], du 21/03/2017 au 17/09/2017. Qté estimée : 79 Kg
+[2017-04-30 11:46:04,548 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s308), concombre rollison's telepraph, 109 pieds, 121 graines, 65 m, 32 m2 de planche(s) [Virtuelle plein champ], du 20/05/2017 au 21/10/2017. Qté estimée : 348 Pièce
+[2017-04-30 11:46:07,155 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s309), concombre le généreux, 109 pieds, 121 graines, 65 m, 32 m2 de planche(s) [Virtuelle plein champ], du 21/05/2017 au 22/10/2017. Qté estimée : 348 Pièce
+[2017-04-30 11:46:09,672 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s310), courge olive, 69 pieds, 76 graines, 69 m, 69 m2 de planche(s) [Virtuelle plein champ], du 09/05/2017 au 12/09/2017. Qté estimée : 124 Pièce
+[2017-04-30 11:46:12,160 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s311), courge butternut, 69 pieds, 76 graines, 69 m, 69 m2 de planche(s) [Virtuelle plein champ], du 10/05/2017 au 14/09/2017. Qté estimée : 124 Pièce
+[2017-04-30 11:46:14,736 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s312), courge pomme d'or, 69 pieds, 76 graines, 69 m, 69 m2 de planche(s) [Virtuelle plein champ], du 11/05/2017 au 15/09/2017. Qté estimée : 124 Pièce
+[2017-04-30 11:46:17,606 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s313), courge muscade, 69 pieds, 76 graines, 69 m, 69 m2 de planche(s) [Virtuelle plein champ], du 12/05/2017 au 16/09/2017. Qté estimée : 124 Pièce
+[2017-04-30 11:46:20,362 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s314), courge patidou, 69 pieds, 76 graines, 69 m, 69 m2 de planche(s) [Virtuelle plein champ], du 13/05/2017 au 17/09/2017. Qté estimée : 124 Pièce
+[2017-04-30 11:46:22,971 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s315), courge longue de nice, 69 pieds, 76 graines, 69 m, 69 m2 de planche(s) [Virtuelle plein champ], du 14/05/2017 au 18/09/2017. Qté estimée : 124 Pièce
+[2017-04-30 11:46:25,427 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s316), courge potimaron red kuri, 69 pieds, 76 graines, 69 m, 69 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 19/09/2017. Qté estimée : 124 Pièce
+[2017-04-30 11:46:28,032 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s317), courge kabocha, 69 pieds, 76 graines, 69 m, 69 m2 de planche(s) [Virtuelle plein champ], du 16/05/2017 au 20/09/2017. Qté estimée : 124 Pièce
+[2017-04-30 11:46:30,661 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s318), courge sucrine du berry, 69 pieds, 76 graines, 69 m, 69 m2 de planche(s) [Virtuelle plein champ], du 17/05/2017 au 21/09/2017. Qté estimée : 124 Pièce
+[2017-04-30 11:46:33,360 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s319), courge pleine de napple, 69 pieds, 76 graines, 69 m, 69 m2 de planche(s) [Virtuelle plein champ], du 18/05/2017 au 22/09/2017. Qté estimée : 124 Pièce
+[2017-04-30 11:46:36,102 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s320), courgette partenon f1, 15 pieds, 16 graines, 15 m, 15 m2 de planche(s) [Virtuelle plein champ], du 21/03/2017 au 29/06/2017. Qté estimée : 67 Pièce
+[2017-04-30 11:49:35,041 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s1), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/02/2017 au 09/08/2017. Qté estimée : 554 Pièce
+(s322), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 06/02/2017 au 10/08/2017. Qté estimée : 554 Pièce
+
+
+[2017-04-30 11:49:37,121 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s2), ail blanc messidor, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/01/2017 au 09/07/2017. Qté estimée : 554 Pièce
+(s323), ail blanc messidor, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 06/01/2017 au 10/07/2017. Qté estimée : 554 Pièce
+
+
+[2017-04-30 11:49:39,542 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s3), aubergine impérial black beauty, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [S_12], du 15/04/2017 au 27/09/2017. Qté estimée : 348 Pièce
+(s324), aubergine impérial black beauty, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [Virtuelle plein champ], du 16/04/2017 au 28/09/2017. Qté estimée : 348 Pièce
+
+
+[2017-04-30 11:49:41,966 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s4), aubergine ronde de valence, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [S_23], du 15/04/2017 au 27/09/2017. Qté estimée : 348 Pièce
+(s325), aubergine ronde de valence, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [Virtuelle plein champ], du 16/04/2017 au 28/09/2017. Qté estimée : 348 Pièce
+
+
+[2017-04-30 11:49:43,884 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s5), betterave rouge alvro-mono, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 02/04/2017 au 08/09/2017. Qté estimée : 249 Kg
+(s326), betterave rouge alvro-mono, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 02/04/2017 au 08/09/2017. Qté estimée : 249 Kg
+
+
+[2017-04-30 11:49:45,932 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s6), betterave rouge crapaudine, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 10/05/2017 au 11/12/2017. Qté estimée : 249 Kg
+(s327), betterave rouge crapaudine, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 11/05/2017 au 12/12/2017. Qté estimée : 249 Kg
+
+
+[2017-04-30 11:49:47,934 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s7), betterave rouge rouge cylindra, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 16/12/2017. Qté estimée : 249 Kg
+(s328), betterave rouge rouge cylindra, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 16/05/2017 au 17/12/2017. Qté estimée : 249 Kg
+
+
+[2017-04-30 11:56:42,463 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s1), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/02/2017 au 09/08/2017. Qté estimée : 554 Pièce
+(s330), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 06/02/2018 au 10/08/2018. Qté estimée : 554 Pièce
+
+
+[2017-04-30 11:56:44,047 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s2), ail blanc messidor, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/01/2017 au 09/07/2017. Qté estimée : 554 Pièce
+(s331), ail blanc messidor, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 06/01/2018 au 10/07/2018. Qté estimée : 554 Pièce
+
+
+[2017-04-30 11:56:45,929 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s3), aubergine impérial black beauty, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [S_12], du 15/04/2017 au 27/09/2017. Qté estimée : 348 Pièce
+(s332), aubergine impérial black beauty, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [Virtuelle plein champ], du 16/04/2018 au 28/09/2018. Qté estimée : 348 Pièce
+
+
+[2017-04-30 11:56:47,828 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s4), aubergine ronde de valence, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [S_23], du 15/04/2017 au 27/09/2017. Qté estimée : 348 Pièce
+(s333), aubergine ronde de valence, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [Virtuelle plein champ], du 16/04/2018 au 28/09/2018. Qté estimée : 348 Pièce
+
+
+[2017-04-30 11:56:49,645 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s5), betterave rouge alvro-mono, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 02/04/2017 au 08/09/2017. Qté estimée : 249 Kg
+(s334), betterave rouge alvro-mono, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 02/04/2018 au 08/09/2018. Qté estimée : 249 Kg
+
+
+[2017-04-30 11:56:51,222 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s6), betterave rouge crapaudine, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 10/05/2017 au 11/12/2017. Qté estimée : 249 Kg
+(s335), betterave rouge crapaudine, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 11/05/2018 au 12/12/2018. Qté estimée : 249 Kg
+
+
+[2017-04-30 11:56:52,785 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s7), betterave rouge rouge cylindra, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 16/12/2017. Qté estimée : 249 Kg
+(s336), betterave rouge rouge cylindra, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 16/05/2018 au 17/12/2018. Qté estimée : 249 Kg
+
+
+[2017-04-30 11:56:54,711 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s8), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle sous abris], du 20/02/2017 au 10/06/2017. Qté estimée : 149 Kg
+(s337), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 21/02/2018 au 11/06/2018. Qté estimée : 149 Kg
+
+
+[2017-04-30 11:56:56,573 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s9), blette verte à carde rouge, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 15/04/2017 au 03/08/2017. Qté estimée : 149 Kg
+(s338), blette verte à carde rouge, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 16/04/2018 au 04/08/2018. Qté estimée : 149 Kg
+
+
+[2017-04-30 11:56:58,455 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s10), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 15/06/2017 au 03/10/2017. Qté estimée : 149 Kg
+(s339), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 16/06/2018 au 04/10/2018. Qté estimée : 149 Kg
+
+
+[2017-04-30 11:57:00,405 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s11), blette verte à carde blanche 3, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle sous abris], du 01/10/2017 au 09/01/2018. Qté estimée : 149 Kg
+(s340), blette verte à carde blanche 3, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 02/10/2018 au 10/01/2019. Qté estimée : 149 Kg
+
+
+[2017-04-30 11:57:02,011 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s12), carotte de garde rodelika, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 27/11/2017. Qté estimée : 333 Kg
+(s341), carotte de garde rodelika, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 16/05/2018 au 28/11/2018. Qté estimée : 333 Kg
+
+
+[2017-04-30 11:57:03,588 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s13), carotte de garde gniff, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 30/05/2017 au 12/12/2017. Qté estimée : 333 Kg
+(s342), carotte de garde gniff, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 31/05/2018 au 13/12/2018. Qté estimée : 333 Kg
+
+
+[2017-04-30 11:57:05,220 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s14), carotte de garde nantaise 2, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 30/06/2017 au 12/01/2018. Qté estimée : 333 Kg
+(s343), carotte de garde nantaise 2, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 01/07/2018 au 13/01/2019. Qté estimée : 333 Kg
+
+
+[2017-04-30 11:57:07,023 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s15), carotte primeur de carentan, 3174 pieds, 4232 graines, 158 m, 39 m2 de planche(s) [Virtuelle sous abris], du 15/02/2017 au 06/06/2017. Qté estimée : 149 Kg
+(s344), carotte primeur de carentan, 3174 pieds, 4232 graines, 158 m, 39 m2 de planche(s) [Virtuelle plein champ], du 16/02/2018 au 07/06/2018. Qté estimée : 149 Kg
+
+
+[2017-04-30 11:57:08,673 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s16), carotte primeur oxhella, 3174 pieds, 4232 graines, 158 m, 39 m2 de planche(s) [Virtuelle sous abris], du 15/02/2017 au 06/06/2017. Qté estimée : 149 Kg
+(s345), carotte primeur oxhella, 3174 pieds, 4232 graines, 158 m, 39 m2 de planche(s) [Virtuelle plein champ], du 16/02/2018 au 07/06/2018. Qté estimée : 149 Kg
+
+
+[2017-04-30 11:57:10,389 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s17), carotte saison jaune du doubs, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 08/05/2017 au 14/09/2017. Qté estimée : 66 Kg
+(s346), carotte saison jaune du doubs, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 09/05/2018 au 15/09/2018. Qté estimée : 66 Kg
+
+
+[2017-04-30 11:57:12,103 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s18), carotte saison de la halle, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 09/05/2017 au 15/09/2017. Qté estimée : 66 Kg
+(s347), carotte saison de la halle, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 10/05/2018 au 16/09/2018. Qté estimée : 66 Kg
+
+
+[2017-04-30 11:57:13,856 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s19), carotte saison colmar à coeur rouge, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 09/05/2017 au 15/09/2017. Qté estimée : 66 Kg
+(s348), carotte saison colmar à coeur rouge, 1234 pieds, 1645 graines, 61 m, 15 m2 de planche(s) [Virtuelle plein champ], du 10/05/2018 au 16/09/2018. Qté estimée : 66 Kg
+
+
+[2017-04-30 11:57:15,801 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s20), céleri branche à côtes violettes, 111 pieds, 123 graines, 44 m, 14 m2 de planche(s) [Virtuelle plein champ], du 10/05/2017 au 20/11/2017. Qté estimée : 99 Pièce
+(s349), céleri branche à côtes violettes, 111 pieds, 123 graines, 44 m, 14 m2 de planche(s) [Virtuelle plein champ], du 11/05/2018 au 21/11/2018. Qté estimée : 99 Pièce
+
+
+[2017-04-30 11:57:17,700 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s21), céleri rave monarch, 222 pieds, 246 graines, 88 m, 29 m2 de planche(s) [Virtuelle plein champ], du 20/04/2017 au 14/11/2017. Qté estimée : 199 Pièce
+(s350), céleri rave monarch, 222 pieds, 246 graines, 88 m, 29 m2 de planche(s) [Virtuelle plein champ], du 21/04/2018 au 15/11/2018. Qté estimée : 199 Pièce
+
+
+[2017-04-30 11:57:19,585 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s22), chou blanc holsteiner platter, 55 pieds, 61 graines, 33 m, 16 m2 de planche(s) [Virtuelle sous abris], du 21/03/2017 au 26/07/2017. Qté estimée : 49 Pièce
+(s351), chou blanc holsteiner platter, 55 pieds, 61 graines, 33 m, 16 m2 de planche(s) [Virtuelle plein champ], du 22/03/2018 au 27/07/2018. Qté estimée : 49 Pièce
+
+
+[2017-04-30 11:57:21,417 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s23), chou blanc holsteiner platter, 55 pieds, 61 graines, 33 m, 16 m2 de planche(s) [C_198], du 11/04/2017 au 22/07/2017. Qté estimée : 49 Pièce
+(s352), chou blanc holsteiner platter, 55 pieds, 61 graines, 33 m, 16 m2 de planche(s) [Virtuelle plein champ], du 12/04/2018 au 23/07/2018. Qté estimée : 49 Pièce
+
+
+[2017-04-30 11:57:23,394 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s24), chou blanc nagels frühweiss, 55 pieds, 61 graines, 33 m, 16 m2 de planche(s) [C_199], du 02/05/2017 au 06/09/2017. Qté estimée : 49 Pièce
+(s353), chou blanc nagels frühweiss, 55 pieds, 61 graines, 33 m, 16 m2 de planche(s) [Virtuelle plein champ], du 03/05/2018 au 07/09/2018. Qté estimée : 49 Pièce
+
+
+[2017-04-30 11:57:33,217 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s1), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/02/2017 au 09/08/2017. Qté estimée : 554 Pièce
+(s355), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/02/2018 au 09/08/2018. Qté estimée : 554 Pièce
+
+
+[2017-04-30 11:57:34,906 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s2), ail blanc messidor, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/01/2017 au 09/07/2017. Qté estimée : 554 Pièce
+(s356), ail blanc messidor, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/01/2018 au 09/07/2018. Qté estimée : 554 Pièce
+
+
+[2017-04-30 11:57:36,751 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s3), aubergine impérial black beauty, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [S_12], du 15/04/2017 au 27/09/2017. Qté estimée : 348 Pièce
+(s357), aubergine impérial black beauty, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [Virtuelle plein champ], du 15/04/2018 au 27/09/2018. Qté estimée : 348 Pièce
+
+
+[2017-04-30 11:57:38,553 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s4), aubergine ronde de valence, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [S_23], du 15/04/2017 au 27/09/2017. Qté estimée : 348 Pièce
+(s358), aubergine ronde de valence, 87 pieds, 96 graines, 52 m, 26 m2 de planche(s) [Virtuelle plein champ], du 15/04/2018 au 27/09/2018. Qté estimée : 348 Pièce
+
+
+[2017-04-30 11:57:40,166 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s5), betterave rouge alvro-mono, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 02/04/2017 au 08/09/2017. Qté estimée : 249 Kg
+(s359), betterave rouge alvro-mono, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 01/04/2018 au 07/09/2018. Qté estimée : 249 Kg
+
+
+[2017-04-30 11:57:41,687 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s6), betterave rouge crapaudine, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 10/05/2017 au 11/12/2017. Qté estimée : 249 Kg
+(s360), betterave rouge crapaudine, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 10/05/2018 au 11/12/2018. Qté estimée : 249 Kg
+
+
+[2017-04-30 11:57:43,331 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s7), betterave rouge rouge cylindra, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 16/12/2017. Qté estimée : 249 Kg
+(s361), betterave rouge rouge cylindra, 2314 pieds, 2571 graines, 231 m, 57 m2 de planche(s) [Virtuelle plein champ], du 15/05/2018 au 16/12/2018. Qté estimée : 249 Kg
+
+
+[2017-04-30 11:57:45,199 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s8), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle sous abris], du 20/02/2017 au 10/06/2017. Qté estimée : 149 Kg
+(s362), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 20/02/2018 au 10/06/2018. Qté estimée : 149 Kg
+
+
+[2017-04-30 11:57:47,100 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s9), blette verte à carde rouge, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 15/04/2017 au 03/08/2017. Qté estimée : 149 Kg
+(s363), blette verte à carde rouge, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 15/04/2018 au 03/08/2018. Qté estimée : 149 Kg
+
+
+[2017-04-30 11:57:48,950 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s10), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 15/06/2017 au 03/10/2017. Qté estimée : 149 Kg
+(s364), blette verte à carde blanche 2, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 15/06/2018 au 03/10/2018. Qté estimée : 149 Kg
+
+
+[2017-04-30 11:57:50,928 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s11), blette verte à carde blanche 3, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle sous abris], du 01/10/2017 au 09/01/2018. Qté estimée : 149 Kg
+(s365), blette verte à carde blanche 3, 166 pieds, 553 graines, 66 m, 22 m2 de planche(s) [Virtuelle plein champ], du 01/10/2018 au 09/01/2019. Qté estimée : 149 Kg
+
+
+[2017-04-30 11:57:52,465 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s12), carotte de garde rodelika, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 15/05/2017 au 27/11/2017. Qté estimée : 333 Kg
+(s366), carotte de garde rodelika, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 15/05/2018 au 27/11/2018. Qté estimée : 333 Kg
+
+
+[2017-04-30 11:57:53,992 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s13), carotte de garde gniff, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 30/05/2017 au 12/12/2017. Qté estimée : 333 Kg
+(s367), carotte de garde gniff, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 30/05/2018 au 12/12/2018. Qté estimée : 333 Kg
+
+
+[2017-04-30 11:57:55,962 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s14), carotte de garde nantaise 2, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 30/06/2017 au 12/01/2018. Qté estimée : 333 Kg
+(s368), carotte de garde nantaise 2, 5772 pieds, 7696 graines, 288 m, 72 m2 de planche(s) [Virtuelle plein champ], du 30/06/2018 au 12/01/2019. Qté estimée : 333 Kg
+
+
+[2017-04-30 12:04:59,823 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s1), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/02/2017 au 09/08/2017. Qté estimée : 554 Pièce
+série dupliquée : (s370), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/02/2019 au 09/08/2019. Qté estimée : 554 Pièce
+
+
+[2017-04-30 12:06:25,284 MARAICH_INFO    ] duplique_series_saison_suivante.handle: (s1), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/02/2017 au 09/08/2017. Qté estimée : 554 Pièces
+série dupliquée : (s372), ail rose flavor bio, 584 pieds, 648 graines, 87 m, 14 m2 de planche(s) [Virtuelle plein champ], du 05/02/2019 au 09/08/2019. Qté estimée : 554 Pièces
+
+

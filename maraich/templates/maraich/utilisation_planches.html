@@ -10,9 +10,7 @@
 function init()
     {
     colorScores()
-        // personalisation du menu
-    document.getElementById("menu_periode_option_serres_champs").style.display="none"
-    document.getElementById("menu_periode_option_filtre_planche").style.display="none"
+        
     }
 
 </script>
@@ -45,7 +43,7 @@ function init()
             
             {% for infoPlanche in planche.l_infoJours %}            
             <td>{{infoPlanche.0|date:'d/m/Y'}}<br/>
-            <div class="score" id="j_{{infoPlanche.0|date:'Y-m-d'}}__planche_{{planche.id}}" ratio="{{infoPlanche.2}}">{{infoPlanche.1}} / {{planche.surface_m2}}<br/>
+            <div class="score" id="j_{{infoPlanche.0|date:'Y-m-d'}}__planche_{{planche.id}}" ratio="{{infoPlanche.2}}">{{infoPlanche.1}}/{{planche.surface_m2|floatformat:0}}<br/>
                 Libre<br/>{{infoPlanche.2}}%</div>    
             </td>
             {% endfor %}

@@ -141,7 +141,6 @@ def serveRequest(request):
         try:
             # gestion de la création ou édition d'une série de plants
             serie = creationEditionSerie(request.POST)
-                                       
             log.info("Nouvelle série créée" + serie.__str__())
             s_json = '{"status":true,"msg":"%s"}'%serie
         except:

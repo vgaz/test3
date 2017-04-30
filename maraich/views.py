@@ -342,10 +342,10 @@ def utilisationPlanches(request):
 
         ## on retire les planches virtuelles
         l_planches = Planche.objects.filter(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP, constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
-        bSerres = request.POST.get("bSerres","")=="on"
+        bSerres = request.POST.get("serres","")=="on"
         if not bSerres:
             l_planches = l_planches.exclude(bSerre = True)
-        bChamps = request.POST.get("bChamps","")=="on"
+        bChamps = request.POST.get("champs","")=="on"
         if not bChamps:
             l_planches = l_planches.exclude(bSerre = False)
         
