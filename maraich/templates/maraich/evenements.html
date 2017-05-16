@@ -61,7 +61,7 @@ function    init()
         {% for evt in l_evts %}
            
                 <tr id="{{evt.id}}">
-                {% if evt.date|date:'d/m/Y' ==  infoPeriode.date_aujourdhui|date:'d/m/Y' %}
+                {% if evt.date|date:'d/m/Y' == infoPeriode.date_aujourdhui|date:'d/m/Y' %}
                     <td class="tdEvt2">{{evt.date|date:'d/m/Y'}}</td>
                     <td class="tdEvt2">{{evt.nom|title}}</td>
                     <td class="tdEvt2">{{evt.txt}}</td>

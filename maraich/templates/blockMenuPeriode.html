@@ -6,8 +6,8 @@
 <input name="champs" id="menu_periode_option_champs" type="checkbox" {% if selection_champs %}checked{% endif %} /> Champs
 </div>
 &nbsp;
-<input style="margin-left: 10px" type="submit" name="direction" value="<< Recul" />
-<input type="submit" name="direction" value="Avance >>" /> 
+<input style="margin-left: 10px" type="submit" name="direction" value="recul" />
+<input type="submit" name="direction" value="avance" /> 
 Par pas de <input style="width: 30px" type="text" id="decalage_j" name="decalage_j" value="{{infoPeriode.decalage_j}}" /> jours 
 <button onclick="document.getElementById('decalage_j').value = parseInt(document.getElementById('decalage_j').value) -1;return(false)">-</button>
 <button onclick="document.getElementById('decalage_j').value = parseInt(document.getElementById('decalage_j').value)+1;return(false)">+</button>

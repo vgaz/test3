@@ -247,7 +247,7 @@ def serveRequest(request):
 
 
     elif cde == "deplacement_implantation":
-        ## déplacement d'une serie de plants d'une planche vers une autre
+        ## déplacement d'une implantation de plants d'une planche vers une autre
         try:
             implantation = Implantation.objects.get(id=int(request.POST.get("id_implantation")))
             id_planche_dest = int(request.POST.get("id_planche_dest"))

@@ -263,7 +263,9 @@ class Espece(djangoModels.Model):
 
     def consoHebdoTotale(self):
         return self.nbParts * self.consoHebdoParPart
-
+    
+    def bEnMottes(self):
+        return self.volume_motte_cm3 != 0
 
 class Panniers(djangoModels.Model):
     """Quantité de panniers au fil du temps"""
@@ -552,8 +554,11 @@ class Serie(djangoModels.Model):
         """ retourne la longueur totale de tous les rangs en fonction de l'intra rang"""
         if not intra_rang_m:
             intra_rang_m = self.intra_rang_m
-        assert intra_rang_m, Exception("intra_rang_m non défini")              
-        return self.nbPieds() * intra_rang_m
+        assert intra_rang_m, Exception("intra_rang_m non défini")
+        if self.legume.espece.bEnMottes():        
+            return self.nbPieds() * intra_rang_m
+        else:
+            return self.nbGraines() * intra_rang_m
     
     def longueurSurPlanche_m(self, intra_rang_m=None, nb_rangs=None):
         """ retourne la longueur occupée sur la planche en fonction des distances inter-rang et dans le rang
@@ -580,7 +585,7 @@ class Serie(djangoModels.Model):
     def quantiteEstimee_kg_ou_piece(self):
             """Retourne la quantité totale escomptée (en kg ou pièces)""" 
             poids_kg = self.legume.prodParPied_kg * self.legume.espece.rendementPousseEtConservation * self.nbPieds()
-            if not self.legume.espece.volume_motte_cm3:
+            if not self.legume.espece.bEnMottes():
                 poids_kg = poids_kg * self.legume.espece.rendementGermination
             if self.legume.espece.unite_prod == constant.UNITE_PROD_KG:
                 return poids_kg
@@ -616,13 +621,14 @@ class Serie(djangoModels.Model):
         return ",".join(impl.planche.nom for impl in self.implantations.all())
          
     def __str__(self):       
-        return "(s%d), %s, %d pieds, %d graines, %d m, %d m2 de planche(s) [%s], du %s au %s. Qté estimée : %d %ss" %( self.id,
+        return "(s%d), %s, %d pieds, %d graines, %d m linéaire, %d m2 sur planche(s) [%s], tous les %d cm sur %d rangs , du %s au %s. Qté estimée : %d %ss" %( self.id,
                                                                                         self.legume.nom(),
                                                                                         self.nbPieds(),
                                                                                         self.nbGraines(),
                                                                                         self.longueurRangTotal(), 
                                                                                         self.surfaceOccupee_m2(), 
                                                                                         self.s_listeNomsPlanches(),
+                                                                                        self.intraRang_cm(), self.nb_rangs,
                                                                                         MyTools.getDMYFromDate(self.evt_debut.date),
                                                                                         MyTools.getDMYFromDate(self.evt_fin.date),
                                                                                         self.quantiteEstimee_kg_ou_piece(),

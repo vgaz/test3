@@ -9,17 +9,15 @@ import sys
    
 
 class Command(BaseCommand):
-    """Duplication de toutes les séries d'une année N vers l'année N+1"""
-    help = "Tapper python manage.py duplique_series_saison_suivante"
+    """Duplication de toutes les séries d'une année N vers l'année M
+    Tapper python manage.py duplique_series_saison_suivante --orig 20XX --dest 20YY"""
 
 
     def add_arguments(self, parser):
-        parser.add_argument('--orig', nargs='+', type=int)
+        parser.add_argument('--orig', nargs='+', type=int, help=__doc__)
         parser.add_argument('--dest', nargs='+', type=int)
               
     def handle(self, *args, **options):
-        """Duplique toutes les séries lancées telle année vers telle autre année
-        passer l'année de départ et l'année de fin ex 'manage.py duplique_series_saison_suivante 2017 2019'"""
         s_err = ""
         try:
             ## recup anne origine
@@ -53,5 +51,6 @@ class Command(BaseCommand):
                 log.info("%s\nsérie dupliquée : %s\n\n"%(serie.__str__(), serieDest.__str__()))
         except:
             s_err = str(sys.exc_info()[1])
+            log.error(s_err)
 
-        log.info("Fin de comande %s\n%s"%(self.__doc__, s_err))  
+        log.info("Fin de commande")  
