@@ -29,7 +29,7 @@ class Command(BaseCommand):
                         p.nom = nomPlanche
                         p.longueur_m = MyTools.getIntInDict(d_line, "longueur (m)", 0, log)
                         p.largeur_m = MyTools.getFloatInDict(d_line, "largeur (m)", 0, log)
-                        p.bSerre = (p.nom[0]=="S")
+                        p.bSerre = p.nom.startswith("Serre")
                         p.save()
                         log.info(p)    
                         if p.bSerre:
