@@ -6334,3 +6334,5 @@ Erreur; espèce melon non trouvée. abandon
 'Nombre de panniers' indéfini ou nul pour melon
 Erreur; espèce artichaut non trouvée. abandon
 Erreur; espèce melon non trouvée. abandon
+[2017-06-26 09:38:21,179 MARAICH_INFO    ] serveRequest   .serveRequest: CDE...........supprime_planche
+[2017-06-26 09:38:21,181 MARAICH_INFO    ] serveRequest   .serveRequest: <QueryDict: {'id': ['10687'], 'cde': ['supprime_planche']}>

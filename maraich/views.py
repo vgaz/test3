@@ -342,10 +342,10 @@ def utilisationPlanches(request):
 
         ## on retire les planches virtuelles
         l_planches = Planche.objects.filter(nom__in = [constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP, constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS])
-        bSerres = request.POST.get("serres","")=="on"
+        bSerres = request.POST.get("menu_periode_option_serres", "")=="on"
         if not bSerres:
             l_planches = l_planches.exclude(bSerre = True)
-        bChamps = request.POST.get("champs","")=="on"
+        bChamps = request.POST.get("menu_periode_option_champs", "")=="on"
         if not bChamps:
             l_planches = l_planches.exclude(bSerre = False)
         
@@ -375,8 +375,8 @@ def utilisationPlanches(request):
                     "infoPeriode":infoPeriode,
                     "l_jours":l_jours,
                     "l_planches":l_planches,
-                    "bSerres":bSerres,
-                    "bChamps":bChamps,
+                    "selection_serres":bSerres,
+                    "selection_champs":bChamps,
                     "info":s_info
                     })
     

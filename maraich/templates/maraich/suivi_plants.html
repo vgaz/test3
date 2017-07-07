@@ -18,8 +18,8 @@ function init()
     l_divSeries = document.getElementsByClassName("serie")
     for (index=0;index<l_divSeries.length; index++)
         {    // personalisation du menu
-    document.getElementById("menu_periode_option_serres_champs").style.display="none"
-    document.getElementById("menu_periode_option_filtre_planche").style.display="none"
+        document.getElementById("menu_periode_option_serres_champs").style.display="none"
+        document.getElementById("menu_periode_option_filtre_planche").style.display="none"
         l_divSeries[index].style.fontWeight = "bold"
         idSerie = l_divSeries[index].getAttribute("serie_id")
         l_divSeries[index].setAttribute("title", l_seriesTitles[idSerie]) 
