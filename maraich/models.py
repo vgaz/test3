@@ -56,10 +56,9 @@ def creationEditionSerie(d_req):
     assert etalement_recolte_j != 0, 'étalement recolte = 0'
     
     leg = Legume.objects.get(id=id_leg)
-    if id_serie == 0 or d_req.get("cde","")=="clone_serie":
+    bNelleSerie = id_serie == 0 or d_req.get("cde","")=="clone_serie"
+    if bNelleSerie:
         serie = Serie() ## nelle serie
-#     elif :
-#         serie = Serie.objects.clone(id_serie)
     else:
         serie = Serie.objects.get(id=id_serie)
     
@@ -81,9 +80,8 @@ def creationEditionSerie(d_req):
     serie.save()
     serie.fixeDates(s_dateEnTerre, duree_avant_recolte_j, etalement_recolte_j, duree_fab_plants_j)
     
-    if id_serie == 0:
-        ## implantation 
-        ## nouvelle
+    if bNelleSerie:
+        ## implantation nouvelle pour nelle série
         impl = Implantation()
         if bSerre:
             impl.planche = Planche.objects.get(nom=constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS)

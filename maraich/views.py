@@ -128,8 +128,8 @@ def suiviImplantations(request):
             bSerres = True
             bChamps = True
         else:
-            bSerres = request.POST.get("serres", )=="on"
-            bChamps = request.POST.get("champs", )=="on"
+            bSerres = request.POST.get("menu_periode_option_serres", )=="on"
+            bChamps = request.POST.get("menu_periode_option_champs", )=="on"
         
         if not bSerres and not bChamps: l_planches = Planche.objects.filter(id=0)
         elif bSerres and not bChamps: l_planches = Planche.objects.filter(bSerre = True)
