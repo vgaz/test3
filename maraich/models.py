@@ -471,9 +471,17 @@ class Serie(djangoModels.Model):
     objects = SerieManager()
     
     def dateDebutPlants(self):  
-        """retourne la date de debut de fab des planst ou None"""
+        """retourne la date de debut de fab des plants ou None"""
         try:
             return self.evenements.get(type=Evenement.TYPE_PREPA_PLANTS).date
+        except:
+            return None
+        
+    def duree_fab_plants_j(self):
+        """retourne la durée de fab des plants ou None
+        on inverse le signe car le delta est negatif par rapport à la date en terre"""
+        try:
+            return -1*self.evenements.get(type=Evenement.TYPE_PREPA_PLANTS).delta_j
         except:
             return None
     
@@ -506,8 +514,11 @@ class Serie(djangoModels.Model):
         if  self.evt_debut_id == 0: 
             """création des evts de série seul l'evt de début est absolu, les autres sont calés sur evt_debut
             """
-            evt_debut = creationEvtAbs(dateDebut, Evenement.TYPE_DEBUT, "début %s"%(self.legume.nom()))
-
+            if delaiCroissancePlants_j:
+                evt_debut = creationEvtAbs(dateDebut, Evenement.TYPE_DEBUT, "plantation %s"%(self.legume.nom()))
+            else:
+                evt_debut = creationEvtAbs(dateDebut, Evenement.TYPE_DEBUT, "semis %s"%(self.legume.nom()))
+                
             self.evenements.add(evt_debut)
             self.evt_debut_id = evt_debut.id
             
@@ -644,7 +655,7 @@ class Serie(djangoModels.Model):
             l_rep.append(impl.__str__())
         
         l_rep.append("surface Occupée : %s m2"%(self.surfaceOccupee_m2()))
-        l_rep.append("quantité estimée : %d %s"%(self.quantiteEstimee_kg_ou_piece(), self.legume.espece.nomUniteProd()))
+        l_rep.append("quantité estimée : %d %ss"%(self.quantiteEstimee_kg_ou_piece(), self.legume.espece.nomUniteProd()))
         l_rep.append("remarque : %s"%self.remarque)
         return "\n".join(l_rep)
     

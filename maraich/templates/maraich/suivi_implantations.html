@@ -407,6 +407,7 @@ function prepareAjouteSerie()
     document.getElementById("editSerie_date_fin").innerHTML = ""  
     document.getElementById("editSerie_date_fin").style.display="none"
     document.getElementById("editSerie_nb_rangs").value = ""
+    document.getElementById("editSerie_duree_fab_plants_j").value = ""
     document.getElementById("editSerie_duree_avant_recolte_j").value = ""
     document.getElementById("editSerie_etalement_recolte_j").value = ""
     document.getElementById("editSerie_intra_rang_cm").value = ""
@@ -432,6 +433,7 @@ function prepareEditeSerie(id_impl)
     document.getElementById("editSerie_nb_pieds").value = hImpl.getAttribute("nb_pieds_serie")
     document.getElementById("editSerie_nb_pieds").readOnly = true
     document.getElementById("editSerie_date_debut").value = hImpl.getAttribute("date_debut_f")
+    document.getElementById("editSerie_duree_fab_plants_j").value = hImpl.getAttribute("duree_fab_plants_j")
     document.getElementById("editSerie_duree_avant_recolte_j").value = hImpl.getAttribute("duree_avant_recolte_j")
     document.getElementById("editSerie_etalement_recolte_j").value = hImpl.getAttribute("etalement_recolte_j")   
     document.getElementById("editSerie_date_fin").innerHTML = hImpl.getAttribute("date_fin_f")
@@ -485,6 +487,7 @@ function cloneSerie()
     s_request += "&nb_pieds=" + document.getElementById("editSerie_nb_pieds").value
     s_request += "&intra_rang_cm=" + document.getElementById("editSerie_intra_rang_cm").value
     s_request += "&date_debut=" + document.getElementById("editSerie_date_debut").value
+    s_request += "&duree_fab_plants_j=" + document.getElementById("editSerie_duree_fab_plants_j").value
     s_request += "&duree_avant_recolte_j=" + document.getElementById("editSerie_duree_avant_recolte_j").value
     s_request += "&etalement_recolte_j=" + document.getElementById("editSerie_etalement_recolte_j").value
     document.getElementById("divEditSerie").style.display="none"
@@ -627,6 +630,7 @@ function unfocusPlanche(event)
                                         s_liste_planches = "{{impl.serie.s_listeNomsPlanches}}"
                                         date_debut="{{impl.serie.evt_debut.date|safe}}" 
                                         date_debut_f="{{impl.serie.evt_debut.date|date:'d/m/Y'}}" 
+                                        duree_fab_plants_j="{{impl.serie.duree_fab_plants_j}}"
                                         duree_avant_recolte_j="{{impl.serie.dureeAvantRecolte_j}}"
                                         etalement_recolte_j="{{impl.serie.etalementRecolte_j}}"
                                         date_fin="{{impl.serie.evt_fin.date|safe}}"
@@ -685,7 +689,9 @@ function unfocusPlanche(event)
        Dans le rang (cm) <input style="width: 40px" type='text' value="" id="editSerie_intra_rang_cm"  name="editSerie_intra_rang_cm" />
            Rien si valeurs par défaut
        </p>
-    <p>Début (jj/mm/aa)<input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
+    <p>Date en terre (jj/mm/aa)<input style="width:100px" type="text" value="" id="editSerie_date_debut" name="editSerie_date_debut"/></p>
+    
+    <p>Durée en serre à plants (j) <input style="width:100px;width: 40px" type="text" value="" id="editSerie_duree_fab_plants_j" name="editSerie_duree_fab_plants_j"/>
     <p>Durée avant récolte (j) <input style="width:100px;width: 40px" type="text" value="" id="editSerie_duree_avant_recolte_j" name="editSerie_duree_avant_recolte_j"/>
        Durée maxi de récolte (j)<input style="width:100px;width: 40px" type="text" value="" id="editSerie_etalement_recolte_j" name="editSerie_etalement_recolte_j"/>
     </p>
