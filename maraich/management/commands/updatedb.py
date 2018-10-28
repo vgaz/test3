@@ -41,15 +41,15 @@ class Command(BaseCommand):
               
         try:
             p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
-            p.nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP
-            p.longueur_m = totalChamp_m2
-            p.largeur_m = 1
-            p.bSerre = False
-            p.save()          
+    
         except:
             p = creationPlanche(totalChamp_m2, 1, False, constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP)
-#             p = Planche()
-        log.info (p)    
+            p.nom = constant.NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP
+            p.longueur_m = totalChamp_m2
+            p.largeur_m = 1.2
+            p.bSerre = False
+            p.save()      
+            log.info (p)    
 
         try:
             p = Planche.objects.get(nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS)
@@ -57,7 +57,7 @@ class Command(BaseCommand):
             p = Planche()
             p.nom = constant.NOM_PLANCHE_VIRTUELLE_SOUS_ABRIS
             p.longueur_m = totalSerre_m2
-            p.largeur_m = 1
+            p.largeur_m = 1.2
             p.bSerre = True
             p.save()  
             log.info (p)    
@@ -111,8 +111,8 @@ class Command(BaseCommand):
                     assert s_stockable, "pas de valeur 'stockable' pour espèce : %s"%(espece.nom)
                     espece.bStockable = (s_stockable == "oui")     
 
-                    espece.nbGrainesParPied = MyTools.getIntInDict(d_line,"Nb graines par pied", 0, log) 
-                    assert espece.nbGrainesParPied, "'Nb graines par pied' indéfini pour %s"%(espece.nom)
+                    espece.nbGrainesParPied = MyTools.getIntInDict(d_line,"Nb graines à semer par trou", 0, log) 
+                    assert espece.nbGrainesParPied, "'Nb graines à semer par trou' indéfini pour %s"%(espece.nom)
 
                     espece.rendementGermination = MyTools.getFloatInDict(d_line, "Rendement germination", "0", log)
                     assert espece.rendementGermination != 0, "'Rendement germination' indéfini pour %s"%(espece.nom)            
@@ -121,11 +121,11 @@ class Command(BaseCommand):
                     assert espece.rendementPousseEtConservation !=0, "'Rendement pousse et conservation' indéfini pour %s"%(espece.nom)            
 
                     ## maj conso
-                    espece.nbParts = MyTools.getIntInDict(d_line, "Nombre de panniers", "0", log)
-                    assert espece.nbParts != 0, "'Nombre de panniers' indéfini ou nul pour %s"%(espece.nom)  
+                    espece.nbParts = MyTools.getIntInDict(d_line, "Nombre de paniers", "0", log)
+                    assert espece.nbParts != 0, "'Nombre de paniers' indéfini ou nul pour %s"%(espece.nom)  
              
-                    espece.consoHebdoParPart = MyTools.getFloatInDict(d_line, "Conso hebdo par pannier", "0", log)
-                    assert espece.consoHebdoParPart, "'Conso hebdo par pannier' indéfini pour %s"%(espece.nom)
+                    espece.consoHebdoParPart = MyTools.getFloatInDict(d_line, "Conso hebdo par panier", "0", log)
+                    assert espece.consoHebdoParPart, "'Conso hebdo par panier' indéfini pour %s"%(espece.nom)
                     
                     espece.delai_avant_retour_an = MyTools.getIntInDict(d_line, "Délai avant retour (an)",  "0", log)
                     assert espece.delai_avant_retour_an, "'Délai avant retour (an)' indéfini pour %s"%(espece.nom)
@@ -146,6 +146,7 @@ class Command(BaseCommand):
         ## maj variétés, légumes et séries
         with open(os.path.join(settings.BASE_DIR, "inputs", "planning.csv"), "r+t", encoding="ISO-8859-1") as hF:
             reader = csv.DictReader(hF)
+
             for d_line in reader:
                 
                 try:
@@ -174,13 +175,12 @@ class Command(BaseCommand):
                     leg.variete_id = var.id
                     log.info("Ajout légume %s %s" % (espece.nom, var.nom))
                        
-                ## recup infos légumes
                 try: 
                     leg.intra_rang_m = MyTools.getFloatInDict(d_line, "Intra rang (cm)","0", log)/100
                     assert leg.intra_rang_m, "'Intra rang (cm)' indéfini pour %s"%(espece.nom)            
 
-                    leg.prodParPied_kg = MyTools.getFloatInDict(d_line, "Production par pied (kg)", "0", log) 
-                    assert leg.prodParPied_kg, "Production par pied (kg)' indéfini pour %s"%(espece.nom)   
+                    leg.prodParPied_kg = MyTools.getFloatInDict(d_line, "Production théorique par trou (kg)", "0", log) 
+                    assert leg.prodParPied_kg, "Production théorique par trou (kg)' indéfini pour %s"%(espece.nom)   
                              
                     leg.poidsParPiece_kg = MyTools.getFloatInDict(d_line, "Poids par pièce (g)", "0", log)/1000 
                     assert leg.poidsParPiece_kg, "Poids par pièce (g)' indéfini pour %s"%(espece.nom)            
@@ -196,11 +196,21 @@ class Command(BaseCommand):
                                                   evt_debut__date = dateEnTerre,
                                                   legume_id = leg.id)
                         continue ## dejà présente
+                    
                     except:
                         ## nouvelle série
                         serie = Serie()
                         serie.legume = leg
-
+                        
+#                         ## maj agenda ics
+#                         evt_txt = ""
+#                         evt_nom = "Plantation %s %s" % (espece.nom, var.nom)
+#                         evt_date = dateEnTerre
+#                         ics_txt += constant.ICS_ITEM%(evt_nom,
+#                                                       evt_txt, 
+#                                                       str(evt_date).split(" ")[0].replace("-","")+"T080000",
+#                                                       str(evt_date).split(" ")[0].replace("-","")+"T090000")
+                        
                     ## recup infos série
                     serie.nb_rangs = MyTools.getIntInDict(d_line, "Nombre de rangs retenus", "0", log)
                     assert serie.nb_rangs != 0, "'Nombre de rangs retenus' indéfini pour %s "%(leg.nom())
@@ -237,14 +247,22 @@ class Command(BaseCommand):
                      
                     implantation.save()
                     serie.implantations.add(implantation)
-#                     serie.save()
                     log.info("Ajout %s", str(implantation))
 
                 except:
                     s_err = str(sys.exc_info()[1])
                     l_err.append(s_err)
                     continue
+        
+#         try:
+#             ics_txt += constant.ICS_QUEUE
+#             MyTools.strToFic(os.path.join(settings.BASE_DIR, "cultures.ics"), ics_txt)
+#         except:
+#             s_err = str(sys.exc_info()[1])
+#             l_err.append(s_err)
+#             log.error(s_err)
 
+                    
         log.info("Fin de comande %s\n nombre d'erreurs = %d\n%s"%(self.__doc__,
                                                                 len(l_err), 
                                                                 "\n".join(l_err)))  
