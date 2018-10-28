@@ -54,6 +54,8 @@ class EvtICS(object):
     TYPE_CULTURE = 4
     TYPE_DIVERS = 5
     TYPE_DISTRIB = 6
+    TYPE_MOTTES = 7
+    TYPE_TERRINE = 8
     
     def __init__(self):
         self.date = "2018-00-00"
@@ -81,7 +83,7 @@ def iCS2txtAssolement():
     paternPlanche = re.compile(PATERN_PLANCHE) 
     #     lecture iCS
     #  recup lieu, légume
-    with open("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018-10-21.maraich2018.ics", "r+t", encoding="utf-8") as hF:
+    with open("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018-10-28.maraich2018.ics", "r+t", encoding="utf-8") as hF:
 
         _type = None
         s_date = ""
@@ -90,16 +92,24 @@ def iCS2txtAssolement():
         s_location = ""
         bInDescription = False
         bInDate = False
-        
+        bInLocation = False
+       
         for s_line in hF:
             
             s_line = s_line.replace("\n", "").replace("\\,", ",").replace("\\;",";")
             
             if bInDate: #la date tient tjs sur 2 lignes
-                s_date += s_line
+                s_date += s_line.replace(" ","")
                 s_date = s_date.split(":")[1]
                 s_date = s_date[0:8]
                 bInDate = False
+
+            if bInLocation: # tient éventuellement sur 2 lignes max, nous sommes ici apres la 1ere
+                ## si la ligne commence par un espace rajouté, c'est que c'est la suite du champ à récuperer, siono, tout tenait sur une ligne
+                if s_line.startswith(" "):
+                    s_location += s_line[1:] ## on ajoute la deuxieme ligne en virant l'espace
+                else:
+                    bInLocation = False
 
             if s_line.startswith("X-MOZ-GENERATION:") or s_line.startswith("LAST-MODIFIED:")\
                or s_line.startswith("TRANSP:") or s_line.startswith("X-EVOLUTION-CALDAV-HREF:") or s_line.startswith("CLASS:PUBLIC")\
@@ -131,6 +141,7 @@ def iCS2txtAssolement():
                 
             if s_line.startswith("LOCATION:"):
                 s_location = s_line.split("LOCATION:")[1]
+                bInLocation =True
                 continue 
                        
             elif s_line.startswith("DESCRIPTION:") and not bInDescription:
@@ -147,7 +158,6 @@ def iCS2txtAssolement():
                 continue
             
             elif s_line.startswith("END:VEVENT"):
-                
                 if s_summary.lower().startswith("plantation "):
                     s_summary = s_summary[len("plantation "):]
                     _type = EvtICS.TYPE_LEG
@@ -156,15 +166,20 @@ def iCS2txtAssolement():
                     _type = EvtICS.TYPE_LEG
                 elif s_summary.lower().startswith("mottes "):
                     s_summary = s_summary[len("mottes "):]
-                    _type = EvtICS.TYPE_LEG
+                    _type = EvtICS.TYPE_MOTTES
+                elif s_summary.lower().startswith("terrine"):
+                    _type = EvtICS.TYPE_TERRINE
+                elif s_summary.lower().startswith("Réalisation plants"):
+                    s_summary = s_summary[len("Réalisation plants"):]
+                    _type = EvtICS.TYPE_MOTTES
                 elif s_summary.lower().startswith("repiquage "):
                     s_summary = s_summary[len("repiquage "):]
                     _type = EvtICS.TYPE_LEG
                 elif s_summary.lower().startswith("phyto"):
                     _type = EvtICS.TYPE_PHYTO
-                elif s_summary.lower().startswith("culture") or "culture" in s_description:
+                elif s_summary.lower().startswith("culture") or "culture." in s_description:
                     _type = EvtICS.TYPE_CULTURE
-                elif s_summary.lower().startswith("Distribution AMAP"):
+                elif s_summary.lower().startswith("distribution amap"):
                     _type = EvtICS.TYPE_DISTRIB
                 else:
                     _type = EvtICS.TYPE_DIVERS
