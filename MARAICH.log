@@ -14458,3 +14458,158 @@ Légumes théoriquement disponibles semaine 23/09/2019
 [2018-06-23 15:04:10,493 MARAICH_INFO    ] listeCompoPaniers.listeCompoPaniers: Fin de commande
  nombre d'erreurs = 0
 
+[2018-12-25 19:09:32,545 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 16
+local variable 'y' referenced before assignment
+pas de nb de mottes pour navet rose plat de milan
+pas de nb de mottes pour echalote conservor
+pas de nb de mottes pour oignon de garde rosé d'armorique
+pas de nb de mottes pour oignon de garde rouge de genève
+pas de nb de mottes pour oignon de garde jaune sturon
+pas de nb de mottes pour betterave de détroit 2
+pas de nb de mottes pour betterave noire plate d'egypte
+pas de nb de mottes pour betterave bolivar
+pas de nb de mottes pour betterave robuschka
+pas de nb de mottes pour poireau atlanta
+pas de nb de mottes pour moutarde red giant
+'Date en terre' indéfini pour mizuna verte
+'Date en terre' indéfini pour mizuna verte
+'Date en terre' indéfini pour mizuna verte
+'Date en terre' indéfini pour  
+[2018-12-25 20:19:09,362 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 16
+local variable 'y' referenced before assignment
+pas de nb de mottes pour navet rose plat de milan
+pas de nb de mottes pour echalote conservor
+pas de nb de mottes pour oignon de garde rosé d'armorique
+pas de nb de mottes pour oignon de garde rouge de genève
+pas de nb de mottes pour oignon de garde jaune sturon
+pas de nb de mottes pour betterave de détroit 2
+pas de nb de mottes pour betterave noire plate d'egypte
+pas de nb de mottes pour betterave bolivar
+pas de nb de mottes pour betterave robuschka
+pas de nb de mottes pour poireau atlanta
+pas de nb de mottes pour moutarde red giant
+'Date en terre' indéfini pour mizuna verte
+'Date en terre' indéfini pour mizuna verte
+'Date en terre' indéfini pour mizuna verte
+'Date en terre' indéfini pour  
+[2018-12-27 18:59:38,295 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 0
+
+[2018-12-27 19:00:02,882 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 0
+
+[2018-12-27 19:13:38,167 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 0
+
+[2018-12-27 19:24:44,229 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 11
+pas de nb de mottes pour navet rose plat de milan
+pas de nb de mottes pour echalote conservor
+pas de nb de mottes pour oignon de garde rosé d'armorique
+pas de nb de mottes pour oignon de garde rouge de genève
+pas de nb de mottes pour oignon de garde jaune sturon
+pas de nb de mottes pour betterave de détroit 2
+pas de nb de mottes pour betterave noire plate d'egypte
+pas de nb de mottes pour betterave bolivar
+pas de nb de mottes pour betterave robuschka
+pas de nb de mottes pour poireau atlanta
+'Date en terre' indéfini pour  
+[2018-12-27 19:25:14,020 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 10
+pas de nb de mottes pour navet rose plat de milan
+pas de nb de mottes pour echalote conservor
+pas de nb de mottes pour oignon de garde rosé d'armorique
+pas de nb de mottes pour oignon de garde rouge de genève
+pas de nb de mottes pour oignon de garde jaune sturon
+pas de nb de mottes pour betterave de détroit 2
+pas de nb de mottes pour betterave noire plate d'egypte
+pas de nb de mottes pour betterave bolivar
+pas de nb de mottes pour betterave robuschka
+pas de nb de mottes pour poireau atlanta
+[2019-01-05 11:07:48,164 MARAICH_ERROR   ] updateICS      .creationICS: name 'ANNEE' is not defined
+[2019-01-05 11:07:48,220 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 11
+pas de nb de mottes pour echalote conservor
+pas de nb de mottes pour oignon de garde rosé d'armorique
+pas de nb de mottes pour oignon de garde rouge de genève
+pas de nb de mottes pour oignon de garde jaune sturon
+pas de nb de mottes pour betterave de détroit 2
+pas de nb de mottes pour betterave noire plate d'egypte
+pas de nb de mottes pour betterave bolivar
+pas de nb de mottes pour betterave robuschka
+pas de nb de mottes pour poireau atlanta ou pluston f1
+'Date en terre' indéfini pour  
+name 'ANNEE' is not defined
+[2019-01-05 11:11:12,484 MARAICH_ERROR   ] updateICS      .creationICS: 'module' object has no attribute 'join'
+[2019-01-05 11:11:12,485 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 11
+pas de nb de mottes pour echalote conservor
+pas de nb de mottes pour oignon de garde rosé d'armorique
+pas de nb de mottes pour oignon de garde rouge de genève
+pas de nb de mottes pour oignon de garde jaune sturon
+pas de nb de mottes pour betterave de détroit 2
+pas de nb de mottes pour betterave noire plate d'egypte
+pas de nb de mottes pour betterave bolivar
+pas de nb de mottes pour betterave robuschka
+pas de nb de mottes pour poireau atlanta ou pluston f1
+'Date en terre' indéfini pour  
+'module' object has no attribute 'join'
+[2019-01-05 11:15:03,545 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 9
+pas de nb de mottes pour echalote conservor
+pas de nb de mottes pour oignon de garde rosé d'armorique
+pas de nb de mottes pour oignon de garde rouge de genève
+pas de nb de mottes pour oignon de garde jaune sturon
+pas de nb de mottes pour betterave de détroit 2
+pas de nb de mottes pour betterave noire plate d'egypte
+pas de nb de mottes pour betterave bolivar
+pas de nb de mottes pour betterave robuschka
+pas de nb de mottes pour poireau atlanta ou pluston f1
+[2019-01-05 11:50:42,567 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 10
+pas de nb de mottes pour echalote conservor
+pas de nb de mottes pour oignon de garde rosé d'armorique
+pas de nb de mottes pour oignon de garde rouge de genève
+pas de nb de mottes pour oignon de garde jaune sturon
+pas de nb de mottes pour betterave de détroit 2
+pas de nb de mottes pour betterave noire plate d'egypte
+pas de nb de mottes pour betterave bolivar
+pas de nb de mottes pour betterave robuschka
+pas de nb de mottes pour poireau atlanta ou pluston f1
+mottes mais pas de nb de tous par plaque...
+[2019-01-05 11:54:40,155 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 10
+pas de nb de mottes pour echalote conservor
+pas de nb de mottes pour oignon de garde rosé d'armorique
+pas de nb de mottes pour oignon de garde rouge de genève
+pas de nb de mottes pour oignon de garde jaune sturon
+pas de nb de mottes pour betterave de détroit 2
+pas de nb de mottes pour betterave noire plate d'egypte
+pas de nb de mottes pour betterave bolivar
+pas de nb de mottes pour betterave robuschka
+pas de nb de mottes pour poireau atlanta ou pluston f1
+mottes mais pas de nb de trous par plaque pour oignon de printemps blanc musona
+[2019-01-05 12:02:12,340 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 9
+pas de nb de mottes pour echalote conservor
+pas de nb de mottes pour oignon de garde rosé d'armorique
+pas de nb de mottes pour oignon de garde rouge de genève
+pas de nb de mottes pour oignon de garde jaune sturon
+pas de nb de mottes pour betterave de détroit 2
+pas de nb de mottes pour betterave noire plate d'egypte
+pas de nb de mottes pour betterave bolivar
+pas de nb de mottes pour betterave robuschka
+pas de nb de mottes pour poireau atlanta ou pluston f1
+[2019-01-23 21:20:02,413 MARAICH_INFO    ] updateICS      .creationICS: Fin de commande
+ nombre d'erreurs = 9
+pas de nb de mottes pour echalote conservor alors qu'une date de fabrication de plants est donnée.
+pas de nb de mottes pour oignon de garde rosé d'armorique alors qu'une date de fabrication de plants est donnée.
+pas de nb de mottes pour oignon de garde rouge de genève alors qu'une date de fabrication de plants est donnée.
+pas de nb de mottes pour oignon de garde jaune sturon alors qu'une date de fabrication de plants est donnée.
+pas de nb de mottes pour betterave de détroit 2 alors qu'une date de fabrication de plants est donnée.
+pas de nb de mottes pour betterave noire plate d'egypte alors qu'une date de fabrication de plants est donnée.
+pas de nb de mottes pour betterave bolivar alors qu'une date de fabrication de plants est donnée.
+pas de nb de mottes pour betterave robuschka alors qu'une date de fabrication de plants est donnée.
+pas de nb de mottes pour poireau atlanta ou pluston f1 alors qu'une date de fabrication de plants est donnée.

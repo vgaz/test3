@@ -72,31 +72,62 @@ class EvtICS(object):
         pass
       
         
-def iCS2txtAssolement():
-    """ affichage de l'assolement à partir du fichier ics"""
+def getEvtsAssolement(filePath):
+    """ récupère les évenements de l'assolement à partir du fichier ics"""
     l_evts = [] 
     
-    PATERN_PLANCHES = "([BDHS])([0-9])"
+    #PATERN_PLANCHES = "([BDHS])([0-9])"
     PATERN_PLANCHE = "([BDHS])([0-9]+)(\.[0-9]+)* *(.*)"
    
-    paternPlanches = re.compile(PATERN_PLANCHES) 
+    #paternPlanches = re.compile(PATERN_PLANCHES) 
     paternPlanche = re.compile(PATERN_PLANCHE) 
     #     lecture iCS
     #  recup lieu, légume
-    with open("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018-10-28.maraich2018.ics", "r+t", encoding="utf-8") as hF:
+    with open(filePath, "r+t", encoding="utf-8") as hF:
 
         _type = None
         s_date = ""
         s_summary = ""
         s_description = ""
         s_location = ""
+        s_finMultiligne = ""
         bInDescription = False
         bInDate = False
         bInLocation = False
+        bInSummary = False
        
         for s_line in hF:
             
             s_line = s_line.replace("\n", "").replace("\\,", ",").replace("\\;",";")
+    
+    
+    ## en cours de developpement (simplification gestion multilignes
+            
+            if s_line.startswith(" "):
+                ## complement de la ligne du dessus
+                s_finMultiligne += s_line[1:]
+                continue
+            else:
+                ## on complete éventuelement la multiligne
+                if bInDate:
+                    s_date += s_finMultiligne.replace(" ","")
+                    s_date = s_date.split(":")[1]
+                    s_date = s_date[0:8]
+                    bInDate = False
+                elif bInLocation: 
+                    s_location += s_finMultiligne
+                    bInLocation = False
+                elif bInDescription:
+                    s_description += s_finMultiligne
+                    bInDescription = False
+                elif bInSummary:
+                    s_summary += s_finMultiligne
+                    bInSummary = False
+                
+                s_finMultiligne = ""
+                 
+    ## fin dev
+                    
             
             if bInDate: #la date tient tjs sur 2 lignes
                 s_date += s_line.replace(" ","")
@@ -118,8 +149,9 @@ def iCS2txtAssolement():
                     bInDescription = False
                 continue
 
+            
             ## recup evt
-            if "BEGIN:VEVENT" in s_line:
+            if s_line.startswith("BEGIN:VEVENT"):
                 _type = None
                 s_date = ""
                 s_summary = ""
@@ -149,13 +181,13 @@ def iCS2txtAssolement():
                 bInDescription = True
                 continue
 
-            elif bInDescription:
-                s_description += s_line
-                continue
-            
-            elif bInDate:
-                s_date += s_line
-                continue
+#             elif bInDescription:
+#                 s_description += s_line[1:] ## nous sommes forcement au moins à la 2 eme ligne
+#                 continue
+#             
+#             elif bInDate:
+#                 s_date += s_line
+#                 continue
             
             elif s_line.startswith("END:VEVENT"):
                 if s_summary.lower().startswith("plantation "):
@@ -175,7 +207,7 @@ def iCS2txtAssolement():
                 elif s_summary.lower().startswith("repiquage "):
                     s_summary = s_summary[len("repiquage "):]
                     _type = EvtICS.TYPE_LEG
-                elif s_summary.lower().startswith("phyto"):
+                elif s_summary.lower().startswith("phyto") :
                     _type = EvtICS.TYPE_PHYTO
                 elif s_summary.lower().startswith("culture") or "culture." in s_description:
                     _type = EvtICS.TYPE_CULTURE
@@ -208,61 +240,72 @@ def iCS2txtAssolement():
                     l_evts.append(evt)                
             
             continue ## next line in file
-
-        ## tri par lieu
-        print (30*"-", "Assolement par planche", 30*"-","\n")
-        l_evts.sort(key=lambda x: x.location)
-        for ev in l_evts:
-            if ev.type == EvtICS.TYPE_LEG:
-                print( ev.location, ":", ev.date, ev.summary)
         
-        ## tri par légume
-        print (30*"-", "Assolement par légume", 30*"-","\n")
-        l_evts.sort(key=lambda x: x.summary)
-        for ev in l_evts:
-            if ev.type == EvtICS.TYPE_LEG:
-                print(ev.summary, ev.date, ">>", ev.location, "\n" )
-        
-        ## info phyto
-        print (30*"-", "Traitement phyto", 30*"-","\n")
-        for ev in l_evts:
-            if ev.type == EvtICS.TYPE_PHYTO:
-                print(ev.summary, ev.date, ";", ev.location, "\n",  ev.description, "\n" )
+        ## ici, on a tous les évenements liés à l'assolement de l'année considérée
+        return l_evts
 
-        ## info culture
-        print (30*"-", "Remarque culture", 30*"-","\n")
-        for ev in l_evts:
-            if ev.type == EvtICS.TYPE_CULTURE:
-                print(ev.summary, ev.date, ";", ev.location, "\n",  ev.description.replace("\\n","\n"), "\n" )
-                
 
-        ## info distrib
-        print (30*"-", "Distributions", 30*"-","\n")
-        l_evts.sort(key=lambda x: x.date)
-        for ev in l_evts:
-            if ev.type == EvtICS.TYPE_DISTRIB:
-                print(ev.date, ev.summary, ";", ev.location, "\n",  ev.description.replace("\\n","\n"), "\n" )
-                
+def getTxtEvtsAssolement(l_evts):
+    
+    # retourne une multistring décrivant tous les evenements
+    s_txtEvts = ""
 
-        ## info divers
-        print (30*"-", "Remarque divers", 30*"-","\n")
-        l_evts.sort(key=lambda x: x.date)
-        for ev in l_evts:
-            if ev.type == EvtICS.TYPE_DIVERS:
-                print(ev.date, ev.summary, ";", ev.location, "\n",  ev.description.replace("\\n","\n"), "\n" )
-                
+    ## tri par lieu
+    s_txtEvts += "\n------------- Assolement par planche -------------\n"
+    l_evts.sort(key=lambda x: x.location)
+    for ev in l_evts:
+        if ev.type == EvtICS.TYPE_LEG:
+            s_txtEvts += "%s : %s %s\n"%(ev.location, ev.date, ev.summary)
+    
+    ## tri par légume
+    s_txtEvts += "\n------------- Assolement par légume -------------\n"
+    l_evts.sort(key=lambda x: x.summary)
+    for ev in l_evts:
+        if ev.type == EvtICS.TYPE_LEG:
+            s_txtEvts += "%s : %s : %s\n"%(ev.date, ev.location, ev.summary)
+    
+    ## info phyto
+    s_txtEvts += "\n------------- Traitements phytosanitaires -------------\n"
+    l_evts.sort(key=lambda x: x.date)
+    for ev in l_evts:
+        if ev.type == EvtICS.TYPE_PHYTO or "phyto." in ev.description :
+            s_txtEvts += "%s ; %s %s\n%s\n"%(ev.date, ev.summary, ev.location, ev.description.replace("\\n","\n"))
 
-              
+    ## info culture
+    s_txtEvts += "\n------------- Remarque culture -------------\n"
+    for ev in l_evts:
+        if ev.type == EvtICS.TYPE_CULTURE:
+            s_txtEvts += "%s ; %s %s\n%s\n"%(ev.date, ev.summary, ev.location, ev.description.replace("\\n","\n"))
             
+
+    ## info distrib
+    s_txtEvts += "\n------------- Distributions -------------\n"
+    l_evts.sort(key=lambda x: x.date)
+    for ev in l_evts:
+        if ev.type == EvtICS.TYPE_DISTRIB:
+            s_txtEvts += "%s ; %s %s\n%s\n"%(ev.date, ev.summary, ev.location, ev.description.replace("\\n","\n"))
+            
+
+    ## info diverses
+    s_txtEvts += "\n------------- Remarque divers -------------\n"
+    l_evts.sort(key=lambda x: x.date)
+    for ev in l_evts:
+        if ev.type == EvtICS.TYPE_DIVERS:
+            s_txtEvts += "%s ; %s ; %s\n%s\n"%(ev.date, ev.summary,ev.location,ev.description.replace("\\n","\n"))
+            
+    
+    return s_txtEvts
+
+           
             
         
 
-def creationICS():
-    """updatedb : mise à jour de la base à partir des tableaux CSV"""
-    l_err = []      
-
-    ## maj variétés, légumes et séries
-    with open(os.path.abspath(os.path.join(BASE_DIR, "..", "..","inputs", "planning.csv")), "r+t", encoding="ISO-8859-1") as hF:
+def creationICS(myFilePath):
+    """Création d'un fichier ics de la base à partir du tableau CSV"""
+    l_err = []
+    
+    ## maj variétés, légumes et séries  encodage "UTF-8" ou "ISO-8859-1"
+    with open(myFilePath, "r+t", encoding="UTF-8") as hF:
         reader = csv.DictReader(hF)
 
         ics_txt = ICS_HEAD
@@ -273,8 +316,6 @@ def creationICS():
                 d_serie = {}
                 d_serie["espece"] = d_line.get("Espèce", "").lower().strip()                    
                 d_serie["variet"] = d_line.get("Variété", "").lower().strip() 
-#                 if "vit" not in d_serie["variet"]:
-#                     continue
                 
                 nomLeg = "%s %s" % (d_serie["espece"], d_serie["variet"])
 
@@ -282,13 +323,13 @@ def creationICS():
                 if d_serie["s_datePlants"]:
                     d_serie["datePlants"] = MyTools.getDateFrom_d_m_y(d_serie["s_datePlants"])           
                     ## maj agenda ics
-                    evt_nom = "Réalisation plants %s" % (nomLeg)
+                    evt_nom = "mottes %s" % (nomLeg)
                     
                     d_serie["nbMottes"] = MyTools.getIntInDict(d_line, "Nombre de mottes", 0)
-                    assert  d_serie["nbMottes"], "pas de nb de mottes pour %s"%(nomLeg)
-                    d_serie["typePlaque"] = MyTools.getIntInDict(d_line, "Nb trous par plaque", 0)
-                                        
-                    evt_txt = "%d mottes, plateaux de %d trous"%(d_serie["nbMottes"], d_serie["typePlaque"])
+                    assert  d_serie["nbMottes"], "pas de nb de mottes pour %s alors qu'une date de fabrication de plants est donnée."%(nomLeg)
+                    d_serie["nbTrousParPlaque"] = MyTools.getIntInDict(d_line, "Nb trous par plaque", 0)
+                    assert d_serie["nbTrousParPlaque"], "mottes mais pas de nb de trous par plaque pour %s %s"%(d_serie["espece"], d_serie["variet"])
+                    evt_txt = "x %d (%.02f x %d)"%(d_serie["nbMottes"], float(d_serie["nbMottes"]/d_serie["nbTrousParPlaque"]), d_serie["nbTrousParPlaque"])
                     ics_txt += ICS_ITEM%( evt_nom,
                                           evt_txt, 
                                           str(d_serie["datePlants"]).split(" ")[0].replace("-","")+"T080000",
@@ -302,7 +343,11 @@ def creationICS():
                 assert d_serie["s_dateEnTerre"], "'Date en terre' indéfini pour %s"%(nomLeg)
                 d_serie["dateEnTerre"] = MyTools.getDateFrom_d_m_y(d_serie["s_dateEnTerre"])        
                 ## maj agenda ics
-                evt_nom = "Plantation %s" % (nomLeg)
+                if d_serie["s_datePlants"]:
+                    evt_nom = "repiquage %s" % (nomLeg)
+                else:
+                    evt_nom = "semis %s" % (nomLeg)
+
                 if d_line.get("lieu") == 'SERRE':
                     s_lieu = "sous serre"
                 else:
@@ -326,7 +371,7 @@ def creationICS():
 
         try:
             ics_txt += ICS_QUEUE
-            MyTools.strToFic(os.path.join(BASE_DIR, "PlanningCultures.ics"), ics_txt)
+            MyTools.strToFic(myFilePath.split(".csv")[0]+".test.ics", ics_txt)
         except:
             s_err = str(sys.exc_info()[1])
             l_err.append(s_err)
@@ -339,7 +384,14 @@ def creationICS():
 
 if __name__ == '__main__':
     
-    iCS2txtAssolement()
+    l_evts = []
+    l_evts = getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/maraich 2018.ics")
+    l_evts += ( getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/maraich 2019.ics"))
+#    print(len(l_evts))
+#     for evt in l_evts:
+#         print(evt)
+#     print(getTxtEvtsAssolement(l_evts))
+    MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/bilan2019.txt", getTxtEvtsAssolement(l_evts))
     
-    #creationICS()
-      
+    ##creationICS(os.path.abspath(os.path.join(BASE_DIR, "..", "..","inputs", "planning.2019.csv")))
+    
