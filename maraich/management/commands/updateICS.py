@@ -98,17 +98,18 @@ def getEvtsAssolement(filePath):
        
         for s_line in hF:
             
-            s_line = s_line.replace("\n", "").replace("\\,", ",").replace("\\;",";")
+            s_line = s_line.replace("\\n,", "\n").replace("\\,", ",").replace("\\;",";").rstrip('\n')
     
-    
-    ## en cours de developpement (simplification gestion multilignes
-            
+                
             if s_line.startswith(" "):
                 ## complement de la ligne du dessus
                 s_finMultiligne += s_line[1:]
                 continue
             else:
                 ## on complete éventuelement la multiligne
+                ## on va à la ligne
+                if s_finMultiligne:
+                    s_finMultiligne += "\n"                
                 if bInDate:
                     s_date += s_finMultiligne.replace(" ","")
                     s_date = s_date.split(":")[1]
@@ -124,32 +125,11 @@ def getEvtsAssolement(filePath):
                     s_summary += s_finMultiligne
                     bInSummary = False
                 
+
+
                 s_finMultiligne = ""
                  
-    ## fin dev
-                    
-            
-            if bInDate: #la date tient tjs sur 2 lignes
-                s_date += s_line.replace(" ","")
-                s_date = s_date.split(":")[1]
-                s_date = s_date[0:8]
-                bInDate = False
 
-            if bInLocation: # tient éventuellement sur 2 lignes max, nous sommes ici apres la 1ere
-                ## si la ligne commence par un espace rajouté, c'est que c'est la suite du champ à récuperer, siono, tout tenait sur une ligne
-                if s_line.startswith(" "):
-                    s_location += s_line[1:] ## on ajoute la deuxieme ligne en virant l'espace
-                else:
-                    bInLocation = False
-
-            if s_line.startswith("X-MOZ-GENERATION:") or s_line.startswith("LAST-MODIFIED:")\
-               or s_line.startswith("TRANSP:") or s_line.startswith("X-EVOLUTION-CALDAV-HREF:") or s_line.startswith("CLASS:PUBLIC")\
-               or s_line.startswith("DTEND;") :
-                if bInDescription:
-                    bInDescription = False
-                continue
-
-            
             ## recup evt
             if s_line.startswith("BEGIN:VEVENT"):
                 _type = None
@@ -181,13 +161,6 @@ def getEvtsAssolement(filePath):
                 bInDescription = True
                 continue
 
-#             elif bInDescription:
-#                 s_description += s_line[1:] ## nous sommes forcement au moins à la 2 eme ligne
-#                 continue
-#             
-#             elif bInDate:
-#                 s_date += s_line
-#                 continue
             
             elif s_line.startswith("END:VEVENT"):
                 if s_summary.lower().startswith("plantation "):
@@ -247,51 +220,49 @@ def getEvtsAssolement(filePath):
 
 def getTxtEvtsAssolement(l_evts):
     
-    # retourne une multistring décrivant tous les evenements
+    # retourne une multistring décrivant tous les évenements
     s_txtEvts = ""
+    l_evts.sort(key=lambda x: x.date)
 
     ## tri par lieu
-    s_txtEvts += "\n------------- Assolement par planche -------------\n"
-    l_evts.sort(key=lambda x: x.location)
-    for ev in l_evts:
+    s_txtEvts += "\n\n------------- Assolement par planche -------------\n\n"
+    l_tmp = sorted(l_evts, key=lambda x: x.location[:3])
+    for ev in l_tmp:
         if ev.type == EvtICS.TYPE_LEG:
-            s_txtEvts += "%s : %s %s\n"%(ev.location, ev.date, ev.summary)
+            s_txtEvts += "%s ; %s %s\n"%(MyTools.getDMYFromDate(ev.date), ev.location, ev.summary)
     
     ## tri par légume
-    s_txtEvts += "\n------------- Assolement par légume -------------\n"
-    l_evts.sort(key=lambda x: x.summary)
-    for ev in l_evts:
+    s_txtEvts += "\n\n------------- Assolement par légume -------------\n\n"
+    l_tmp = sorted(l_evts, key=lambda x: x.summary.split()[0])
+    for ev in l_tmp:
         if ev.type == EvtICS.TYPE_LEG:
-            s_txtEvts += "%s : %s : %s\n"%(ev.date, ev.location, ev.summary)
+            s_txtEvts += "%s ; %s : %s\n"%(MyTools.getDMYFromDate(ev.date), ev.location, ev.summary)
     
     ## info phyto
-    s_txtEvts += "\n------------- Traitements phytosanitaires -------------\n"
-    l_evts.sort(key=lambda x: x.date)
+    s_txtEvts += "\n\n------------- Traitements phytosanitaires -------------\n\n"
     for ev in l_evts:
         if ev.type == EvtICS.TYPE_PHYTO or "phyto." in ev.description :
-            s_txtEvts += "%s ; %s %s\n%s\n"%(ev.date, ev.summary, ev.location, ev.description.replace("\\n","\n"))
+            s_txtEvts += "%s ; %s %s\n%s\n"%(MyTools.getDMYFromDate(ev.date), ev.summary, ev.location, ev.description)
 
     ## info culture
-    s_txtEvts += "\n------------- Remarque culture -------------\n"
+    s_txtEvts += "\n\n------------- Remarque culture -------------\n\n"
     for ev in l_evts:
         if ev.type == EvtICS.TYPE_CULTURE:
-            s_txtEvts += "%s ; %s %s\n%s\n"%(ev.date, ev.summary, ev.location, ev.description.replace("\\n","\n"))
+            s_txtEvts += "%s ; %s %s\n%s\n"%(MyTools.getDMYFromDate(ev.date), ev.summary, ev.location, ev.description)
             
 
     ## info distrib
-    s_txtEvts += "\n------------- Distributions -------------\n"
-    l_evts.sort(key=lambda x: x.date)
+    s_txtEvts += "\n\n------------- Distributions -------------\n\n"
     for ev in l_evts:
         if ev.type == EvtICS.TYPE_DISTRIB:
-            s_txtEvts += "%s ; %s %s\n%s\n"%(ev.date, ev.summary, ev.location, ev.description.replace("\\n","\n"))
+            s_txtEvts += "%s ; %s %s\n%s\n"%(MyTools.getDMYFromDate(ev.date), ev.summary, ev.location, ev.description.replace("\\n","\n"))
             
 
     ## info diverses
-    s_txtEvts += "\n------------- Remarque divers -------------\n"
-    l_evts.sort(key=lambda x: x.date)
+    s_txtEvts += "\n\n------------- Remarques divers -------------\n\n"
     for ev in l_evts:
         if ev.type == EvtICS.TYPE_DIVERS:
-            s_txtEvts += "%s ; %s ; %s\n%s\n"%(ev.date, ev.summary,ev.location,ev.description.replace("\\n","\n"))
+            s_txtEvts += "%s ; %s ; %s\n%s\n"%(MyTools.getDMYFromDate(ev.date), ev.summary,ev.location,ev.description.replace("\\n","\n"))
             
     
     return s_txtEvts
