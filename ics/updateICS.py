@@ -9,6 +9,8 @@ import re
 
 
 sys.path.insert(-1, "/home/vincent/Documents/donnees/DIVERS/DeveloppementLogiciel/python/MyPyTools")
+
+
 import MyTools
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -60,12 +62,15 @@ class EvtICS(object):
     def __init__(self):
         self.date = "2018-00-00"
         self.summary = ""
-        self.description = ""
+        self.description = """ """
         self.location = ""
         self.type = None
     
     def __str__(self):
-        return "%s\n%s-%s\n\n"%(self.summary, self.date, self.location)  
+        s_rep = "%s\n%s-%s\n"%(self.summary, self.date, self.location)
+        if self.description:
+            s_rep += self.description
+        return s_rep
             
 
     def traceSend(self, strIn):
@@ -209,7 +214,7 @@ def getEvtsAssolement(filePath):
                     evt.summary = s_summary
                     evt.location = s_location
                     evt.date = MyTools.getDateFrom_y_m_d(s_date)
-                    evt.description = s_description
+                    evt.description = s_description.replace("\\n","\n")
                     l_evts.append(evt)                
             
             continue ## next line in file
@@ -261,8 +266,8 @@ def getTxtEvtsAssolement(l_evts):
     s_txtEvts += "\n\n------------- Distributions -------------\n\n"
     for ev in l_evts:
         if ev.type == EvtICS.TYPE_DISTRIB:
-            s_txtEvts += "%s ; %s %s\n%s\n"%(MyTools.getDMYFromDate(ev.date), ev.summary, ev.location, ev.description.replace("\\n","\n"))
-            
+            s_txtEvts += ev.__str__()
+
 
     ## info diverses
     s_txtEvts += "\n\n------------- Remarques diverses -------------\n\n"
@@ -358,16 +363,27 @@ def creationICS(myFilePath):
         log.info("Fin de commande\n nombre d'erreurs = %d\n%s"%( len(l_err), "\n".join(l_err)))  
 
 
+def getPoidsTomates2019(l_evts):
+    
+    l_evtsDistib = [evt for evt in l_evts if (evt.date.year == 2018 and evt.type == EvtICS.TYPE_DISTRIB)]
+    for evt in l_evtsDistib:
+        print("---------------", evt)
 
 if __name__ == '__main__':
+    
     
     l_evts = []
     l_evts = getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/maraich 2018.ics")
     l_evts += ( getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/maraich 2019.ics"))
-#    print(len(l_evts), "évènements")
-#     for evt in l_evts:
-#         print(evt)
+
+#     getPoidsTomates2019(l_evts)
+# 
+#     exit
+
+
+
     MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/bilan2019.txt", getTxtEvtsAssolement(l_evts))
+    
     
     ##creationICS(os.path.abspath(os.path.join(BASE_DIR, "..", "..","inputs", "planning.2019.csv")))
     
