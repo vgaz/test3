@@ -242,7 +242,13 @@ def getTxtEvtsAssolement(l_evts):
     s_txtEvts += "\n\n------------- Traitements phytosanitaires -------------\n\n"
     for ev in l_evts:
         if ev.type == EvtICS.TYPE_PHYTO or "phyto." in ev.description :
-            s_txtEvts += "%s ; %s %s\n%s\n"%(MyTools.getDMYFromDate(ev.date), ev.summary, ev.location, ev.description)
+            s_txtEvts += "%s ; %s ; %s\n%s\n\n"%(MyTools.getDMYFromDate(ev.date), ev.summary, ev.location, ev.description)
+
+    ## info amendement
+    s_txtEvts += "\n\n------------- Amendement -------------\n\n"
+    for ev in l_evts:
+        if "amendement" in ev.summary.lower() :
+            s_txtEvts += "%s ; %s ; %s\n%s\n"%(MyTools.getDMYFromDate(ev.date), ev.summary, ev.location, ev.description)
 
     ## info culture
     s_txtEvts += "\n\n------------- Remarque culture -------------\n\n"
@@ -259,7 +265,7 @@ def getTxtEvtsAssolement(l_evts):
             
 
     ## info diverses
-    s_txtEvts += "\n\n------------- Remarques divers -------------\n\n"
+    s_txtEvts += "\n\n------------- Remarques diverses -------------\n\n"
     for ev in l_evts:
         if ev.type == EvtICS.TYPE_DIVERS:
             s_txtEvts += "%s ; %s ; %s\n%s\n"%(MyTools.getDMYFromDate(ev.date), ev.summary,ev.location,ev.description.replace("\\n","\n"))
@@ -358,10 +364,9 @@ if __name__ == '__main__':
     l_evts = []
     l_evts = getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/maraich 2018.ics")
     l_evts += ( getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/maraich 2019.ics"))
-#    print(len(l_evts))
+#    print(len(l_evts), "évènements")
 #     for evt in l_evts:
 #         print(evt)
-#     print(getTxtEvtsAssolement(l_evts))
     MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/bilan2019.txt", getTxtEvtsAssolement(l_evts))
     
     ##creationICS(os.path.abspath(os.path.join(BASE_DIR, "..", "..","inputs", "planning.2019.csv")))

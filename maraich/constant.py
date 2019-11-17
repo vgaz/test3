@@ -31,6 +31,46 @@ PLAQUE_77_55 = (77,55)
 DOC_CHRONOVIEW = """Voila la doc de chrono planches<br/>
 Il s'agit de placer les séries sur les planches dans le temps"""
 
+D_FAMILLE = {"ail":"amaryllidacée",
+            "artichaut" : "asteracée",
+            "aubergine" : "solanacée",
+            "basilic" : "lamiacée",
+            "betterave" : "chénopodiacée",
+            "blette" : "chénopodiacée",
+            "carotte" : "apiacée",
+            "céleri" : "apiacée",
+            "chou" : "brassicacée",
+            "ciboulette" : "amaryllidacée",
+            "concombre" : "cucurbitacée",
+            "coriandre" : "apiacée",
+            "courge" : "cucurbitacée",
+            "courgette" : "cucurbitacée",
+            "échalote" : "amaryllidacée",
+            "épinard" : "chénopodiacée",
+            "fenouil" : "apiacée",
+            "fèves" : "fabacée",
+            "haricot" : "fabacée",
+            "laitue" : "asteracée",
+            "mâche" : "valérianacée",
+            "maïs" : "poacée",
+            "melon" : "cucurbitacée",
+            "mizuna" : "brassicacée",
+            "moutarde" : "brassicacée",
+            "navet" : "brassicacée",
+            "oignon" : "amaryllidacée",
+            "panais" : "apiacée",
+            "pomme de terre" : "solanacée",
+            "persil" : "apiacée",
+            "poireau" : "amaryllidacée",
+            "pois" : "fabacée",
+            "poivron" : "solanacée",
+            "pourpier d'hiver" : "portulacacée",
+            "pourpier d'été" : "portulacacée",
+            "radis rose" : "brassicacée",
+            "rhubarbe" : "polygonacées",
+            "roquette" : "brassicacée",
+            "tomate" : "solanacée"
+            }
 
 ICS_HEAD = """BEGIN:VCALENDAR
 PRODID:-//Mozilla.org/NONSGML Mozilla Calendar V1.1//EN
