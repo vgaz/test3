@@ -60,7 +60,7 @@ class EvtICS(object):
     TYPE_TERRINE = 8
     
     def __init__(self):
-        self.date = "2018-00-00"
+        self.date = None
         self.summary = ""
         self.description = """ """
         self.location = ""
@@ -103,7 +103,8 @@ def getEvtsAssolement(filePath):
        
         for s_line in hF:
             
-            s_line = s_line.replace("\\n,", "\n").replace("\\,", ",").replace("\\;",";").rstrip('\n')
+            #s_line = s_line.replace("\\n,", "\n").replace("\\,", ",").replace("\\;",";").rstrip('\n')
+            s_line = s_line.replace("\\,", ",").replace("\\;",";").rstrip('\n')
     
                 
             if s_line.startswith(" "):
@@ -129,8 +130,6 @@ def getEvtsAssolement(filePath):
                 elif bInSummary:
                     s_summary += s_finMultiligne
                     bInSummary = False
-                
-
 
                 s_finMultiligne = ""
                  
@@ -363,11 +362,32 @@ def creationICS(myFilePath):
         log.info("Fin de commande\n nombre d'erreurs = %d\n%s"%( len(l_err), "\n".join(l_err)))  
 
 
-def getPoidsTomates2019(l_evts):
+def getCumul(l_evts, legume):
+    cumul = 0.0
+    paternPaniers = re.compile("paniers : *([0-9]+)")
+    patern = re.compile("%s.*: *(.*)"%(legume))
     
-    l_evtsDistib = [evt for evt in l_evts if (evt.date.year == 2018 and evt.type == EvtICS.TYPE_DISTRIB)]
-    for evt in l_evtsDistib:
-        print("---------------", evt)
+    try:
+        for evt in l_evts:
+            bPatPaniers = False
+            for s_ligne in evt.description.split("\n"):
+                pat = patern.match(s_ligne.lower().strip().replace("kg","").split("(")[0]) 
+                if pat:
+                    cumul += float(pat.group(1).replace(",","."))
+                    print(evt.date, s_ligne)
+                    
+                if paternPaniers.match(s_ligne):
+                    bPatPaniers = True
+        
+            if not bPatPaniers:
+                print ("ERR def paniers le :", evt.date)      
+    except:
+        print ("ERR", evt, legume)
+
+#     print("cumul", cumul)
+    
+    return (cumul)
+
 
 if __name__ == '__main__':
     
@@ -375,10 +395,19 @@ if __name__ == '__main__':
     l_evts = []
     l_evts = getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/maraich 2018.ics")
     l_evts += ( getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/maraich 2019.ics"))
+    l_evts.sort(key=lambda x: x.date)
 
-#     getPoidsTomates2019(l_evts)
+
+    dateDebut = MyTools.getDateFrom_d_m_y("1/5/2019")
+    dateFin =  MyTools.getDateFrom_d_m_y("30/4/2020")
+    l_evts = [evt for evt in l_evts if (evt.date > dateDebut and evt.date < dateFin and evt.type == EvtICS.TYPE_DISTRIB)]
+    
+    print ("Récoltes du", MyTools.getDMYFromDate(dateDebut), "au", MyTools.getDMYFromDate(dateFin))
+    for leg in ["oignon"]:#"blette", "carotte", "chou", "courge", "courgette", "échalotte", "épinard", "fève", "haricot","mâche","melon", "panais", "pois", "poireau","poivron","pomme de terre", "radis", "tomate"]:
+        cumul = getCumul(l_evts, leg)
+        print(leg, ":", cumul)
 # 
-#     exit
+    exit
 
 
 
