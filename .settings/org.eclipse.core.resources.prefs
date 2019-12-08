@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
-encoding//ics/updateICS.py=utf-8
+encoding//ics/bilanAssolement.py=utf-8
+encoding//ics/createICS.py=utf-8
 encoding//inputs/planning.2019.csv=UTF-8
 encoding//maraich/XXcontroleModels.py=utf-8
 encoding//maraich/admin.py=utf-8

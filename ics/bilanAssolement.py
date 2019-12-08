@@ -6,6 +6,7 @@ import datetime, os, sys
 # from maraich.models import *
 from maraich.settings import log
 import re
+from maraich import constant
 
 
 sys.path.insert(-1, "/home/vincent/Documents/donnees/DIVERS/DeveloppementLogiciel/python/MyPyTools")
@@ -15,38 +16,6 @@ import MyTools
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-
-ICS_HEAD = """BEGIN:VCALENDAR
-PRODID:-//Mozilla.org/NONSGML Mozilla Calendar V1.1//EN
-VERSION:2.0
-BEGIN:VTIMEZONE
-TZID:Europe/Paris
-BEGIN:DAYLIGHT
-TZOFFSETFROM:+0100
-TZOFFSETTO:+0200
-TZNAME:CEST
-DTSTART:19700329T020000
-RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
-END:DAYLIGHT
-BEGIN:STANDARD
-TZOFFSETFROM:+0200
-TZOFFSETTO:+0100
-TZNAME:CET
-DTSTART:19701025T030000
-RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
-END:STANDARD
-END:VTIMEZONE
-"""
-ICS_QUEUE = "END:VCALENDAR"
-
-ICS_ITEM = """BEGIN:VEVENT
-SUMMARY:%s
-DESCRIPTION:%s
-DTSTART;TZID=Europe/Paris:%s
-DTEND;TZID=Europe/Paris:%s
-TRANSP:OPAQUE
-END:VEVENT
-"""
 
 class EvtICS(object):
     
@@ -71,7 +40,24 @@ class EvtICS(object):
         if self.description:
             s_rep += self.description
         return s_rep
-            
+    
+    def getNomLegume(self):
+        """retourne le nom du légume ou chaine vide si ce n'est pas un évènement légume"""
+        if self.type != self.TYPE_LEG:
+            return ""
+        else:
+            for d_leg in constant.L_LEGUMES:
+                if self.summary.lower().startswith(d_leg["nom"]):
+                    return d_leg["nom"]
+            raise ("aie")
+        
+    def getFamille(self):
+        """retourne le nom de la famille du légume ou chaine vide si ce n'est pas un evenement légume"""
+        if self.type != self.TYPE_LEG:
+            return ""        
+        for d_leg in constant.L_LEGUMES:
+            if d_leg["nom"] == self.getNomLegume():
+                return d_leg["famille"]
 
     def traceSend(self, strIn):
         pass
@@ -168,10 +154,10 @@ def getEvtsAssolement(filePath):
             
             elif s_line.startswith("END:VEVENT"):
                 if s_summary.lower().startswith("plantation "):
-                    s_summary = s_summary[len("plantation "):]
+                    s_summary = s_summary[len("plantation "):].strip()
                     _type = EvtICS.TYPE_LEG
                 elif s_summary.lower().startswith("semis "):
-                    s_summary = s_summary[len("semis "):]
+                    s_summary = s_summary[len("semis "):].strip()
                     _type = EvtICS.TYPE_LEG
                 elif s_summary.lower().startswith("mottes "):
                     s_summary = s_summary[len("mottes "):]
@@ -182,7 +168,7 @@ def getEvtsAssolement(filePath):
                     s_summary = s_summary[len("Réalisation plants"):]
                     _type = EvtICS.TYPE_MOTTES
                 elif s_summary.lower().startswith("repiquage "):
-                    s_summary = s_summary[len("repiquage "):]
+                    s_summary = s_summary[len("repiquage "):].strip()
                     _type = EvtICS.TYPE_LEG
                 elif s_summary.lower().startswith("phyto") :
                     _type = EvtICS.TYPE_PHYTO
@@ -278,100 +264,55 @@ def getTxtEvtsAssolement(l_evts):
     return s_txtEvts
 
            
+        
+
+def getPlanchesPossibles(l_evts, famille, prefixePlanche=None):
+    """ recherche les planches dispo pour une espece donnee 
+    @todo: retenir un delai de rotation"""
+    
+    l_planches = []
+    try:
+        for pl in constant.L_PLANCHES:
+            if pl=="S42":
+                pass
+            bFamilleVue = False
+            
+            for evt in l_evts:
+                if evt.type is not EvtICS.TYPE_LEG:
+                    continue
+                if "S42" in evt.location:
+                    pass
+                if pl in evt.location and evt.getFamille() == famille:
+                    bFamilleVue = True
+                    ## deja eu un legume de cette famille, on passe
+                    break
+            if bFamilleVue:
+                continue
+                
+            ## récupération de la localisation de la culture si on passe ici, famille encore inconue ici
+            l_planches.append(pl)
+                  
+    except:
+        print ("ERR", evt)
+
+    
+    return (l_planches)
             
         
 
-def creationICS(myFilePath):
-    """Création d'un fichier ics de la base à partir du tableau CSV"""
-    l_err = []
-    
-    ## maj variétés, légumes et séries  encodage "UTF-8" ou "ISO-8859-1"
-    with open(myFilePath, "r+t", encoding="UTF-8") as hF:
-        reader = csv.DictReader(hF)
-
-        ics_txt = ICS_HEAD
-
-        for d_line in reader:
-        
-            try: 
-                d_serie = {}
-                d_serie["espece"] = d_line.get("Espèce", "").lower().strip()                    
-                d_serie["variet"] = d_line.get("Variété", "").lower().strip() 
-                
-                nomLeg = "%s %s" % (d_serie["espece"], d_serie["variet"])
-
-                d_serie["s_datePlants"] = d_line.get("Date réalisation plants","")
-                if d_serie["s_datePlants"]:
-                    d_serie["datePlants"] = MyTools.getDateFrom_d_m_y(d_serie["s_datePlants"])           
-                    ## maj agenda ics
-                    evt_nom = "mottes %s" % (nomLeg)
-                    
-                    d_serie["nbMottes"] = MyTools.getIntInDict(d_line, "Nombre de mottes", 0)
-                    assert  d_serie["nbMottes"], "pas de nb de mottes pour %s alors qu'une date de fabrication de plants est donnée."%(nomLeg)
-                    d_serie["nbTrousParPlaque"] = MyTools.getIntInDict(d_line, "Nb trous par plaque", 0)
-                    assert d_serie["nbTrousParPlaque"], "mottes mais pas de nb de trous par plaque pour %s %s"%(d_serie["espece"], d_serie["variet"])
-                    evt_txt = "x %d (%.02f x %d)"%(d_serie["nbMottes"], float(d_serie["nbMottes"]/d_serie["nbTrousParPlaque"]), d_serie["nbTrousParPlaque"])
-                    ics_txt += ICS_ITEM%( evt_nom,
-                                          evt_txt, 
-                                          str(d_serie["datePlants"]).split(" ")[0].replace("-","")+"T080000",
-                                          str(d_serie["datePlants"]).split(" ")[0].replace("-","")+"T090000")                    
-                    
-
-                    
-
-                
-                d_serie["s_dateEnTerre"] = d_line.get("Date en terre","")
-                assert d_serie["s_dateEnTerre"], "'Date en terre' indéfini pour %s"%(nomLeg)
-                d_serie["dateEnTerre"] = MyTools.getDateFrom_d_m_y(d_serie["s_dateEnTerre"])        
-                ## maj agenda ics
-                if d_serie["s_datePlants"]:
-                    evt_nom = "repiquage %s" % (nomLeg)
-                else:
-                    evt_nom = "semis %s" % (nomLeg)
-
-                if d_line.get("lieu") == 'SERRE':
-                    s_lieu = "sous serre"
-                else:
-                    s_lieu = "en plein champ"
-                    
-                evt_txt = "Nb planches : %0.2f (%d m).Tous les %d cm sur %d rangs (%s). Rem : %s" %(MyTools.getFloatInDict(d_line, "nb planches", 0),
-                                                            MyTools.getIntInDict(d_line, "Longueur de rang de cette série (m)", 0),                            
-                                                            MyTools.getIntInDict(d_line, "Intra rang (cm)", 0),
-                                                            MyTools.getIntInDict(d_line, "Nombre de rangs retenus", 0),
-                                                            s_lieu,
-                                                            d_line.get("Remarque", ""))
-                evt_date = d_serie["dateEnTerre"]
-                ics_txt += ICS_ITEM%( evt_nom,
-                                      evt_txt, 
-                                      str(evt_date).split(" ")[0].replace("-","")+"T080000",
-                                      str(evt_date).split(" ")[0].replace("-","")+"T090000")            
-            except:
-                s_err = str(sys.exc_info()[1])
-                l_err.append(s_err)
-                continue
-
-        try:
-            ics_txt += ICS_QUEUE
-            MyTools.strToFic(myFilePath.split(".csv")[0]+".test.ics", ics_txt)
-        except:
-            s_err = str(sys.exc_info()[1])
-            l_err.append(s_err)
-            log.error(s_err)
-
-                    
-        log.info("Fin de commande\n nombre d'erreurs = %d\n%s"%( len(l_err), "\n".join(l_err)))  
-
-
 def getCumul(l_evts, legume):
+    """ recup des cumul de distribution par légume"""
     cumul = 0.0
     paternPaniers = re.compile("paniers : *([0-9]+)")
-    patern = re.compile("%s.*: *(.*)"%(legume))
+    patern = re.compile("%s .*: *([0-9]+)"%(legume))
     
     try:
         for evt in l_evts:
+            if evt.type is not EvtICS.TYPE_DISTRIB:
+                continue
             bPatPaniers = False
             for s_ligne in evt.description.split("\n"):
-                pat = patern.match(s_ligne.lower().strip().replace("kg","").split("(")[0]) 
+                pat = patern.match(s_ligne.lower().strip()) 
                 if pat:
                     cumul += float(pat.group(1).replace(",","."))
                     print(evt.date, s_ligne)
@@ -393,26 +334,29 @@ if __name__ == '__main__':
     
     
     l_evts = []
-    l_evts = getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/maraich 2018.ics")
-    l_evts += ( getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/maraich 2019.ics"))
+    l_evts = getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")
+    l_evts += ( getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics"))
     l_evts.sort(key=lambda x: x.date)
 
-
-    dateDebut = MyTools.getDateFrom_d_m_y("1/5/2019")
-    dateFin =  MyTools.getDateFrom_d_m_y("30/4/2020")
-    l_evts = [evt for evt in l_evts if (evt.date > dateDebut and evt.date < dateFin and evt.type == EvtICS.TYPE_DISTRIB)]
+    ## Filtrage éventuel par période
+    if 1==0 :
+        dateDebut = MyTools.getDateFrom_d_m_y("1/5/2019")
+        dateFin =  MyTools.getDateFrom_d_m_y("30/4/2020")
+        l_evts = [evt for evt in l_evts if (evt.date > dateDebut and evt.date < dateFin)]
+        print ("Récoltes du", MyTools.getDMYFromDate(dateDebut), "au", MyTools.getDMYFromDate(dateFin))
     
-    print ("Récoltes du", MyTools.getDMYFromDate(dateDebut), "au", MyTools.getDMYFromDate(dateFin))
-    for leg in ["oignon"]:#"blette", "carotte", "chou", "courge", "courgette", "échalotte", "épinard", "fève", "haricot","mâche","melon", "panais", "pois", "poireau","poivron","pomme de terre", "radis", "tomate"]:
-        cumul = getCumul(l_evts, leg)
-        print(leg, ":", cumul)
+    ## récup des cumuls de distribution par légume
+    if 1==0:
+        for leg in [ d_leg["nom"] for d_leg in constant.L_LEGUMES]:
+            cumul = getCumul(l_evts, leg)
+            print(leg, ":", cumul)
 # 
-    exit
+    l_planches = getPlanchesPossibles(l_evts, "solanacée")
+    for pl in l_planches:
+        print(pl)
+    
 
-
-
-    MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/bilan2019.txt", getTxtEvtsAssolement(l_evts))
+    #MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/bilan2019.txt", getTxtEvtsAssolement(l_evts))
     
     
-    ##creationICS(os.path.abspath(os.path.join(BASE_DIR, "..", "..","inputs", "planning.2019.csv")))
     
