@@ -36,7 +36,7 @@ class EvtICS(object):
         self.type = None
     
     def __str__(self):
-        s_rep = "%s\n%s-%s\n"%(self.summary, self.date, self.location)
+        s_rep = "%s\n%s sur %s\n"%(self.summary, self.date, self.location)
         if self.description:
             s_rep += self.description
         return s_rep
@@ -49,7 +49,7 @@ class EvtICS(object):
             for d_leg in constant.L_LEGUMES:
                 if self.summary.lower().startswith(d_leg["nom"]):
                     return d_leg["nom"]
-            raise ("aie")
+            raise Exception("ERREUR : %s n'est pas dans la liste des légumes"%self.summary)
         
     def getFamille(self):
         """retourne le nom de la famille du légume ou chaine vide si ce n'est pas un evenement légume"""
@@ -131,7 +131,6 @@ def getEvtsAssolement(filePath):
                 bInDate = False
                 continue
             
-
             if s_line.startswith("DTSTART;"):
                 s_date = s_line
                 bInDate = True
@@ -193,7 +192,7 @@ def getEvtsAssolement(filePath):
                         s_location = "%s%s%s%s"%(s_locChamp, s_locNumPl, s_locNumRang, s_locDetail)
                     else:
                         s_location = s_loc
-                     
+                    
                     evt = EvtICS()
                     evt.type = _type
                     evt.summary = s_summary
@@ -266,30 +265,36 @@ def getTxtEvtsAssolement(l_evts):
            
         
 
-def getPlanchesPossibles(l_evts, famille, prefixePlanche=None):
+def getPlanchesPossibles(l_evts, famille, prefixePlanche=""):
     """ recherche les planches dispo pour une espece donnee 
     @todo: retenir un delai de rotation"""
     
     l_planches = []
     try:
         for pl in constant.L_PLANCHES:
-            if pl=="S42":
-                pass
-            bFamilleVue = False
-            
+
+             
+            if prefixePlanche and not pl.startswith(prefixePlanche):
+                continue
+             
+            bFamilleDejaVue = False
+
             for evt in l_evts:
+                            
+#                 if evt.location == "S44":
+#                     pass
                 if evt.type is not EvtICS.TYPE_LEG:
                     continue
-                if "S42" in evt.location:
-                    pass
+
                 if pl in evt.location and evt.getFamille() == famille:
-                    bFamilleVue = True
-                    ## deja eu un legume de cette famille, on passe
+                    bFamilleDejaVue = True
+                    ## deja eu un légume de cette famille, on passe
                     break
-            if bFamilleVue:
+                
+            if bFamilleDejaVue:
                 continue
                 
-            ## récupération de la localisation de la culture si on passe ici, famille encore inconue ici
+            ## récupération de la localisation de la culture :  si on passe ici, famille encore inconue 
             l_planches.append(pl)
                   
     except:
@@ -338,6 +343,13 @@ if __name__ == '__main__':
     l_evts += ( getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics"))
     l_evts.sort(key=lambda x: x.date)
 
+
+            
+#     for evt in l_evts:            
+#         if evt.location == "S44":
+#             print(evt)
+        
+        
     ## Filtrage éventuel par période
     if 1==0 :
         dateDebut = MyTools.getDateFrom_d_m_y("1/5/2019")
@@ -350,8 +362,15 @@ if __name__ == '__main__':
         for leg in [ d_leg["nom"] for d_leg in constant.L_LEGUMES]:
             cumul = getCumul(l_evts, leg)
             print(leg, ":", cumul)
-# 
-    l_planches = getPlanchesPossibles(l_evts, "solanacée")
+    
+#     l_tmp=[]
+#     for ev in l_evts:    
+#         if (ev.getNomLegume() =="tomate" or ev.getNomLegume() =="pomme de terre")and "S" in ev.location:
+#             print(ev)
+#             l_tmp.append(ev.location)
+#     print(str(l_tmp))
+        
+    l_planches = getPlanchesPossibles(l_evts, "solanacée","S")
     for pl in l_planches:
         print(pl)
     
