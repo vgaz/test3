@@ -81,77 +81,49 @@ def getEvtsAssolement(filePath):
         s_summary = ""
         s_description = ""
         s_location = ""
-        s_finMultiligne = ""
-        bInDescription = False
-        bInDate = False
-        bInLocation = False
-        bInSummary = False
+        s_ligneComplete = """"""
        
-        for s_line in hF:
+        cpt = 0
+       
+        for s_ligneCourante in hF:
             
-            #s_line = s_line.replace("\\n,", "\n").replace("\\,", ",").replace("\\;",";").rstrip('\n')
-            s_line = s_line.replace("\\,", ",").replace("\\;",";").rstrip('\n')
-    
-                
-            if s_line.startswith(" "):
-                ## complement de la ligne du dessus
-                s_finMultiligne += s_line[1:]
-                continue
-            else:
-                ## on complete éventuelement la multiligne
-                ## on va à la ligne
-                if s_finMultiligne:
-                    s_finMultiligne += "\n"                
-                if bInDate:
-                    s_date += s_finMultiligne.replace(" ","")
-                    s_date = s_date.split(":")[1]
-                    s_date = s_date[0:8]
-                    bInDate = False
-                elif bInLocation: 
-                    s_location += s_finMultiligne
-                    bInLocation = False
-                elif bInDescription:
-                    s_description += s_finMultiligne
-                    bInDescription = False
-                elif bInSummary:
-                    s_summary += s_finMultiligne
-                    bInSummary = False
-
-                s_finMultiligne = ""
+            cpt+=1
                  
+            if s_ligneCourante.startswith(" "):
+                s_ligneComplete += s_ligneCourante[1:].rstrip('\n')
+                continue
+            
+            if not s_ligneComplete:
+                ## on garde le début de cette ligne (la premièreligne du fichier), complète ou pas
+                s_ligneComplete = s_ligneCourante.rstrip('\n')
+                continue
+            
+            ## on est au début d'une nouvelle ligne 
+            ## on gère la ligne complète du dessus
+            s_ligneComplete = s_ligneComplete.replace("\\n", "\n")
+            s_ligneComplete = s_ligneComplete.replace("\\,", ",").replace("\\;",";")
+            
+            #########################
+            ## début de gestion ligne complète
+            ##print (">>>>", s_ligneComplete)   
 
-            ## recup evt
-            if s_line.startswith("BEGIN:VEVENT"):
+            if s_ligneComplete.startswith("BEGIN:VEVENT"):
                 _type = None
                 s_date = ""
                 s_summary = ""
                 s_description = ""
                 s_location = ""
-                bInDescription = False
-                bInDate = False
-                continue
-            
-            if s_line.startswith("DTSTART;"):
-                s_date = s_line
-                bInDate = True
-                continue
-
-            elif s_line.startswith("SUMMARY:"):
-                s_summary = s_line.split(":")[1]
-                continue
                 
-            if s_line.startswith("LOCATION:"):
-                s_location = s_line.split("LOCATION:")[1]
-                bInLocation =True
-                continue 
-                       
-            elif s_line.startswith("DESCRIPTION:") and not bInDescription:
-                s_description = s_line.split("DESCRIPTION:")[1]
-                bInDescription = True
-                continue
+             
+            if s_ligneComplete.startswith("DTSTART;"):
+                s_date = s_ligneComplete
+                s_date += s_ligneComplete.replace(" ","")
+                s_date = s_date.split(":")[1]
+                s_date = s_date[0:8]
 
-            
-            elif s_line.startswith("END:VEVENT"):
+            elif s_ligneComplete.startswith("SUMMARY:"):
+                s_summary = s_ligneComplete.split("SUMMARY:")[1]
+                
                 if s_summary.lower().startswith("plantation "):
                     s_summary = s_summary[len("plantation "):].strip()
                     _type = EvtICS.TYPE_LEG
@@ -177,7 +149,10 @@ def getEvtsAssolement(filePath):
                     _type = EvtICS.TYPE_DISTRIB
                 else:
                     _type = EvtICS.TYPE_DIVERS
-         
+
+                 
+            elif s_ligneComplete.startswith("LOCATION:"):
+                s_location = s_ligneComplete.split("LOCATION:")[1]
                 l_locations = s_location.split(",")         
                 for s_loc in l_locations:
                     s_loc = s_loc.strip()
@@ -192,18 +167,28 @@ def getEvtsAssolement(filePath):
                         s_location = "%s%s%s%s"%(s_locChamp, s_locNumPl, s_locNumRang, s_locDetail)
                     else:
                         s_location = s_loc
-                    
+
+                           
+            elif s_ligneComplete.startswith("DESCRIPTION:"):
+                s_description = s_ligneComplete.split("DESCRIPTION:")[1]
+ 
+            elif s_ligneComplete.startswith("END:VEVENT"):
+                    ## création de l'évenement       
                     evt = EvtICS()
                     evt.type = _type
                     evt.summary = s_summary
                     evt.location = s_location
                     evt.date = MyTools.getDateFrom_y_m_d(s_date)
-                    evt.description = s_description.replace("\\n","\n")
-                    l_evts.append(evt)                
-            
+                    evt.description = s_description
+                    l_evts.append(evt)          
+
+   
+            #########################
+            ## fin de gestion ligne complète
+            ## reset ligne complète avec la ligne courante
+            s_ligneComplete = s_ligneCourante.rstrip('\n')    
             continue ## next line in file
-        
-        ## ici, on a tous les évenements liés à l'assolement de l'année considérée
+         
         return l_evts
 
 
@@ -342,40 +327,34 @@ if __name__ == '__main__':
     l_evts = getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")
     l_evts += ( getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics"))
     l_evts.sort(key=lambda x: x.date)
+    MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/bilan2019.txt", getTxtEvtsAssolement(l_evts))
 
-
-            
-#     for evt in l_evts:            
-#         if evt.location == "S44":
-#             print(evt)
         
-        
-    ## Filtrage éventuel par période
     if 1==0 :
-        dateDebut = MyTools.getDateFrom_d_m_y("1/5/2019")
-        dateFin =  MyTools.getDateFrom_d_m_y("30/4/2020")
+        ## Filtrage éventuel par période
+        dateDebut = MyTools.getDateFrom_d_m_y("2/10/2019")
+        dateFin =  MyTools.getDateFrom_d_m_y("4/10/2020")
         l_evts = [evt for evt in l_evts if (evt.date > dateDebut and evt.date < dateFin)]
         print ("Récoltes du", MyTools.getDMYFromDate(dateDebut), "au", MyTools.getDMYFromDate(dateFin))
     
-    ## récup des cumuls de distribution par légume
-    if 1==0:
+    if 1==1:
+        ## récup des cumuls de distribution par légume
         for leg in [ d_leg["nom"] for d_leg in constant.L_LEGUMES]:
             cumul = getCumul(l_evts, leg)
             print(leg, ":", cumul)
     
-#     l_tmp=[]
-#     for ev in l_evts:    
-#         if (ev.getNomLegume() =="tomate" or ev.getNomLegume() =="pomme de terre")and "S" in ev.location:
-#             print(ev)
-#             l_tmp.append(ev.location)
-#     print(str(l_tmp))
+    l_tmp=[]
+    for ev in l_evts:    
+        if (ev.getNomLegume() =="tomate" or ev.getNomLegume() =="pomme de terre")and "S" in ev.location:
+            print(ev)
+            l_tmp.append(ev.location)
+    print(str(l_tmp))
         
-    l_planches = getPlanchesPossibles(l_evts, "solanacée","S")
-    for pl in l_planches:
-        print(pl)
+#     l_planches = getPlanchesPossibles(l_evts, "solanacée","S")
+#     for pl in l_planches:
+#         print(pl)
     
 
-    #MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/bilan2019.txt", getTxtEvtsAssolement(l_evts))
     
     
     
