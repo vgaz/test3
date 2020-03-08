@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import csv
-import datetime, os, sys
+import os, sys
 
 # from django.core.management.base import BaseCommand
 # from maraich.models import *
@@ -63,8 +63,8 @@ class EvtICS(object):
         pass
       
         
-def getEvtsAssolement(filePath):
-    """ récupère les évenements de l'assolement à partir du fichier ics"""
+def getEvents(filePath):
+    """ récupère les évenements à partir du fichier ics"""
     l_evts = [] 
     
     #PATERN_PLANCHES = "([BDHS])([0-9])"
@@ -72,6 +72,8 @@ def getEvtsAssolement(filePath):
    
     #paternPlanches = re.compile(PATERN_PLANCHES) 
     paternPlanche = re.compile(PATERN_PLANCHE) 
+    
+    
     #     lecture iCS
     #  recup lieu, légume
     with open(filePath, "r+t", encoding="utf-8") as hF:
@@ -83,12 +85,9 @@ def getEvtsAssolement(filePath):
         s_location = ""
         s_ligneComplete = """"""
        
-        cpt = 0
-       
+      
         for s_ligneCourante in hF:
-            
-            cpt+=1
-                 
+                             
             if s_ligneCourante.startswith(" "):
                 s_ligneComplete += s_ligneCourante[1:].rstrip('\n')
                 continue
@@ -102,7 +101,8 @@ def getEvtsAssolement(filePath):
             ## on gère la ligne complète du dessus
             s_ligneComplete = s_ligneComplete.replace("\\n", "\n")
             s_ligneComplete = s_ligneComplete.replace("\\,", ",").replace("\\;",";")
-            
+            ## suppression du commentaire suivant //
+            s_ligneComplete = s_ligneComplete.split("//")[0]
             #########################
             ## début de gestion ligne complète
             ##print (">>>>", s_ligneComplete)   
@@ -251,9 +251,11 @@ def getTxtEvtsAssolement(l_evts):
         
 
 def getPlanchesPossibles(l_evts, famille, prefixePlanche=""):
-    """ recherche les planches dispo pour une espece donnee 
+    """ recherche les planches disponibles pour une espece donnée
+    possibilité de passer une lettre en 3 eme parametre correspondant au prefixe de la parcelle voulue 
     @todo: retenir un delai de rotation"""
     
+    print("Recherche des planches disponibles pour planter une %s"%famille)
     l_planches = []
     try:
         for pl in constant.L_PLANCHES:
@@ -266,8 +268,6 @@ def getPlanchesPossibles(l_evts, famille, prefixePlanche=""):
 
             for evt in l_evts:
                             
-#                 if evt.location == "S44":
-#                     pass
                 if evt.type is not EvtICS.TYPE_LEG:
                     continue
 
@@ -291,21 +291,24 @@ def getPlanchesPossibles(l_evts, famille, prefixePlanche=""):
         
 
 def getCumul(l_evts, legume):
-    """ recup des cumul de distribution par légume"""
+    """ recup des cumuls de distribution par légume"""
     cumul = 0.0
     paternPaniers = re.compile("paniers : *([0-9]+)")
-    patern = re.compile("%s .*: *([0-9]+)"%(legume))
+    paternTotalLegume = re.compile("%s .*: *([0-9]+)"%(legume))
     
     try:
         for evt in l_evts:
+            
             if evt.type is not EvtICS.TYPE_DISTRIB:
                 continue
+            
             bPatPaniers = False
             for s_ligne in evt.description.split("\n"):
-                pat = patern.match(s_ligne.lower().strip()) 
+                pat = paternTotalLegume.match(s_ligne.lower().strip()) 
                 if pat:
-                    cumul += float(pat.group(1).replace(",","."))
+                    cumul += float(pat.group(1).replace(",","."))                        
                     print(evt.date, s_ligne)
+                    
                     
                 if paternPaniers.match(s_ligne):
                     bPatPaniers = True
@@ -322,38 +325,40 @@ def getCumul(l_evts, legume):
 
 if __name__ == '__main__':
     
+    dateDebut = MyTools.getDateFrom_d_m_y("1/7/2017")
+    dateFin =  MyTools.getDateTimeToday()
     
+    ## Création de la liste de tous les évènements
     l_evts = []
-    l_evts = getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")
-    l_evts += ( getEvtsAssolement("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics"))
+    l_evts = getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")
+    l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics")
+    l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2020/maraich 2020.ics")
     l_evts.sort(key=lambda x: x.date)
-    MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/bilan2019.txt", getTxtEvtsAssolement(l_evts))
-
         
-    if 1==0 :
-        ## Filtrage éventuel par période
-        dateDebut = MyTools.getDateFrom_d_m_y("2/10/2019")
-        dateFin =  MyTools.getDateFrom_d_m_y("4/10/2020")
+    ## Filtrage éventuel par période    
+    if 1==1 :
+        dateDebut = MyTools.getDateFrom_d_m_y("1/5/2019")
+        dateFin =  MyTools.getDateFrom_d_m_y("30/04/2020")
         l_evts = [evt for evt in l_evts if (evt.date > dateDebut and evt.date < dateFin)]
-        print ("Récoltes du", MyTools.getDMYFromDate(dateDebut), "au", MyTools.getDMYFromDate(dateFin))
+    print ("Du %s au %s"%(MyTools.getDMYFromDate(dateDebut),MyTools.getDMYFromDate(dateFin)))
     
+    ## Création synthèse des évenements
+    if 1==0 :
+        MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/bilan2019.txt", getTxtEvtsAssolement(l_evts))
+
+    
+    ## récup des cumuls de distribution par légume
     if 1==1:
-        ## récup des cumuls de distribution par légume
         for leg in [ d_leg["nom"] for d_leg in constant.L_LEGUMES]:
             cumul = getCumul(l_evts, leg)
             print(leg, ":", cumul)
     
-    l_tmp=[]
-    for ev in l_evts:    
-        if (ev.getNomLegume() =="tomate" or ev.getNomLegume() =="pomme de terre")and "S" in ev.location:
-            print(ev)
-            l_tmp.append(ev.location)
-    print(str(l_tmp))
+    ## Recherche des planches dispo pour telle ou telle famille de légume
+    if 1==0:   
+        l_planches = getPlanchesPossibles(l_evts, "cucurbitacée","S")  #  fabacée, amaryllidacée, solanacée, cucurbitacée
+        for pl in l_planches:
+            print(pl)
         
-#     l_planches = getPlanchesPossibles(l_evts, "solanacée","S")
-#     for pl in l_planches:
-#         print(pl)
-    
 
     
     
