@@ -82,7 +82,7 @@ def getEvents(filePath):
         s_date = ""
         s_summary = ""
         s_description = ""
-        s_location = ""
+        l_locations = []
         s_ligneComplete = """"""
        
       
@@ -112,7 +112,7 @@ def getEvents(filePath):
                 s_date = ""
                 s_summary = ""
                 s_description = ""
-                s_location = ""
+                l_locations = []
                 
              
             if s_ligneComplete.startswith("DTSTART;"):
@@ -154,33 +154,35 @@ def getEvents(filePath):
             elif s_ligneComplete.startswith("LOCATION:"):
                 s_location = s_ligneComplete.split("LOCATION:")[1]
                 l_locations = s_location.split(",")         
-                for s_loc in l_locations:
-                    s_loc = s_loc.strip()
-                    patern = paternPlanche.match(s_loc)
-                    if patern:
-                        s_locChamp = patern.group(1)
-                        s_locNumPl =  "%02d"%int(patern.group(2))
-                        s_locNumRang = patern.group(3) or "" # numero de rg
-                        if s_locNumRang : "rang " + s_locNumRang.split(".")[1]
-                        s_locDetail = patern.group(4) or "" # precision debut et fin dans la planche en m
-                        if s_locDetail : s_locDetail = " (%s)"%(s_locDetail)
-                        s_location = "%s%s%s%s"%(s_locChamp, s_locNumPl, s_locNumRang, s_locDetail)
-                    else:
-                        s_location = s_loc
+
 
                            
             elif s_ligneComplete.startswith("DESCRIPTION:"):
                 s_description = s_ligneComplete.split("DESCRIPTION:")[1]
  
             elif s_ligneComplete.startswith("END:VEVENT"):
-                    ## création de l'évenement       
+                ## création du ou des évenements ; 1 par location 
+                for s_loc in l_locations:
+#                         patern = paternPlanche.match(s_loc)
+#                         if patern:
+#                             s_locChamp = patern.group(1)
+#                             s_locNumPl =  "%02d"%int(patern.group(2))
+#                             s_locNumRang = patern.group(3) or "" # numero de rg
+#                             if s_locNumRang : "rang " + s_locNumRang.split(".")[1]
+#                             s_locDetail = patern.group(4) or "" # precision debut et fin dans la planche en m
+#                             if s_locDetail : s_locDetail = " (%s)"%(s_locDetail)
+#                             s_location = "%s%s%s%s"%(s_locChamp, s_locNumPl, s_locNumRang, s_locDetail)
+#                         else:
+#                             s_location = s_loc      
+                
                     evt = EvtICS()
                     evt.type = _type
                     evt.summary = s_summary
-                    evt.location = s_location
+                    evt.location = s_loc.strip()
                     evt.date = MyTools.getDateFrom_y_m_d(s_date)
                     evt.description = s_description
-                    l_evts.append(evt)          
+                    l_evts.append(evt)   
+#                     print(evt)       
 
    
             #########################
@@ -188,7 +190,7 @@ def getEvents(filePath):
             ## reset ligne complète avec la ligne courante
             s_ligneComplete = s_ligneCourante.rstrip('\n')    
             continue ## next line in file
-         
+
         return l_evts
 
 
@@ -265,13 +267,12 @@ def getPlanchesPossibles(l_evts, famille, prefixePlanche=""):
                 continue
              
             bFamilleDejaVue = False
-
+            
             for evt in l_evts:
-                            
                 if evt.type is not EvtICS.TYPE_LEG:
                     continue
-
-                if pl in evt.location and evt.getFamille() == famille:
+                
+                if pl == evt.location.split(" ")[0].split(".")[0] and evt.getFamille() == famille:
                     bFamilleDejaVue = True
                     ## deja eu un légume de cette famille, on passe
                     break
@@ -330,15 +331,15 @@ if __name__ == '__main__':
     
     ## Création de la liste de tous les évènements
     l_evts = []
-    l_evts = getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")
+    l_evts += getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")
     l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics")
     l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2020/maraich 2020.ics")
     l_evts.sort(key=lambda x: x.date)
         
     ## Filtrage éventuel par période    
-    if 1==1 :
-        dateDebut = MyTools.getDateFrom_d_m_y("1/5/2019")
-        dateFin =  MyTools.getDateFrom_d_m_y("30/04/2020")
+    if 1==0 :
+        dateDebut = MyTools.getDateFrom_d_m_y("24/01/2020")
+        dateFin =  MyTools.getDateFrom_d_m_y("26/01/2020")
         l_evts = [evt for evt in l_evts if (evt.date > dateDebut and evt.date < dateFin)]
     print ("Du %s au %s"%(MyTools.getDMYFromDate(dateDebut),MyTools.getDMYFromDate(dateFin)))
     
@@ -348,16 +349,19 @@ if __name__ == '__main__':
 
     
     ## récup des cumuls de distribution par légume
-    if 1==1:
+    if 1==0:
         for leg in [ d_leg["nom"] for d_leg in constant.L_LEGUMES]:
             cumul = getCumul(l_evts, leg)
             print(leg, ":", cumul)
     
     ## Recherche des planches dispo pour telle ou telle famille de légume
-    if 1==0:   
+    if 1==1:   
+        l_planches = getPlanchesPossibles(l_evts, "solanacée","S")  #  fabacée, amaryllidacée, solanacée, cucurbitacée
+        print(l_planches, "\n")
+        
         l_planches = getPlanchesPossibles(l_evts, "cucurbitacée","S")  #  fabacée, amaryllidacée, solanacée, cucurbitacée
-        for pl in l_planches:
-            print(pl)
+        print(l_planches, "\n")
+        
         
 
     
