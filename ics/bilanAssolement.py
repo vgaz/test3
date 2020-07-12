@@ -102,7 +102,7 @@ def getEvents(filePath):
             s_ligneComplete = s_ligneComplete.replace("\\n", "\n")
             s_ligneComplete = s_ligneComplete.replace("\\,", ",").replace("\\;",";")
             ## suppression du commentaire suivant //
-            s_ligneComplete = s_ligneComplete.split("//")[0]
+#             s_ligneComplete = s_ligneComplete.split("//")[0]
             #########################
             ## début de gestion ligne complète
             ##print (">>>>", s_ligneComplete)   
@@ -324,6 +324,74 @@ def getCumul(l_evts, legume):
     return (cumul)
 
 
+def createCSVDistrib(l_evts):
+    """ recup des distribution et création d'un tableau csv de chaque légume par date et taille de panier
+    """
+    paternParts = re.compile("([0-9]+) ([0-9]+) ([0-9]+) *")
+    paternPaniers = re.compile("paniers : *([0-9]+)")
+    paternTotalLegume = re.compile("(.*) *: *([0-9]+) *(\w+)?")
+    s_txt = ""
+    
+    try:
+        s_txt += ('Jour,Date,Taille,Légume,Quantité,Unité,Equivalent poids,Qté Totale en poids,Prix U,Montant\n')
+
+        for evt in [ev for ev in l_evts if ev.type == EvtICS.TYPE_DISTRIB]:
+            
+            legCourant = ""
+            uniteCourante = ""
+
+            
+            for s_ligne in evt.description.split("\n"):
+                
+     
+                s_ligne = s_ligne.split("//")[0].strip().lower()  ## suppression de l'éventuel commentaire de bout de ligne
+                
+                if paternPaniers.match(s_ligne):
+                    continue
+
+                if legCourant:
+                    ## recup des valeurs par panier
+                    patParts = paternParts.match(s_ligne) 
+                    if patParts:
+                        partPetits = int(patParts.group(1))
+                        partMoyens = int(patParts.group(2))
+                        partGrands = int(patParts.group(3))
+                        s_jour = MyTools.getWeekDayFromDate(evt.date)
+                        
+                        prixU=0
+                        for d_leg in [ d_legume for d_legume in constant.L_LEGUMES]:
+                            if d_leg["nom"].startswith(legCourant):
+                                prixU = ("%.2f"%(d_leg["prix"])).replace(".",",")
+
+                        assert prixU, "pas de prix pour " + legCourant
+                        
+                        s_txt += '"%s","%s","petit","%s",%d,"%s","","","%s",""\n'%(s_jour, evt.date, legCourant, partPetits, uniteCourante, prixU)
+                        s_txt += '"%s","%s","moyen","%s",%d,"%s","","","%s",""\n'%(s_jour, evt.date, legCourant, partMoyens, uniteCourante, prixU)
+                        s_txt += '"%s","%s","grand","%s",%d,"%s","","","%s",""\n'%(s_jour, evt.date, legCourant, partGrands, uniteCourante, prixU)
+                
+                patLegume = paternTotalLegume.match(s_ligne)
+                if patLegume:
+                    legCourant = patLegume.group(1).strip()
+                    
+                    if patLegume.group(3):
+#                         print(patLegume.group(2), patLegume.group(3))
+                        uniteCourante = patLegume.group(3)
+                    else:
+                        uniteCourante = "piece"
+                        
+                    if uniteCourante =="kg":
+                        uniteCourante = "g"                    
+                    continue
+                else:
+                    legCourant = ""   
+ 
+             
+    except:
+        print (evt, str(sys.exc_info()[1]))
+
+    MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/AMAP/distribs.csv", s_txt)
+    
+
 if __name__ == '__main__':
     
     dateDebut = MyTools.getDateFrom_d_m_y("1/7/2017")
@@ -331,37 +399,41 @@ if __name__ == '__main__':
     
     ## Création de la liste de tous les évènements
     l_evts = []
-    l_evts += getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")
-    l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics")
+#     l_evts += getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")
+#     l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics")
     l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2020/maraich 2020.ics")
     l_evts.sort(key=lambda x: x.date)
         
     ## Filtrage éventuel par période    
-    if 1==0 :
-        dateDebut = MyTools.getDateFrom_d_m_y("24/01/2020")
-        dateFin =  MyTools.getDateFrom_d_m_y("26/01/2020")
+    if True :
+        dateDebut = MyTools.getDateFrom_d_m_y("1/04/2020")
+        dateFin =  MyTools.getDateFrom_d_m_y("10/07/2020")
         l_evts = [evt for evt in l_evts if (evt.date > dateDebut and evt.date < dateFin)]
-    print ("Du %s au %s"%(MyTools.getDMYFromDate(dateDebut),MyTools.getDMYFromDate(dateFin)))
+    print ("Récupération des évènements du %s au %s"%(MyTools.getDMYFromDate(dateDebut),MyTools.getDMYFromDate(dateFin)))
     
-    ## Création synthèse des évenements
-    if 1==0 :
-        MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/bilan2019.txt", getTxtEvtsAssolement(l_evts))
-
+    ## Création synthèse des évenements par planche, par légume, par distrib...
+    if False:
+        MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/historiqueCultures.txt", getTxtEvtsAssolement(l_evts))
+        exit(0)
+    
     
     ## récup des cumuls de distribution par légume
-    if 1==0:
+    if False:
         for leg in [ d_leg["nom"] for d_leg in constant.L_LEGUMES]:
             cumul = getCumul(l_evts, leg)
             print(leg, ":", cumul)
+        exit(0)
     
+    if True:
+        createCSVDistrib(l_evts)
+        
     ## Recherche des planches dispo pour telle ou telle famille de légume
-    if 1==1:   
+    if False:   
         l_planches = getPlanchesPossibles(l_evts, "solanacée","S")  #  fabacée, amaryllidacée, solanacée, cucurbitacée
         print(l_planches, "\n")
         
         l_planches = getPlanchesPossibles(l_evts, "cucurbitacée","S")  #  fabacée, amaryllidacée, solanacée, cucurbitacée
         print(l_planches, "\n")
-        
         
 
     

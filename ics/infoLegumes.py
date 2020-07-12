@@ -30,14 +30,13 @@ class Legume():
         return s_rep
         
     def getInfoFromCSVLine(self, d_line):
-        ## recup des infos de porduction.csv pour les infos de base de chaque légume
+        ## recup des infos de production.csv pour les infos de base de chaque légume
         self.nom = d_line.get("nom complet","").lower().strip()
         self.famille = d_line.get("Famille","").lower().strip()
         self.s_unite = d_line.get("Unité","").lower().strip()
         self.poidsUnite_g = int(d_line.get("Poids par pièce (g)","").lower().strip())
         self.prix_kg = MyTools.getFloatInDict(d_line, "prix/kg (euro)")                        
             
-
         
 class   legumesManager():
     
