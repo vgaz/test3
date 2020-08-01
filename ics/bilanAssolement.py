@@ -328,28 +328,34 @@ def createCSVDistrib(l_evts):
     """ recup des distribution et création d'un tableau csv de chaque légume par date et taille de panier
     """
     paternParts = re.compile("([0-9]+) ([0-9]+) ([0-9]+) *")
-    paternPaniers = re.compile("paniers : *([0-9]+)")
-    paternTotalLegume = re.compile("(.*) *: *([0-9]+) *(\w+)?")
+    paternPaniers = re.compile("paniers : ([0-9]+) ([0-9]+) ([0-9]+)")
+    paternTotalLegume = re.compile("(.*) *: *([0-9,]+) *(\w+)?")
     s_txt = ""
     
     try:
-        s_txt += ('Jour,Date,Taille,Légume,Quantité,Unité,Equivalent poids,Qté Totale en poids,Prix U,Montant\n')
+        s_txt += ('Jour,Date,Taille,Légume,Quantité,Unité,Equivalent poids,Qté Totale en poids,Prix U,Montant,Unité_théorique, Commentaire\n')
 
         for evt in [ev for ev in l_evts if ev.type == EvtICS.TYPE_DISTRIB]:
             
             legCourant = ""
             uniteCourante = ""
-
+            s_completeComment = ""
+            if str(evt.date)=="2020-06-11":
+                pass
             
             for s_ligne in evt.description.split("\n"):
                 
-     
-                s_ligne = s_ligne.split("//")[0].strip().lower()  ## suppression de l'éventuel commentaire de bout de ligne
-                
+                s_comment = ""
+                if "//" in s_ligne:
+                    (s_ligne, s_comment) = s_ligne.split("//")
+                s_ligne = s_ligne.strip().lower()  
+                              
                 if paternPaniers.match(s_ligne):
+                    ## que fait on du nb de paniers ?
                     continue
 
                 if legCourant:
+          
                     ## recup des valeurs par panier
                     patParts = paternParts.match(s_ligne) 
                     if patParts:
@@ -357,39 +363,54 @@ def createCSVDistrib(l_evts):
                         partMoyens = int(patParts.group(2))
                         partGrands = int(patParts.group(3))
                         s_jour = MyTools.getWeekDayFromDate(evt.date)
+                        s_completeComment += s_comment               
+                        
                         
                         prixU=0
+                        
                         for d_leg in [ d_legume for d_legume in constant.L_LEGUMES]:
                             if d_leg["nom"].startswith(legCourant):
                                 prixU = ("%.2f"%(d_leg["prix"])).replace(".",",")
+                                unite_th = constant.D_NOM_UNITE_PROD[d_leg["unite"]]
+                                break
 
                         assert prixU, "pas de prix pour " + legCourant
                         
-                        s_txt += '"%s","%s","petit","%s",%d,"%s","","","%s",""\n'%(s_jour, evt.date, legCourant, partPetits, uniteCourante, prixU)
-                        s_txt += '"%s","%s","moyen","%s",%d,"%s","","","%s",""\n'%(s_jour, evt.date, legCourant, partMoyens, uniteCourante, prixU)
-                        s_txt += '"%s","%s","grand","%s",%d,"%s","","","%s",""\n'%(s_jour, evt.date, legCourant, partGrands, uniteCourante, prixU)
+                        assert uniteCourante , "pas d'unité courante"
+                        
+                        if unite_th.lower() != uniteCourante.lower():
+                            print("ERREUR !!! Pb unité discordante %s le %s"%(legCourant, evt.date))
+                            s_completeComment += " !!! Pb unité discordante "
+
+
+                        
+                        s_txt += '"%s","%s","petit","%s",%d,"%s","","","%s","","%s","%s"\n'%(s_jour, evt.date, legCourant, partPetits, uniteCourante, prixU, unite_th, s_completeComment)
+                        s_txt += '"%s","%s","moyen","%s",%d,"%s","","","%s","","%s","%s"\n'%(s_jour, evt.date, legCourant, partMoyens, uniteCourante, prixU, unite_th, s_completeComment)
+                        s_txt += '"%s","%s","grand","%s",%d,"%s","","","%s","","%s","%s"\n'%(s_jour, evt.date, legCourant, partGrands, uniteCourante, prixU, unite_th, s_completeComment)
                 
                 patLegume = paternTotalLegume.match(s_ligne)
                 if patLegume:
-                    legCourant = patLegume.group(1).strip()
                     
+                    legCourant = patLegume.group(1).strip()
+
                     if patLegume.group(3):
-#                         print(patLegume.group(2), patLegume.group(3))
                         uniteCourante = patLegume.group(3)
                     else:
-                        uniteCourante = "piece"
+                        uniteCourante = "pièce"
                         
-                    if uniteCourante =="kg":
-                        uniteCourante = "g"                    
+                    s_completeComment += s_comment               
                     continue
                 else:
-                    legCourant = ""   
+                    legCourant = ""
+                    s_completeComment = ""  
  
              
     except:
         print (evt, str(sys.exc_info()[1]))
 
-    MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/AMAP/distribs.csv", s_txt)
+    MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/AMAP/distribs.csv", 
+                     s_txt,
+                     coding="ISO-8859-1")
     
 
 if __name__ == '__main__':
@@ -407,13 +428,14 @@ if __name__ == '__main__':
     ## Filtrage éventuel par période    
     if True :
         dateDebut = MyTools.getDateFrom_d_m_y("1/04/2020")
-        dateFin =  MyTools.getDateFrom_d_m_y("10/07/2020")
+        dateFin =  MyTools.getDateFrom_d_m_y("31/07/2020")
         l_evts = [evt for evt in l_evts if (evt.date > dateDebut and evt.date < dateFin)]
     print ("Récupération des évènements du %s au %s"%(MyTools.getDMYFromDate(dateDebut),MyTools.getDMYFromDate(dateFin)))
     
     ## Création synthèse des évenements par planche, par légume, par distrib...
     if False:
-        MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/historiqueCultures.txt", getTxtEvtsAssolement(l_evts))
+        MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/historiqueCultures.txt", 
+                         getTxtEvtsAssolement(l_evts))
         exit(0)
     
     

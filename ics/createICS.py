@@ -56,7 +56,7 @@ def creationICS(csvFilePath, icsFilePath):
     
     ## maj variétés, légumes et séries  encodage "UTF-8" ou "ISO-8859-1"
 #     with open(csvFilePath, "r+t", encoding="UTF-8") as hF:
-    with open(csvFilePath, "r+t", encoding="ISO-8859-3") as hF:
+    with open(csvFilePath, "r+t", encoding="ISO-8859-1") as hF:
         reader = csv.DictReader(hF)
 
         ics_txt = ICS_HEAD
