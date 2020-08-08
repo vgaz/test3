@@ -333,7 +333,7 @@ def createCSVDistrib(l_evts):
     s_txt = ""
     
     try:
-        s_txt += ('Jour,Date,Taille,Légume,Quantité,Unité,Equivalent poids,Qté Totale en poids,Prix U,Montant,Unité_théorique, Commentaire\n')
+        s_txt += ('Jour;Date;Taille;Légume;Quantité;Unité;Equivalent poids;Qté Totale en poids;Prix U;Unité_théorique;Montant; Commentaire\n')
 
         for evt in [ev for ev in l_evts if ev.type == EvtICS.TYPE_DISTRIB]:
             
@@ -359,9 +359,14 @@ def createCSVDistrib(l_evts):
                     ## recup des valeurs par panier
                     patParts = paternParts.match(s_ligne) 
                     if patParts:
-                        partPetits = int(patParts.group(1))
-                        partMoyens = int(patParts.group(2))
-                        partGrands = int(patParts.group(3))
+                        partPetits = float(patParts.group(1))
+                        partMoyens = float(patParts.group(2))
+                        partGrands = float(patParts.group(3))
+                        if uniteCourante.lower() == "kg":
+                            partPetits = partPetits/1000
+                            partMoyens = partMoyens/1000
+                            partGrands = partGrands/1000
+                            
                         s_jour = MyTools.getWeekDayFromDate(evt.date)
                         s_completeComment += s_comment               
                         
@@ -384,9 +389,9 @@ def createCSVDistrib(l_evts):
 
 
                         
-                        s_txt += '"%s","%s","petit","%s",%d,"%s","","","%s","","%s","%s"\n'%(s_jour, evt.date, legCourant, partPetits, uniteCourante, prixU, unite_th, s_completeComment)
-                        s_txt += '"%s","%s","moyen","%s",%d,"%s","","","%s","","%s","%s"\n'%(s_jour, evt.date, legCourant, partMoyens, uniteCourante, prixU, unite_th, s_completeComment)
-                        s_txt += '"%s","%s","grand","%s",%d,"%s","","","%s","","%s","%s"\n'%(s_jour, evt.date, legCourant, partGrands, uniteCourante, prixU, unite_th, s_completeComment)
+                        s_txt += '"%s";"%s";"petit";"%s";%s;"%s";"";"";%s;"%s";"";"%s"\n'%(s_jour, evt.date, legCourant, (("%.03f")%partPetits).replace(".",","), uniteCourante, prixU, unite_th, s_completeComment)
+                        s_txt += '"%s";"%s";"moyen";"%s";%s;"%s";"";"";%s;"%s";"";"%s"\n'%(s_jour, evt.date, legCourant, (("%.03f")%partMoyens).replace(".",","), uniteCourante, prixU, unite_th, s_completeComment)
+                        s_txt += '"%s";"%s";"grand";"%s";%s;"%s";"";"";%s;"%s";"";"%s"\n'%(s_jour, evt.date, legCourant, (("%.03f")%partGrands).replace(".",","), uniteCourante, prixU, unite_th, s_completeComment)
                 
                 patLegume = paternTotalLegume.match(s_ligne)
                 if patLegume:

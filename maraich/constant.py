@@ -22,10 +22,10 @@ UNITE_PROD_KG = 1
 UNITE_PROD_PIECE = 2
 UNITE_PROD_BRIN = 3
 UNITE_PROD_BOUQUET = 4
-D_NOM_UNITE_PROD = {UNITE_PROD_KG : "Kg", 
-                    UNITE_PROD_PIECE : "Pièce",
-                    UNITE_PROD_BRIN : "Brin",
-                    UNITE_PROD_BOUQUET : "Bouquet"
+D_NOM_UNITE_PROD = {UNITE_PROD_KG : "kg", 
+                    UNITE_PROD_PIECE : "pièce",
+                    UNITE_PROD_BRIN : "brin",
+                    UNITE_PROD_BOUQUET : "bouquet"
                     }
 
 NOM_PLANCHE_VIRTUELLE_PLEIN_CHAMP = "Virtuelle plein champ"
@@ -72,7 +72,7 @@ L_LEGUMES = [{"nom":"ail",          "famille":"amaryllidacée",      "prix":14, 
             {"nom":"cresson" ,      "famille": "brassicacée",       "prix":3.2,      "unite":UNITE_PROD_KG},
             {"nom":"échalote",      "famille" : "amaryllidacée",    "prix":5,        "unite":UNITE_PROD_KG},
             {"nom":"épinard" ,      "famille": "chénopodiacée",     "prix":5.5,      "unite":UNITE_PROD_KG},
-            {"nom":"fenouil" ,      "famille": "apiacée",           "prix":2,        "unite":UNITE_PROD_PIECE},
+            {"nom":"fenouil" ,      "famille": "apiacée",           "prix":3,        "unite":UNITE_PROD_KG},
             {"nom":"fève",          "famille" : "fabacée",          "prix":5.5,      "unite":UNITE_PROD_KG},
             {"nom":"fraise",        "famille" : "rosacée",          "prix":4,        "unite":UNITE_PROD_KG},
             {"nom":"haricot vert",  "famille" : "fabacée",          "prix":8,        "unite":UNITE_PROD_KG},
