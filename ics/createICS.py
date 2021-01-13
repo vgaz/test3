@@ -54,50 +54,53 @@ def creationICS(csvFilePath, icsFilePath):
     """Création d'un fichier ics de la base à partir du tableau CSV"""
     l_err = []
     
-    ## maj variétés, légumes et séries  encodage "UTF-8" ou "ISO-8859-1"
-#     with open(csvFilePath, "r+t", encoding="UTF-8") as hF:
+    ## maj variétés, légumes et séries  encodage  "ISO-8859-1"
     with open(csvFilePath, "r+t", encoding="ISO-8859-1") as hF:
         reader = csv.DictReader(hF)
 
         ics_txt = ICS_HEAD
-        cptSeries = 0
         
         for d_line in reader:
-            
-            cptSeries += 1
-            
+                        
             try: 
                 d_serie = {}
-                d_serie["espece"] = d_line.get("nom espece", "").lower().strip()                    
+                d_serie["espece"] = d_line.get("nom espece", "").lower().strip() 
+                assert d_serie["espece"], 'Champ "nom espece" vide'         
                 d_serie["variet"] = d_line.get("Variété", "").lower().strip() 
-                
+                assert d_serie["variet"], 'Champ "Variété" vide pour %s'%(d_serie["espece"])         
                 nomLeg = "%s %s" % (d_serie["espece"], d_serie["variet"])
+                
+                d_serie["numSerie"] = d_line.get("Numéro série", "")
+                assert d_serie["numSerie"], "pb de numéro de série pour %s"%(nomLeg)
+                
+                
+                d_serie["delaiPepin_j"] = MyTools.getIntInDict(d_line, "Délai pépinière (j)", 0)
 
-                d_serie["s_datePlants"] = d_line.get("Date réalisation plants","")
-                if d_serie["s_datePlants"]:
+                d_serie["s_datePlants"] = d_line.get("Date plants ou semis","")
+
+                if d_serie["delaiPepin_j"]:     ## cas des mottes à faire et semer
+                    
                     d_serie["datePlants"] = MyTools.getDateFrom_d_m_y(d_serie["s_datePlants"])           
-                    ## maj agenda ics
+                    ## maj agenda ics pour les mottes
                     evt_nom = "mottes %s" % (nomLeg)
                     
                     d_serie["nbMottes"] = MyTools.getIntInDict(d_line, "Nombre de mottes", 0)
                     assert  d_serie["nbMottes"], "Attention : pas de nb de mottes pour %s alors qu'une date de fabrication de plants est donnée."%(nomLeg)
                     d_serie["nbTrousParPlaque"] = MyTools.getIntInDict(d_line, "Nb trous par plaque", 0)
                     assert d_serie["nbTrousParPlaque"], "mottes mais pas de nb de trous par plaque pour %s %s"%(d_serie["espece"], d_serie["variet"])
-                    evt_txt = "ns:%d\\nx %d (%.02f x %d)"%(cptSeries, d_serie["nbMottes"], float(d_serie["nbMottes"]/d_serie["nbTrousParPlaque"]), d_serie["nbTrousParPlaque"])
+                    evt_txt = "ns:%s\\nx %d (%.02f x %d)"%(d_serie["numSerie"], d_serie["nbMottes"], float(d_serie["nbMottes"]/d_serie["nbTrousParPlaque"]), d_serie["nbTrousParPlaque"])
                     ics_txt += ICS_ITEM%( evt_nom,
                                           evt_txt, 
                                           str(d_serie["datePlants"]).split(" ")[0].replace("-","")+"T080000",
                                           str(d_serie["datePlants"]).split(" ")[0].replace("-","")+"T090000")                    
                     
 
-                    
-
-                
                 d_serie["s_dateEnTerre"] = d_line.get("Date en terre","")
                 assert d_serie["s_dateEnTerre"], "'Date en terre' indéfini pour %s"%(nomLeg)
                 d_serie["dateEnTerre"] = MyTools.getDateFrom_d_m_y(d_serie["s_dateEnTerre"])        
-                ## maj agenda ics
-                if d_serie["s_datePlants"]:
+                
+                ## maj agenda ics pour le semis ou le repiquage
+                if d_serie["delaiPepin_j"]:
                     evt_nom = "repiquage %s" % (nomLeg)
                 else:
                     evt_nom = "semis %s" % (nomLeg)
@@ -107,7 +110,7 @@ def creationICS(csvFilePath, icsFilePath):
                 else:
                     s_lieu = "en plein champ"
                     
-                evt_txt = "ns:%d\\nNb planches : %0.2f (%d m).Tous les %d cm sur %d rangs (%s). %s" %(cptSeries,
+                evt_txt = "ns:%s\\nNb planches : %0.2f (%d m).Tous les %d cm sur %d rangs (%s). %s" %(d_serie["numSerie"],
                                                                             MyTools.getFloatInDict(d_line, "nb planches", 0),
                                                                             MyTools.getIntInDict(d_line, "Longueur de rang de cette série (m)", 0),                            
                                                                             MyTools.getIntInDict(d_line, "Intra rang (cm)", 0),
@@ -139,7 +142,7 @@ def creationICS(csvFilePath, icsFilePath):
 
 if __name__ == '__main__':
 
-    
-    creationICS("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2020/csv/planning.2020.csv",
-                "/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2020/planning.2020.ics")
+    s_annee = "2021"
+    creationICS("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/%s/csv/planning.%s.csv"%(s_annee, s_annee),
+                "/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/%s/planning.%s.ics"%(s_annee, s_annee))
     

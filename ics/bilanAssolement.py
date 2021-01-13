@@ -58,6 +58,7 @@ class EvtICS(object):
         for d_leg in constant.L_LEGUMES:
             if d_leg["nom"] == self.getNomLegume():
                 return d_leg["famille"]
+        raise Exception("ERREUR : %s n'est pas dans la liste des légumes"%self.getNomLegume())
 
     def traceSend(self, strIn):
         pass
@@ -252,40 +253,37 @@ def getTxtEvtsAssolement(l_evts):
            
         
 
-def getPlanchesPossibles(l_evts, famille, prefixePlanche=""):
-    """ recherche les planches disponibles pour une espece donnée
+def getPlanchesDeFamille(l_evts, famille, prefixePlanche=""):
+    """ recherche les planches ayant accueilli pour une famille donnée
     possibilité de passer une lettre en 3 eme parametre correspondant au prefixe de la parcelle voulue 
-    @todo: retenir un delai de rotation"""
+    """
     
-    print("Recherche des planches disponibles pour planter une %s"%famille)
+#     print("Recherche des planches de la famille %s"%famille)
     l_planches = []
     try:
         for pl in constant.L_PLANCHES:
 
-             
             if prefixePlanche and not pl.startswith(prefixePlanche):
                 continue
-             
-            bFamilleDejaVue = False
             
+            l_date = []
             for evt in l_evts:
-                if evt.type is not EvtICS.TYPE_LEG:
+                if evt.type != EvtICS.TYPE_LEG:
                     continue
-                
-                if pl == evt.location.split(" ")[0].split(".")[0] and evt.getFamille() == famille:
-                    bFamilleDejaVue = True
-                    ## deja eu un légume de cette famille, on passe
-                    break
-                
-            if bFamilleDejaVue:
-                continue
-                
-            ## récupération de la localisation de la culture :  si on passe ici, famille encore inconue 
-            l_planches.append(pl)
+
+                if evt.getFamille() != famille:
+                    continue
+
+                if pl == evt.location.split(" ")[0].split(".")[0]:
+#                     print("%s %s"%(pl,evt.date))    
+                    ## récupération date de la culture
+                    l_date.append(evt.date)
+            if l_date:        
+                l_planches.append((pl, l_date))
                   
     except:
-        print ("ERR", evt)
-
+        s_err = "ERR for %s : %s"%(evt,str(sys.exc_info()[1]))
+        log.error(s_err)
     
     return (l_planches)
             
@@ -295,7 +293,7 @@ def getCumul(l_evts, legume):
     """ recup des cumuls de distribution par légume"""
     cumul = 0.0
     paternPaniers = re.compile("paniers : *([0-9]+)")
-    paternTotalLegume = re.compile("%s .*: *([0-9]+)"%(legume))
+    paternTotalLegume = re.compile("%s .*: *([0-9,]+)"%(legume))
     
     try:
         for evt in l_evts:
@@ -305,31 +303,30 @@ def getCumul(l_evts, legume):
             
             bPatPaniers = False
             for s_ligne in evt.description.split("\n"):
+                s_ligne = s_ligne.split("//")[0]
                 pat = paternTotalLegume.match(s_ligne.lower().strip()) 
                 if pat:
                     cumul += float(pat.group(1).replace(",","."))                        
-                    print(evt.date, s_ligne)
+#                     print(evt.date, s_ligne)
                     
                     
                 if paternPaniers.match(s_ligne):
                     bPatPaniers = True
         
-            if not bPatPaniers:
-                print ("ERR def paniers le :", evt.date)      
+            assert bPatPaniers, "ERR def nombre de paniers le :%s"%evt.date      
     except:
         print ("ERR", evt, legume)
-
-#     print("cumul", cumul)
     
     return (cumul)
 
 
-def createCSVDistrib(l_evts):
+def createCSVDistrib(l_evts, myFileName):
     """ recup des distribution et création d'un tableau csv de chaque légume par date et taille de panier
     """
     paternParts = re.compile("([0-9]+) ([0-9]+) ([0-9]+) *")
     paternPaniers = re.compile("paniers : ([0-9]+) ([0-9]+) ([0-9]+)")
     paternTotalLegume = re.compile("(.*) *: *([0-9,]+) *(\w+)?")
+    paternOubliTotal = re.compile("(.*) *: *")
     s_txt = ""
     
     try:
@@ -340,8 +337,6 @@ def createCSVDistrib(l_evts):
             legCourant = ""
             uniteCourante = ""
             s_completeComment = ""
-            if str(evt.date)=="2020-06-11":
-                pass
             
             for s_ligne in evt.description.split("\n"):
                 
@@ -372,13 +367,13 @@ def createCSVDistrib(l_evts):
                         
                         
                         prixU=0
-                        
+
+                        ## recherche du prix du légume
                         for d_leg in [ d_legume for d_legume in constant.L_LEGUMES]:
-                            if d_leg["nom"].startswith(legCourant):
+                            if legCourant.startswith(d_leg["nom"]):
                                 prixU = ("%.2f"%(d_leg["prix"])).replace(".",",")
                                 unite_th = constant.D_NOM_UNITE_PROD[d_leg["unite"]]
                                 break
-
                         assert prixU, "pas de prix pour " + legCourant
                         
                         assert uniteCourante , "pas d'unité courante"
@@ -397,7 +392,7 @@ def createCSVDistrib(l_evts):
                 if patLegume:
                     
                     legCourant = patLegume.group(1).strip()
-
+                    
                     if patLegume.group(3):
                         uniteCourante = patLegume.group(3)
                     else:
@@ -409,11 +404,14 @@ def createCSVDistrib(l_evts):
                     legCourant = ""
                     s_completeComment = ""  
  
-             
+                patErrOubliPds = paternOubliTotal.match(s_ligne)
+                if patErrOubliPds:
+                    print (s_ligne, str(evt.date))
+
     except:
         print (evt, str(sys.exc_info()[1]))
 
-    MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/AMAP/distribs.csv", 
+    MyTools.strToFic(myFileName, 
                      s_txt,
                      coding="ISO-8859-1")
     
@@ -425,42 +423,50 @@ if __name__ == '__main__':
     
     ## Création de la liste de tous les évènements
     l_evts = []
-#     l_evts += getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")
-#     l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics")
+    l_evts += getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")     
+    l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics")
     l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2020/maraich 2020.ics")
     l_evts.sort(key=lambda x: x.date)
         
     ## Filtrage éventuel par période    
     if True :
-        dateDebut = MyTools.getDateFrom_d_m_y("1/04/2020")
-        dateFin =  MyTools.getDateFrom_d_m_y("31/07/2020")
+        dateDebut = MyTools.getDateFrom_d_m_y("1/04/2017")
+        dateFin =  MyTools.getDateFrom_d_m_y("31/12/2020")
         l_evts = [evt for evt in l_evts if (evt.date > dateDebut and evt.date < dateFin)]
     print ("Récupération des évènements du %s au %s"%(MyTools.getDMYFromDate(dateDebut),MyTools.getDMYFromDate(dateFin)))
     
     ## Création synthèse des évenements par planche, par légume, par distrib...
     if False:
-        MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/historiqueCultures.txt", 
+        MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2020/historiqueCultures2020.txt", 
                          getTxtEvtsAssolement(l_evts))
-        exit(0)
     
     
     ## récup des cumuls de distribution par légume
     if False:
-        for leg in [ d_leg["nom"] for d_leg in constant.L_LEGUMES]:
-            cumul = getCumul(l_evts, leg)
-            print(leg, ":", cumul)
-        exit(0)
+        for d_leg in constant.L_LEGUMES:
+            cumul = getCumul(l_evts, d_leg["nom"])
+            print("%s : %.02f %s"%(d_leg["nom"], cumul, constant.D_NOM_UNITE_PROD[d_leg["unite"]]))
     
-    if True:
-        createCSVDistrib(l_evts)
+    ## création d'un fichier table csv recapitulant toutes les distribs
+    if False:
+        createCSVDistrib(l_evts, 
+                         "/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/AMAP/2020/distribs2020.csv")
         
     ## Recherche des planches dispo pour telle ou telle famille de légume
-    if False:   
-        l_planches = getPlanchesPossibles(l_evts, "solanacée","S")  #  fabacée, amaryllidacée, solanacée, cucurbitacée
-        print(l_planches, "\n")
-        
-        l_planches = getPlanchesPossibles(l_evts, "cucurbitacée","S")  #  fabacée, amaryllidacée, solanacée, cucurbitacée
-        print(l_planches, "\n")
+    if True:
+        for fam in  [ "amaryllidacée", "brassicacée","chénopodiacée","fabacée", "cucurbitacée","solanacée" ]:  
+            l_planches = getPlanchesDeFamille(l_evts, fam,"S")  
+            print("\nDernières dates implantaion de %s sur les planches"%fam)
+            l_tup2 = []
+            for pl, l_date in l_planches:
+                l_date.sort()
+                lastDate = l_date[-1]
+                l_tup2.append((lastDate, pl))
+            l_tup2.sort()    
+            for date, pl in l_tup2:
+                print(date, pl)
+            
+
         
 
     

@@ -14946,3 +14946,677 @@ Attention : pas de nb de mottes pour poireau atlanta vg alors qu'une date de fab
 [2020-01-17 19:10:37,154 MARAICH_ERROR   ] infoLegumes    .getLegumes: could not convert string to float: 
 [2020-01-17 19:11:16,607 MARAICH_ERROR   ] infoLegumes    .getLegumes: could not convert string to float: 
 [2020-01-17 19:13:04,502 MARAICH_ERROR   ] infoLegumes    .getLegumes: float() takes at most 1 argument (2 given)
+[2020-12-20 13:14:47,646 MARAICH_ERROR   ] createICS      .creationICS: [Errno 2] No such file or directory: '/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/%s/planning.%s.ics'
+[2020-12-20 13:14:47,692 MARAICH_INFO    ] createICS      .creationICS: Fin de commande
+ nombre d'erreurs = 176
+Attention : pas de nb de mottes pour radis rose de 18 jours alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour pomme de terre primeur rikea alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour pomme de terre primeur starlet alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour radis rose french breakfast 2 alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour navet de printemps des vertus marteau alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour pois mangetout ambosia alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour radis rose gaudry2 alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour radis rose de 18 jours alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour pois mangetout ambosia alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour radis rose gaudry2 alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour haricot rame cobra alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour navet de printemps rose à forcer de milan alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour carotte saison rothild alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour carotte saison colmar à coeur rouge 2 alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour carotte saison nantaise 5 alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour échalote longor alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour pomme de terre saison ? alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour radis rose french breakfast 2 alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour radis rose flamboyant 2 alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour ail rose gayant de printemps alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour pois à écosser douce provence alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour carotte de garde chantenay à coeur rouge 2 alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour maïs doux golden batam alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour pomme de terre de garde allians, désirée alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour radis rose gaudry2 alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour radis rose french breakfast 2 alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour radis rose pernot clair alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour carotte de garde nantaise 5 alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour carotte de garde rodelika alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour carotte de garde jaune du doubs alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour carotte de garde colmar à coeur rouge 2 alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour carotte de garde oxhella alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour haricot nain pongo alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour panais demi long de guernesey alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour betterave cylindra alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour betterave noire plate d'egypte alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour betterave robuschka alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour betterave forono alors qu'une date de fabrication de plants est donnée.
+mottes mais pas de nb de trous par plaque pour betterave botte cylindra
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour navet de garde petrowski alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour navet de garde blanc à collet violet alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour navet de garde boule d'or alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour radis rose gaudry2 alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour radis rose de 18 jours alors qu'une date de fabrication de plants est donnée.
+Attention : pas de nb de mottes pour radis rose french breakfast 2 alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour radis rose gaudry2 alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour radis rose french breakfast 2 alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour radis rose flamboyant 2 alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour ail blanc messidor d'automne alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour fève agadulce alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+Attention : pas de nb de mottes pour carotte primeur rothild alors qu'une date de fabrication de plants est donnée.
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+[Errno 2] No such file or directory: '/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/%s/planning.%s.ics'
+[2020-12-20 14:04:41,775 MARAICH_ERROR   ] createICS      .creationICS: [Errno 2] No such file or directory: '/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/%s/planning.%s.ics'
+[2020-12-20 14:04:41,776 MARAICH_INFO    ] createICS      .creationICS: Fin de commande
+ nombre d'erreurs = 176
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Champ "Variété" vide
+[Errno 2] No such file or directory: '/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/%s/planning.%s.ics'
+[2020-12-20 14:05:55,673 MARAICH_INFO    ] createICS      .creationICS: Fin de commande
+ nombre d'erreurs = 175
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+Champ "Variété" vide
+[2020-12-20 14:08:28,958 MARAICH_INFO    ] createICS      .creationICS: Fin de commande
+ nombre d'erreurs = 1
+Champ "Variété" vide
+[2020-12-20 14:13:42,531 MARAICH_INFO    ] createICS      .creationICS: Fin de commande
+ nombre d'erreurs = 1
+Champ "Variété" vide
+[2020-12-20 14:14:35,086 MARAICH_INFO    ] createICS      .creationICS: Fin de commande
+ nombre d'erreurs = 122
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+%d format: a number is required, not str
+pb de numéro de série pour bilan recolte possible ligne de bilan
+[2020-12-20 14:16:24,886 MARAICH_INFO    ] createICS      .creationICS: Fin de commande
+ nombre d'erreurs = 1
+pb de numéro de série pour bilan recolte possible ligne de bilan
+[2020-12-20 14:17:51,145 MARAICH_INFO    ] createICS      .creationICS: Fin de commande
+ nombre d'erreurs = 1
+Champ "Variété" vide pour estimation récolte
+[2020-12-20 14:35:24,673 MARAICH_INFO    ] createICS      .creationICS: Fin de commande
+ nombre d'erreurs = 1
+Champ "Variété" vide pour estimation récolte
