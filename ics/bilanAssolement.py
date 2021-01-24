@@ -68,10 +68,8 @@ def getEvents(filePath):
     """ récupère les évenements à partir du fichier ics"""
     l_evts = [] 
     
-    #PATERN_PLANCHES = "([BDHS])([0-9])"
-    PATERN_PLANCHE = "([BDHS])([0-9]+)(\.[0-9]+)* *(.*)"
+    PATERN_PLANCHE = " *([BDHS])([0-9]+)(.[1-8])? *(.*)"
    
-    #paternPlanches = re.compile(PATERN_PLANCHES) 
     paternPlanche = re.compile(PATERN_PLANCHE) 
     
     
@@ -79,7 +77,7 @@ def getEvents(filePath):
     #  recup lieu, légume
     with open(filePath, "r+t", encoding="utf-8") as hF:
 
-        _type = None
+        ev_type = None
         s_date = ""
         s_summary = ""
         s_description = ""
@@ -109,7 +107,7 @@ def getEvents(filePath):
             ##print (">>>>", s_ligneComplete)   
 
             if s_ligneComplete.startswith("BEGIN:VEVENT"):
-                _type = None
+                ev_type = None
                 s_date = ""
                 s_summary = ""
                 s_description = ""
@@ -127,29 +125,29 @@ def getEvents(filePath):
                 
                 if s_summary.lower().startswith("plantation "):
                     s_summary = s_summary[len("plantation "):].strip()
-                    _type = EvtICS.TYPE_LEG
+                    ev_type = EvtICS.TYPE_LEG
                 elif s_summary.lower().startswith("semis "):
                     s_summary = s_summary[len("semis "):].strip()
-                    _type = EvtICS.TYPE_LEG
+                    ev_type = EvtICS.TYPE_LEG
                 elif s_summary.lower().startswith("mottes "):
                     s_summary = s_summary[len("mottes "):]
-                    _type = EvtICS.TYPE_MOTTES
+                    ev_type = EvtICS.TYPE_MOTTES
                 elif s_summary.lower().startswith("terrine"):
-                    _type = EvtICS.TYPE_TERRINE
+                    ev_type = EvtICS.TYPE_TERRINE
                 elif s_summary.lower().startswith("Réalisation plants"):
                     s_summary = s_summary[len("Réalisation plants"):]
-                    _type = EvtICS.TYPE_MOTTES
+                    ev_type = EvtICS.TYPE_MOTTES
                 elif s_summary.lower().startswith("repiquage "):
                     s_summary = s_summary[len("repiquage "):].strip()
-                    _type = EvtICS.TYPE_LEG
+                    ev_type = EvtICS.TYPE_LEG
                 elif s_summary.lower().startswith("phyto") :
-                    _type = EvtICS.TYPE_PHYTO
+                    ev_type = EvtICS.TYPE_PHYTO
                 elif s_summary.lower().startswith("culture") or "culture." in s_description:
-                    _type = EvtICS.TYPE_CULTURE
+                    ev_type = EvtICS.TYPE_CULTURE
                 elif s_summary.lower().startswith("distribution amap"):
-                    _type = EvtICS.TYPE_DISTRIB
+                    ev_type = EvtICS.TYPE_DISTRIB
                 else:
-                    _type = EvtICS.TYPE_DIVERS
+                    ev_type = EvtICS.TYPE_DIVERS
 
                  
             elif s_ligneComplete.startswith("LOCATION:"):
@@ -164,22 +162,26 @@ def getEvents(filePath):
             elif s_ligneComplete.startswith("END:VEVENT"):
                 ## création du ou des évenements ; 1 par location 
                 for s_loc in l_locations:
-#                         patern = paternPlanche.match(s_loc)
-#                         if patern:
-#                             s_locChamp = patern.group(1)
-#                             s_locNumPl =  "%02d"%int(patern.group(2))
-#                             s_locNumRang = patern.group(3) or "" # numero de rg
-#                             if s_locNumRang : "rang " + s_locNumRang.split(".")[1]
-#                             s_locDetail = patern.group(4) or "" # precision debut et fin dans la planche en m
-#                             if s_locDetail : s_locDetail = " (%s)"%(s_locDetail)
+                    
+                    if ev_type == EvtICS.TYPE_LEG:
+                        ## mise en forme des nom de planche en Xnnn  X = S,H,D,B ; nnn sur 3 chiffres
+                        patP = paternPlanche.match(s_loc)
+                        assert patP, "erreur de syntaxe de planche %s"%(s_loc)
+                        s_locParcelle =  patP.group(1)
+                        s_locNumPl =  "%03d"%int(patP.group(2))
+                        s_locNumRang = patP.group(3) or "" # numero de rg
+                        s_locDetail = patP.group(4) or "" # precision debut et fin dans la planche en m
+                        s_loc = "%s%s%s %s"%(s_locParcelle, s_locNumPl, s_locNumRang, s_locDetail)
+                        print("s_loc", s_loc)                       
+#                             if  : "rang " + s_locNumRang.split(".")[1]
 #                             s_location = "%s%s%s%s"%(s_locChamp, s_locNumPl, s_locNumRang, s_locDetail)
 #                         else:
 #                             s_location = s_loc      
                 
                     evt = EvtICS()
-                    evt.type = _type
+                    evt.type = ev_type
                     evt.summary = s_summary
-                    evt.location = s_loc.strip()
+                    evt.location = s_loc
                     evt.date = MyTools.getDateFrom_y_m_d(s_date)
                     evt.description = s_description
                     l_evts.append(evt)   
@@ -201,9 +203,9 @@ def getTxtEvtsAssolement(l_evts):
     s_txtEvts = ""
     l_evts.sort(key=lambda x: x.date)
 
-    ## tri par lieu
+    ## tri par planche
     s_txtEvts += "\n\n------------- Assolement par planche -------------\n\n"
-    l_tmp = sorted(l_evts, key=lambda x: x.location[:3])
+    l_tmp = sorted(l_evts, key=lambda x: x.location[:4])
     for ev in l_tmp:
         if ev.type == EvtICS.TYPE_LEG:
             s_txtEvts += "%s ; %s %s\n"%(MyTools.getDMYFromDate(ev.date), ev.location, ev.summary)
@@ -315,7 +317,7 @@ def getCumul(l_evts, legume):
         
             assert bPatPaniers, "ERR def nombre de paniers le :%s"%evt.date      
     except:
-        print ("ERR", evt, legume)
+       log.error("ERR %s %s", str(evt), legume)
     
     return (cumul)
 
@@ -424,8 +426,8 @@ if __name__ == '__main__':
     ## Création de la liste de tous les évènements
     l_evts = []
     l_evts += getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2018/maraich 2018.ics")     
-    l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics")
-    l_evts +=  getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2020/maraich 2020.ics")
+    l_evts += getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2019/maraich 2019.ics")
+    l_evts += getEvents("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2020/maraich 2020.ics")
     l_evts.sort(key=lambda x: x.date)
         
     ## Filtrage éventuel par période    
@@ -436,11 +438,10 @@ if __name__ == '__main__':
     print ("Récupération des évènements du %s au %s"%(MyTools.getDMYFromDate(dateDebut),MyTools.getDMYFromDate(dateFin)))
     
     ## Création synthèse des évenements par planche, par légume, par distrib...
-    if False:
+    if True:
         MyTools.strToFic("/home/vincent/Documents/donnees/maraichage/Armorique/lancieux/LaNouvelais/Cultures/2020/historiqueCultures2020.txt", 
                          getTxtEvtsAssolement(l_evts))
-    
-    
+
     ## récup des cumuls de distribution par légume
     if False:
         for d_leg in constant.L_LEGUMES:
@@ -454,6 +455,7 @@ if __name__ == '__main__':
         
     ## Recherche des planches dispo pour telle ou telle famille de légume
     if True:
+        print("dispo")
         for fam in  [ "amaryllidacée", "brassicacée","chénopodiacée","fabacée", "cucurbitacée","solanacée" ]:  
             l_planches = getPlanchesDeFamille(l_evts, fam,"S")  
             print("\nDernières dates implantaion de %s sur les planches"%fam)

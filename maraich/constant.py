@@ -37,7 +37,7 @@ PLAQUE_77_55 = (77,55)
 DOC_CHRONOVIEW = """Voila la doc de chrono planches<br/>
 Il s'agit de placer les séries sur les planches dans le temps"""
 
-L_PLANCHES = ["B1","S10","S11","S12","S13","S14","S15","S16","S20","S21","S22","S23","S24","S25","S26","S30","S31","S32","S33","S34","S35","S36","S40","S41","S42","S43","S44","S45","S46"]
+L_PLANCHES = ["S010","0S11","S012","S013","S014","S015","S016","S020","S021","S022","S023","S024","S025","S026","S030","S031","S032","S033","S034","S035","S036","S040","S041","S042","S043","S044","S045","S046"]
 
 
 L_LEGUMES = [{"nom":"aillet",        "famille":"amaryllidacée",      "prix":14,       "unite":UNITE_PROD_KG},
@@ -117,7 +117,7 @@ L_LEGUMES = [{"nom":"aillet",        "famille":"amaryllidacée",      "prix":14,
             {"nom":"tétragone" , "famille": "aizoacée",         "prix":3.2,     "unite":UNITE_PROD_KG},
             {"nom":"thym" , "famille": "lamiacée",              "prix":1.5,     "unite":UNITE_PROD_BOUQUET},
             {"nom":"tomate", "famille" : "solanacée",           "prix":4.9,      "unite":UNITE_PROD_KG}
-             ]
+            ]
 
 ICS_HEAD = """BEGIN:VCALENDAR
 PRODID:-//Mozilla.org/NONSGML Mozilla Calendar V1.1//EN
